@@ -1,20 +1,80 @@
 import { Box } from "@chakra-ui/react";
-import type { ActionFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
+import type { FunctionsResponse } from "@supabase/functions-js";
 import { validationError } from "remix-validated-form";
-import { useUrlParams } from "~/hooks";
+import { useRouteData, useUrlParams } from "~/hooks";
 import type { PurchaseInvoiceStatus } from "~/modules/invoicing";
 import {
   PurchaseInvoiceForm,
   purchaseInvoiceValidator,
   upsertPurchaseInvoice,
 } from "~/modules/invoicing";
+import {
+  createPurchaseInvoiceFromPurchaseOrder,
+  createPurchaseInvoiceFromReceipt,
+} from "~/modules/invoicing/invoicing.server";
 import { getNextSequence, rollbackNextSequence } from "~/modules/settings";
 import { requirePermissions } from "~/services/auth";
 import { flash } from "~/services/session";
+import type { ListItem } from "~/types";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";
 import { error } from "~/utils/result";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  // we don't use the client here -- if they have this permission, we'll upgrade to a service role if needed
+  const { userId } = await requirePermissions(request, {
+    create: "invoicing",
+  });
+
+  const url = new URL(request.url);
+  const sourceDocument = url.searchParams.get("sourceDocument") ?? undefined;
+  const sourceDocumentId = url.searchParams.get("sourceDocumentId") ?? "";
+
+  let result: FunctionsResponse<{ id: string }>;
+
+  switch (sourceDocument) {
+    case "Purchase Order":
+      if (!sourceDocumentId) throw new Error("Missing sourceDocumentId");
+      result = await createPurchaseInvoiceFromPurchaseOrder(
+        sourceDocumentId,
+        userId
+      );
+
+      if (result.error || !result?.data) {
+        return redirect(
+          request.headers.get("Referer") ?? path.to.purchaseOrders,
+          await flash(
+            request,
+            error(result.error, "Failed to create purchase invoice")
+          )
+        );
+      }
+
+      return redirect(path.to.purchaseInvoice(result.data?.id!));
+
+    case "Receipt":
+      if (!sourceDocumentId) throw new Error("Missing sourceDocumentId");
+
+      result = await createPurchaseInvoiceFromReceipt(sourceDocumentId, userId);
+
+      if (result.error || !result?.data) {
+        return redirect(
+          request.headers.get("Referer") ?? path.to.receipts,
+          await flash(
+            request,
+            error(result.error, "Failed to create purchase invoice")
+          )
+        );
+      }
+
+      return redirect(path.to.purchaseInvoice(result.data?.id!));
+
+    default:
+      return null;
+  }
+}
 
 export async function action({ request }: ActionFunctionArgs) {
   assertIsPost(request);
@@ -50,7 +110,6 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   if (createPurchaseInvoice.error || !createPurchaseInvoice.data?.[0]) {
-    // TODO: this should be done as a transaction
     await rollbackNextSequence(client, "purchaseInvoice", userId);
     return redirect(
       path.to.purchaseInvoices,
@@ -69,6 +128,11 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function PurchaseInvoiceNewRoute() {
   const [params] = useUrlParams();
   const supplierId = params.get("supplierId");
+
+  const sharedData = useRouteData<{ paymentTerms: ListItem[] }>(
+    path.to.purchaseInvoiceRoot
+  );
+
   const initialValues = {
     id: undefined,
     invoiceId: undefined,
@@ -81,6 +145,7 @@ export default function PurchaseInvoiceNewRoute() {
       <PurchaseInvoiceForm
         // @ts-expect-error
         initialValues={initialValues}
+        paymentTerms={sharedData?.paymentTerms ?? []}
       />
     </Box>
   );

@@ -10,7 +10,7 @@ export function useSupplierSidebar({ contacts, locations }: Props) {
   const permissions = usePermissions();
   return [
     {
-      name: "Details",
+      name: "Overview",
       to: "",
     },
     {
@@ -24,6 +24,16 @@ export function useSupplierSidebar({ contacts, locations }: Props) {
       to: "locations",
       role: ["employee", "supplier"],
       count: locations,
+    },
+    {
+      name: "Payments",
+      to: "payments",
+      role: ["employee"],
+    },
+    {
+      name: "Shipping",
+      to: "shipping",
+      role: ["employee"],
     },
   ].filter(
     (item) =>

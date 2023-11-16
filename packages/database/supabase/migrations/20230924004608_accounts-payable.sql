@@ -15,12 +15,15 @@ CREATE TABLE "purchaseInvoice" (
   "status" "purchaseInvoiceStatus" NOT NULL DEFAULT 'Draft',
   "supplierId" TEXT,
   "supplierReference" TEXT,
-  "supplierContactId" TEXT,
+  "invoiceSupplierId" TEXT,
+  "invoiceSupplierLocationId" TEXT,
+  "invoiceSupplierContactId" TEXT,
+  "paymentTermId" TEXT,
+  "currencyCode" TEXT NOT NULL,
+  "exchangeRate" NUMERIC(10, 4) NOT NULL DEFAULT 1,
   "dateIssued" DATE,
   "dateDue" DATE,
   "datePaid" DATE,
-  "currencyCode" TEXT NOT NULL,
-  "exchangeRate" NUMERIC(10, 4) NOT NULL DEFAULT 1,
   "subtotal" NUMERIC(10, 2) NOT NULL DEFAULT 0,
   "totalDiscount" NUMERIC(10, 2) NOT NULL DEFAULT 0,
   "totalAmount" NUMERIC(10, 2) NOT NULL DEFAULT 0,
@@ -33,7 +36,10 @@ CREATE TABLE "purchaseInvoice" (
 
   CONSTRAINT "purchaseInvoice_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "purchaseInvoice_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "supplier" ("id"),
-  CONSTRAINT "purchaseInvoice_supplierContactId_fkey" FOREIGN KEY ("supplierContactId") REFERENCES "supplierContact" ("id"),
+  CONSTRAINT "purchaseInvoice_invoiceSupplierId_fkey" FOREIGN KEY ("invoiceSupplierId") REFERENCES "supplier" ("id"),
+  CONSTRAINT "purchaseInvoice_invoiceSupplierLocationId_fkey" FOREIGN KEY ("invoiceSupplierLocationId") REFERENCES "supplierLocation" ("id"),
+  CONSTRAINT "purchaseInvoice_invoiceSupplierContactId_fkey" FOREIGN KEY ("invoiceSupplierContactId") REFERENCES "supplierContact" ("id"),
+  CONSTRAINT "purchaseInvoice_paymentTermId_fkey" FOREIGN KEY ("paymentTermId") REFERENCES "paymentTerm" ("id"),
   CONSTRAINT "purchaseInvoice_currencyCode_fkey" FOREIGN KEY ("currencyCode") REFERENCES "currency" ("code"),
   CONSTRAINT "purchaseInvoice_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id"),
   CONSTRAINT "purchaseInvoice_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id")
@@ -75,6 +81,8 @@ CREATE POLICY "Employees with invoicing_delete can delete AP invoices" ON "purch
     AND (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
 
+
+
 CREATE TABLE "purchaseInvoiceStatusHistory" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "invoiceId" TEXT NOT NULL,
@@ -105,6 +113,8 @@ CREATE TABLE "purchaseInvoiceLine" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "invoiceId" TEXT NOT NULL,
   "invoiceLineType" "payableLineType" NOT NULL,
+  "purchaseOrderId" TEXT,
+  "purchaseOrderLineId" TEXT,
   "partId" TEXT,
   "accountNumber" TEXT,
   "assetId" TEXT,
@@ -120,7 +130,9 @@ CREATE TABLE "purchaseInvoiceLine" (
   "updatedAt" TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT "purchaseInvoiceLines_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "purchaseInvoiceLines_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "purchaseInvoice" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT "purchaseInvoiceLines_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "purchaseInvoice" ("id") ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT "purchaseInvoiceLines_purchaseOrderId_fkey" FOREIGN KEY ("purchaseOrderId") REFERENCES "purchaseOrder" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT "purchaseInvoiceLines_purchaseOrderLineId_fkey" FOREIGN KEY ("purchaseOrderLineId") REFERENCES "purchaseOrderLine" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_partId_fkey" FOREIGN KEY ("partId") REFERENCES "part" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_accountNumber_fkey" FOREIGN KEY ("accountNumber") REFERENCES "account" ("number") ON UPDATE CASCADE ON DELETE RESTRICT,
   -- CONSTRAINT "purchaseInvoiceLines_assetId_fkey" FOREIGN KEY ("assetId") REFERENCES "fixedAsset" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
@@ -158,6 +170,62 @@ CREATE POLICY "Employees with invoicing_delete can delete AP invoice lines" ON "
     coalesce(get_my_claim('invoicing_delete')::boolean, false) = true 
     AND (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
+
+CREATE TABLE "purchaseInvoicePriceChange" (
+  "id" TEXT NOT NULL DEFAULT xid(),
+  "invoiceId" TEXT NOT NULL,
+  "invoiceLineId" TEXT NOT NULL,
+  "previousPrice" NUMERIC(10, 2) NOT NULL DEFAULT 0,
+  "newPrice" NUMERIC(10, 2) NOT NULL DEFAULT 0,
+  "previousQuantity" NUMERIC(10, 2) NOT NULL DEFAULT 0,
+  "newQuantity" NUMERIC(10, 2) NOT NULL DEFAULT 0,
+  "updatedBy" TEXT NOT NULL,
+
+  CONSTRAINT "purchaseInvoicePriceChange_pkey" PRIMARY KEY ("id"),
+  CONSTRAINT "purchaseInvoicePriceChange_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "purchaseInvoice" ("id") ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT "purchaseInvoicePriceChange_invoiceLineId_fkey" FOREIGN KEY ("invoiceLineId") REFERENCES "purchaseInvoiceLine" ("id") ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT "purchaseInvoicePriceChange_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+ALTER TABLE "purchaseInvoicePriceChange" ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Employees with invoicing_view can view AP invoice price changes" ON "purchaseInvoicePriceChange"
+  FOR SELECT
+  USING (
+    coalesce(get_my_claim('invoicing_view')::boolean,false) 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+
+CREATE OR REPLACE FUNCTION "purchaseInvoiceLine_update_price_change"()
+  RETURNS TRIGGER AS $$
+  BEGIN
+    IF NEW."unitPrice" <> OLD."unitPrice" OR NEW."quantity" <> OLD."quantity" THEN
+      INSERT INTO "purchaseInvoicePriceChange" (
+        "invoiceId",
+        "invoiceLineId",
+        "previousPrice",
+        "newPrice",
+        "previousQuantity",
+        "newQuantity",
+        "updatedBy"
+      ) VALUES (
+        NEW."invoiceId",
+        NEW."id",
+        OLD."unitPrice",
+        NEW."unitPrice",
+        OLD."quantity",
+        NEW."quantity",
+        NEW."updatedBy"
+      );
+    END IF;
+    RETURN NEW;
+  END;
+  $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER "purchaseInvoiceLine_update_price_change"
+  AFTER UPDATE ON "purchaseInvoiceLine"
+  FOR EACH ROW
+  EXECUTE PROCEDURE "purchaseInvoiceLine_update_price_change"();
 
 CREATE TABLE "purchasePayment" (
   "id" TEXT NOT NULL DEFAULT xid(),
@@ -237,10 +305,13 @@ CREATE OR REPLACE VIEW "purchaseInvoices" AS
     pi."invoiceId",
     pi."supplierId",
     pi."supplierReference",
-    pi."supplierContactId",
+    pi."invoiceSupplierId",
+    pi."invoiceSupplierLocationId",
+    pi."invoiceSupplierContactId",
     pi."dateIssued",
     pi."dateDue",
     pi."datePaid",
+    pi."paymentTermId",
     pi."currencyCode",
     pi."exchangeRate",
     pi."subtotal",
@@ -264,7 +335,7 @@ CREATE OR REPLACE VIEW "purchaseInvoices" AS
     u2."fullName" AS "updatedByFullName"
   FROM "purchaseInvoice" pi
     LEFT JOIN "supplier" s ON s.id = pi."supplierId"
-    LEFT JOIN "supplierContact" sc ON sc.id = pi."supplierContactId"
+    LEFT JOIN "supplierContact" sc ON sc.id = pi."invoiceSupplierContactId"
     LEFT JOIN "contact" c ON c.id = sc."contactId"
     LEFT JOIN "user" u ON u."id" = pi."createdBy"
     LEFT JOIN "user" u2 ON u2."id" = pi."updatedBy";

@@ -26,6 +26,7 @@ export const path = {
         generatePath(
           `${api}/settings/sequence/rollback?table=${table}&currentSequence=${id}`
         ),
+      sequences: (table: string) => `${api}/settings/sequences?table=${table}`,
       shifts: (id: string) =>
         generatePath(`${api}/resources/shifts?location=${id}`),
       shelves: (id: string) =>
@@ -86,6 +87,10 @@ export const path = {
       generatePath(`${x}/customer/${customerId}/locations/${id}`),
     customerLocations: (id: string) =>
       generatePath(`${x}/customer/${id}/locations`),
+    customerPayment: (id: string) =>
+      generatePath(`${x}/customer/${id}/payments`),
+    customerShipping: (id: string) =>
+      generatePath(`${x}/customer/${id}/shipping`),
     customerType: (id: string) =>
       generatePath(`${x}/sales/customer-types/delete/${id}`),
     customerTypes: `${x}/sales/customer-types`,
@@ -286,6 +291,7 @@ export const path = {
       generatePath(`${x}/purchase-invoice/${id}`),
     purchaseInvoiceDetails: (id: string) =>
       generatePath(`${x}/purchase-invoice/${id}/details`),
+    purchaseInvoiceRoot: `${x}/purchase-invoice`,
     purchaseInvoices: `${x}/invoicing/purchasing`,
     purchaseOrder: (id: string) => generatePath(`${x}/purchase-order/${id}`),
     purchaseOrderDelivery: (id: string) =>
@@ -330,6 +336,10 @@ export const path = {
       generatePath(`${x}/supplier/${supplierId}/locations/${id}`),
     supplierLocations: (id: string) =>
       generatePath(`${x}/supplier/${id}/locations`),
+    supplierPayment: (id: string) =>
+      generatePath(`${x}/supplier/${id}/payments`),
+    supplierShipping: (id: string) =>
+      generatePath(`${x}/supplier/${id}/shipping`),
     supplierRoot: `${x}/supplier`,
     supplierType: (id: string) =>
       generatePath(`${x}/purchasing/supplier-types/delete/${id}`),

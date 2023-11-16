@@ -10,7 +10,7 @@ export function useCustomerSidebar({ contacts, locations }: Props) {
   const permissions = usePermissions();
   return [
     {
-      name: "Details",
+      name: "Overview",
       to: "",
     },
     {
@@ -24,6 +24,16 @@ export function useCustomerSidebar({ contacts, locations }: Props) {
       to: "locations",
       role: ["employee", "customer"],
       count: locations,
+    },
+    {
+      name: "Payments",
+      to: "payments",
+      role: ["employee"],
+    },
+    {
+      name: "Shipping",
+      to: "shipping",
+      role: ["employee"],
     },
   ].filter(
     (item) =>

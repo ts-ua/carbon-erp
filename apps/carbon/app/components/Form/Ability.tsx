@@ -14,7 +14,6 @@ import { path } from "~/utils/path";
 import type { SelectProps } from "./Select";
 
 type AbilitySelectProps = Omit<SelectProps, "options" | "onChange"> & {
-  ability?: string;
   onChange?: (
     selection: SingleValue<{
       value: string | number;
@@ -26,7 +25,6 @@ type AbilitySelectProps = Omit<SelectProps, "options" | "onChange"> & {
 const Ability = ({
   name,
   label = "Ability",
-  ability,
   helperText,
   isLoading,
   isReadOnly,
