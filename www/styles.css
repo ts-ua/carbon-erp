@@ -4,6 +4,10 @@ code {
   @apply text-sm;
 }
 
+:root {
+  --nextra-primary-hue: 161deg;
+}
+
 body {
   background: linear-gradient(
       to bottom,
@@ -39,9 +43,10 @@ body {
   --shiki-token-constant: var(--shiki-color-text);
   --shiki-token-comment: #999;
   --shiki-token-keyword: #ff0078;
-  --shiki-token-function: #0077ff;
+  --shiki-token-function: #12ff00;
   --shiki-token-string-expression: #028265;
   --shiki-token-punctuation: var(--shiki-color-text);
+  --shiki-token-string: #797afa;
 }
 
 .dark body {
@@ -49,9 +54,10 @@ body {
   --shiki-token-constant: var(--shiki-color-text);
   --shiki-token-comment: #666;
   --shiki-token-keyword: #ff0078;
-  --shiki-token-function: #0099ff;
+  --shiki-token-function: #12ff00;
   --shiki-token-string-expression: #50e3c2;
   --shiki-token-punctuation: var(--shiki-color-text);
+  --shiki-token-string: #797afa;
 
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #111 300px),
     fixed 0 0 / 20px 20px radial-gradient(#313131 1px, transparent 0),
@@ -84,4 +90,76 @@ code[data-language="sh"] {
 
 #__next article.nextra-body h5 {
   font-size: 0.85em;
+}
+
+@keyframes jumbo {
+  from {
+    background-position: 50% 50%, 50% 50%;
+  }
+  to {
+    background-position: 350% 50%, 350% 50%;
+  }
+}
+
+.jumbo {
+  --stripes: repeating-linear-gradient(
+    100deg,
+    #fff 0%,
+    #fff 7%,
+    transparent 10%,
+    transparent 12%,
+    #fff 16%
+  );
+  --stripesDark: repeating-linear-gradient(
+    100deg,
+    #000 0%,
+    #000 7%,
+    transparent 10%,
+    transparent 12%,
+    #000 16%
+  );
+  --rainbow: repeating-linear-gradient(
+    100deg,
+    #60a5fa 10%,
+    #e879f9 15%,
+    #60a5fa 20%,
+    #5eead4 25%,
+    #60a5fa 30%
+  );
+  background-image: var(--stripes), var(--rainbow);
+  background-size: 300%, 200%;
+  background-position: 50% 50%, 50% 50%;
+
+  filter: blur(10px) invert(100%);
+
+  mask-image: radial-gradient(ellipse at 100% 0%, black 40%, transparent 70%);
+
+  pointer-events: none;
+}
+
+.jumbo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--stripes), var(--rainbow);
+  background-size: 200%, 100%;
+  animation: jumbo 60s linear infinite;
+  background-attachment: fixed;
+  mix-blend-mode: difference;
+}
+
+.dark .jumbo {
+  background-image: var(--stripesDark), var(--rainbow);
+  filter: blur(10px) opacity(50%) saturate(200%);
+}
+.dark .jumbo::after {
+  background-image: var(--stripesDark), var(--rainbow);
+}
+
+.light .nx-text-primary-600 {
+  --tw-text-opacity: 1;
+  color: hsl(
+    var(--nextra-primary-hue) var(--nextra-primary-saturation) 35% /
+      var(--tw-text-opacity)
+  );
 }

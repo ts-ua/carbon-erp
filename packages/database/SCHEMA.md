@@ -889,6 +889,8 @@ CREATE TABLE "customerAccount" (
 
 CREATE INDEX "customerAccount_customerId_index" ON "customerAccount"("customerId");
 
+
+
 ```
 
 
@@ -1541,7 +1543,7 @@ CREATE POLICY "Employees with jobs_view can search for jobs" ON "search"
 
 
 
-## `rbac`
+## `abac`
 
 ```sql
 -- contact
@@ -1838,7 +1840,6 @@ CREATE POLICY "Employees with sales_delete can delete customer contacts" ON "cus
   FOR DELETE
   USING (coalesce(get_my_claim('sales_delete')::boolean, false) = true AND (get_my_claim('role'::text)) = '"employee"'::jsonb);
 
-
 -- supplierType
 
 ALTER TABLE "supplierType" ENABLE ROW LEVEL SECURITY;
@@ -1946,6 +1947,7 @@ CREATE POLICY "Suppliers with purchasing_update can update their supplier contac
 CREATE POLICY "Employees with purchasing_delete can delete supplier contacts" ON "supplierContact"
   FOR DELETE
   USING (coalesce(get_my_claim('purchasing_delete')::boolean, false) = true AND (get_my_claim('role'::text)) = '"employee"'::jsonb);
+
 
 ```
 
@@ -4367,7 +4369,6 @@ CREATE TABLE "shippingTerm" (
 
 
 CREATE TYPE "purchaseOrderType" AS ENUM (
-  'Draft',
   'Purchase', 
   'Return'
 );
@@ -4634,16 +4635,6 @@ CREATE OR REPLACE VIEW "purchaseOrders" AS
   LEFT JOIN "user" u2 ON u2."id" = p."updatedBy"
   LEFT JOIN "user" u3 ON u3."id" = p."closedBy";
 
-ALTER TABLE "supplier" 
-  ADD COLUMN "defaultCurrencyCode" TEXT,
-  ADD COLUMN "defaultPaymentTermId" TEXT,
-  ADD COLUMN "defaultShippingMethodId" TEXT,
-  ADD COLUMN "defaultShippingTermId" TEXT;
-
-ALTER TABLE "supplier"
-  ADD CONSTRAINT "supplier_defaultPaymentTermId_fkey" FOREIGN KEY ("defaultPaymentTermId") REFERENCES "paymentTerm" ("id") ON DELETE SET NULL,
-  ADD CONSTRAINT "supplier_defaultShippingMethodId_fkey" FOREIGN KEY ("defaultShippingMethodId") REFERENCES "shippingMethod" ("id") ON DELETE SET NULL,
-  ADD CONSTRAINT "supplier_defaultShippingTermId_fkey" FOREIGN KEY ("defaultShippingTermId") REFERENCES "shippingTerm" ("id") ON DELETE SET NULL;
 
 CREATE OR REPLACE VIEW "purchaseOrderSuppliers" AS
   SELECT DISTINCT
@@ -4661,17 +4652,29 @@ CREATE OR REPLACE VIEW "purchaseOrderSuppliers" AS
 
 ```sql
 CREATE TABLE "sequence" (
+  "id" TEXT GENERATED ALWAYS AS (
+    CASE WHEN prefix IS NULL AND suffix IS NULL THEN 
+      repeat('0', "size")
+    WHEN prefix IS NULL THEN
+      repeat('0', "size") || suffix
+    WHEN suffix IS NULL THEN
+      prefix || repeat('0', "size")
+    ELSE
+      prefix || repeat('0', "size") || suffix
+    END
+  )
+  STORED,
   "table" TEXT NOT NULL,
   "name" TEXT NOT NULL,
   "prefix" TEXT,
   "suffix" TEXT,
-  "next" BIGINT NOT NULL DEFAULT 1,
+  "next" INTEGER NOT NULL DEFAULT 1,
   "size" INTEGER NOT NULL DEFAULT 5,
   "step" INTEGER NOT NULL DEFAULT 1,
   "updatedAt" TIMESTAMP WITH TIME ZONE,
   "updatedBy" TEXT,
 
-  CONSTRAINT "sequence_pkey" PRIMARY KEY ("table"),
+  CONSTRAINT "sequence_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "sequence_next_check" CHECK ("next" >= 0),
   CONSTRAINT "sequence_size_check" CHECK ("size" >= 1),
   CONSTRAINT "sequence_step_check" CHECK ("step" >= 1),
@@ -6463,24 +6466,6 @@ CREATE OR REPLACE VIEW "partQuantities" AS
 
 
 
-## `customer-details`
-
-```sql
-ALTER TABLE "customer" 
-  ADD COLUMN "defaultCurrencyCode" TEXT,
-  ADD COLUMN "defaultPaymentTermId" TEXT,
-  ADD COLUMN "defaultShippingMethodId" TEXT,
-  ADD COLUMN "defaultShippingTermId" TEXT;
-
-ALTER TABLE "customer"
-  ADD CONSTRAINT "customer_defaultPaymentTermId_fkey" FOREIGN KEY ("defaultPaymentTermId") REFERENCES "paymentTerm" ("id") ON DELETE SET NULL,
-  ADD CONSTRAINT "customer_defaultShippingMethodId_fkey" FOREIGN KEY ("defaultShippingMethodId") REFERENCES "shippingMethod" ("id") ON DELETE SET NULL,
-  ADD CONSTRAINT "customer_defaultShippingTermId_fkey" FOREIGN KEY ("defaultShippingTermId") REFERENCES "shippingTerm" ("id") ON DELETE SET NULL;
-
-```
-
-
-
 ## `accounts-payable`
 
 ```sql
@@ -6501,12 +6486,15 @@ CREATE TABLE "purchaseInvoice" (
   "status" "purchaseInvoiceStatus" NOT NULL DEFAULT 'Draft',
   "supplierId" TEXT,
   "supplierReference" TEXT,
-  "supplierContactId" TEXT,
+  "invoiceSupplierId" TEXT,
+  "invoiceSupplierLocationId" TEXT,
+  "invoiceSupplierContactId" TEXT,
+  "paymentTermId" TEXT,
+  "currencyCode" TEXT NOT NULL,
+  "exchangeRate" NUMERIC(10, 4) NOT NULL DEFAULT 1,
   "dateIssued" DATE,
   "dateDue" DATE,
   "datePaid" DATE,
-  "currencyCode" TEXT NOT NULL,
-  "exchangeRate" NUMERIC(10, 4) NOT NULL DEFAULT 1,
   "subtotal" NUMERIC(10, 2) NOT NULL DEFAULT 0,
   "totalDiscount" NUMERIC(10, 2) NOT NULL DEFAULT 0,
   "totalAmount" NUMERIC(10, 2) NOT NULL DEFAULT 0,
@@ -6519,7 +6507,10 @@ CREATE TABLE "purchaseInvoice" (
 
   CONSTRAINT "purchaseInvoice_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "purchaseInvoice_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "supplier" ("id"),
-  CONSTRAINT "purchaseInvoice_supplierContactId_fkey" FOREIGN KEY ("supplierContactId") REFERENCES "supplierContact" ("id"),
+  CONSTRAINT "purchaseInvoice_invoiceSupplierId_fkey" FOREIGN KEY ("invoiceSupplierId") REFERENCES "supplier" ("id"),
+  CONSTRAINT "purchaseInvoice_invoiceSupplierLocationId_fkey" FOREIGN KEY ("invoiceSupplierLocationId") REFERENCES "supplierLocation" ("id"),
+  CONSTRAINT "purchaseInvoice_invoiceSupplierContactId_fkey" FOREIGN KEY ("invoiceSupplierContactId") REFERENCES "supplierContact" ("id"),
+  CONSTRAINT "purchaseInvoice_paymentTermId_fkey" FOREIGN KEY ("paymentTermId") REFERENCES "paymentTerm" ("id"),
   CONSTRAINT "purchaseInvoice_currencyCode_fkey" FOREIGN KEY ("currencyCode") REFERENCES "currency" ("code"),
   CONSTRAINT "purchaseInvoice_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id"),
   CONSTRAINT "purchaseInvoice_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id")
@@ -6561,6 +6552,8 @@ CREATE POLICY "Employees with invoicing_delete can delete AP invoices" ON "purch
     AND (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
 
+
+
 CREATE TABLE "purchaseInvoiceStatusHistory" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "invoiceId" TEXT NOT NULL,
@@ -6591,6 +6584,8 @@ CREATE TABLE "purchaseInvoiceLine" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "invoiceId" TEXT NOT NULL,
   "invoiceLineType" "payableLineType" NOT NULL,
+  "purchaseOrderId" TEXT,
+  "purchaseOrderLineId" TEXT,
   "partId" TEXT,
   "accountNumber" TEXT,
   "assetId" TEXT,
@@ -6606,7 +6601,9 @@ CREATE TABLE "purchaseInvoiceLine" (
   "updatedAt" TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT "purchaseInvoiceLines_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "purchaseInvoiceLines_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "purchaseInvoice" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT "purchaseInvoiceLines_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "purchaseInvoice" ("id") ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT "purchaseInvoiceLines_purchaseOrderId_fkey" FOREIGN KEY ("purchaseOrderId") REFERENCES "purchaseOrder" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT "purchaseInvoiceLines_purchaseOrderLineId_fkey" FOREIGN KEY ("purchaseOrderLineId") REFERENCES "purchaseOrderLine" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_partId_fkey" FOREIGN KEY ("partId") REFERENCES "part" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_accountNumber_fkey" FOREIGN KEY ("accountNumber") REFERENCES "account" ("number") ON UPDATE CASCADE ON DELETE RESTRICT,
   -- CONSTRAINT "purchaseInvoiceLines_assetId_fkey" FOREIGN KEY ("assetId") REFERENCES "fixedAsset" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
@@ -6644,6 +6641,62 @@ CREATE POLICY "Employees with invoicing_delete can delete AP invoice lines" ON "
     coalesce(get_my_claim('invoicing_delete')::boolean, false) = true 
     AND (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
+
+CREATE TABLE "purchaseInvoicePriceChange" (
+  "id" TEXT NOT NULL DEFAULT xid(),
+  "invoiceId" TEXT NOT NULL,
+  "invoiceLineId" TEXT NOT NULL,
+  "previousPrice" NUMERIC(10, 2) NOT NULL DEFAULT 0,
+  "newPrice" NUMERIC(10, 2) NOT NULL DEFAULT 0,
+  "previousQuantity" NUMERIC(10, 2) NOT NULL DEFAULT 0,
+  "newQuantity" NUMERIC(10, 2) NOT NULL DEFAULT 0,
+  "updatedBy" TEXT NOT NULL,
+
+  CONSTRAINT "purchaseInvoicePriceChange_pkey" PRIMARY KEY ("id"),
+  CONSTRAINT "purchaseInvoicePriceChange_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "purchaseInvoice" ("id") ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT "purchaseInvoicePriceChange_invoiceLineId_fkey" FOREIGN KEY ("invoiceLineId") REFERENCES "purchaseInvoiceLine" ("id") ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT "purchaseInvoicePriceChange_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+ALTER TABLE "purchaseInvoicePriceChange" ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Employees with invoicing_view can view AP invoice price changes" ON "purchaseInvoicePriceChange"
+  FOR SELECT
+  USING (
+    coalesce(get_my_claim('invoicing_view')::boolean,false) 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+
+CREATE OR REPLACE FUNCTION "purchaseInvoiceLine_update_price_change"()
+  RETURNS TRIGGER AS $$
+  BEGIN
+    IF NEW."unitPrice" <> OLD."unitPrice" OR NEW."quantity" <> OLD."quantity" THEN
+      INSERT INTO "purchaseInvoicePriceChange" (
+        "invoiceId",
+        "invoiceLineId",
+        "previousPrice",
+        "newPrice",
+        "previousQuantity",
+        "newQuantity",
+        "updatedBy"
+      ) VALUES (
+        NEW."invoiceId",
+        NEW."id",
+        OLD."unitPrice",
+        NEW."unitPrice",
+        OLD."quantity",
+        NEW."quantity",
+        NEW."updatedBy"
+      );
+    END IF;
+    RETURN NEW;
+  END;
+  $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER "purchaseInvoiceLine_update_price_change"
+  AFTER UPDATE ON "purchaseInvoiceLine"
+  FOR EACH ROW
+  EXECUTE PROCEDURE "purchaseInvoiceLine_update_price_change"();
 
 CREATE TABLE "purchasePayment" (
   "id" TEXT NOT NULL DEFAULT xid(),
@@ -6723,10 +6776,13 @@ CREATE OR REPLACE VIEW "purchaseInvoices" AS
     pi."invoiceId",
     pi."supplierId",
     pi."supplierReference",
-    pi."supplierContactId",
+    pi."invoiceSupplierId",
+    pi."invoiceSupplierLocationId",
+    pi."invoiceSupplierContactId",
     pi."dateIssued",
     pi."dateDue",
     pi."datePaid",
+    pi."paymentTermId",
     pi."currencyCode",
     pi."exchangeRate",
     pi."subtotal",
@@ -6750,7 +6806,7 @@ CREATE OR REPLACE VIEW "purchaseInvoices" AS
     u2."fullName" AS "updatedByFullName"
   FROM "purchaseInvoice" pi
     LEFT JOIN "supplier" s ON s.id = pi."supplierId"
-    LEFT JOIN "supplierContact" sc ON sc.id = pi."supplierContactId"
+    LEFT JOIN "supplierContact" sc ON sc.id = pi."invoiceSupplierContactId"
     LEFT JOIN "contact" c ON c.id = sc."contactId"
     LEFT JOIN "user" u ON u."id" = pi."createdBy"
     LEFT JOIN "user" u2 ON u2."id" = pi."updatedBy";
@@ -6758,5 +6814,172 @@ CREATE OR REPLACE VIEW "purchaseInvoices" AS
 
 
 ALTER VIEW "purchaseInvoices" SET (security_invoker = on);
+```
+
+
+
+## `supplier-details`
+
+```sql
+
+
+CREATE TABLE "supplierPayment" (
+  "supplierId" TEXT NOT NULL,
+  "invoiceSupplierId" TEXT,
+  "invoiceSupplierLocationId" TEXT,
+  "invoiceSupplierContactId" TEXT,
+  "paymentTermId" TEXT,
+  "currencyCode" TEXT,
+  "updatedAt" TIMESTAMP WITH TIME ZONE,
+  "updatedBy" TEXT,
+  
+  CONSTRAINT "supplierPayment_pkey" PRIMARY KEY ("supplierId"),
+  CONSTRAINT "supplierPayment_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "supplier"("id") ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT "supplierPayment_invoiceSupplierId_fkey" FOREIGN KEY ("invoiceSupplierId") REFERENCES "supplier"("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "supplierPayment_invoiceSupplierLocationId_fkey" FOREIGN KEY ("invoiceSupplierLocationId") REFERENCES "supplierLocation"("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "supplierPayment_invoiceSupplierContactId_fkey" FOREIGN KEY ("invoiceSupplierContactId") REFERENCES "supplierContact"("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "supplierPayment_paymentTermId_fkey" FOREIGN KEY ("paymentTermId") REFERENCES "paymentTerm" ("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "supplierPayment_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user"("id") ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+ALTER TABLE "supplierPayment" ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Employees with purchasing_view can view supplier payment" ON "supplierPayment"
+  FOR SELECT
+  USING (coalesce(get_my_claim('purchasing_view')::boolean, false) = true AND (get_my_claim('role'::text)) = '"employee"'::jsonb);
+
+CREATE POLICY "Employees with purchasing_update can update supplier payment" ON "supplierPayment"
+  FOR UPDATE
+  USING (coalesce(get_my_claim('purchasing_update')::boolean,false) AND (get_my_claim('role'::text)) = '"employee"'::jsonb);
+
+
+CREATE TABLE "supplierShipping" (
+  "supplierId" TEXT NOT NULL,
+  "shippingSupplierId" TEXT,
+  "shippingSupplierLocationId" TEXT,
+  "shippingSupplierContactId" TEXT,
+  "shippingTermId" TEXT,
+  "shippingMethodId" TEXT,
+  "updatedAt" TIMESTAMP WITH TIME ZONE,
+  "updatedBy" TEXT,
+
+  CONSTRAINT "supplierShipping_pkey" PRIMARY KEY ("supplierId"),
+  CONSTRAINT "supplierShipping_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "supplier"("id") ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT "supplierShipping_shippingSupplierId_fkey" FOREIGN KEY ("shippingSupplierId") REFERENCES "supplier"("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "supplierShipping_shippingSupplierLocationId_fkey" FOREIGN KEY ("shippingSupplierLocationId") REFERENCES "supplierLocation"("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "supplierShipping_shippingSupplierContactId_fkey" FOREIGN KEY ("shippingSupplierContactId") REFERENCES "supplierContact"("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "supplierShipping_shippingTermId_fkey" FOREIGN KEY ("shippingTermId") REFERENCES "shippingTerm" ("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "supplierShipping_shippingMethodId_fkey" FOREIGN KEY ("shippingMethodId") REFERENCES "shippingMethod" ("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "supplierShipping_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user"("id") ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+ALTER TABLE "supplierShipping" ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Employees with purchasing_view can view supplier shipping" ON "supplierShipping"
+  FOR SELECT
+  USING (coalesce(get_my_claim('purchasing_view')::boolean, false) = true AND (get_my_claim('role'::text)) = '"employee"'::jsonb);
+
+CREATE POLICY "Employees with purchasing_update can update supplier shipping" ON "supplierShipping"
+  FOR UPDATE
+  USING (coalesce(get_my_claim('purchasing_update')::boolean,false) AND (get_my_claim('role'::text)) = '"employee"'::jsonb);
+
+
+CREATE FUNCTION public.create_supplier_entries()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public."supplierPayment"("supplierId", "invoiceSupplierId")
+  VALUES (new.id, new.id);
+  INSERT INTO public."supplierShipping"("supplierId", "shippingSupplierId")
+  VALUES (new.id, new.id);
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER create_supplier_entries
+  AFTER INSERT on public.supplier
+  FOR EACH ROW EXECUTE PROCEDURE public.create_supplier_entries();
+```
+
+
+
+## `customer-details`
+
+```sql
+
+CREATE TABLE "customerPayment" (
+  "customerId" TEXT NOT NULL,
+  "invoiceCustomerId" TEXT,
+  "invoiceCustomerLocationId" TEXT,
+  "invoiceCustomerContactId" TEXT,
+  "paymentTermId" TEXT,
+  "currencyCode" TEXT,
+  "updatedAt" TIMESTAMP WITH TIME ZONE,
+  "updatedBy" TEXT,
+  
+  CONSTRAINT "customerPayment_pkey" PRIMARY KEY ("customerId"),
+  CONSTRAINT "customerPayment_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "customer"("id") ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT "customerPayment_invoiceCustomerId_fkey" FOREIGN KEY ("invoiceCustomerId") REFERENCES "customer"("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "customerPayment_invoiceCustomerLocationId_fkey" FOREIGN KEY ("invoiceCustomerLocationId") REFERENCES "customerLocation"("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "customerPayment_invoiceCustomerContactId_fkey" FOREIGN KEY ("invoiceCustomerContactId") REFERENCES "customerContact"("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "customerPayment_paymentTermId_fkey" FOREIGN KEY ("paymentTermId") REFERENCES "paymentTerm"("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "customerPayment_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user"("id") ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+
+ALTER TABLE "customerPayment" ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Employees with sales_view can view customer payment" ON "customerPayment"
+  FOR SELECT
+  USING (coalesce(get_my_claim('sales_view')::boolean, false) = true AND (get_my_claim('role'::text)) = '"employee"'::jsonb);
+
+CREATE POLICY "Employees with sales_update can update customer payment" ON "customerPayment"
+  FOR UPDATE
+  USING (coalesce(get_my_claim('sales_update')::boolean,false) AND (get_my_claim('role'::text)) = '"employee"'::jsonb);
+
+CREATE TABLE "customerShipping" (
+  "customerId" TEXT NOT NULL,
+  "shippingCustomerId" TEXT,
+  "shippingCustomerLocationId" TEXT,
+  "shippingCustomerContactId" TEXT,
+  "shippingTermId" TEXT,
+  "shippingMethodId" TEXT,
+  "updatedAt" TIMESTAMP WITH TIME ZONE,
+  "updatedBy" TEXT,
+
+  CONSTRAINT "customerShipping_pkey" PRIMARY KEY ("customerId"),
+  CONSTRAINT "customerShipping_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "customer"("id") ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT "customerShipping_shippingCustomerId_fkey" FOREIGN KEY ("shippingCustomerId") REFERENCES "customer"("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "customerShipping_shippingCustomerLocationId_fkey" FOREIGN KEY ("shippingCustomerLocationId") REFERENCES "customerLocation"("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "customerShipping_shippingCustomerContactId_fkey" FOREIGN KEY ("shippingCustomerContactId") REFERENCES "customerContact"("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "customerShipping_shippingTermId_fkey" FOREIGN KEY ("shippingTermId") REFERENCES "shippingTerm" ("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "customerShipping_shippingMethodId_fkey" FOREIGN KEY ("shippingMethodId") REFERENCES "shippingMethod" ("id") ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT "customerShipping_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user"("id") ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+ALTER TABLE "customerShipping" ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Employees with purchasing_view can view customer shipping" ON "customerShipping"
+  FOR SELECT
+  USING (coalesce(get_my_claim('purchasing_view')::boolean, false) = true AND (get_my_claim('role'::text)) = '"employee"'::jsonb);
+
+CREATE POLICY "Employees with purchasing_update can update customer shipping" ON "customerShipping"
+  FOR UPDATE
+  USING (coalesce(get_my_claim('purchasing_update')::boolean,false) AND (get_my_claim('role'::text)) = '"employee"'::jsonb);
+
+
+CREATE FUNCTION public.create_customer_entries()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public."customerPayment"("customerId", "invoiceCustomerId")
+  VALUES (new.id, new.id);
+  INSERT INTO public."customerShipping"("customerId", "shippingCustomerId")
+  VALUES (new.id, new.id);
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER create_customer_entries
+  AFTER INSERT on public.customer
+  FOR EACH ROW EXECUTE PROCEDURE public.create_customer_entries();
 ```
 

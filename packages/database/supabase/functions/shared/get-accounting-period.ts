@@ -1,10 +1,14 @@
 import { format } from "https://deno.land/std@0.160.0/datetime/mod.ts";
 import { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2.33.1";
-import { Kysely } from "https://esm.sh/kysely@0.23.4";
+import { Kysely } from "https://esm.sh/kysely@0.26.3";
 import { Database } from "../../../src/types.ts";
 import { DB } from "../lib/database.ts";
 
 // TODO: refactor to use @internationalized/date when npm:<package>@<version> is supported
+const isLeapYear = (year: number) => {
+  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+};
+
 const daysInMonths: Record<number, number> = {
   1: 31,
   2: 28,
@@ -73,9 +77,13 @@ export async function getCurrentAccountingPeriod<T>(
     const year = new Date().getFullYear();
     const month = new Date().getMonth() + 1;
     const startDate = `${year}-${month.toString().padStart(2, "0")}-01`;
-    const endDate = `${year}-${month.toString().padStart(2, "0")}-${
-      daysInMonths[month - 1]
+    let endDate = `${year}-${month.toString().padStart(2, "0")}-${
+      daysInMonths[month]
     }`;
+
+    if (month === 2 && isLeapYear(year)) {
+      endDate = `${year}-${month.toString().padStart(2, "0")}-29`;
+    }
 
     await trx
       .updateTable("accountingPeriod")

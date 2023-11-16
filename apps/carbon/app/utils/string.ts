@@ -4,7 +4,7 @@ export const capitalize = (words: string) => {
 };
 
 // used to generate sequences
-export const interpolateDate = (value: string | null) => {
+export const interpolateSequenceDate = (value: string | null) => {
   // replace all instances of %{year} with the current year
   if (!value) return "";
   let result = value;

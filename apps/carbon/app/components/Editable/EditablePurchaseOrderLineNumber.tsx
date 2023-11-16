@@ -20,6 +20,7 @@ const EditablePurchaseOrderLineNumber =
       parts: { label: string; value: string }[];
       accounts: { label: string; value: string }[];
       defaultLocationId: string | null;
+      userId: string;
     }
   ) =>
   ({
@@ -29,7 +30,7 @@ const EditablePurchaseOrderLineNumber =
     onError,
     onUpdate,
   }: EditableTableCellComponentProps<PurchaseOrderLine>) => {
-    const { client, parts, accounts } = options;
+    const { client, parts, accounts, userId } = options;
     const selectOptions =
       row.purchaseOrderLineType === "Part"
         ? parts
@@ -69,6 +70,7 @@ const EditablePurchaseOrderLineNumber =
             description: account.data?.name ?? "",
             unitOfMeasureCode: null,
             shelfId: null,
+            updatedBy: userId,
           })
           .eq("id", row.id);
 
@@ -131,6 +133,7 @@ const EditablePurchaseOrderLineNumber =
             locationId: options.defaultLocationId,
             shelfId: shelf.data?.defaultShelfId ?? null,
             unitPrice: cost.data?.unitCost ?? null,
+            updatedBy: userId,
           })
           .eq("id", row.id);
 
