@@ -1,7 +1,7 @@
 {
   "name": "shared",
   "private": true,
-  "license": "AGPL-3.0-or-later",
+  "license": "Apache-2.0",
   "sideEffects": false,
   "scripts": {
     "build": "remix build",
