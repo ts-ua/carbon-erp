@@ -74,6 +74,10 @@ export default function useReceiptForm({
     navigate(path.to.receiptPost(receipt.id));
   };
 
+  const onInvoice = () => {
+    navigate(path.to.receiptInvoice(receipt.id));
+  };
+
   const sourceDocumentIdFromParams = params.get("sourceDocumentId");
   const sourceDocumentFromParams = params.get("sourceDocument");
 
@@ -94,29 +98,23 @@ export default function useReceiptForm({
     if (!supabase) return;
 
     try {
-      await fetch(path.to.api.rollback("receipt", receipt.receiptId), {
+      await fetch(path.to.api.rollback("receipt", receipt.id), {
         method: "DELETE",
       })
         .then(() => console.log("successfully rolled back receipt sequence"))
         .catch(console.error);
 
-      await supabase
-        .from("receipt")
-        .delete()
-        .eq("receiptId", receipt.receiptId);
+      await supabase.from("receipt").delete().eq("receiptId", receipt.id);
     } catch {
       setError("Failed to delete receipt");
     }
-  }, [receipt.receiptId, supabase]);
+  }, [receipt.id, supabase]);
 
   const deleteReceiptLines = useCallback(async () => {
     if (!supabase) throw new Error("supabase client is not defined");
 
-    return supabase
-      .from("receiptLine")
-      .delete()
-      .eq("receiptId", receipt.receiptId);
-  }, [receipt.receiptId, supabase]);
+    return supabase.from("receiptLine").delete().eq("receiptId", receipt.id);
+  }, [receipt.id, supabase]);
 
   const fetchSourceDocuments = useCallback(() => {
     if (!supabase) return;
@@ -150,35 +148,31 @@ export default function useReceiptForm({
 
     switch (sourceDocument) {
       case "Purchase Order":
-        const [
-          purchaseOrder,
-          receiptLines,
-          previouslyReceivedLines,
-          purchaseOrderLines,
-        ] = await Promise.all([
-          supabase
-            .from("purchaseOrders")
-            .select("*")
-            .eq("id", sourceDocumentId)
-            .single(),
+        const [purchaseOrder, receiptLines, purchaseOrderLines] =
+          await Promise.all([
+            supabase
+              .from("purchaseOrders")
+              .select("*")
+              .eq("id", sourceDocumentId)
+              .single(),
 
-          supabase
-            .from("receiptLine")
-            .select("*")
-            .eq("receiptId", receipt.receiptId),
-          supabase
-            .from("receiptQuantityReceivedByLine")
-            .select("*")
-            .eq("sourceDocumentId", sourceDocumentId),
-          locationId
-            ? supabase
-                .from("purchaseOrderLine")
-                .select("*")
-                .eq("purchaseOrderId", sourceDocumentId)
-                .eq("purchaseOrderLineType", "Part")
-                .eq("locationId", locationId)
-            : Promise.resolve({ data: [] as PurchaseOrderLine[], error: null }),
-        ]);
+            supabase
+              .from("receiptLine")
+              .select("*")
+              .eq("receiptId", receipt.id),
+
+            locationId
+              ? supabase
+                  .from("purchaseOrderLine")
+                  .select("*")
+                  .eq("purchaseOrderId", sourceDocumentId)
+                  .eq("purchaseOrderLineType", "Part")
+                  .eq("locationId", locationId)
+              : Promise.resolve({
+                  data: [] as PurchaseOrderLine[],
+                  error: null,
+                }),
+          ]);
 
         if (purchaseOrder.error) {
           setError(purchaseOrder.error.message);
@@ -215,9 +209,9 @@ export default function useReceiptForm({
         }
 
         const previouslyReceivedQuantitiesByLine = (
-          previouslyReceivedLines.data ?? []
+          purchaseOrderLines.data ?? []
         ).reduce<Record<string, number>>((acc, d) => {
-          if (d.lineId) acc[d.lineId] = d.receivedQuantity ?? 0;
+          if (d.id) acc[d.id] = d.quantityReceived ?? 0;
           return acc;
         }, {});
 
@@ -238,7 +232,7 @@ export default function useReceiptForm({
             (previouslyReceivedQuantitiesByLine[d.id] ?? 0);
 
           acc.push({
-            receiptId: receipt.receiptId,
+            receiptId: receipt.id,
             lineId: d.id,
             partId: d.partId,
             orderQuantity: d.purchaseQuantity,
@@ -267,7 +261,7 @@ export default function useReceiptForm({
         const { data: receiptLinesData, error: selectError } = await supabase
           .from("receiptLine")
           .select("*")
-          .eq("receiptId", receipt.receiptId);
+          .eq("receiptId", receipt.id);
 
         if (selectError) {
           setError(selectError.message);
@@ -283,7 +277,7 @@ export default function useReceiptForm({
   }, [
     deleteReceiptLines,
     locationId,
-    receipt.receiptId,
+    receipt.id,
     receipt.sourceDocumentId,
     sourceDocument,
     sourceDocumentId,
@@ -385,6 +379,7 @@ export default function useReceiptForm({
     supplierId,
     sourceDocuments,
     onClose,
+    onInvoice,
     onPost,
     setLocationId,
     setReceiptLines,

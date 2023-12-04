@@ -4454,7 +4454,7 @@ CREATE TABLE "purchaseOrderLine" (
   "shelfId" TEXT,
   "setupPrice" NUMERIC(9,2),
   "receivedComplete" BOOLEAN NOT NULL DEFAULT FALSE,
-  "invoiceComplete" BOOLEAN NOT NULL DEFAULT FALSE,
+  "invoicedComplete" BOOLEAN NOT NULL DEFAULT FALSE,
   "requiresInspection" BOOLEAN NOT NULL DEFAULT FALSE,
   "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   "createdBy" TEXT NOT NULL,
@@ -4790,9 +4790,14 @@ FOR DELETE USING (
 ```sql
 ALTER TABLE "purchaseOrder" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Employees with purchasing_view can view purchase orders" ON "purchaseOrder"
+CREATE POLICY "Employees with purchasing_view, inventory_view, or invoicing_view can view purchase orders" ON "purchaseOrder"
   FOR SELECT
-  USING (coalesce(get_my_claim('purchasing_view')::boolean, false) = true AND (get_my_claim('role'::text)) = '"employee"'::jsonb);
+  USING (
+    (
+      coalesce(get_my_claim('purchasing_view')::boolean, false) = true OR
+      coalesce(get_my_claim('inventory_view')::boolean, false) = true OR
+      coalesce(get_my_claim('invoicing_view')::boolean, false) = true
+    ) AND (get_my_claim('role'::text)) = '"employee"'::jsonb);
 
 CREATE POLICY "Suppliers with purchasing_view can their own purchase orders" ON "purchaseOrder"
   FOR SELECT
@@ -5295,8 +5300,7 @@ CREATE POLICY "Employees with accounting_create can insert journals" ON "journal
 
 
 CREATE TYPE "journalLineDocumentType" AS ENUM (
-  'Quote',
-  'Order',
+  'Receipt',
   'Invoice',
   'Credit Memo',
   'Blanket Order',
@@ -5309,9 +5313,12 @@ CREATE TABLE "journalLine" (
   "accountNumber" TEXT NOT NULL,
   "description" TEXT,
   "amount" NUMERIC(19, 4) NOT NULL,
+  "quantity" NUMERIC(12, 4) NOT NULL DEFAULT 1,
   "documentType" "journalLineDocumentType", 
   "documentId" TEXT,
   "externalDocumentId" TEXT,
+  "reference" TEXT,
+  "accrual" BOOLEAN NOT NULL DEFAULT false,
   "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 
   CONSTRAINT "journalLine_pkey" PRIMARY KEY ("id"),
@@ -5380,7 +5387,7 @@ CREATE TYPE "partLedgerDocumentType" AS ENUM (
   'Direct Transfer'
 );
 
-CREATE TABLE "valueLedger" (
+CREATE TABLE "costLedger" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "entryNumber" SERIAL,
   "postingDate" DATE NOT NULL DEFAULT CURRENT_DATE,
@@ -5390,36 +5397,36 @@ CREATE TABLE "valueLedger" (
   "documentType" "partLedgerDocumentType",
   "documentId" TEXT,
   "externalDocumentId" TEXT,
-  "costAmountActual" NUMERIC(19, 4) NOT NULL DEFAULT 0,
-  "costAmountExpected" NUMERIC(19, 4) NOT NULL DEFAULT 0,
-  "actualCostPostedToGl" NUMERIC(19, 4) NOT NULL DEFAULT 0,
-  "expectedCostPostedToGl" NUMERIC(19, 4) NOT NULL DEFAULT 0,
+  "partId" TEXT,
+  "quantity" NUMERIC(12, 4) NOT NULL DEFAULT 0,
+  "cost" NUMERIC(19, 4) NOT NULL DEFAULT 0,
+  "costPostedToGL" NUMERIC(19, 4) NOT NULL DEFAULT 0,
   "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 
-  CONSTRAINT "valueLedger_pkey" PRIMARY KEY ("id")
+  CONSTRAINT "costLedger_pkey" PRIMARY KEY ("id")
 );
 
-ALTER TABLE "valueLedger" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "costLedger" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Employees with accounting_view can view the value ledger" ON "valueLedger"
+CREATE POLICY "Employees with accounting_view can view the value ledger" ON "costLedger"
   FOR SELECT
   USING (
     coalesce(get_my_claim('accounting_view')::boolean, false) = true AND
     (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
 
-CREATE TABLE "valueLedgerJournalLineRelation" (
-  "valueLedgerId" TEXT NOT NULL,
+CREATE TABLE "costLedgerJournalLineRelation" (
+  "costLedgerId" TEXT NOT NULL,
   "journalLineId" TEXT NOT NULL,
 
-  CONSTRAINT "valueLedgerJournalLineRelation_pkey" PRIMARY KEY ("valueLedgerId", "journalLineId"),
-  CONSTRAINT "valueLedgerJournalLineRelation_valueLedgerId_fkey" FOREIGN KEY ("valueLedgerId") REFERENCES "valueLedger"("id"),
-  CONSTRAINT "valueLedgerJournalLineRelation_journalLineId_fkey" FOREIGN KEY ("journalLineId") REFERENCES "journalLine"("id")
+  CONSTRAINT "costLedgerJournalLineRelation_pkey" PRIMARY KEY ("costLedgerId", "journalLineId"),
+  CONSTRAINT "costLedgerJournalLineRelation_costLedgerId_fkey" FOREIGN KEY ("costLedgerId") REFERENCES "costLedger"("id"),
+  CONSTRAINT "costLedgerJournalLineRelation_journalLineId_fkey" FOREIGN KEY ("journalLineId") REFERENCES "journalLine"("id")
 );
 
-ALTER TABLE "valueLedgerJournalLineRelation" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "costLedgerJournalLineRelation" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Employees with accounting_view can view the value ledger/general ledger relations" ON "valueLedgerJournalLineRelation"
+CREATE POLICY "Employees with accounting_view can view the value ledger/general ledger relations" ON "costLedgerJournalLineRelation"
   FOR SELECT
   USING (
     coalesce(get_my_claim('accounting_view')::boolean, false) = true AND
@@ -5457,24 +5464,6 @@ CREATE POLICY "Certain employees can view the parts ledger" ON "partLedger"
       coalesce(get_my_claim('parts_view')::boolean, false) = true
     )
     AND (get_my_claim('role'::text)) = '"employee"'::jsonb
-  );
-  
-CREATE TABLE "partLedgerValueLedgerRelation" (
-  "partLedgerId" TEXT NOT NULL,
-  "valueLedgerId" TEXT NOT NULL,
-
-  CONSTRAINT "partLedgerValueLedgerRelation_pkey" PRIMARY KEY ("partLedgerId", "valueLedgerId"),
-  CONSTRAINT "partLedgerValueLedgerRelation_partLedgerId_fkey" FOREIGN KEY ("partLedgerId") REFERENCES "partLedger"("id"),
-  CONSTRAINT "partLedgerValueLedgerRelation_valueLedgerId_fkey" FOREIGN KEY ("valueLedgerId") REFERENCES "valueLedger"("id")
-);
-
-ALTER TABLE "partLedgerValueLedgerRelation" ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Employees with accounting_view can view the part ledger/value ledger relations" ON "partLedgerValueLedgerRelation"
-  FOR SELECT
-  USING (
-    coalesce(get_my_claim('accounting_view')::boolean, false) = true AND
-    (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
 
 CREATE TYPE "supplierLedgerDocumentType" AS ENUM (
@@ -5529,6 +5518,8 @@ $$;
 
 
 
+      
+      
 
 
 ```
@@ -5635,7 +5626,7 @@ CREATE TABLE "receiptLine" (
   "updatedBy" TEXT,
 
   CONSTRAINT "receiptLine_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "receiptLine_receiptId_fkey" FOREIGN KEY ("receiptId") REFERENCES "receipt" ("receiptId") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "receiptLine_receiptId_fkey" FOREIGN KEY ("receiptId") REFERENCES "receipt" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT "receiptLine_partId_fkey" FOREIGN KEY ("partId") REFERENCES "part" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT "receiptLine_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "location" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT "receiptLine_shelfId_fkey" FOREIGN KEY ("shelfId", "locationId") REFERENCES "shelf" ("id", "locationId") ON DELETE SET NULL ON UPDATE CASCADE,
@@ -5678,15 +5669,7 @@ CREATE POLICY "Employees with inventory_delete can delete receipt lines" ON "rec
     AND (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
 
-CREATE OR REPLACE VIEW "receiptQuantityReceivedByLine" AS 
-  SELECT
-    r."sourceDocumentId",
-    l."lineId",
-    SUM(l."receivedQuantity") AS "receivedQuantity"
-  FROM "receipt" r 
-  INNER JOIN "receiptLine" l
-    ON l."receiptId" = r."receiptId"
-  GROUP BY r."sourceDocumentId", l."lineId";
+
 
 
 
@@ -5755,6 +5738,7 @@ CREATE TABLE "accountDefault" (
     "workInProgressAccount" TEXT NOT NULL,
     "receivablesAccount" TEXT NOT NULL,
     "inventoryShippedNotInvoicedAccount" TEXT NOT NULL,
+    "inventoryInvoicedNotReceivedAccount" TEXT NOT NULL,
     "bankCashAccount" TEXT NOT NULL,
     "bankLocalCurrencyAccount" TEXT NOT NULL,
     "bankForeignCurrencyAccount" TEXT NOT NULL,
@@ -5846,6 +5830,7 @@ CREATE TABLE "postingGroupInventory" (
   "inventoryAccount" TEXT NOT NULL,
   "inventoryInterimAccrualAccount" TEXT NOT NULL,
   "inventoryReceivedNotInvoicedAccount" TEXT NOT NULL,
+  "inventoryInvoicedNotReceivedAccount" TEXT NOT NULL,
   "inventoryShippedNotInvoicedAccount" TEXT NOT NULL,
   "workInProgressAccount" TEXT NOT NULL,
   "directCostAppliedAccount" TEXT NOT NULL,
@@ -5865,6 +5850,7 @@ CREATE TABLE "postingGroupInventory" (
   CONSTRAINT "postingGroupInventory_inventoryAccount_fkey" FOREIGN KEY ("inventoryAccount") REFERENCES "account" ("number") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "postingGroupInventory_inventoryInterimAccrualAccount_fkey" FOREIGN KEY ("inventoryInterimAccrualAccount") REFERENCES "account" ("number") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "postingGroupInventory_inventoryReceivedNotInvoicedAccount_fkey" FOREIGN KEY ("inventoryReceivedNotInvoicedAccount") REFERENCES "account" ("number") ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT "postingGroupInventory_inventoryInvoicedNotReceivedAccount_fkey" FOREIGN KEY ("inventoryInvoicedNotReceivedAccount") REFERENCES "account" ("number") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "postingGroupInventory_inventoryShippedNotInvoicedAccount_fkey" FOREIGN KEY ("inventoryShippedNotInvoicedAccount") REFERENCES "account" ("number") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "postingGroupInventory_workInProgressAccount_fkey" FOREIGN KEY ("workInProgressAccount") REFERENCES "account" ("number") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "postingGroupInventory_directCostAppliedAccount_fkey" FOREIGN KEY ("directCostAppliedAccount") REFERENCES "account" ("number") ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -5900,6 +5886,7 @@ CREATE TABLE "postingGroupPurchasing" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "supplierTypeId" TEXT,
   "partGroupId" TEXT,
+  "payablesAccount" TEXT NOT NULL,
   "purchaseAccount" TEXT NOT NULL,
   "purchaseDiscountAccount" TEXT NOT NULL,
   "purchaseCreditAccount" TEXT NOT NULL,
@@ -5911,6 +5898,7 @@ CREATE TABLE "postingGroupPurchasing" (
   CONSTRAINT "postingGroupPurchasing_id_supplierTypeId_partGroupId_key" UNIQUE ("supplierTypeId", "partGroupId"),
   CONSTRAINT "postingGroupPurchasing_partGroupId_fkey" FOREIGN KEY ("partGroupId") REFERENCES "partGroup" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT "postingGroupPurchasing_supplierTypeId_fkey" FOREIGN KEY ("supplierTypeId") REFERENCES "supplierType" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "postingGroupPurchasing_payablesAccount_fkey" FOREIGN KEY ("payablesAccount") REFERENCES "account" ("number") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "postingGroupPurchasing_purchaseAccount_fkey" FOREIGN KEY ("purchaseAccount") REFERENCES "account" ("number") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "postingGroupPurchasing_purchaseDiscountAccount_fkey" FOREIGN KEY ("purchaseDiscountAccount") REFERENCES "account" ("number") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "postingGroupPurchasing_purchaseCreditAccount_fkey" FOREIGN KEY ("purchaseCreditAccount") REFERENCES "account" ("number") ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -5941,6 +5929,7 @@ CREATE TABLE "postingGroupSales" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "customerTypeId" TEXT,
   "partGroupId" TEXT,
+  "receivablesAccount" TEXT NOT NULL,
   "salesAccount" TEXT NOT NULL,
   "salesDiscountAccount" TEXT NOT NULL,
   "salesCreditAccount" TEXT NOT NULL,
@@ -5952,6 +5941,7 @@ CREATE TABLE "postingGroupSales" (
   CONSTRAINT "postingGroupSales_id_customerTypeId_partGroupId_key" UNIQUE ("customerTypeId", "partGroupId"),
   CONSTRAINT "postingGroupSales_partGroupId_fkey" FOREIGN KEY ("partGroupId") REFERENCES "partGroup" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT "postingGroupSales_customerTypeId_fkey" FOREIGN KEY ("customerTypeId") REFERENCES "customerType" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "postingGroupSales_receivablesAccount_fkey" FOREIGN KEY ("receivablesAccount") REFERENCES "account" ("number") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "postingGroupSales_salesAccount_fkey" FOREIGN KEY ("salesAccount") REFERENCES "account" ("number") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "postingGroupSales_salesDiscountAccount_fkey" FOREIGN KEY ("salesDiscountAccount") REFERENCES "account" ("number") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "postingGroupSales_salesCreditAccount_fkey" FOREIGN KEY ("salesCreditAccount") REFERENCES "account" ("number") ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -5993,6 +5983,7 @@ BEGIN
       "inventoryAccount",
       "inventoryInterimAccrualAccount",
       "inventoryReceivedNotInvoicedAccount",
+      "inventoryInvoicedNotReceivedAccount",
       "inventoryShippedNotInvoicedAccount",
       "workInProgressAccount",
       "directCostAppliedAccount",
@@ -6010,6 +6001,7 @@ BEGIN
       account_defaults."inventoryAccount",
       account_defaults."inventoryInterimAccrualAccount",
       account_defaults."inventoryReceivedNotInvoicedAccount",
+      account_defaults."inventoryInvoicedNotReceivedAccount",
       account_defaults."inventoryShippedNotInvoicedAccount",
       account_defaults."workInProgressAccount",
       account_defaults."directCostAppliedAccount",
@@ -6031,6 +6023,7 @@ BEGIN
     "inventoryAccount",
     "inventoryInterimAccrualAccount",
     "inventoryReceivedNotInvoicedAccount",
+    "inventoryInvoicedNotReceivedAccount",
     "inventoryShippedNotInvoicedAccount",
     "workInProgressAccount",
     "directCostAppliedAccount",
@@ -6048,6 +6041,7 @@ BEGIN
     account_defaults."inventoryAccount",
     account_defaults."inventoryInterimAccrualAccount",
     account_defaults."inventoryReceivedNotInvoicedAccount",
+    account_defaults."inventoryInvoicedNotReceivedAccount",
     account_defaults."inventoryShippedNotInvoicedAccount",
     account_defaults."workInProgressAccount",
     account_defaults."directCostAppliedAccount",
@@ -6082,6 +6076,7 @@ BEGIN
     INSERT INTO "postingGroupSales" (
       "partGroupId",
       "customerTypeId",
+      "receivablesAccount",
       "salesAccount",
       "salesDiscountAccount",
       "salesCreditAccount",
@@ -6091,6 +6086,7 @@ BEGIN
     ) VALUES (
       new."id",
       rec."id",
+      account_defaults."receivablesAccount",
       account_defaults."salesAccount",
       account_defaults."salesDiscountAccount",
       account_defaults."receivablesAccount",
@@ -6104,6 +6100,7 @@ BEGIN
   INSERT INTO "postingGroupSales" (
     "partGroupId",
     "customerTypeId",
+    "receivablesAccount",
     "salesAccount",
     "salesDiscountAccount",
     "salesCreditAccount",
@@ -6113,6 +6110,7 @@ BEGIN
   ) VALUES (
     new."id",
     NULL,
+    account_defaults."receivablesAccount",
     account_defaults."salesAccount",
     account_defaults."salesDiscountAccount",
     account_defaults."receivablesAccount",
@@ -6126,6 +6124,7 @@ BEGIN
     INSERT INTO "postingGroupPurchasing" (
       "partGroupId",
       "supplierTypeId",
+      "payablesAccount", 
       "purchaseAccount",
       "purchaseDiscountAccount",
       "purchaseCreditAccount",
@@ -6135,6 +6134,7 @@ BEGIN
     ) VALUES (
       new."id",
       rec."id",
+      account_defaults."payablesAccount",
       account_defaults."purchaseAccount",
       account_defaults."purchaseAccount",
       account_defaults."payablesAccount",
@@ -6148,6 +6148,7 @@ BEGIN
   INSERT INTO "postingGroupPurchasing" (
     "partGroupId",
     "supplierTypeId",
+    "payablesAccount",
     "purchaseAccount",
     "purchaseDiscountAccount",
     "purchaseCreditAccount",
@@ -6157,6 +6158,7 @@ BEGIN
   ) VALUES (
     new."id",
     NULL,
+    account_defaults."payablesAccount",
     account_defaults."purchaseAccount",
     account_defaults."purchaseAccount",
     account_defaults."payablesAccount",
@@ -6174,6 +6176,7 @@ BEGIN
       "inventoryAccount",
       "inventoryInterimAccrualAccount",
       "inventoryReceivedNotInvoicedAccount",
+      "inventoryInvoicedNotReceivedAccount",
       "inventoryShippedNotInvoicedAccount",
       "workInProgressAccount",
       "directCostAppliedAccount",
@@ -6191,6 +6194,7 @@ BEGIN
       account_defaults."inventoryAccount",
       account_defaults."inventoryInterimAccrualAccount",
       account_defaults."inventoryReceivedNotInvoicedAccount",
+      account_defaults."inventoryInvoicedNotReceivedAccount",
       account_defaults."inventoryShippedNotInvoicedAccount",
       account_defaults."workInProgressAccount",
       account_defaults."directCostAppliedAccount",
@@ -6212,6 +6216,7 @@ BEGIN
     "inventoryAccount",
     "inventoryInterimAccrualAccount",
     "inventoryReceivedNotInvoicedAccount",
+    "inventoryInvoicedNotReceivedAccount",
     "inventoryShippedNotInvoicedAccount",
     "workInProgressAccount",
     "directCostAppliedAccount",
@@ -6229,6 +6234,7 @@ BEGIN
     account_defaults."inventoryAccount",
     account_defaults."inventoryInterimAccrualAccount",
     account_defaults."inventoryReceivedNotInvoicedAccount",
+    account_defaults."inventoryInvoicedNotReceivedAccount",
     account_defaults."inventoryShippedNotInvoicedAccount",
     account_defaults."workInProgressAccount",
     account_defaults."directCostAppliedAccount",
@@ -6263,6 +6269,7 @@ BEGIN
     INSERT INTO "postingGroupSales" (
       "customerTypeId",
       "partGroupId",
+      "receivablesAccount",
       "salesAccount",
       "salesDiscountAccount",
       "salesCreditAccount",
@@ -6272,6 +6279,7 @@ BEGIN
     ) VALUES (
       new."id",
       rec."id",
+      account_defaults."receivablesAccount",
       account_defaults."salesAccount",
       account_defaults."salesDiscountAccount",
       account_defaults."salesAccount",
@@ -6285,6 +6293,7 @@ BEGIN
   INSERT INTO "postingGroupSales" (
     "customerTypeId",
     "partGroupId",
+    "receivablesAccount",
     "salesAccount",
     "salesDiscountAccount",
     "salesCreditAccount",
@@ -6294,6 +6303,7 @@ BEGIN
   ) VALUES (
     new."id",
     NULL,
+    account_defaults."receivablesAccount",
     account_defaults."salesAccount",
     account_defaults."salesDiscountAccount",
     account_defaults."salesAccount",
@@ -6324,6 +6334,7 @@ BEGIN
     INSERT INTO "postingGroupPurchasing" (
       "supplierTypeId",
       "partGroupId",
+      "payablesAccount",
       "purchaseAccount",
       "purchaseDiscountAccount",
       "purchaseCreditAccount",
@@ -6333,6 +6344,7 @@ BEGIN
     ) VALUES (
       new."id",
       rec."id",
+      account_defaults."payablesAccount",
       account_defaults."purchaseAccount",
       account_defaults."purchaseAccount",
       account_defaults."purchaseAccount",
@@ -6346,6 +6358,7 @@ BEGIN
   INSERT INTO "postingGroupPurchasing" (
     "supplierTypeId",
     "partGroupId",
+    "payablesAccount",
     "purchaseAccount",
     "purchaseDiscountAccount",
     "purchaseCreditAccount",
@@ -6355,6 +6368,7 @@ BEGIN
   ) VALUES (
     new."id",
     NULL,
+    account_defaults."payablesAccount",
     account_defaults."purchaseAccount",
     account_defaults."purchaseAccount",
     account_defaults."purchaseAccount",
@@ -6471,6 +6485,7 @@ CREATE OR REPLACE VIEW "partQuantities" AS
 ```sql
 CREATE TYPE "purchaseInvoiceStatus" AS ENUM (
   'Draft', 
+  'Pending',
   'Submitted',
   'Return',
   'Debit Note Issued',
@@ -6492,6 +6507,7 @@ CREATE TABLE "purchaseInvoice" (
   "paymentTermId" TEXT,
   "currencyCode" TEXT NOT NULL,
   "exchangeRate" NUMERIC(10, 4) NOT NULL DEFAULT 1,
+  "postingDate" DATE,
   "dateIssued" DATE,
   "dateDue" DATE,
   "datePaid" DATE,
@@ -6521,6 +6537,8 @@ CREATE INDEX "purchaseInvoice_status_idx" ON "purchaseInvoice" ("status");
 CREATE INDEX "purchaseInvoice_supplierId_idx" ON "purchaseInvoice" ("supplierId");
 CREATE INDEX "purchaseInvoice_dateDue_idx" ON "purchaseInvoice" ("dateDue");
 CREATE INDEX "purchaseInvoice_datePaid_idx" ON "purchaseInvoice" ("datePaid");
+
+ALTER publication supabase_realtime ADD TABLE "purchaseInvoice";
 
 ALTER TABLE "purchaseInvoice" ENABLE ROW LEVEL SECURITY;
 
@@ -6587,6 +6605,7 @@ CREATE TABLE "purchaseInvoiceLine" (
   "purchaseOrderId" TEXT,
   "purchaseOrderLineId" TEXT,
   "partId" TEXT,
+  "locationId" TEXT,
   "accountNumber" TEXT,
   "assetId" TEXT,
   "description" TEXT,
@@ -6605,6 +6624,7 @@ CREATE TABLE "purchaseInvoiceLine" (
   CONSTRAINT "purchaseInvoiceLines_purchaseOrderId_fkey" FOREIGN KEY ("purchaseOrderId") REFERENCES "purchaseOrder" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_purchaseOrderLineId_fkey" FOREIGN KEY ("purchaseOrderLineId") REFERENCES "purchaseOrderLine" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_partId_fkey" FOREIGN KEY ("partId") REFERENCES "part" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT "purchaseInvoiceLines_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "location" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_accountNumber_fkey" FOREIGN KEY ("accountNumber") REFERENCES "account" ("number") ON UPDATE CASCADE ON DELETE RESTRICT,
   -- CONSTRAINT "purchaseInvoiceLines_assetId_fkey" FOREIGN KEY ("assetId") REFERENCES "fixedAsset" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_currencyCode_fkey" FOREIGN KEY ("currencyCode") REFERENCES "currency" ("code") ON UPDATE CASCADE ON DELETE RESTRICT,
@@ -6779,6 +6799,7 @@ CREATE OR REPLACE VIEW "purchaseInvoices" AS
     pi."invoiceSupplierId",
     pi."invoiceSupplierLocationId",
     pi."invoiceSupplierContactId",
+    pi."postingDate",
     pi."dateIssued",
     pi."dateDue",
     pi."datePaid",

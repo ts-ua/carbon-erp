@@ -1,5 +1,6 @@
 CREATE TYPE "purchaseInvoiceStatus" AS ENUM (
   'Draft', 
+  'Pending',
   'Submitted',
   'Return',
   'Debit Note Issued',
@@ -21,6 +22,7 @@ CREATE TABLE "purchaseInvoice" (
   "paymentTermId" TEXT,
   "currencyCode" TEXT NOT NULL,
   "exchangeRate" NUMERIC(10, 4) NOT NULL DEFAULT 1,
+  "postingDate" DATE,
   "dateIssued" DATE,
   "dateDue" DATE,
   "datePaid" DATE,
@@ -50,6 +52,8 @@ CREATE INDEX "purchaseInvoice_status_idx" ON "purchaseInvoice" ("status");
 CREATE INDEX "purchaseInvoice_supplierId_idx" ON "purchaseInvoice" ("supplierId");
 CREATE INDEX "purchaseInvoice_dateDue_idx" ON "purchaseInvoice" ("dateDue");
 CREATE INDEX "purchaseInvoice_datePaid_idx" ON "purchaseInvoice" ("datePaid");
+
+ALTER publication supabase_realtime ADD TABLE "purchaseInvoice";
 
 ALTER TABLE "purchaseInvoice" ENABLE ROW LEVEL SECURITY;
 
@@ -116,6 +120,7 @@ CREATE TABLE "purchaseInvoiceLine" (
   "purchaseOrderId" TEXT,
   "purchaseOrderLineId" TEXT,
   "partId" TEXT,
+  "locationId" TEXT,
   "accountNumber" TEXT,
   "assetId" TEXT,
   "description" TEXT,
@@ -134,6 +139,7 @@ CREATE TABLE "purchaseInvoiceLine" (
   CONSTRAINT "purchaseInvoiceLines_purchaseOrderId_fkey" FOREIGN KEY ("purchaseOrderId") REFERENCES "purchaseOrder" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_purchaseOrderLineId_fkey" FOREIGN KEY ("purchaseOrderLineId") REFERENCES "purchaseOrderLine" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_partId_fkey" FOREIGN KEY ("partId") REFERENCES "part" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT "purchaseInvoiceLines_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "location" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_accountNumber_fkey" FOREIGN KEY ("accountNumber") REFERENCES "account" ("number") ON UPDATE CASCADE ON DELETE RESTRICT,
   -- CONSTRAINT "purchaseInvoiceLines_assetId_fkey" FOREIGN KEY ("assetId") REFERENCES "fixedAsset" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_currencyCode_fkey" FOREIGN KEY ("currencyCode") REFERENCES "currency" ("code") ON UPDATE CASCADE ON DELETE RESTRICT,
@@ -308,6 +314,7 @@ CREATE OR REPLACE VIEW "purchaseInvoices" AS
     pi."invoiceSupplierId",
     pi."invoiceSupplierLocationId",
     pi."invoiceSupplierContactId",
+    pi."postingDate",
     pi."dateIssued",
     pi."dateDue",
     pi."datePaid",

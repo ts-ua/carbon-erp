@@ -27,8 +27,7 @@ const costLedgerTypes = [
 ] as const;
 
 export const journalLineDocumentType = [
-  "Quote",
-  "Order",
+  "Receipt",
   "Invoice",
   "Credit Memo",
   "Blanket Order",
@@ -282,6 +281,9 @@ export const defaultAcountValidator = withZod(
     inventoryReceivedNotInvoicedAccount: z.string().min(1, {
       message: "Inventory received not invoiced account is required",
     }),
+    inventoryInvoicedNotReceivedAccount: z.string().min(1, {
+      message: "Inventory invoiced not received account is required",
+    }),
     inventoryShippedNotInvoicedAccount: z.string().min(1, {
       message: "Inventory shipped not invoiced account is required",
     }),
@@ -366,17 +368,15 @@ export const paymentTermValidator = withZod(
   })
 );
 
-export const valueLedgerValidator = withZod(
-  z.object({
-    postingDate: zfd.text(z.string().optional()),
-    partLedgerType: z.enum(partLedgerTypes),
-    costLedgerType: z.enum(costLedgerTypes),
-    adjustment: z.boolean(),
-    documentType: z.union([z.enum(partLedgerDocumentTypes), z.undefined()]),
-    documentId: z.string().optional(),
-    costAmountActual: z.number(),
-    costAmountExpected: z.number(),
-    actualCostPostedToGl: z.number(),
-    expectedCostPostedToGl: z.number(),
-  })
-);
+export const costLedgerValidator = z.object({
+  postingDate: zfd.text(z.string().optional()),
+  partLedgerType: z.enum(partLedgerTypes),
+  costLedgerType: z.enum(costLedgerTypes),
+  adjustment: z.boolean(),
+  documentType: z.union([z.enum(partLedgerDocumentTypes), z.undefined()]),
+  documentId: z.string().optional(),
+  partId: zfd.text(z.string()),
+  quantity: z.number(),
+  cost: z.number(),
+  costPostedToGL: z.number(),
+});

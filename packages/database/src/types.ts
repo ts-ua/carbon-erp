@@ -270,6 +270,7 @@ export interface Database {
           inventoryAccount: string
           inventoryAdjustmentVarianceAccount: string
           inventoryInterimAccrualAccount: string
+          inventoryInvoicedNotReceivedAccount: string
           inventoryReceivedNotInvoicedAccount: string
           inventoryShippedNotInvoicedAccount: string
           maintenanceAccount: string
@@ -312,6 +313,7 @@ export interface Database {
           inventoryAccount: string
           inventoryAdjustmentVarianceAccount: string
           inventoryInterimAccrualAccount: string
+          inventoryInvoicedNotReceivedAccount: string
           inventoryReceivedNotInvoicedAccount: string
           inventoryShippedNotInvoicedAccount: string
           maintenanceAccount: string
@@ -354,6 +356,7 @@ export interface Database {
           inventoryAccount?: string
           inventoryAdjustmentVarianceAccount?: string
           inventoryInterimAccrualAccount?: string
+          inventoryInvoicedNotReceivedAccount?: string
           inventoryReceivedNotInvoicedAccount?: string
           inventoryShippedNotInvoicedAccount?: string
           maintenanceAccount?: string
@@ -1250,6 +1253,91 @@ export interface Database {
             columns: ["createdBy"]
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          }
+        ]
+      }
+      costLedger: {
+        Row: {
+          adjustment: boolean
+          cost: number
+          costLedgerType: Database["public"]["Enums"]["costLedgerType"]
+          costPostedToGL: number
+          createdAt: string
+          documentId: string | null
+          documentType:
+            | Database["public"]["Enums"]["partLedgerDocumentType"]
+            | null
+          entryNumber: number
+          externalDocumentId: string | null
+          id: string
+          partId: string | null
+          partLedgerType: Database["public"]["Enums"]["partLedgerType"]
+          postingDate: string
+          quantity: number
+        }
+        Insert: {
+          adjustment?: boolean
+          cost?: number
+          costLedgerType: Database["public"]["Enums"]["costLedgerType"]
+          costPostedToGL?: number
+          createdAt?: string
+          documentId?: string | null
+          documentType?:
+            | Database["public"]["Enums"]["partLedgerDocumentType"]
+            | null
+          entryNumber?: number
+          externalDocumentId?: string | null
+          id?: string
+          partId?: string | null
+          partLedgerType: Database["public"]["Enums"]["partLedgerType"]
+          postingDate?: string
+          quantity?: number
+        }
+        Update: {
+          adjustment?: boolean
+          cost?: number
+          costLedgerType?: Database["public"]["Enums"]["costLedgerType"]
+          costPostedToGL?: number
+          createdAt?: string
+          documentId?: string | null
+          documentType?:
+            | Database["public"]["Enums"]["partLedgerDocumentType"]
+            | null
+          entryNumber?: number
+          externalDocumentId?: string | null
+          id?: string
+          partId?: string | null
+          partLedgerType?: Database["public"]["Enums"]["partLedgerType"]
+          postingDate?: string
+          quantity?: number
+        }
+        Relationships: []
+      }
+      costLedgerJournalLineRelation: {
+        Row: {
+          costLedgerId: string
+          journalLineId: string
+        }
+        Insert: {
+          costLedgerId: string
+          journalLineId: string
+        }
+        Update: {
+          costLedgerId?: string
+          journalLineId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "costLedgerJournalLineRelation_costLedgerId_fkey"
+            columns: ["costLedgerId"]
+            referencedRelation: "costLedger"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "costLedgerJournalLineRelation_journalLineId_fkey"
+            columns: ["journalLineId"]
+            referencedRelation: "journalLine"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -2808,6 +2896,7 @@ export interface Database {
       journalLine: {
         Row: {
           accountNumber: string
+          accrual: boolean
           amount: number
           createdAt: string
           description: string | null
@@ -2818,9 +2907,12 @@ export interface Database {
           externalDocumentId: string | null
           id: string
           journalId: number
+          quantity: number
+          reference: string | null
         }
         Insert: {
           accountNumber: string
+          accrual?: boolean
           amount: number
           createdAt?: string
           description?: string | null
@@ -2831,9 +2923,12 @@ export interface Database {
           externalDocumentId?: string | null
           id?: string
           journalId: number
+          quantity?: number
+          reference?: string | null
         }
         Update: {
           accountNumber?: string
+          accrual?: boolean
           amount?: number
           createdAt?: string
           description?: string | null
@@ -2844,6 +2939,8 @@ export interface Database {
           externalDocumentId?: string | null
           id?: string
           journalId?: number
+          quantity?: number
+          reference?: string | null
         }
         Relationships: [
           {
@@ -3443,34 +3540,6 @@ export interface Database {
             columns: ["shelfId", "locationId"]
             referencedRelation: "shelf"
             referencedColumns: ["id", "locationId"]
-          }
-        ]
-      }
-      partLedgerValueLedgerRelation: {
-        Row: {
-          partLedgerId: string
-          valueLedgerId: string
-        }
-        Insert: {
-          partLedgerId: string
-          valueLedgerId: string
-        }
-        Update: {
-          partLedgerId?: string
-          valueLedgerId?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "partLedgerValueLedgerRelation_partLedgerId_fkey"
-            columns: ["partLedgerId"]
-            referencedRelation: "partLedger"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "partLedgerValueLedgerRelation_valueLedgerId_fkey"
-            columns: ["valueLedgerId"]
-            referencedRelation: "valueLedger"
-            referencedColumns: ["id"]
           }
         ]
       }
@@ -4141,6 +4210,7 @@ export interface Database {
           inventoryAccount: string
           inventoryAdjustmentVarianceAccount: string
           inventoryInterimAccrualAccount: string
+          inventoryInvoicedNotReceivedAccount: string
           inventoryReceivedNotInvoicedAccount: string
           inventoryShippedNotInvoicedAccount: string
           locationId: string | null
@@ -4160,6 +4230,7 @@ export interface Database {
           inventoryAccount: string
           inventoryAdjustmentVarianceAccount: string
           inventoryInterimAccrualAccount: string
+          inventoryInvoicedNotReceivedAccount: string
           inventoryReceivedNotInvoicedAccount: string
           inventoryShippedNotInvoicedAccount: string
           locationId?: string | null
@@ -4179,6 +4250,7 @@ export interface Database {
           inventoryAccount?: string
           inventoryAdjustmentVarianceAccount?: string
           inventoryInterimAccrualAccount?: string
+          inventoryInvoicedNotReceivedAccount?: string
           inventoryReceivedNotInvoicedAccount?: string
           inventoryShippedNotInvoicedAccount?: string
           locationId?: string | null
@@ -4260,6 +4332,18 @@ export interface Database {
           {
             foreignKeyName: "postingGroupInventory_inventoryInterimAccrualAccount_fkey"
             columns: ["inventoryInterimAccrualAccount"]
+            referencedRelation: "accounts"
+            referencedColumns: ["number"]
+          },
+          {
+            foreignKeyName: "postingGroupInventory_inventoryInvoicedNotReceivedAccount_fkey"
+            columns: ["inventoryInvoicedNotReceivedAccount"]
+            referencedRelation: "account"
+            referencedColumns: ["number"]
+          },
+          {
+            foreignKeyName: "postingGroupInventory_inventoryInvoicedNotReceivedAccount_fkey"
+            columns: ["inventoryInvoicedNotReceivedAccount"]
             referencedRelation: "accounts"
             referencedColumns: ["number"]
           },
@@ -4389,6 +4473,7 @@ export interface Database {
         Row: {
           id: string
           partGroupId: string | null
+          payablesAccount: string
           purchaseAccount: string
           purchaseCreditAccount: string
           purchaseDiscountAccount: string
@@ -4400,6 +4485,7 @@ export interface Database {
         Insert: {
           id?: string
           partGroupId?: string | null
+          payablesAccount: string
           purchaseAccount: string
           purchaseCreditAccount: string
           purchaseDiscountAccount: string
@@ -4411,6 +4497,7 @@ export interface Database {
         Update: {
           id?: string
           partGroupId?: string | null
+          payablesAccount?: string
           purchaseAccount?: string
           purchaseCreditAccount?: string
           purchaseDiscountAccount?: string
@@ -4425,6 +4512,18 @@ export interface Database {
             columns: ["partGroupId"]
             referencedRelation: "partGroup"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "postingGroupPurchasing_payablesAccount_fkey"
+            columns: ["payablesAccount"]
+            referencedRelation: "account"
+            referencedColumns: ["number"]
+          },
+          {
+            foreignKeyName: "postingGroupPurchasing_payablesAccount_fkey"
+            columns: ["payablesAccount"]
+            referencedRelation: "accounts"
+            referencedColumns: ["number"]
           },
           {
             foreignKeyName: "postingGroupPurchasing_purchaseAccount_fkey"
@@ -4511,6 +4610,7 @@ export interface Database {
           customerTypeId: string | null
           id: string
           partGroupId: string | null
+          receivablesAccount: string
           salesAccount: string
           salesCreditAccount: string
           salesDiscountAccount: string
@@ -4522,6 +4622,7 @@ export interface Database {
           customerTypeId?: string | null
           id?: string
           partGroupId?: string | null
+          receivablesAccount: string
           salesAccount: string
           salesCreditAccount: string
           salesDiscountAccount: string
@@ -4533,6 +4634,7 @@ export interface Database {
           customerTypeId?: string | null
           id?: string
           partGroupId?: string | null
+          receivablesAccount?: string
           salesAccount?: string
           salesCreditAccount?: string
           salesDiscountAccount?: string
@@ -4552,6 +4654,18 @@ export interface Database {
             columns: ["partGroupId"]
             referencedRelation: "partGroup"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "postingGroupSales_receivablesAccount_fkey"
+            columns: ["receivablesAccount"]
+            referencedRelation: "account"
+            referencedColumns: ["number"]
+          },
+          {
+            foreignKeyName: "postingGroupSales_receivablesAccount_fkey"
+            columns: ["receivablesAccount"]
+            referencedRelation: "accounts"
+            referencedColumns: ["number"]
           },
           {
             foreignKeyName: "postingGroupSales_salesAccount_fkey"
@@ -4643,6 +4757,7 @@ export interface Database {
           invoiceSupplierId: string | null
           invoiceSupplierLocationId: string | null
           paymentTermId: string | null
+          postingDate: string | null
           status: Database["public"]["Enums"]["purchaseInvoiceStatus"]
           subtotal: number
           supplierId: string | null
@@ -4668,6 +4783,7 @@ export interface Database {
           invoiceSupplierId?: string | null
           invoiceSupplierLocationId?: string | null
           paymentTermId?: string | null
+          postingDate?: string | null
           status?: Database["public"]["Enums"]["purchaseInvoiceStatus"]
           subtotal?: number
           supplierId?: string | null
@@ -4693,6 +4809,7 @@ export interface Database {
           invoiceSupplierId?: string | null
           invoiceSupplierLocationId?: string | null
           paymentTermId?: string | null
+          postingDate?: string | null
           status?: Database["public"]["Enums"]["purchaseInvoiceStatus"]
           subtotal?: number
           supplierId?: string | null
@@ -4826,6 +4943,7 @@ export interface Database {
           id: string
           invoiceId: string
           invoiceLineType: Database["public"]["Enums"]["payableLineType"]
+          locationId: string | null
           partId: string | null
           purchaseOrderId: string | null
           purchaseOrderLineId: string | null
@@ -4846,6 +4964,7 @@ export interface Database {
           id?: string
           invoiceId: string
           invoiceLineType: Database["public"]["Enums"]["payableLineType"]
+          locationId?: string | null
           partId?: string | null
           purchaseOrderId?: string | null
           purchaseOrderLineId?: string | null
@@ -4866,6 +4985,7 @@ export interface Database {
           id?: string
           invoiceId?: string
           invoiceLineType?: Database["public"]["Enums"]["payableLineType"]
+          locationId?: string | null
           partId?: string | null
           purchaseOrderId?: string | null
           purchaseOrderLineId?: string | null
@@ -4917,6 +5037,24 @@ export interface Database {
             columns: ["invoiceId"]
             referencedRelation: "purchaseInvoices"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchaseInvoiceLines_locationId_fkey"
+            columns: ["locationId"]
+            referencedRelation: "location"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchaseInvoiceLines_locationId_fkey"
+            columns: ["locationId"]
+            referencedRelation: "partQuantities"
+            referencedColumns: ["locationId"]
+          },
+          {
+            foreignKeyName: "purchaseInvoiceLines_locationId_fkey"
+            columns: ["locationId"]
+            referencedRelation: "purchaseOrders"
+            referencedColumns: ["locationId"]
           },
           {
             foreignKeyName: "purchaseInvoiceLines_partId_fkey"
@@ -5402,7 +5540,7 @@ export interface Database {
           createdBy: string
           description: string | null
           id: string
-          invoiceComplete: boolean
+          invoicedComplete: boolean
           locationId: string | null
           partId: string | null
           purchaseOrderId: string
@@ -5428,7 +5566,7 @@ export interface Database {
           createdBy: string
           description?: string | null
           id?: string
-          invoiceComplete?: boolean
+          invoicedComplete?: boolean
           locationId?: string | null
           partId?: string | null
           purchaseOrderId: string
@@ -5454,7 +5592,7 @@ export interface Database {
           createdBy?: string
           description?: string | null
           id?: string
-          invoiceComplete?: boolean
+          invoicedComplete?: boolean
           locationId?: string | null
           partId?: string | null
           purchaseOrderId?: string
@@ -6096,13 +6234,13 @@ export interface Database {
             foreignKeyName: "receiptLine_receiptId_fkey"
             columns: ["receiptId"]
             referencedRelation: "receipt"
-            referencedColumns: ["receiptId"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "receiptLine_receiptId_fkey"
             columns: ["receiptId"]
             referencedRelation: "receiptsPostedNotInvoiced"
-            referencedColumns: ["receiptId"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "receiptLine_shelfId_fkey"
@@ -7518,91 +7656,6 @@ export interface Database {
           }
         ]
       }
-      valueLedger: {
-        Row: {
-          actualCostPostedToGl: number
-          adjustment: boolean
-          costAmountActual: number
-          costAmountExpected: number
-          costLedgerType: Database["public"]["Enums"]["costLedgerType"]
-          createdAt: string
-          documentId: string | null
-          documentType:
-            | Database["public"]["Enums"]["partLedgerDocumentType"]
-            | null
-          entryNumber: number
-          expectedCostPostedToGl: number
-          externalDocumentId: string | null
-          id: string
-          partLedgerType: Database["public"]["Enums"]["partLedgerType"]
-          postingDate: string
-        }
-        Insert: {
-          actualCostPostedToGl?: number
-          adjustment?: boolean
-          costAmountActual?: number
-          costAmountExpected?: number
-          costLedgerType: Database["public"]["Enums"]["costLedgerType"]
-          createdAt?: string
-          documentId?: string | null
-          documentType?:
-            | Database["public"]["Enums"]["partLedgerDocumentType"]
-            | null
-          entryNumber?: number
-          expectedCostPostedToGl?: number
-          externalDocumentId?: string | null
-          id?: string
-          partLedgerType: Database["public"]["Enums"]["partLedgerType"]
-          postingDate?: string
-        }
-        Update: {
-          actualCostPostedToGl?: number
-          adjustment?: boolean
-          costAmountActual?: number
-          costAmountExpected?: number
-          costLedgerType?: Database["public"]["Enums"]["costLedgerType"]
-          createdAt?: string
-          documentId?: string | null
-          documentType?:
-            | Database["public"]["Enums"]["partLedgerDocumentType"]
-            | null
-          entryNumber?: number
-          expectedCostPostedToGl?: number
-          externalDocumentId?: string | null
-          id?: string
-          partLedgerType?: Database["public"]["Enums"]["partLedgerType"]
-          postingDate?: string
-        }
-        Relationships: []
-      }
-      valueLedgerJournalLineRelation: {
-        Row: {
-          journalLineId: string
-          valueLedgerId: string
-        }
-        Insert: {
-          journalLineId: string
-          valueLedgerId: string
-        }
-        Update: {
-          journalLineId?: string
-          valueLedgerId?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "valueLedgerJournalLineRelation_journalLineId_fkey"
-            columns: ["journalLineId"]
-            referencedRelation: "journalLine"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "valueLedgerJournalLineRelation_valueLedgerId_fkey"
-            columns: ["valueLedgerId"]
-            referencedRelation: "valueLedger"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       warehouse: {
         Row: {
           active: boolean
@@ -8275,6 +8328,7 @@ export interface Database {
           invoiceSupplierId: string | null
           invoiceSupplierLocationId: string | null
           paymentTermId: string | null
+          postingDate: string | null
           status: Database["public"]["Enums"]["purchaseInvoiceStatus"] | null
           subtotal: number | null
           supplierId: string | null
@@ -8511,14 +8565,6 @@ export interface Database {
         Row: {
           id: string | null
           name: string | null
-        }
-        Relationships: []
-      }
-      receiptQuantityReceivedByLine: {
-        Row: {
-          lineId: string | null
-          receivedQuantity: number | null
-          sourceDocumentId: string | null
         }
         Relationships: []
       }
@@ -8811,8 +8857,7 @@ export interface Database {
       glIncomeBalance: "Balance Sheet" | "Income Statement"
       glNormalBalance: "Debit" | "Credit" | "Both"
       journalLineDocumentType:
-        | "Quote"
-        | "Order"
+        | "Receipt"
         | "Invoice"
         | "Credit Memo"
         | "Blanket Order"
@@ -8871,6 +8916,7 @@ export interface Database {
       paymentTermCalculationMethod: "Net" | "End of Month" | "Day of Month"
       purchaseInvoiceStatus:
         | "Draft"
+        | "Pending"
         | "Submitted"
         | "Return"
         | "Debit Note Issued"

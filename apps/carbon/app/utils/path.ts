@@ -291,6 +291,8 @@ export const path = {
       generatePath(`${x}/purchase-invoice/${id}`),
     purchaseInvoiceDetails: (id: string) =>
       generatePath(`${x}/purchase-invoice/${id}/details`),
+    purchaseInvoicePost: (id: string) =>
+      generatePath(`${x}/purchase-invoice/${id}/post`),
     purchaseInvoiceRoot: `${x}/purchase-invoice`,
     purchaseInvoices: `${x}/invoicing/purchasing`,
     purchaseOrder: (id: string) => generatePath(`${x}/purchase-order/${id}`),
@@ -306,6 +308,7 @@ export const path = {
     purchasing: `${x}/purchasing`,
     receipt: (id: string) => generatePath(`${x}/inventory/receipts/${id}`),
     receipts: `${x}/inventory/receipts`,
+    receiptInvoice: (id: string) => generatePath(`${x}/receipt/${id}/invoice`),
     receiptPost: (id: string) =>
       generatePath(`${x}/inventory/receipts/${id}/post`),
     refreshSession: "/refresh-session",
