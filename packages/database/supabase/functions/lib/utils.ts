@@ -22,3 +22,40 @@ export const interpolateSequenceDate = (value?: string | null) => {
 
   return result;
 };
+
+type AccountType = "asset" | "liability" | "equity" | "revenue" | "expense";
+
+export const credit = (accountType: AccountType, amount: number) => {
+  switch (accountType) {
+    case "asset":
+    case "expense":
+      return -amount;
+    case "liability":
+    case "equity":
+    case "revenue":
+      return amount;
+    default:
+      throw new Error(`Invalid account type: ${accountType}`);
+  }
+};
+
+export const debit = (accountType: AccountType, amount: number) => {
+  switch (accountType) {
+    case "asset":
+    case "expense":
+      return amount;
+    case "liability":
+    case "equity":
+    case "revenue":
+      return -amount;
+    default:
+      throw new Error(`Invalid account type: ${accountType}`);
+  }
+};
+
+export const journalReference = {
+  to: {
+    purchaseInvoice: (id: string) => `purchase-invoice:${id}`,
+    receipt: (id: string) => `receipt:${id}`,
+  },
+};
