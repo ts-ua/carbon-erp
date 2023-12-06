@@ -6,7 +6,7 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { useFetcher } from "@remix-run/react";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useControlField, useField } from "remix-validated-form";
 import type { getSequencesList } from "~/modules/settings";
 import { path } from "~/utils/path";
@@ -27,7 +27,7 @@ const Sequence = ({
   onChange,
   ...props
 }: SequenceSelectProps) => {
-  const { error, defaultValue } = useField(name);
+  const { error } = useField(name);
   const [value, setValue] = useControlField<string | undefined>(name);
 
   const sequenceFetcher =
@@ -66,14 +66,6 @@ const Sequence = ({
       options.find((option) => option.value === value) ?? options?.[0] ?? null,
     [value, options]
   );
-
-  // so that we can call onChange on load
-  useEffect(() => {
-    if (controlledValue && controlledValue.value === defaultValue) {
-      handleChange(controlledValue);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controlledValue?.value]);
 
   return (
     <FormControl isInvalid={!!error}>

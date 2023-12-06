@@ -17,7 +17,7 @@ import type { SelectProps } from "./Select";
 
 type SupplierContactSelectProps = Omit<SelectProps, "options" | "onChange"> & {
   supplier?: string;
-  onChange?: (supplierContact: SupplierContactType | undefined) => void;
+  onChange?: (supplierContact: SupplierContactType | null) => void;
 };
 
 const SupplierContact = ({
@@ -32,7 +32,7 @@ const SupplierContact = ({
   ...props
 }: SupplierContactSelectProps) => {
   const initialLoad = useRef(true);
-  const { error, defaultValue } = useField(name);
+  const { error } = useField(name);
   const [value, setValue] = useControlField<string | null>(name);
 
   const supplierContactFetcher =
@@ -80,7 +80,7 @@ const SupplierContact = ({
         (c) => c.id === newValue
       );
 
-      onChange(contact);
+      onChange(contact ?? null);
     }
   };
 
@@ -89,14 +89,6 @@ const SupplierContact = ({
     () => options.find((option) => option.value === value),
     [value, options]
   );
-
-  // so that we can call onChange on load
-  useEffect(() => {
-    if (controlledValue && controlledValue.value === defaultValue) {
-      handleChange(controlledValue);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controlledValue?.value]);
 
   return (
     <FormControl isInvalid={!!error}>

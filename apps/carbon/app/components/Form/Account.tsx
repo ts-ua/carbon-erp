@@ -57,9 +57,7 @@ const Account = ({
   }) => {
     const newValue = (selection.value as string) || undefined;
     setValue(newValue);
-    if (onChange && typeof onChange === "function") {
-      onChange(selection);
-    }
+    onChange?.(selection);
   };
 
   const controlledValue = useMemo(

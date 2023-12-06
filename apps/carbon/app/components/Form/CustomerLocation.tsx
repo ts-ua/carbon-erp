@@ -32,7 +32,7 @@ const CustomerLocation = ({
   ...props
 }: CustomerLocationSelectProps) => {
   const initialLoad = useRef(true);
-  const { error, defaultValue } = useField(name);
+  const { error } = useField(name);
   const [value, setValue] = useControlField<string | undefined>(name);
 
   const customerLocationFetcher =
@@ -86,14 +86,6 @@ const CustomerLocation = ({
     () => options.find((option) => option.value === value),
     [value, options]
   );
-
-  // so that we can call onChange on load
-  useEffect(() => {
-    if (controlledValue && controlledValue.value === defaultValue) {
-      handleChange(controlledValue);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controlledValue?.value]);
 
   return (
     <FormControl isInvalid={!!error}>

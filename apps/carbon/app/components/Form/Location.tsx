@@ -6,7 +6,7 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { useFetcher } from "@remix-run/react";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useControlField, useField } from "remix-validated-form";
 import type { getLocations } from "~/modules/resources";
 import { path } from "~/utils/path";
@@ -32,7 +32,7 @@ const Location = ({
   onChange,
   ...props
 }: LocationSelectProps) => {
-  const { error, defaultValue } = useField(name);
+  const { error } = useField(name);
   const [value, setValue] = useControlField<string | null>(name);
 
   const locationFetcher =
@@ -69,14 +69,6 @@ const Location = ({
     () => options.find((option) => option.value === value),
     [value, options]
   );
-
-  // so that we can call onChange on load
-  useEffect(() => {
-    if (controlledValue && controlledValue.value === defaultValue) {
-      handleChange(controlledValue);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controlledValue?.value]);
 
   return (
     <FormControl isInvalid={!!error}>
