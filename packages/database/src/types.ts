@@ -4948,7 +4948,9 @@ export interface Database {
           purchaseOrderId: string | null
           purchaseOrderLineId: string | null
           quantity: number
+          shelfId: string | null
           totalAmount: number | null
+          unitOfMeasureCode: string | null
           unitPrice: number
           updatedAt: string | null
           updatedBy: string | null
@@ -4969,7 +4971,9 @@ export interface Database {
           purchaseOrderId?: string | null
           purchaseOrderLineId?: string | null
           quantity?: number
+          shelfId?: string | null
           totalAmount?: number | null
+          unitOfMeasureCode?: string | null
           unitPrice?: number
           updatedAt?: string | null
           updatedBy?: string | null
@@ -4990,7 +4994,9 @@ export interface Database {
           purchaseOrderId?: string | null
           purchaseOrderLineId?: string | null
           quantity?: number
+          shelfId?: string | null
           totalAmount?: number | null
+          unitOfMeasureCode?: string | null
           unitPrice?: number
           updatedAt?: string | null
           updatedBy?: string | null
@@ -5091,6 +5097,18 @@ export interface Database {
             columns: ["purchaseOrderLineId"]
             referencedRelation: "purchaseOrderLine"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchaseInvoiceLines_shelfId_fkey"
+            columns: ["shelfId", "locationId"]
+            referencedRelation: "shelf"
+            referencedColumns: ["id", "locationId"]
+          },
+          {
+            foreignKeyName: "purchaseInvoiceLines_unitOfMeasureCode_fkey"
+            columns: ["unitOfMeasureCode"]
+            referencedRelation: "unitOfMeasure"
+            referencedColumns: ["code"]
           },
           {
             foreignKeyName: "purchaseInvoiceLines_updatedBy_fkey"

@@ -13,7 +13,7 @@ export default function Home() {
         />
       </Head>
       <div className="absolute inset-0 overflow-hidden">
-        <div className="jumbo absolute -inset-[10px] opacity-50"></div>
+        {/* <div className="jumbo absolute -inset-[10px] opacity-50"></div> */}
       </div>
       <div className="relative px-4 py-16 mx-auto sm:pt-20 sm:pb-24 lg:max-w-7xl lg:pt-24">
         <div className="flex flex-col justify-between text-center">
@@ -22,13 +22,13 @@ export default function Home() {
               ERP for the builders
             </h1>
             <p className="mt-6 nx-text-xl font-medium leading-tight text-black/60 dark:text-white/60 sm:nx-text-2xl md:nx-text-3xl lg:nx-text-4xl">
-              Carbon ERP is an open-source, high performance ERP
+              Carbon ERP is an open-source ERP starting point
             </p>
           </div>
           <div className="flex fix-flex-col h-32 mt-4 md:mt-0 mb-6 md:mb-0 items-center justify-center gap-3 md:flex-row xl:flex-row">
             <div className="rounded-md fix-width-auto xl:w-auto">
               <a
-                className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-black no-underline bg-white border border-transparent rounded-md dark:bg-black dark:text-white betterhover:dark:hover:bg-gray-800 betterhover:hover:bg-gray-100 md:py-3 md:text-lg md:px-10 md:leading-6"
+                className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-black no-underline bg-zinc-200 border border-transparent rounded-md dark:bg-zinc-800 dark:text-white betterhover:dark:hover:bg-gray-800 betterhover:hover:bg-zinc-300 md:py-3 md:text-lg md:px-10 md:leading-6"
                 href="/learn/introduction"
               >
                 Learn
@@ -36,7 +36,7 @@ export default function Home() {
             </div>
             <div className="rounded-md fix-width-auto xl:w-auto">
               <a
-                className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white no-underline bg-black border border-transparent rounded-md dark:bg-white dark:text-black betterhover:dark:hover:bg-gray-300 betterhover:hover:bg-gray-700 md:py-3 md:text-lg md:px-10 md:leading-6"
+                className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white no-underline bg-zinc-800 border border-transparent rounded-md dark:bg-zinc-100 dark:text-black betterhover:dark:hover:bg-gray-300 betterhover:hover:bg-gray-700 md:py-3 md:text-lg md:px-10 md:leading-6"
                 href="/develop/getting-started"
               >
                 Develop
