@@ -42,7 +42,6 @@ export default {
           src={`/logo${isDark ? "-light" : "-dark"}.png`}
           alt="Carbon Logo"
         />
-        <span className="w-full font-bold pl-2 text-lg">Carbon ERP</span>
       </>
     );
   },

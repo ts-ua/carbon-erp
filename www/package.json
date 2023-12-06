@@ -10,6 +10,7 @@
     "start": "next start "
   },
   "dependencies": {
+    "framer-motion": "^10.13.1",
     "next": "^13.4.16",
     "nextra": "^2.5.2",
     "nextra-theme-docs": "^2.5.2",

@@ -1,4 +1,7 @@
-import type { purchaseInvoiceStatusType } from "./invoicing.models";
+import type {
+  purchaseInvoiceLineType,
+  purchaseInvoiceStatusType,
+} from "./invoicing.models";
 import type {
   getPurchaseInvoiceLines,
   getPurchaseInvoices,
@@ -11,5 +14,7 @@ export type PurchaseInvoice = NonNullable<
 export type PurchaseInvoiceLine = NonNullable<
   Awaited<ReturnType<typeof getPurchaseInvoiceLines>>["data"]
 >[number];
+
+export type PurchaseInvoiceLineType = (typeof purchaseInvoiceLineType)[number];
 
 export type PurchaseInvoiceStatus = (typeof purchaseInvoiceStatusType)[number];
