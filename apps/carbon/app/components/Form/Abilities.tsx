@@ -58,9 +58,7 @@ const Abilities = ({
   ) => {
     const newValue = selections.map((s) => s.value as string) || [];
     setValue(newValue);
-    if (onChange && typeof onChange === "function") {
-      onChange(selections);
-    }
+    onChange?.(selections);
   };
 
   const controlledValue = useMemo(

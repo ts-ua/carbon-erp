@@ -7,7 +7,7 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { useFetcher } from "@remix-run/react";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useControlField, useField } from "remix-validated-form";
 import type { getAbilitiesList } from "~/modules/resources";
 import { path } from "~/utils/path";
@@ -32,7 +32,7 @@ const Ability = ({
   onChange,
   ...props
 }: AbilitySelectProps) => {
-  const { error, defaultValue } = useField(name);
+  const { error } = useField(name);
   const [value, setValue] = useControlField<string | undefined>(name);
 
   const abilityFetcher =
@@ -61,23 +61,13 @@ const Ability = ({
   ) => {
     const newValue = (selection?.value as string) || undefined;
     setValue(newValue);
-    if (onChange && typeof onChange === "function") {
-      onChange(selection);
-    }
+    onChange?.(selection);
   };
 
   const controlledValue = useMemo(
     () => options.find((option) => option.value === value),
     [value, options]
   );
-
-  // so that we can call onChange on load
-  useEffect(() => {
-    if (controlledValue && controlledValue.value === defaultValue) {
-      handleChange(controlledValue);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controlledValue?.value]);
 
   return (
     <FormControl isInvalid={!!error}>

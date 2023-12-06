@@ -32,7 +32,7 @@ const SupplierLocation = ({
   ...props
 }: SupplierLocationSelectProps) => {
   const initialLoad = useRef(true);
-  const { error, defaultValue } = useField(name);
+  const { error } = useField(name);
   const [value, setValue] = useControlField<string | null>(name);
 
   const supplierLocationFetcher =
@@ -75,11 +75,11 @@ const SupplierLocation = ({
     setValue(newValue);
     if (onChange && typeof onChange === "function") {
       if (newValue === null) onChange(newValue);
-      const contact = supplierLocationFetcher.data?.data?.find(
+      const location = supplierLocationFetcher.data?.data?.find(
         (c) => c.id === newValue
       );
 
-      onChange(contact);
+      onChange(location ?? null);
     }
   };
 
@@ -88,14 +88,6 @@ const SupplierLocation = ({
     () => options.find((option) => option.value === value),
     [value, options]
   );
-
-  // so that we can call onChange on load
-  useEffect(() => {
-    if (controlledValue && controlledValue.value === defaultValue) {
-      handleChange(controlledValue);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controlledValue?.value]);
 
   return (
     <FormControl isInvalid={!!error}>

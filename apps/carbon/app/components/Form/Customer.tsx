@@ -5,7 +5,7 @@ import {
   FormHelperText,
   FormLabel,
 } from "@chakra-ui/react";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useControlField, useField } from "remix-validated-form";
 import { useCustomers } from "~/stores";
 import type { SelectProps } from "./Select";
@@ -22,7 +22,7 @@ const Customer = ({
   onChange,
   ...props
 }: CustomerSelectProps) => {
-  const { getInputProps, error, defaultValue } = useField(name);
+  const { getInputProps, error } = useField(name);
   const [value, setValue] = useControlField<string | undefined>(name);
 
   const [customers] = useCustomers();
@@ -52,14 +52,6 @@ const Customer = ({
     () => options.find((option) => option.value === value),
     [value, options]
   );
-
-  // so that we can call onChange on load
-  useEffect(() => {
-    if (controlledValue && controlledValue.value === defaultValue) {
-      handleChange(controlledValue);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controlledValue?.value]);
 
   return (
     <FormControl isInvalid={!!error}>
