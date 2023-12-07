@@ -13,6 +13,10 @@ module.exports = {
     "./theme.config.js",
     "./styles.css",
   ],
+  plugins: [
+    require("tailwindcss-animate"),
+    // ...
+  ],
   theme: {
     extend: {
       fontFamily: {
