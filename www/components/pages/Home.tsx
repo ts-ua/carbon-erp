@@ -116,7 +116,7 @@ export default function Home() {
       </Head>
 
       <div>
-        <Gradient />
+        {/* <Gradient /> */}
         <Hero />
 
         <motion.div
@@ -150,10 +150,10 @@ export default function Home() {
   );
 }
 
-function Gradient() {
-  return (
-    <div className="background">
-      <div className="gradient" />
-    </div>
-  );
-}
+// function Gradient() {
+//   return (
+//     <div className="background">
+//       <div className="gradient" />
+//     </div>
+//   );
+// }
