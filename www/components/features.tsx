@@ -35,10 +35,10 @@ const features = [
 function Features() {
   return (
     <>
-      <div className="grid grid-cols-2 gap-6 my-12 sm:grid-cols-3 ">
+      <div className="grid grid-cols-1 gap-6 my-12 sm:grid-cols-2 md:grid-cols-3 ">
         {features.map(({ icon: Icon, ...feature }, i) => (
           <div
-            className="flex items-center p-8 space-x-4 bg-black/[0.07] hover:bg-black/10 dark:bg-zinc-900 dark:hover:bg-zinc-800/50 sm:-inset-x-6 sm:rounded"
+            className="backdrop-blur-sm flex items-center p-8 space-x-4 bg-black/[0.03] hover:bg-black/[0.05] dark:bg-zinc-900 dark:hover:bg-zinc-800/50 sm:-inset-x-6 rounded-md shadow-lg"
             key={feature.name.split(" ").join("-")}
           >
             <div>

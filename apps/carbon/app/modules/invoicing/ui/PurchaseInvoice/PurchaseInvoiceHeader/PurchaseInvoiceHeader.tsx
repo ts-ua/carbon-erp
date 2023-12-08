@@ -19,10 +19,11 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Form, useParams } from "@remix-run/react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { FaHistory } from "react-icons/fa";
 import { usePermissions, useRouteData } from "~/hooks";
-import type { PurchaseInvoice } from "~/modules/invoicing";
+import { useSupabase } from "~/lib/supabase";
+import type { PurchaseInvoice, PurchaseInvoiceLine } from "~/modules/invoicing";
 import {
   PurchaseInvoicingStatus,
   usePurchaseInvoiceTotals,
@@ -33,6 +34,9 @@ const PurchaseInvoiceHeader = () => {
   const permissions = usePermissions();
   const { invoiceId } = useParams();
   const postingModal = useDisclosure();
+
+  const { supabase } = useSupabase();
+  const [lines, setLines] = useState<PurchaseInvoiceLine[]>([]);
 
   if (!invoiceId) throw new Error("invoiceId not found");
 
@@ -54,6 +58,20 @@ const PurchaseInvoiceHeader = () => {
     []
   );
 
+  const showPostModal = async () => {
+    if (!supabase) throw new Error("supabase not found");
+    const { data, error } = await supabase
+      .from("purchaseInvoiceLine")
+      .select("*")
+      .eq("invoiceId", invoiceId);
+
+    if (error) throw new Error(error.message);
+    if (!data) return;
+
+    setLines(data);
+    postingModal.onOpen();
+  };
+
   return (
     <>
       <VStack w="full" alignItems="start" spacing={2}>
@@ -61,7 +79,7 @@ const PurchaseInvoiceHeader = () => {
           <Menubar>
             <MenubarItem
               isDisabled={!permissions.can("update", "invoicing") || isPosted}
-              onClick={postingModal.onOpen}
+              onClick={showPostModal}
             >
               Post
             </MenubarItem>
@@ -122,6 +140,7 @@ const PurchaseInvoiceHeader = () => {
           <ModalCloseButton />
           <ModalBody>
             Are you sure you want to post this invoice? This cannot be undone.
+            {JSON.stringify(lines)}
           </ModalBody>
 
           <ModalFooter>
