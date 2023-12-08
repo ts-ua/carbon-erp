@@ -7,17 +7,6 @@ import { useWindowSize } from "../../hooks/useWindowSize";
 import Features from "../features";
 import Sticky from "../sticky";
 
-const fadeIn = {
-  initial: {
-    opacity: 0,
-    scale: 0.9,
-  },
-  animate: {
-    opacity: 1,
-    scale: 1,
-  },
-};
-
 function Gradient() {
   const { scrollYProgress } = useScroll();
 
@@ -38,14 +27,17 @@ function Gradient() {
 }
 
 function Hero() {
-  const { height } = useWindowSize();
+  const { height, width } = useWindowSize();
 
   if (!height) return null;
+  if (!width) return null;
+
   return (
     <section>
       <Sticky
         cover
         height={height}
+        width={width}
         render={({ progress }) => {
           const blur = {
             filter: `blur(${progress * 3}px)`,
@@ -53,7 +45,7 @@ function Hero() {
           };
 
           const scale = {
-            transform: `scale(${clamp(0.9, 1.1, 1.1 - progress * 0.3)})`,
+            transform: `scale(${clamp(0.8, 1, 1 - progress * 0.3)})`,
           };
 
           return (
@@ -90,7 +82,7 @@ function Hero() {
                   }}
                   className="mt-6 nx-text-xl font-medium leading-tight text-black/60 dark:text-white/60 sm:nx-text-2xl md:nx-text-3xl lg:nx-text-4xl"
                 >
-                  Carbon is an open-source starting point for business
+                  Carbon is an open-source starting point for business planning
                 </motion.p>
               </div>
               <div
@@ -171,3 +163,14 @@ export default function Home() {
     </>
   );
 }
+
+const fadeIn = {
+  initial: {
+    opacity: 0,
+    scale: 0.9,
+  },
+  animate: {
+    opacity: 1,
+    scale: 1,
+  },
+};

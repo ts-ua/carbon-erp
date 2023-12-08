@@ -54,7 +54,7 @@ export const purchaseInvoiceLineValidator = withZod(
       accountNumber: zfd.text(z.string().optional()),
       assetId: zfd.text(z.string().optional()),
       description: zfd.text(z.string().optional()),
-      quantity: zfd.numeric(z.number().optional()),
+      quantity: zfd.numeric(z.number()),
       unitPrice: zfd.numeric(z.number().optional()),
       locationId: zfd.text(z.string().optional()),
       shelfId: zfd.text(z.string().optional()),
@@ -66,6 +66,13 @@ export const purchaseInvoiceLineValidator = withZod(
       message: "Part is required",
       path: ["partId"], // path of error
     })
+    .refine(
+      (data) => (data.invoiceLineType === "Part" ? data.locationId : true),
+      {
+        message: "Location is required",
+        path: ["locationId"], // path of error
+      }
+    )
     .refine(
       (data) =>
         data.invoiceLineType === "G/L Account" ? data.accountNumber : true,
