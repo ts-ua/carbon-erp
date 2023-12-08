@@ -8,9 +8,10 @@ type StickyProps = {
   render: (props: { progress: number }) => React.ReactNode;
   cover?: boolean;
   height: number;
+  width: number;
 };
 
-const Sticky = ({ render, cover, height }: StickyProps) => {
+const Sticky = ({ render, cover, height, width }: StickyProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -20,6 +21,8 @@ const Sticky = ({ render, cover, height }: StickyProps) => {
 
   const [progress, setProgress] = useState(0);
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    console.log(width);
+    if (width < 768) return;
     setProgress(latest);
   });
 

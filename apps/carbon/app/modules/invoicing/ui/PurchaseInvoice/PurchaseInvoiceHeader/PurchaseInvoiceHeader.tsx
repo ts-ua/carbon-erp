@@ -6,19 +6,12 @@ import {
   CardHeader,
   HStack,
   Heading,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Stack,
   Text,
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Form, useParams } from "@remix-run/react";
+import { useParams } from "@remix-run/react";
 import { useMemo, useState } from "react";
 import { FaHistory } from "react-icons/fa";
 import { usePermissions, useRouteData } from "~/hooks";
@@ -29,6 +22,7 @@ import {
   usePurchaseInvoiceTotals,
 } from "~/modules/invoicing";
 import { path } from "~/utils/path";
+import PurchaseInvoicePostModal from "../PurchaseInvoicePostModal";
 
 const PurchaseInvoiceHeader = () => {
   const permissions = usePermissions();
@@ -36,7 +30,9 @@ const PurchaseInvoiceHeader = () => {
   const postingModal = useDisclosure();
 
   const { supabase } = useSupabase();
-  const [lines, setLines] = useState<PurchaseInvoiceLine[]>([]);
+  const [linesNotAssociatedWithPO, setLinesNotAssociatedWithPO] = useState<
+    PurchaseInvoiceLine[]
+  >([]);
 
   if (!invoiceId) throw new Error("invoiceId not found");
 
@@ -59,16 +55,20 @@ const PurchaseInvoiceHeader = () => {
   );
 
   const showPostModal = async () => {
+    // check if there are any lines that are not associated with a PO
     if (!supabase) throw new Error("supabase not found");
     const { data, error } = await supabase
       .from("purchaseInvoiceLine")
-      .select("*")
-      .eq("invoiceId", invoiceId);
+      .select("partId, quantity")
+      .eq("invoiceId", invoiceId)
+      .eq("invoiceLineType", "Part")
+      .is("purchaseOrderLineId", null);
 
     if (error) throw new Error(error.message);
     if (!data) return;
 
-    setLines(data);
+    // so that we can ask the user if they want to receive those lines
+    setLinesNotAssociatedWithPO(data);
     postingModal.onOpen();
   };
 
@@ -133,33 +133,12 @@ const PurchaseInvoiceHeader = () => {
           </CardBody>
         </Card>
       </VStack>
-      <Modal isOpen={postingModal.isOpen} onClose={postingModal.onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Post Invoice</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            Are you sure you want to post this invoice? This cannot be undone.
-            {JSON.stringify(lines)}
-          </ModalBody>
-
-          <ModalFooter>
-            <HStack spacing={2}>
-              <Button colorScheme="gray" onClick={postingModal.onClose}>
-                Cancel
-              </Button>
-              <Form
-                method="post"
-                action={path.to.purchaseInvoicePost(invoiceId)}
-              >
-                <Button colorScheme="brand" type="submit">
-                  Post Invoice
-                </Button>
-              </Form>
-            </HStack>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <PurchaseInvoicePostModal
+        invoiceId={invoiceId}
+        isOpen={postingModal.isOpen}
+        onClose={postingModal.onClose}
+        linesToReceive={linesNotAssociatedWithPO}
+      />
     </>
   );
 };
