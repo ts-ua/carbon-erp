@@ -100,8 +100,16 @@ code[data-language="sh"] {
   );
 }
 
-.nextra-nav-container.nx-sticky {
-  position: relative;
+.nextra-nav-container {
+  position: fixed;
+}
+
+article {
+  padding-top: 70px;
+}
+
+aside {
+  padding-top: 15px;
 }
 
 /* Credit: https://cmdk.paco.me/ */
@@ -139,7 +147,7 @@ code[data-language="sh"] {
 
 .background:after {
   content: "";
-  background-image: url("/static/grid.svg");
+  background-image: url("/grid.svg");
   z-index: 1;
   position: absolute;
   width: 100%;
