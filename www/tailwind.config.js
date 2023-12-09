@@ -20,15 +20,12 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: [`"Inter"`, "sans-serif"],
+        sans: ["var(--font-geist-sans)", "sans-serif"],
         mono: [
+          "var(--font-geist-mono)",
           "Menlo",
           "Monaco",
           "Lucida Console",
-          "Liberation Mono",
-          "DejaVu Sans Mono",
-          "Bitstream Vera Sans Mono",
-          "Courier New",
           "monospace",
         ],
       },
