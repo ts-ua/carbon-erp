@@ -19,23 +19,28 @@ const Sticky = ({ render, cover, height, width }: StickyProps) => {
     offset: ["start", "end start"],
   });
 
+  const isMobile = width < 768;
+
   const [progress, setProgress] = useState(0);
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    console.log(width);
-    if (width < 768) return;
+    if (isMobile) return;
     setProgress(latest);
   });
 
   return (
     <div ref={ref} data-component="sticky">
-      <div className="relative h-screen" style={{ height: height * 1.5 }}>
+      <div
+        className="relative h-screen"
+        style={{ height: isMobile ? height : height * 1.5 }}
+      >
         <div className="h-full">
           <div
             className={clsx(
-              "flex justify-center items-center overflow-x-hidden sticky top-0 left-0 right-0 z-[1] min-h-[initial] w-full",
+              "flex justify-center items-center overflow-x-hidden  z-[1] min-h-[initial] w-full",
               {
                 "h-screen overflow-y-hidden": cover,
                 "h-[initial]": !cover,
+                "sticky top-0 left-0 right-0": !isMobile,
               }
             )}
           >

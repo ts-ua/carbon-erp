@@ -12,6 +12,7 @@
   "dependencies": {
     "clsx": "2.0.0",
     "framer-motion": "^10.13.1",
+    "geist": "1.2.0",
     "next": "^13.4.16",
     "nextra": "^2.5.2",
     "nextra-theme-docs": "^2.5.2",

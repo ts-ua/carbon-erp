@@ -104,6 +104,15 @@ code[data-language="sh"] {
   position: fixed;
 }
 
+.nextra-nav-container + div {
+  min-height: 100vh;
+}
+
+section > section {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
 article {
   padding-top: 70px;
 }
@@ -155,6 +164,10 @@ aside {
   top: 0;
   opacity: 0.4;
   filter: invert(1);
+}
+
+.dark .background:after {
+  filter: invert(0);
 }
 
 .gradient {
