@@ -24,9 +24,7 @@ const ReceiptPostModal = (props: ReceiptPostModalProps) => {
       <ModalContent>
         <ModalHeader>Post Receipt</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          Are you sure you want to post this receipt? This cannot be undone.
-        </ModalBody>
+        <ModalBody>Are you sure you want to post this receipt?</ModalBody>
 
         <ModalFooter>
           <HStack spacing={2}>

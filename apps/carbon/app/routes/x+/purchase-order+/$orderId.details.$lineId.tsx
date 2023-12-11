@@ -4,8 +4,8 @@ import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import type { PurchaseOrderLineType } from "~/modules/purchasing";
 import {
-  getPurchaseOrderLine,
   PurchaseOrderLineForm,
+  getPurchaseOrderLine,
   purchaseOrderLineValidator,
   upsertPurchaseOrderLine,
 } from "~/modules/purchasing";
@@ -79,7 +79,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
         request,
         error(
           updatePurchaseOrderLine.error,
-          "Failed to update purchaseOrderLine."
+          "Failed to update purchase order line"
         )
       )
     );
@@ -98,6 +98,8 @@ export default function EditPurchaseOrderLineRoute() {
       purchaseOrderLine?.purchaseOrderLineType ??
       ("Part" as PurchaseOrderLineType),
     partId: purchaseOrderLine?.partId ?? "",
+    accountNumber: purchaseOrderLine?.accountNumber ?? "",
+    assetId: purchaseOrderLine?.assetId ?? "",
     description: purchaseOrderLine?.description ?? "",
     purchaseQuantity: purchaseOrderLine?.purchaseQuantity ?? 1,
     unitPrice: purchaseOrderLine?.unitPrice ?? 0,

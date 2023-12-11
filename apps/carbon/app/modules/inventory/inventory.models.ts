@@ -4,8 +4,10 @@ import { zfd } from "zod-form-data";
 
 export const receiptSourceDocumentType = [
   // "Sales Order",
+  // "Sales Invoice",
   // "Sales Return Order",
   "Purchase Order",
+  "Purchase Invoice",
   // "Purchase Return Order",
   // "Inbound Transfer",
   // "Outbound Transfer",

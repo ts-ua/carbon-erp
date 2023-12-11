@@ -5,7 +5,10 @@ import type { TypeOfValidator } from "~/types/validators";
 import type { GenericQueryFilters } from "~/utils/query";
 import { setGenericQueryFilters } from "~/utils/query";
 import { sanitize } from "~/utils/supabase";
-import type { purchaseInvoiceValidator } from "./invoicing.models";
+import type {
+  purchaseInvoiceLineValidator,
+  purchaseInvoiceValidator,
+} from "./invoicing.models";
 
 export async function deletePurchaseInvoice(
   client: SupabaseClient<Database>,
@@ -15,6 +18,16 @@ export async function deletePurchaseInvoice(
   // and then sets the status of the purchase order back to
   // "To Receive and Invoice" | "To Invoice"
   return client.from("purchaseInvoice").delete().eq("id", purchaseInvoiceId);
+}
+
+export async function deletePurchaseInvoiceLine(
+  client: SupabaseClient<Database>,
+  purchaseInvoiceLineId: string
+) {
+  return client
+    .from("purchaseInvoiceLine")
+    .delete()
+    .eq("id", purchaseInvoiceLineId);
 }
 
 export async function getPurchaseInvoice(
@@ -68,6 +81,17 @@ export async function getPurchaseInvoiceLines(
     .eq("invoiceId", purchaseInvoiceId);
 }
 
+export async function getPurchaseInvoiceLine(
+  client: SupabaseClient<Database>,
+  purchaseInvoiceLineId: string
+) {
+  return client
+    .from("purchaseInvoiceLine")
+    .select("*")
+    .eq("id", purchaseInvoiceLineId)
+    .single();
+}
+
 export async function upsertPurchaseInvoice(
   client: SupabaseClient<Database>,
   purchaseInvoice:
@@ -117,4 +141,36 @@ export async function upsertPurchaseInvoice(
     .select("id, invoiceId");
 
   return invoice;
+}
+
+export async function upsertPurchaseInvoiceLine(
+  client: SupabaseClient<Database>,
+  purchaseInvoiceLine:
+    | (Omit<TypeOfValidator<typeof purchaseInvoiceLineValidator>, "id"> & {
+        createdBy: string;
+      })
+    | (Omit<TypeOfValidator<typeof purchaseInvoiceLineValidator>, "id"> & {
+        id: string;
+        updatedBy: string;
+      })
+) {
+  if ("id" in purchaseInvoiceLine) {
+    return client
+      .from("purchaseInvoiceLine")
+      .update(sanitize(purchaseInvoiceLine))
+      .eq("id", purchaseInvoiceLine.id)
+      .select("id")
+      .single();
+  }
+
+  return client
+    .from("purchaseInvoiceLine")
+    .insert([
+      {
+        ...purchaseInvoiceLine,
+        currencyCode: purchaseInvoiceLine.currencyCode ?? "USD",
+      },
+    ])
+    .select("id")
+    .single();
 }

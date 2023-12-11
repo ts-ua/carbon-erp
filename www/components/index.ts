@@ -1,3 +1,4 @@
 import Features from "./features";
+import Sticky from "./sticky";
 
-export { Features };
+export { Features, Sticky };
