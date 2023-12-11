@@ -1313,34 +1313,6 @@ export interface Database {
         }
         Relationships: []
       }
-      costLedgerJournalLineRelation: {
-        Row: {
-          costLedgerId: string
-          journalLineId: string
-        }
-        Insert: {
-          costLedgerId: string
-          journalLineId: string
-        }
-        Update: {
-          costLedgerId?: string
-          journalLineId?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "costLedgerJournalLineRelation_costLedgerId_fkey"
-            columns: ["costLedgerId"]
-            referencedRelation: "costLedger"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "costLedgerJournalLineRelation_journalLineId_fkey"
-            columns: ["journalLineId"]
-            referencedRelation: "journalLine"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       country: {
         Row: {
           code: string

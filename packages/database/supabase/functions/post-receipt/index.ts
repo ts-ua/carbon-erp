@@ -556,12 +556,6 @@ serve(async (req: Request) => {
             .where("id", "=", receipt.data.sourceDocumentId)
             .execute();
 
-          await trx
-            .insertInto("partLedger")
-            .values(partLedgerInserts)
-            .returning(["id"])
-            .execute();
-
           const journal = await trx
             .insertInto("journal")
             .values({
@@ -575,7 +569,7 @@ serve(async (req: Request) => {
           const journalId = journal[0].id;
           if (!journalId) throw new Error("Failed to insert journal");
 
-          const journalLineIds = await trx
+          await trx
             .insertInto("journalLine")
             .values(
               journalLineInserts.map((journalLine) => ({
@@ -586,28 +580,19 @@ serve(async (req: Request) => {
             .returning(["id"])
             .execute();
 
+          if (partLedgerInserts.length > 0) {
+            await trx
+              .insertInto("partLedger")
+              .values(partLedgerInserts)
+              .returning(["id"])
+              .execute();
+          }
+
           if (costLedgerInserts.length > 0) {
-            const costLedgerIds = await trx
+            await trx
               .insertInto("costLedger")
               .values(costLedgerInserts)
               .returning(["id"])
-              .execute();
-
-            // TODO: this won't work -- it assumes each line is the same -- we need better grouping further up in process
-            // insert relationship between journal line and cost line
-            const journalLinesPerCostEntry =
-              journalLineIds.length / costLedgerIds.length;
-            const costLedgerJournalLineRelationInserts = journalLineIds.map<
-              Database["public"]["Tables"]["costLedgerJournalLineRelation"]["Insert"]
-            >((journalLineId, i) => ({
-              journalLineId: journalLineId.id!,
-              costLedgerId:
-                costLedgerIds[Math.floor(i / journalLinesPerCostEntry)].id!,
-            }));
-
-            await trx
-              .insertInto("costLedgerJournalLineRelation")
-              .values(costLedgerJournalLineRelationInserts)
               .execute();
           }
 

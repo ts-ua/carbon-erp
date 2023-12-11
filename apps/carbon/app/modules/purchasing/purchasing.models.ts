@@ -97,7 +97,7 @@ export const purchaseOrderLineValidator = withZod(
       accountNumber: zfd.text(z.string().optional()),
       assetId: zfd.text(z.string().optional()),
       description: zfd.text(z.string().optional()),
-      purchaseQuantity: z.number(),
+      purchaseQuantity: zfd.numeric(z.number()),
       unitOfMeasureCode: zfd.text(z.string().optional()),
       unitPrice: zfd.numeric(z.number()),
       setupPrice: zfd.numeric(z.number().optional()),
