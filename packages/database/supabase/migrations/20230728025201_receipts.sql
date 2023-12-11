@@ -1,7 +1,9 @@
 CREATE TYPE "receiptSourceDocument" AS ENUM (
   'Sales Order',
+  'Sales Invoice',
   'Sales Return Order',
   'Purchase Order',
+  'Purchase Invoice',
   'Purchase Return Order',
   'Inbound Transfer',
   'Outbound Transfer',

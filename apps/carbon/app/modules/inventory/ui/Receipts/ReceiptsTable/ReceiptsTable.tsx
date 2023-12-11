@@ -59,6 +59,18 @@ const ReceiptsTable = memo(({ data, count }: ReceiptsTableProps) => {
                   {row.original.sourceDocumentReadableId}
                 </Link>
               );
+            case "Purchase Invoice":
+              return (
+                <Link
+                  onClick={() =>
+                    navigate(
+                      path.to.purchaseInvoice(row.original.sourceDocumentId!)
+                    )
+                  }
+                >
+                  {row.original.sourceDocumentReadableId}
+                </Link>
+              );
             default:
               return null;
           }

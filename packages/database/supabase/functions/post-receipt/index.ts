@@ -593,7 +593,8 @@ serve(async (req: Request) => {
               .returning(["id"])
               .execute();
 
-            // insert relationship between journal entry and value entry
+            // TODO: this won't work -- it assumes each line is the same -- we need better grouping further up in process
+            // insert relationship between journal line and cost line
             const journalLinesPerCostEntry =
               journalLineIds.length / costLedgerIds.length;
             const costLedgerJournalLineRelationInserts = journalLineIds.map<
