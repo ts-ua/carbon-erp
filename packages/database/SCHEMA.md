@@ -5417,23 +5417,23 @@ CREATE POLICY "Employees with accounting_view can view the value ledger" ON "cos
     (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
 
-CREATE TABLE "costLedgerJournalLineRelation" (
-  "costLedgerId" TEXT NOT NULL,
-  "journalLineId" TEXT NOT NULL,
+-- CREATE TABLE "costLedgerJournalLineRelation" (
+--   "costLedgerId" TEXT NOT NULL,
+--   "journalLineId" TEXT NOT NULL,
 
-  CONSTRAINT "costLedgerJournalLineRelation_pkey" PRIMARY KEY ("costLedgerId", "journalLineId"),
-  CONSTRAINT "costLedgerJournalLineRelation_costLedgerId_fkey" FOREIGN KEY ("costLedgerId") REFERENCES "costLedger"("id"),
-  CONSTRAINT "costLedgerJournalLineRelation_journalLineId_fkey" FOREIGN KEY ("journalLineId") REFERENCES "journalLine"("id")
-);
+--   CONSTRAINT "costLedgerJournalLineRelation_pkey" PRIMARY KEY ("costLedgerId", "journalLineId"),
+--   CONSTRAINT "costLedgerJournalLineRelation_costLedgerId_fkey" FOREIGN KEY ("costLedgerId") REFERENCES "costLedger"("id"),
+--   CONSTRAINT "costLedgerJournalLineRelation_journalLineId_fkey" FOREIGN KEY ("journalLineId") REFERENCES "journalLine"("id")
+-- );
 
-ALTER TABLE "costLedgerJournalLineRelation" ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE "costLedgerJournalLineRelation" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Employees with accounting_view can view the value ledger/general ledger relations" ON "costLedgerJournalLineRelation"
-  FOR SELECT
-  USING (
-    coalesce(get_my_claim('accounting_view')::boolean, false) = true AND
-    (get_my_claim('role'::text)) = '"employee"'::jsonb
-  );
+-- CREATE POLICY "Employees with accounting_view can view the value ledger/general ledger relations" ON "costLedgerJournalLineRelation"
+--   FOR SELECT
+--   USING (
+--     coalesce(get_my_claim('accounting_view')::boolean, false) = true AND
+--     (get_my_claim('role'::text)) = '"employee"'::jsonb
+--   );
 
 
 CREATE TABLE "partLedger" (
@@ -5533,8 +5533,10 @@ $$;
 ```sql
 CREATE TYPE "receiptSourceDocument" AS ENUM (
   'Sales Order',
+  'Sales Invoice',
   'Sales Return Order',
   'Purchase Order',
+  'Purchase Invoice',
   'Purchase Return Order',
   'Inbound Transfer',
   'Outbound Transfer',
@@ -6609,6 +6611,7 @@ CREATE TABLE "purchaseInvoiceLine" (
   "purchaseOrderLineId" TEXT,
   "partId" TEXT,
   "locationId" TEXT,
+  "shelfId" TEXT,
   "accountNumber" TEXT,
   "assetId" TEXT,
   "description" TEXT,
@@ -6617,6 +6620,7 @@ CREATE TABLE "purchaseInvoiceLine" (
   "totalAmount" NUMERIC(10, 2) GENERATED ALWAYS AS ("quantity" * "unitPrice") STORED,
   "currencyCode" TEXT NOT NULL,
   "exchangeRate" NUMERIC(10, 4) NOT NULL DEFAULT 1,
+  "unitOfMeasureCode" TEXT,
   "createdBy" TEXT NOT NULL,
   "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
   "updatedBy" TEXT,
@@ -6628,9 +6632,11 @@ CREATE TABLE "purchaseInvoiceLine" (
   CONSTRAINT "purchaseInvoiceLines_purchaseOrderLineId_fkey" FOREIGN KEY ("purchaseOrderLineId") REFERENCES "purchaseOrderLine" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_partId_fkey" FOREIGN KEY ("partId") REFERENCES "part" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "location" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT "purchaseInvoiceLines_shelfId_fkey" FOREIGN KEY ("shelfId", "locationId") REFERENCES "shelf" ("id", "locationId") ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT "purchaseInvoiceLines_accountNumber_fkey" FOREIGN KEY ("accountNumber") REFERENCES "account" ("number") ON UPDATE CASCADE ON DELETE RESTRICT,
   -- CONSTRAINT "purchaseInvoiceLines_assetId_fkey" FOREIGN KEY ("assetId") REFERENCES "fixedAsset" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_currencyCode_fkey" FOREIGN KEY ("currencyCode") REFERENCES "currency" ("code") ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT "purchaseInvoiceLines_unitOfMeasureCode_fkey" FOREIGN KEY ("unitOfMeasureCode") REFERENCES "unitOfMeasure" ("code") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON UPDATE CASCADE ON DELETE RESTRICT
 );

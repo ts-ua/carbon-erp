@@ -26,7 +26,7 @@ export async function getNextSequence(trx: Transaction<DB>, tableName: string) {
       next: nextValue,
       updatedBy: "system",
     })
-    .where("table", "=", "purchaseInvoice")
+    .where("table", "=", tableName)
     .execute();
 
   return `${derivedPrefix}${nextSequence}${derivedSuffix}`;

@@ -1313,34 +1313,6 @@ export interface Database {
         }
         Relationships: []
       }
-      costLedgerJournalLineRelation: {
-        Row: {
-          costLedgerId: string
-          journalLineId: string
-        }
-        Insert: {
-          costLedgerId: string
-          journalLineId: string
-        }
-        Update: {
-          costLedgerId?: string
-          journalLineId?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "costLedgerJournalLineRelation_costLedgerId_fkey"
-            columns: ["costLedgerId"]
-            referencedRelation: "costLedger"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "costLedgerJournalLineRelation_journalLineId_fkey"
-            columns: ["journalLineId"]
-            referencedRelation: "journalLine"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       country: {
         Row: {
           code: string
@@ -4948,7 +4920,9 @@ export interface Database {
           purchaseOrderId: string | null
           purchaseOrderLineId: string | null
           quantity: number
+          shelfId: string | null
           totalAmount: number | null
+          unitOfMeasureCode: string | null
           unitPrice: number
           updatedAt: string | null
           updatedBy: string | null
@@ -4969,7 +4943,9 @@ export interface Database {
           purchaseOrderId?: string | null
           purchaseOrderLineId?: string | null
           quantity?: number
+          shelfId?: string | null
           totalAmount?: number | null
+          unitOfMeasureCode?: string | null
           unitPrice?: number
           updatedAt?: string | null
           updatedBy?: string | null
@@ -4990,7 +4966,9 @@ export interface Database {
           purchaseOrderId?: string | null
           purchaseOrderLineId?: string | null
           quantity?: number
+          shelfId?: string | null
           totalAmount?: number | null
+          unitOfMeasureCode?: string | null
           unitPrice?: number
           updatedAt?: string | null
           updatedBy?: string | null
@@ -5091,6 +5069,18 @@ export interface Database {
             columns: ["purchaseOrderLineId"]
             referencedRelation: "purchaseOrderLine"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchaseInvoiceLines_shelfId_fkey"
+            columns: ["shelfId", "locationId"]
+            referencedRelation: "shelf"
+            referencedColumns: ["id", "locationId"]
+          },
+          {
+            foreignKeyName: "purchaseInvoiceLines_unitOfMeasureCode_fkey"
+            columns: ["unitOfMeasureCode"]
+            referencedRelation: "unitOfMeasure"
+            referencedColumns: ["code"]
           },
           {
             foreignKeyName: "purchaseInvoiceLines_updatedBy_fkey"
@@ -8944,8 +8934,10 @@ export interface Database {
       purchaseOrderType: "Purchase" | "Return"
       receiptSourceDocument:
         | "Sales Order"
+        | "Sales Invoice"
         | "Sales Return Order"
         | "Purchase Order"
+        | "Purchase Invoice"
         | "Purchase Return Order"
         | "Inbound Transfer"
         | "Outbound Transfer"

@@ -32,38 +32,38 @@ import {
 } from "~/components/Form";
 import { usePermissions, useRouteData, useUser } from "~/hooks";
 import { useSupabase } from "~/lib/supabase";
-import type { getShelvesList } from "~/modules/parts";
 import type {
-  PurchaseOrder,
-  PurchaseOrderLineType,
-} from "~/modules/purchasing";
+  PurchaseInvoice,
+  PurchaseInvoiceLineType,
+} from "~/modules/invoicing";
 import {
-  purchaseOrderLineType,
-  purchaseOrderLineValidator,
-} from "~/modules/purchasing";
+  purchaseInvoiceLineType,
+  purchaseInvoiceLineValidator,
+} from "~/modules/invoicing";
+import type { getShelvesList } from "~/modules/parts";
 import type { ListItem } from "~/types";
 import type { TypeOfValidator } from "~/types/validators";
 import { path } from "~/utils/path";
 
-type PurchaseOrderLineFormProps = {
-  initialValues: TypeOfValidator<typeof purchaseOrderLineValidator>;
+type PurchaseInvoiceLineFormProps = {
+  initialValues: TypeOfValidator<typeof purchaseInvoiceLineValidator>;
 };
 
-const PurchaseOrderLineForm = ({
+const PurchaseInvoiceLineForm = ({
   initialValues,
-}: PurchaseOrderLineFormProps) => {
+}: PurchaseInvoiceLineFormProps) => {
   const permissions = usePermissions();
   const { supabase } = useSupabase();
   const navigate = useNavigate();
   const { defaults } = useUser();
-  const { orderId } = useParams();
+  const { invoiceId } = useParams();
 
-  if (!orderId) throw new Error("orderId not found");
+  if (!invoiceId) throw new Error("invoiceId not found");
 
   const routeData = useRouteData<{
     locations: ListItem[];
-    purchaseOrder: PurchaseOrder;
-  }>(path.to.purchaseOrder(orderId));
+    purchaseInvoice: PurchaseInvoice;
+  }>(path.to.purchaseInvoice(invoiceId));
 
   const locations = routeData?.locations ?? [];
   const locationOptions = locations.map((location) => ({
@@ -71,11 +71,11 @@ const PurchaseOrderLineForm = ({
     value: location.id,
   }));
 
-  const isEditable = ["Draft", "To Review"].includes(
-    routeData?.purchaseOrder?.status ?? ""
+  const isEditable = ["Draft"].includes(
+    routeData?.purchaseInvoice?.status ?? ""
   );
 
-  const [type, setType] = useState(initialValues.purchaseOrderLineType);
+  const [type, setType] = useState(initialValues.invoiceLineType);
   const [locationId, setLocationId] = useState(defaults.locationId ?? "");
   const [partData, setPartData] = useState<{
     partId: string;
@@ -116,14 +116,16 @@ const PurchaseOrderLineForm = ({
     ? !permissions.can("update", "purchasing")
     : !permissions.can("create", "purchasing");
 
-  const purchaseOrderLineTypeOptions = purchaseOrderLineType.map((type) => ({
-    label: type,
-    value: type,
-  }));
+  const purchaseInvoiceLineTypeOptions = purchaseInvoiceLineType.map(
+    (type) => ({
+      label: type,
+      value: type,
+    })
+  );
 
   const onClose = () => navigate(-1);
 
-  const onTypeChange = (type: PurchaseOrderLineType) => {
+  const onTypeChange = (type: PurchaseInvoiceLineType) => {
     setType(type);
     setPartData({
       partId: "",
@@ -190,31 +192,31 @@ const PurchaseOrderLineForm = ({
     <Drawer onClose={onClose} isOpen={true} size="sm">
       <ValidatedForm
         defaultValues={initialValues}
-        validator={purchaseOrderLineValidator}
+        validator={purchaseInvoiceLineValidator}
         method="post"
         action={
           isEditing
-            ? path.to.purchaseOrderLine(orderId, initialValues.id!)
-            : path.to.newPurchaseOrderLine(orderId)
+            ? path.to.purchaseInvoiceLine(invoiceId, initialValues.id!)
+            : path.to.newPurchaseInvoiceLine(invoiceId)
         }
       >
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            {isEditing ? "Edit" : "New"} Purchase Order Line
+            {isEditing ? "Edit" : "New"} Purchase Invoice Line
           </DrawerHeader>
           <DrawerBody pb={8}>
             <Hidden name="id" />
-            <Hidden name="purchaseOrderId" />
+            <Hidden name="invoiceId" />
             <Hidden name="description" value={partData.description} />
             <VStack spacing={4} alignItems="start">
               <Select
-                name="purchaseOrderLineType"
+                name="invoiceLineType"
                 label="Type"
-                options={purchaseOrderLineTypeOptions}
+                options={purchaseInvoiceLineTypeOptions}
                 onChange={({ value }) => {
-                  onTypeChange(value as PurchaseOrderLineType);
+                  onTypeChange(value as PurchaseInvoiceLineType);
                 }}
               />
               {type === "Part" && (
@@ -234,13 +236,13 @@ const PurchaseOrderLineForm = ({
                   label="Account"
                   classes={["Expense", "Asset"]}
                   onChange={({ label }) => {
-                    setPartData({
+                    setPartData((d) => ({
+                      ...d,
                       partId: "",
                       description: label,
-                      unitPrice: "0",
                       uom: "EA",
                       shelfId: "",
-                    });
+                    }));
                   }}
                 />
               )}
@@ -259,12 +261,12 @@ const PurchaseOrderLineForm = ({
               </FormControl>
               {type !== "Comment" && (
                 <>
-                  <Number name="purchaseQuantity" label="Quantity" />
+                  <Number name="quantity" label="Quantity" />
                   {/* 
                 // TODO: implement this and replace the UoM in PartForm */}
                   {/* <UnitOfMeasure name="unitOfMeasureCode" label="Unit of Measure" value={uom} /> */}
                   <FormControl>
-                    <FormLabel htmlFor="unitPrice">Unit Cost</FormLabel>
+                    <FormLabel htmlFor="unitPrice">Unit Price</FormLabel>
                     <NumberInput
                       name="unitPrice"
                       value={partData.unitPrice}
@@ -323,4 +325,4 @@ const PurchaseOrderLineForm = ({
   );
 };
 
-export default PurchaseOrderLineForm;
+export default PurchaseInvoiceLineForm;

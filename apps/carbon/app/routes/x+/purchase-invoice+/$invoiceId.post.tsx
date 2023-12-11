@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { postingQueue, PostingQueueType } from "~/queues";
+import { PostingQueueType, postingQueue } from "~/queues";
 import { requirePermissions } from "~/services/auth";
 import { flash } from "~/services/session";
 import { path } from "~/utils/path";

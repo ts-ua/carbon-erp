@@ -142,6 +142,10 @@ export const path = {
       generatePath(`${x}/accounting/payment-terms/delete/${id}`),
     deletePurchaseInvoice: (id: string) =>
       generatePath(`${x}/purchase-invoice/delete/${id}`),
+    deletePurchaseInvoiceLine: (invoiceId: string, lineId: string) =>
+      generatePath(
+        `${x}/purchase-invoice/${invoiceId}/details/delete/${lineId}`
+      ),
     deletePurchaseOrder: (id: string) =>
       generatePath(`${x}/purchase-order/delete/${id}`),
     deletePurchaseOrderLine: (orderId: string, lineId: string) =>
@@ -240,6 +244,8 @@ export const path = {
     newPartner: `${x}/resources/partners/new`,
     newPaymentTerm: `${x}/accounting/payment-terms/new`,
     newPurchaseInvoice: `${x}/purchase-invoice/new`,
+    newPurchaseInvoiceLine: (id: string) =>
+      generatePath(`${x}/purchase-invoice/${id}/details/new`),
     newPurchaseOrder: `${x}/purchase-order/new`,
     newPurchaseOrderLine: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/details/new`),
@@ -291,6 +297,8 @@ export const path = {
       generatePath(`${x}/purchase-invoice/${id}`),
     purchaseInvoiceDetails: (id: string) =>
       generatePath(`${x}/purchase-invoice/${id}/details`),
+    purchaseInvoiceLine: (invoiceId: string, id: string) =>
+      generatePath(`${x}/purchase-invoice/${invoiceId}/details/${id}`),
     purchaseInvoicePost: (id: string) =>
       generatePath(`${x}/purchase-invoice/${id}/post`),
     purchaseInvoiceRoot: `${x}/purchase-invoice`,
