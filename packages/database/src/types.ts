@@ -8962,8 +8962,10 @@ export interface Database {
       purchaseOrderType: "Purchase" | "Return"
       receiptSourceDocument:
         | "Sales Order"
+        | "Sales Invoice"
         | "Sales Return Order"
         | "Purchase Order"
+        | "Purchase Invoice"
         | "Purchase Return Order"
         | "Inbound Transfer"
         | "Outbound Transfer"
