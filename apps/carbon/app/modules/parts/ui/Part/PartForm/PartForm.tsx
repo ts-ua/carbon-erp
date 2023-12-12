@@ -26,7 +26,11 @@ import type {
   PartType,
   UnitOfMeasureListItem,
 } from "~/modules/parts";
-import { partValidator } from "~/modules/parts";
+import {
+  partReplenishmentSystems,
+  partTypes,
+  partValidator,
+} from "~/modules/parts";
 import { path } from "~/utils/path";
 
 type PartFormValues = {
@@ -93,8 +97,6 @@ const useNextPartIdShortcut = () => {
 const PartForm = ({ initialValues }: PartFormProps) => {
   const sharedPartsData = useRouteData<{
     partGroups: PartGroupListItem[];
-    partTypes: PartType[];
-    partReplenishmentSystems: PartReplenishmentSystem[];
     unitOfMeasures: UnitOfMeasureListItem[];
   }>(path.to.partRoot);
 
@@ -109,18 +111,16 @@ const PartForm = ({ initialValues }: PartFormProps) => {
     })) ?? [];
 
   const partTypeOptions =
-    sharedPartsData?.partTypes.map((partType) => ({
+    partTypes.map((partType) => ({
       label: partType,
       value: partType,
     })) ?? [];
 
   const partReplenishmentSystemOptions =
-    sharedPartsData?.partReplenishmentSystems.map(
-      (partReplenishmentSystem) => ({
-        label: partReplenishmentSystem,
-        value: partReplenishmentSystem,
-      })
-    ) ?? [];
+    partReplenishmentSystems.map((partReplenishmentSystem) => ({
+      label: partReplenishmentSystem,
+      value: partReplenishmentSystem,
+    })) ?? [];
 
   const unitOfMeasureOptions =
     sharedPartsData?.unitOfMeasures.map((uom) => ({

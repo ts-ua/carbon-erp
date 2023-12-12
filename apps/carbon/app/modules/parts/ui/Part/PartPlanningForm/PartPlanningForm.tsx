@@ -19,8 +19,7 @@ import {
   Submit,
 } from "~/components/Form";
 import { usePermissions } from "~/hooks";
-import type { PartReorderingPolicy } from "~/modules/parts";
-import { partPlanningValidator } from "~/modules/parts";
+import { partPlanningValidator, partReorderingPolicies } from "~/modules/parts";
 import type { ListItem } from "~/types";
 import type { TypeOfValidator } from "~/types/validators";
 import { path } from "~/utils/path";
@@ -28,13 +27,11 @@ import { path } from "~/utils/path";
 type PartPlanningFormProps = {
   initialValues: TypeOfValidator<typeof partPlanningValidator>;
   locations: ListItem[];
-  partReorderingPolicies: PartReorderingPolicy[];
 };
 
 const PartPlanningForm = ({
   initialValues,
   locations,
-  partReorderingPolicies,
 }: PartPlanningFormProps) => {
   const permissions = usePermissions();
 

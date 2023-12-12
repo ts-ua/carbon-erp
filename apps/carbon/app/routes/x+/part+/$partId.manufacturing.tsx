@@ -2,11 +2,9 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
-import { useRouteData } from "~/hooks";
-import type { PartManufacturingPolicy } from "~/modules/parts";
 import {
-  getPartManufacturing,
   PartManufacturingForm,
+  getPartManufacturing,
   partManufacturingValidator,
   upsertPartManufacturing,
 } from "~/modules/parts";
@@ -87,23 +85,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function PartManufacturingRoute() {
-  const sharedPartsData = useRouteData<{
-    partManufacturingPolicies: PartManufacturingPolicy[];
-  }>(path.to.partRoot);
-
   const { partManufacturing } = useLoaderData<typeof loader>();
-
-  if (!sharedPartsData) throw new Error("Could not load shared parts data");
 
   const initialValues = {
     ...partManufacturing,
     lotSize: partManufacturing.lotSize ?? 0,
   };
 
-  return (
-    <PartManufacturingForm
-      initialValues={initialValues}
-      partManufacturingPolicies={sharedPartsData.partManufacturingPolicies}
-    />
-  );
+  return <PartManufacturingForm initialValues={initialValues} />;
 }

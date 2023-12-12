@@ -4,18 +4,14 @@ import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
-import type { PartType } from "~/modules/parts";
+import { partTypes } from "~/modules/parts";
 import type { ListItem } from "~/types";
 
 type PartsTableFiltersProps = {
-  partTypes: PartType[];
   partGroups: ListItem[];
 };
 
-const PartsTableFilters = ({
-  partTypes,
-  partGroups,
-}: PartsTableFiltersProps) => {
+const PartsTableFilters = ({ partGroups }: PartsTableFiltersProps) => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
   const partTypeOptions = partTypes.map((type) => ({
