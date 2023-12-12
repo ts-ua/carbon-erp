@@ -53,6 +53,8 @@ export type PartsTableRow = NonNullable<
 
 export type PartType = Database["public"]["Enums"]["partType"];
 
+export type ServiceType = Database["public"]["Enums"]["serviceType"];
+
 export type UnitOfMeasure = NonNullable<
   Awaited<ReturnType<typeof getUnitOfMeasure>>["data"]
 >;

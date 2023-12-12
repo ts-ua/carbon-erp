@@ -100,3 +100,98 @@ CREATE POLICY "Employees with parts_delete can delete services" ON "service"
     coalesce(get_my_claim('parts_delete')::boolean, false) = true 
     AND (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
+
+
+CREATE TABLE "serviceSupplier" (
+  "id" TEXT NOT NULL DEFAULT xid(),
+  "serviceId" TEXT NOT NULL,
+  "supplierId" TEXT NOT NULL,
+  "supplierServiceId" TEXT,
+  "active" BOOLEAN NOT NULL DEFAULT true,
+  "createdBy" TEXT NOT NULL,
+  "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  "updatedBy" TEXT,
+  "updatedAt" TIMESTAMP WITH TIME ZONE,
+
+  CONSTRAINT "serviceSupplier_id_pkey" PRIMARY KEY ("id"),
+  CONSTRAINT "serviceSupplier_serviceId_fkey" FOREIGN KEY ("serviceId") REFERENCES "service"("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "serviceSupplier_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "supplier"("id") ON DELETE CASCADE,
+  CONSTRAINT "serviceSupplier_service_supplier_unique" UNIQUE ("serviceId", "supplierId"),
+  CONSTRAINT "serviceSupplier_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user"("id"),
+  CONSTRAINT "serviceSupplier_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user"("id")
+);
+
+CREATE INDEX "serviceSupplier_serviceId_index" ON "serviceSupplier"("serviceId");
+
+ALTER TABLE "serviceSupplier" ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Employees with part_view can view service suppliers" ON "serviceSupplier"
+  FOR SELECT
+  USING (
+    coalesce(get_my_claim('parts_view')::boolean,false) 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+
+CREATE POLICY "Employees with parts_update can update service suppliers" ON "serviceSupplier"
+  FOR UPDATE
+  USING (
+    coalesce(get_my_claim('parts_update')::boolean, false) = true 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+
+CREATE POLICY "Employees with parts_create can create service suppliers" ON "serviceSupplier"
+  FOR INSERT
+  WITH CHECK (
+    coalesce(get_my_claim('parts_create')::boolean, false) = true 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+
+CREATE POLICY "Employees with parts_delete can delete service suppliers" ON "serviceSupplier"
+  FOR DELETE
+  USING (
+    coalesce(get_my_claim('parts_delete')::boolean, false) = true 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+
+CREATE POLICY "Suppliers with parts_view can view their own part suppliers" ON "partSupplier"
+  FOR SELECT
+  USING (
+    coalesce(get_my_claim('parts_view')::boolean,false) 
+    AND (get_my_claim('role'::text)) = '"supplier"'::jsonb
+    AND "serviceTypeId" = 'External'
+    AND "supplierId" IN (
+      SELECT "supplierId" FROM "supplierAccount" WHERE id::uuid = auth.uid()
+    )
+  );
+
+CREATE POLICY "Suppliers with parts_update can update their own part suppliers" ON "partSupplier"
+  FOR UPDATE
+  USING (
+    coalesce(get_my_claim('parts_update')::boolean,false) 
+    AND (get_my_claim('role'::text)) = '"supplier"'::jsonb
+    AND "serviceTypeId" = 'External'
+    AND "supplierId" IN (
+      SELECT "supplierId" FROM "supplierAccount" WHERE id::uuid = auth.uid()
+    )
+  );
+
+CREATE OR REPLACE VIEW "view" WITH(SECURITY_INVOKER=true) AS
+  SELECT
+    s.id,
+    s.name,
+    s.description,
+    s."serviceType",
+    s."serviceGroupId",
+    sg.name AS "serviceGroup",
+    s.active,
+    array_agg(ps."supplierId") AS "supplierIds"
+  FROM "supplier" s
+  LEFT JOIN "serviceGroup" sg ON sg.id = s."serviceGroupId"
+  LEFT JOIN "serviceSupplier" ss ON ss."serviceId" = s.id
+  GROUP BY s.id,
+    s.name,
+    s.description,
+    s."serviceType",
+    s."serviceGroupId",
+    sg.name,
+    s.active;

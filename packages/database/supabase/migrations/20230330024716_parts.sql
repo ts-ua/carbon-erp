@@ -367,7 +367,7 @@ CREATE POLICY "Employees with parts_delete can delete part suppliers" ON "partSu
     AND (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
 
-CREATE POLICY "Suppliers with parts can view their own part suppliers" ON "partSupplier"
+CREATE POLICY "Suppliers with parts_view can view their own part suppliers" ON "partSupplier"
   FOR SELECT
   USING (
     coalesce(get_my_claim('parts_view')::boolean,false) 
@@ -387,15 +387,6 @@ CREATE POLICY "Suppliers with parts_update can update their own part suppliers" 
     )
   );
 
-CREATE POLICY "Suppliers with parts_create can create part suppliers" ON "partSupplier"
-  FOR INSERT
-  WITH CHECK (
-    coalesce(get_my_claim('parts_create')::boolean, false) = true 
-    AND (get_my_claim('role'::text)) = '"supplier"'::jsonb
-    AND  "supplierId" IN (
-      SELECT "supplierId" FROM "supplierAccount" WHERE id::uuid = auth.uid()
-    )
-  );
 
 CREATE TABLE "partReplenishment" (
   "partId" TEXT NOT NULL,
