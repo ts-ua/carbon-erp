@@ -26,6 +26,8 @@ export const partManufacturingPolicies = [
   "Make to Order",
 ] as const;
 
+export const serviceType = ["Internal", "External"] as const;
+
 export const partValidator = withZod(
   z.object({
     id: z.string().min(1, { message: "Part ID is required" }).max(255),

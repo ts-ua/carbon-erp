@@ -1,11 +1,7 @@
 import { VStack } from "@chakra-ui/react";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
-import {
-  getPartCostingMethods,
-  getPartGroupsList,
-  getUnitOfMeasuresList,
-} from "~/modules/parts";
+import { getPartGroupsList, getUnitOfMeasuresList } from "~/modules/parts";
 import { getLocationsList } from "~/modules/resources";
 import { requirePermissions } from "~/services/auth";
 import type { Handle } from "~/utils/handle";
@@ -34,7 +30,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return {
     locations: locations?.data ?? [],
-    partCostingMethods: getPartCostingMethods(),
     partGroups: partGroups?.data ?? [],
     unitOfMeasures: unitOfMeasures?.data ?? [],
   };
