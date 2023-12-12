@@ -4,10 +4,6 @@ import { Outlet } from "@remix-run/react";
 import {
   getPartCostingMethods,
   getPartGroupsList,
-  getPartManufacturingPolicies,
-  getPartReplenishmentSystems,
-  getPartRorderdingPolicies,
-  getPartTypes,
   getUnitOfMeasuresList,
 } from "~/modules/parts";
 import { getLocationsList } from "~/modules/resources";
@@ -40,10 +36,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     locations: locations?.data ?? [],
     partCostingMethods: getPartCostingMethods(),
     partGroups: partGroups?.data ?? [],
-    partManufacturingPolicies: getPartManufacturingPolicies(),
-    partReorderingPolicies: getPartRorderdingPolicies(),
-    partReplenishmentSystems: getPartReplenishmentSystems(),
-    partTypes: getPartTypes(),
     unitOfMeasures: unitOfMeasures?.data ?? [],
   };
 }

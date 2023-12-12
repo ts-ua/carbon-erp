@@ -47,8 +47,7 @@ CREATE POLICY "Employees with parts_delete can delete part groups" ON "partGroup
 
 CREATE TYPE "partType" AS ENUM (
   'Inventory',
-  'Non-Inventory',
-  'Service'
+  'Non-Inventory'
 );
 
 CREATE TYPE "partReplenishmentSystem" AS ENUM (

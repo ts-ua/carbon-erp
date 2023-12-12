@@ -170,6 +170,7 @@ export async function getPartsList(
       `replenishmentSystem.eq.${replenishmentSystem},replenishmentSystem.eq.Buy and Make`
     );
   }
+
   return query;
 }
 
@@ -221,27 +222,6 @@ export async function getPartUnitSalePrice(
   id: string
 ) {
   return client.from("partUnitSalePrice").select("*").eq("partId", id).single();
-}
-
-export function getPartTypes(): Database["public"]["Enums"]["partType"][] {
-  return ["Inventory", "Non-Inventory", "Service"];
-}
-
-export function getPartRorderdingPolicies(): Database["public"]["Enums"]["partReorderingPolicy"][] {
-  return [
-    "Manual Reorder",
-    "Demand-Based Reorder",
-    "Fixed Reorder Quantity",
-    "Maximum Quantity",
-  ];
-}
-
-export function getPartReplenishmentSystems(): Database["public"]["Enums"]["partReplenishmentSystem"][] {
-  return ["Buy", "Make", "Buy and Make"];
-}
-
-export function getPartManufacturingPolicies(): Database["public"]["Enums"]["partManufacturingPolicy"][] {
-  return ["Make to Order", "Make to Stock"];
 }
 
 export function getPartCostingMethods(): Database["public"]["Enums"]["partCostingMethod"][] {
