@@ -252,6 +252,7 @@ export const path = {
     newReceipt: `${x}/inventory/receipts/new`,
     newShift: `${x}/resources/shifts/new`,
     newShippingMethod: `${x}/inventory/shipping-methods/new`,
+    newService: `${x}/service/new`,
     newSupplier: `${x}/supplier/new`,
     newSupplierAccount: `${x}/users/suppliers/new`,
     newSupplierContact: (id: string) =>
@@ -328,6 +329,8 @@ export const path = {
     sales: `${x}/sales`,
     salesInvoices: `${x}/invoicing/sales`,
     scheduling: `${x}/scheduling`,
+    service: (id: string) => generatePath(`${x}/service/${id}`),
+    services: `${x}/parts/services`,
     settings: `${x}/settings`,
     sequences: `${x}/settings/sequences`,
     shift: (id: string) => generatePath(`${x}/resources/shifts/${id}`),

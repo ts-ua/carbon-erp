@@ -5,33 +5,28 @@ import { memo, useMemo } from "react";
 import { BsPencilSquare } from "react-icons/bs";
 import { Table } from "~/components";
 import { useUrlParams } from "~/hooks";
-import type { Part } from "~/modules/parts";
+import type { Service } from "~/modules/parts";
 import { path } from "~/utils/path";
 
-type PartsTableProps = {
-  data: Part[];
+type ServicesTableProps = {
+  data: Service[];
   count: number;
 };
 
-const PartsTable = memo(({ data, count }: PartsTableProps) => {
+const ServicesTable = memo(({ data, count }: ServicesTableProps) => {
   const navigate = useNavigate();
   const [params] = useUrlParams();
 
-  const columns = useMemo<ColumnDef<Part>[]>(() => {
+  const columns = useMemo<ColumnDef<Service>[]>(() => {
     return [
-      {
-        accessorKey: "id",
-        header: "Part ID",
-        cell: ({ row }) => (
-          <Link onClick={() => navigate(path.to.part(row.original.id!))}>
-            {row.original.id}
-          </Link>
-        ),
-      },
       {
         accessorKey: "name",
         header: "Name",
-        cell: (item) => item.getValue(),
+        cell: ({ row }) => (
+          <Link onClick={() => navigate(path.to.service(row.original.id))}>
+            {row.original.id}
+          </Link>
+        ),
       },
       {
         accessorKey: "description",
@@ -39,19 +34,14 @@ const PartsTable = memo(({ data, count }: PartsTableProps) => {
         cell: (item) => item.getValue(),
       },
       {
-        accessorKey: "partType",
-        header: "Part Type",
-        cell: (item) => item.getValue(),
-      },
-      {
-        accessorKey: "replenishmentSystem",
-        header: "Replenishment",
+        accessorKey: "serviceType",
+        header: "Type",
         cell: (item) => item.getValue(),
       },
       {
         // @ts-ignore
-        accessorKey: "partGroup",
-        header: "Part Group",
+        accessorKey: "serviceGroup",
+        header: "Service Group",
         cell: (item) => item.getValue(),
       },
     ];
@@ -60,19 +50,19 @@ const PartsTable = memo(({ data, count }: PartsTableProps) => {
 
   const renderContextMenu = useMemo(() => {
     // eslint-disable-next-line react/display-name
-    return (row: Part) => (
+    return (row: Service) => (
       <MenuItem
         icon={<BsPencilSquare />}
-        onClick={() => navigate(path.to.part(row.id!))}
+        onClick={() => navigate(path.to.service(row.id))}
       >
-        Edit Part
+        Edit Service
       </MenuItem>
     );
   }, [navigate]);
 
   return (
     <>
-      <Table<Part>
+      <Table<Service>
         count={count}
         columns={columns}
         data={data}
@@ -83,6 +73,6 @@ const PartsTable = memo(({ data, count }: PartsTableProps) => {
   );
 });
 
-PartsTable.displayName = "PartTable";
+ServicesTable.displayName = "ServicesTable";
 
-export default PartsTable;
+export default ServicesTable;
