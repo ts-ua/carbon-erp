@@ -74,7 +74,7 @@ const PartSupplierForm = ({ initialValues }: PartSupplierFormProps) => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            {isEditing ? "Edit" : "New"} Purchase Order Line
+            {isEditing ? "Edit" : "New"} Part Supplier
           </DrawerHeader>
           <DrawerBody pb={8}>
             <Hidden name="id" />

@@ -12,38 +12,20 @@ import { Link, Outlet, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 import { MdMoreHoriz } from "react-icons/md";
-import {
-  EditableList,
-  EditableNumber,
-  EditableText,
-} from "~/components/Editable";
+import { EditableText } from "~/components/Editable";
 import Grid from "~/components/Grid";
-import { useRouteData } from "~/hooks";
-import type { PartSupplier, UnitOfMeasureListItem } from "~/modules/parts";
-import { path } from "~/utils/path";
-import usePartSuppliers from "./usePartSuppliers";
+import type { ServiceSupplier } from "~/modules/parts";
+import useServiceSuppliers from "./useServiceSuppliers";
 
-type PartSuppliersProps = {
-  partSuppliers: PartSupplier[];
+type ServiceSuppliersProps = {
+  serviceSuppliers: ServiceSupplier[];
 };
 
-const PartSuppliers = ({ partSuppliers }: PartSuppliersProps) => {
+const ServiceSuppliers = ({ serviceSuppliers }: ServiceSuppliersProps) => {
   const navigate = useNavigate();
-  const { canEdit, onCellEdit } = usePartSuppliers();
-  const sharedPartData = useRouteData<{
-    unitOfMeasures: UnitOfMeasureListItem[];
-  }>(path.to.partRoot);
+  const { canEdit, onCellEdit } = useServiceSuppliers();
 
-  const unitOfMeasureOptions = useMemo(() => {
-    return (
-      sharedPartData?.unitOfMeasures.map((unitOfMeasure) => ({
-        label: unitOfMeasure.code,
-        value: unitOfMeasure.code,
-      })) ?? []
-    );
-  }, [sharedPartData?.unitOfMeasures]);
-
-  const columns = useMemo<ColumnDef<PartSupplier>[]>(() => {
+  const columns = useMemo<ColumnDef<ServiceSupplier>[]>(() => {
     return [
       {
         accessorKey: "supplier.id",
@@ -55,7 +37,7 @@ const PartSuppliers = ({ partSuppliers }: PartSuppliersProps) => {
             {canEdit && (
               <Box position="relative" w={6} h={5}>
                 <IconButton
-                  aria-label="Edit part supplier"
+                  aria-label="Edit service supplier"
                   as={Link}
                   icon={<MdMoreHoriz />}
                   size="sm"
@@ -72,23 +54,8 @@ const PartSuppliers = ({ partSuppliers }: PartSuppliersProps) => {
         ),
       },
       {
-        accessorKey: "supplierPartId",
+        accessorKey: "supplierServiceId",
         header: "Supplier ID",
-        cell: (item) => item.getValue(),
-      },
-      {
-        accessorKey: "supplierUnitOfMeasureCode",
-        header: "Unit of Measure",
-        cell: (item) => item.getValue(),
-      },
-      {
-        accessorKey: "minimumOrderQuantity",
-        header: "Minimum Order Quantity",
-        cell: (item) => item.getValue(),
-      },
-      {
-        accessorKey: "conversionFactor",
-        header: "Conversion Factor",
         cell: (item) => item.getValue(),
       },
     ];
@@ -96,12 +63,9 @@ const PartSuppliers = ({ partSuppliers }: PartSuppliersProps) => {
 
   const editableComponents = useMemo(
     () => ({
-      supplierPartId: EditableText(onCellEdit),
-      supplierUnitOfMeasureCode: EditableList(onCellEdit, unitOfMeasureOptions),
-      minimumOrderQuantity: EditableNumber(onCellEdit),
-      conversionFactor: EditableNumber(onCellEdit),
+      supplierServiceId: EditableText(onCellEdit),
     }),
-    [onCellEdit, unitOfMeasureOptions]
+    [onCellEdit]
   );
 
   return (
@@ -118,8 +82,8 @@ const PartSuppliers = ({ partSuppliers }: PartSuppliersProps) => {
           )}
         </CardHeader>
         <CardBody>
-          <Grid<PartSupplier>
-            data={partSuppliers}
+          <Grid<ServiceSupplier>
+            data={serviceSuppliers}
             columns={columns}
             canEdit={canEdit}
             editableComponents={editableComponents}
@@ -132,4 +96,4 @@ const PartSuppliers = ({ partSuppliers }: PartSuppliersProps) => {
   );
 };
 
-export default PartSuppliers;
+export default ServiceSuppliers;

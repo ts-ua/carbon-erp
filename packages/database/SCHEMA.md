@@ -7192,6 +7192,7 @@ CREATE OR REPLACE VIEW "services" WITH(SECURITY_INVOKER=true) AS
     sg.id AS "serviceGroupId",
     sg.name AS "serviceGroup",
     s.active,
+    s.blocked,
     array_agg(ss."supplierId") AS "supplierIds"
   FROM "service" s
   LEFT JOIN "serviceGroup" sg ON sg.id = s."serviceGroupId"

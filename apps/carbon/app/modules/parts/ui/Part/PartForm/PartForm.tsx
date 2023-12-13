@@ -20,33 +20,17 @@ import {
 } from "~/components/Form";
 import { usePermissions, useRouteData } from "~/hooks";
 import { useSupabase } from "~/lib/supabase";
-import type {
-  PartGroupListItem,
-  PartReplenishmentSystem,
-  PartType,
-  UnitOfMeasureListItem,
-} from "~/modules/parts";
+import type { PartGroupListItem, UnitOfMeasureListItem } from "~/modules/parts";
 import {
   partReplenishmentSystems,
   partTypes,
   partValidator,
 } from "~/modules/parts";
+import type { TypeOfValidator } from "~/types/validators";
 import { path } from "~/utils/path";
 
-type PartFormValues = {
-  id?: string;
-  name: string;
-  description?: string;
-  partType?: PartType;
-  partGroupId?: string;
-  replenishmentSystem?: PartReplenishmentSystem;
-  unitOfMeasureCode?: string;
-  blocked?: boolean;
-  active?: boolean;
-};
-
 type PartFormProps = {
-  initialValues: PartFormValues;
+  initialValues: TypeOfValidator<typeof partValidator>;
 };
 
 const useNextPartIdShortcut = () => {

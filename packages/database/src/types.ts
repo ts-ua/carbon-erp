@@ -8872,6 +8872,7 @@ export interface Database {
       services: {
         Row: {
           active: boolean | null;
+          blocked: boolean | null;
           description: string | null;
           id: string | null;
           name: string | null;

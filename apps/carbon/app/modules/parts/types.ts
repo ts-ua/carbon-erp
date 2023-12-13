@@ -8,6 +8,7 @@ import type {
   getPartSummary,
   getPartSuppliers,
   getServices,
+  getServiceSuppliers,
   getUnitOfMeasure,
   getUnitOfMeasuresList,
 } from "./parts.service";
@@ -56,6 +57,10 @@ export type PartType = Database["public"]["Enums"]["partType"];
 
 export type Service = NonNullable<
   Awaited<ReturnType<typeof getServices>>["data"]
+>[number];
+
+export type ServiceSupplier = NonNullable<
+  Awaited<ReturnType<typeof getServiceSuppliers>>["data"]
 >[number];
 
 export type ServiceType = Database["public"]["Enums"]["serviceType"];

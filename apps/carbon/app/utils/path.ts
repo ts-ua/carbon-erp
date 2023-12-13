@@ -253,6 +253,8 @@ export const path = {
     newShift: `${x}/resources/shifts/new`,
     newShippingMethod: `${x}/inventory/shipping-methods/new`,
     newService: `${x}/service/new`,
+    newServiceSupplier: (id: string) =>
+      generatePath(`${x}/service/${id}/suppliers/new`),
     newSupplier: `${x}/supplier/new`,
     newSupplierAccount: `${x}/users/suppliers/new`,
     newSupplierContact: (id: string) =>
@@ -331,6 +333,11 @@ export const path = {
     scheduling: `${x}/scheduling`,
     service: (id: string) => generatePath(`${x}/service/${id}`),
     services: `${x}/parts/services`,
+    serviceRoot: `${x}/service`,
+    serviceSupplier: (serviceId: string, id: string) =>
+      generatePath(`${x}/service/${serviceId}/suppliers/${id}`),
+    serviceSuppliers: (id: string) =>
+      generatePath(`${x}/service/${id}/suppliers`),
     settings: `${x}/settings`,
     sequences: `${x}/settings/sequences`,
     shift: (id: string) => generatePath(`${x}/resources/shifts/${id}`),

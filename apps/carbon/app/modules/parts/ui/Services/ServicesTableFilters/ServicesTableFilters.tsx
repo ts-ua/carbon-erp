@@ -76,7 +76,7 @@ const ServicesTableFilters = ({ serviceGroups }: ServicesTableFiltersProps) => {
         )}
       </HStack>
       <HStack spacing={2}>
-        {permissions.can("create", "services") && (
+        {permissions.can("create", "parts") && (
           <Button
             as={Link}
             to={path.to.newService}
