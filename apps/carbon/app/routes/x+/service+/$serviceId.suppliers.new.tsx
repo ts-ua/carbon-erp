@@ -3,9 +3,9 @@ import { redirect } from "@remix-run/node";
 import { useParams } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import {
-  PartSupplierForm,
-  partSupplierValidator,
-  upsertPartSupplier,
+  ServiceSupplierForm,
+  serviceSupplierValidator,
+  upsertServiceSupplier,
 } from "~/modules/parts";
 import { requirePermissions } from "~/services/auth";
 import { flash } from "~/services/session";
@@ -19,10 +19,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
     create: "parts",
   });
 
-  const { partId } = params;
-  if (!partId) throw new Error("Could not find partId");
+  const { serviceId } = params;
+  if (!serviceId) throw new Error("Could not find serviceId");
 
-  const validation = await partSupplierValidator.validate(
+  const validation = await serviceSupplierValidator.validate(
     await request.formData()
   );
 
@@ -32,37 +32,34 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const { id, ...data } = validation.data;
 
-  const createPartSupplier = await upsertPartSupplier(client, {
+  const createServiceSupplier = await upsertServiceSupplier(client, {
     ...data,
     createdBy: userId,
   });
 
-  if (createPartSupplier.error) {
+  if (createServiceSupplier.error) {
     return redirect(
-      path.to.partSuppliers(partId),
+      path.to.serviceSuppliers(serviceId),
       await flash(
         request,
-        error(createPartSupplier.error, "Failed to create part supplier.")
+        error(createServiceSupplier.error, "Failed to create service supplier.")
       )
     );
   }
 
-  return redirect(path.to.partSuppliers(partId));
+  return redirect(path.to.serviceSuppliers(serviceId));
 }
 
-export default function NewPartSupplierRoute() {
-  const { partId } = useParams();
+export default function NewServiceSupplierRoute() {
+  const { serviceId } = useParams();
 
-  if (!partId) throw new Error("partId not found");
+  if (!serviceId) throw new Error("serviceId not found");
 
   const initialValues = {
-    partId: partId,
+    serviceId,
     supplierId: "",
-    supplierPartId: "",
-    supplierUnitOfMeasureCode: "EA",
-    minimumOrderQuantity: 1,
-    conversionFactor: 1,
+    supplierServiceId: "",
   };
 
-  return <PartSupplierForm initialValues={initialValues} />;
+  return <ServiceSupplierForm initialValues={initialValues} />;
 }

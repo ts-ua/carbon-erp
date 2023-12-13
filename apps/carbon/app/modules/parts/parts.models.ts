@@ -160,6 +160,30 @@ export const partUnitSalePriceValidator = withZod(
   })
 );
 
+export const serviceValidator = withZod(
+  z.object({
+    id: zfd.text(z.string().optional()),
+    name: z.string().min(1, { message: "Name is required" }).max(255),
+    description: z.string().optional(),
+    serviceType: z.enum(serviceType, {
+      errorMap: (issue, ctx) => ({
+        message: "Service type is required",
+      }),
+    }),
+    blocked: zfd.checkbox(),
+    active: zfd.checkbox(),
+  })
+);
+
+export const serviceSupplierValidator = withZod(
+  z.object({
+    id: zfd.text(z.string().optional()),
+    serviceId: z.string().min(1, { message: "Part ID is required" }),
+    supplierId: z.string().min(36, { message: "Supplier ID is required" }),
+    supplierServiceId: z.string().optional(),
+  })
+);
+
 export const unitOfMeasureValidator = withZod(
   z.object({
     id: zfd.text(z.string().optional()),

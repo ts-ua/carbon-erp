@@ -14,6 +14,8 @@ import type {
   partSupplierValidator,
   partUnitSalePriceValidator,
   partValidator,
+  serviceSupplierValidator,
+  serviceValidator,
 } from "./parts.models";
 import type { PartReplenishmentSystem, ServiceType } from "./types";
 
@@ -259,6 +261,10 @@ export async function getServices(
   return query;
 }
 
+export async function getService(client: SupabaseClient<Database>, id: string) {
+  return client.from("services").select("*").eq("id", id).single();
+}
+
 export async function getServicesList(
   client: SupabaseClient<Database>,
   type: ServiceType | null
@@ -312,6 +318,17 @@ export async function getServiceGroupsList(
   }
 
   return query;
+}
+
+export async function getServiceSuppliers(
+  client: SupabaseClient<Database>,
+  id: string
+) {
+  return client
+    .from("serviceSupplier")
+    .select(`id, supplier(id, name), supplierServiceId`)
+    .eq("active", true)
+    .eq("serviceId", id);
 }
 
 export async function getShelvesList(
@@ -541,6 +558,47 @@ export async function upsertPartUnitSalePrice(
     .from("partUnitSalePrice")
     .update(sanitize(partUnitSalePrice))
     .eq("partId", partUnitSalePrice.partId);
+}
+
+export async function upsertService(
+  client: SupabaseClient<Database>,
+  service:
+    | (TypeOfValidator<typeof serviceValidator> & { createdBy: string })
+    | (Omit<TypeOfValidator<typeof serviceValidator>, "id"> & {
+        id: string;
+        updatedBy: string;
+      })
+) {
+  if ("createdBy" in service) {
+    return client.from("service").insert(service).select("id").single();
+  }
+  return client.from("service").update(sanitize(service)).eq("id", service.id);
+}
+
+export async function upsertServiceSupplier(
+  client: SupabaseClient<Database>,
+  serviceSupplier:
+    | (Omit<TypeOfValidator<typeof serviceSupplierValidator>, "id"> & {
+        createdBy: string;
+      })
+    | (Omit<TypeOfValidator<typeof serviceSupplierValidator>, "id"> & {
+        id: string;
+        updatedBy: string;
+      })
+) {
+  if ("createdBy" in serviceSupplier) {
+    return client
+      .from("serviceSupplier")
+      .insert([serviceSupplier])
+      .select("id")
+      .single();
+  }
+  return client
+    .from("serviceSupplier")
+    .update(sanitize(serviceSupplier))
+    .eq("id", serviceSupplier.id)
+    .select("id")
+    .single();
 }
 
 export async function upsertUnitOfMeasure(
