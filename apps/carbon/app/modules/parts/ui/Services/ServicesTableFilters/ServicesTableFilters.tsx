@@ -56,7 +56,7 @@ const ServicesTableFilters = ({ serviceGroups }: ServicesTableFiltersProps) => {
               setParams({ group: selected?.value });
             }}
             aria-label="Groups"
-            placeholder="Part Groups"
+            placeholder="Service Groups"
           />
         )}
         {serviceTypeOptions.length > 0 && (
@@ -70,8 +70,8 @@ const ServicesTableFilters = ({ serviceGroups }: ServicesTableFiltersProps) => {
             onChange={(selected) => {
               setParams({ type: selected?.value });
             }}
-            aria-label="Part Type"
-            placeholder="Part Type"
+            aria-label="Service Type"
+            placeholder="Service Type"
           />
         )}
       </HStack>

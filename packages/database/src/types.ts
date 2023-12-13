@@ -6418,6 +6418,12 @@ export interface Database {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "service_serviceGroupId_fkey";
+            columns: ["serviceGroupId"];
+            referencedRelation: "services";
+            referencedColumns: ["serviceGroupId"];
+          },
+          {
             foreignKeyName: "service_updatedBy_fkey";
             columns: ["updatedBy"];
             referencedRelation: "user";
@@ -6483,6 +6489,109 @@ export interface Database {
           },
           {
             foreignKeyName: "serviceGroup_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
+      serviceSupplier: {
+        Row: {
+          active: boolean;
+          createdAt: string;
+          createdBy: string;
+          id: string;
+          serviceId: string;
+          supplierId: string;
+          supplierServiceId: string | null;
+          updatedAt: string | null;
+          updatedBy: string | null;
+        };
+        Insert: {
+          active?: boolean;
+          createdAt?: string;
+          createdBy: string;
+          id?: string;
+          serviceId: string;
+          supplierId: string;
+          supplierServiceId?: string | null;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Update: {
+          active?: boolean;
+          createdAt?: string;
+          createdBy?: string;
+          id?: string;
+          serviceId?: string;
+          supplierId?: string;
+          supplierServiceId?: string | null;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "serviceSupplier_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "serviceSupplier_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "serviceSupplier_serviceId_fkey";
+            columns: ["serviceId"];
+            referencedRelation: "service";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "serviceSupplier_serviceId_fkey";
+            columns: ["serviceId"];
+            referencedRelation: "services";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "serviceSupplier_supplierId_fkey";
+            columns: ["supplierId"];
+            referencedRelation: "supplier";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "serviceSupplier_supplierId_fkey";
+            columns: ["supplierId"];
+            referencedRelation: "contractors";
+            referencedColumns: ["supplierId"];
+          },
+          {
+            foreignKeyName: "serviceSupplier_supplierId_fkey";
+            columns: ["supplierId"];
+            referencedRelation: "partners";
+            referencedColumns: ["supplierId"];
+          },
+          {
+            foreignKeyName: "serviceSupplier_supplierId_fkey";
+            columns: ["supplierId"];
+            referencedRelation: "purchaseOrderSuppliers";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "serviceSupplier_supplierId_fkey";
+            columns: ["supplierId"];
+            referencedRelation: "suppliers";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "serviceSupplier_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "serviceSupplier_updatedBy_fkey";
             columns: ["updatedBy"];
             referencedRelation: "userDefaults";
             referencedColumns: ["userId"];
@@ -8759,6 +8868,19 @@ export interface Database {
             referencedColumns: ["id"];
           }
         ];
+      };
+      services: {
+        Row: {
+          active: boolean | null;
+          description: string | null;
+          id: string | null;
+          name: string | null;
+          serviceGroup: string | null;
+          serviceGroupId: string | null;
+          serviceType: Database["public"]["Enums"]["serviceType"] | null;
+          supplierIds: string[] | null;
+        };
+        Relationships: [];
       };
       suppliers: {
         Row: {
