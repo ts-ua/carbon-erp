@@ -23,8 +23,8 @@ const ServicesTable = memo(({ data, count }: ServicesTableProps) => {
         accessorKey: "name",
         header: "Name",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(path.to.service(row.original.id))}>
-            {row.original.id}
+          <Link onClick={() => navigate(path.to.service(row.original.id!))}>
+            {row.original.name}
           </Link>
         ),
       },
@@ -53,7 +53,7 @@ const ServicesTable = memo(({ data, count }: ServicesTableProps) => {
     return (row: Service) => (
       <MenuItem
         icon={<BsPencilSquare />}
-        onClick={() => navigate(path.to.service(row.id))}
+        onClick={() => navigate(path.to.service(row.id!))}
       >
         Edit Service
       </MenuItem>

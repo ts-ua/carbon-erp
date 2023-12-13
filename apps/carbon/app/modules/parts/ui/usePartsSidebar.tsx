@@ -11,6 +11,10 @@ const partsRoutes: AuthenticatedRouteGroup[] = [
         to: path.to.partsSearch,
       },
       {
+        name: "Services",
+        to: path.to.services,
+      },
+      {
         name: "Routing",
         to: path.to.routings,
         role: "employee",
@@ -25,6 +29,11 @@ const partsRoutes: AuthenticatedRouteGroup[] = [
         to: path.to.partGroups,
         role: "employee",
       },
+      // {
+      //   name: "Service Groups",
+      //   to: path.to.serviceGroups,
+      //   role: "employee",
+      // },
       {
         name: "Units of Measure",
         to: path.to.uoms,

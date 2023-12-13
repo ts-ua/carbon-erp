@@ -153,45 +153,43 @@ CREATE POLICY "Employees with parts_delete can delete service suppliers" ON "ser
     AND (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
 
-CREATE POLICY "Suppliers with parts_view can view their own part suppliers" ON "partSupplier"
+CREATE POLICY "Suppliers with parts_view can view their own part suppliers" ON "serviceSupplier"
   FOR SELECT
   USING (
     coalesce(get_my_claim('parts_view')::boolean,false) 
     AND (get_my_claim('role'::text)) = '"supplier"'::jsonb
-    AND "serviceTypeId" = 'External'
     AND "supplierId" IN (
       SELECT "supplierId" FROM "supplierAccount" WHERE id::uuid = auth.uid()
     )
   );
 
-CREATE POLICY "Suppliers with parts_update can update their own part suppliers" ON "partSupplier"
+CREATE POLICY "Suppliers with parts_update can update their own part suppliers" ON "serviceSupplier"
   FOR UPDATE
   USING (
     coalesce(get_my_claim('parts_update')::boolean,false) 
     AND (get_my_claim('role'::text)) = '"supplier"'::jsonb
-    AND "serviceTypeId" = 'External'
     AND "supplierId" IN (
       SELECT "supplierId" FROM "supplierAccount" WHERE id::uuid = auth.uid()
     )
   );
 
-CREATE OR REPLACE VIEW "view" WITH(SECURITY_INVOKER=true) AS
+CREATE OR REPLACE VIEW "services" WITH(SECURITY_INVOKER=true) AS
   SELECT
     s.id,
     s.name,
     s.description,
     s."serviceType",
-    s."serviceGroupId",
+    sg.id AS "serviceGroupId",
     sg.name AS "serviceGroup",
     s.active,
-    array_agg(ps."supplierId") AS "supplierIds"
-  FROM "supplier" s
+    array_agg(ss."supplierId") AS "supplierIds"
+  FROM "service" s
   LEFT JOIN "serviceGroup" sg ON sg.id = s."serviceGroupId"
   LEFT JOIN "serviceSupplier" ss ON ss."serviceId" = s.id
   GROUP BY s.id,
     s.name,
     s.description,
     s."serviceType",
-    s."serviceGroupId",
+    sg.id,
     sg.name,
     s.active;
