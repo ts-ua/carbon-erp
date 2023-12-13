@@ -39,18 +39,13 @@ function Hero() {
         height={height}
         width={width}
         render={({ progress }) => {
-          const blur = {
-            filter: `blur(${progress * 2}px)`,
-            opacity: 1 - progress * 1.4,
-          };
-
           const scale = {
             transform: `scale(${clamp(0.8, 1, 1 - progress * 0.3)})`,
           };
 
           return (
             <div className="flex flex-col justify-between text-center">
-              <div style={blur}>
+              <div>
                 <motion.h1
                   initial={{
                     filter: "blur(3px)",
@@ -68,8 +63,10 @@ function Hero() {
                   }}
                   className="max-w-5xl mx-auto nx-text-6xl font-extrabold tracking-tighter leading-tighter text-6xl sm:text-7xl lg:nx-text-8xl xl:nx-text-8xl"
                 >
-                  ERP for{" "}
-                  <span className="bg-gradient-to-r from-black via-orange-600 to-amber-500 dark:from-white dark:via-purple-300 dark:to-orange-300 bg-clip-text text-transparent">
+                  <span className="dark:bg-clip-text dark:text-transparent dark:bg-gradient-to-b dark:from-white  dark:to-gray-400">
+                    ERP for
+                  </span>{" "}
+                  <span className="bg-gradient-to-b bg-clip-text text-transparent dark:bg-gradient-to-br dark:from-[#3ECF8E] dark:via-[#3ECF8E] dark:to-[#3ecfb2] from-black via-orange-600 to-amber-500 ">
                     the builders
                   </span>
                 </motion.h1>

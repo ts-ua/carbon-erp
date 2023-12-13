@@ -4,23 +4,23 @@ import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
-import { partTypes } from "~/modules/parts";
+import { serviceType } from "~/modules/parts";
 import type { ListItem } from "~/types";
 import { path } from "~/utils/path";
 
-type PartsTableFiltersProps = {
-  partGroups: ListItem[];
+type ServicesTableFiltersProps = {
+  serviceGroups: ListItem[];
 };
 
-const PartsTableFilters = ({ partGroups }: PartsTableFiltersProps) => {
+const ServicesTableFilters = ({ serviceGroups }: ServicesTableFiltersProps) => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
-  const partTypeOptions = partTypes.map((type) => ({
+  const serviceTypeOptions = serviceType.map((type) => ({
     value: type,
     label: type,
   }));
 
-  const partGroupsOptions = partGroups.map((group) => ({
+  const serviceGroupsOptions = serviceGroups.map((group) => ({
     value: group.id,
     label: group.name,
   }));
@@ -42,16 +42,16 @@ const PartsTableFilters = ({ partGroups }: PartsTableFiltersProps) => {
           param="search"
           size="sm"
           minW={180}
-          placeholder="Search Parts"
+          placeholder="Search Services"
         />
-        {partGroupsOptions.length > 0 && (
+        {serviceGroupsOptions.length > 0 && (
           <Select
             size="sm"
             isClearable
-            value={partGroupsOptions.find(
+            value={serviceGroupsOptions.find(
               (type) => type.value === params.get("group")
             )}
-            options={partGroupsOptions}
+            options={serviceGroupsOptions}
             onChange={(selected) => {
               setParams({ group: selected?.value });
             }}
@@ -59,14 +59,14 @@ const PartsTableFilters = ({ partGroups }: PartsTableFiltersProps) => {
             placeholder="Part Groups"
           />
         )}
-        {partTypeOptions.length > 0 && (
+        {serviceTypeOptions.length > 0 && (
           <Select
             size="sm"
-            value={partTypeOptions.find(
+            value={serviceTypeOptions.find(
               (type) => type.value === params.get("type")
             )}
             isClearable
-            options={partTypeOptions}
+            options={serviceTypeOptions}
             onChange={(selected) => {
               setParams({ type: selected?.value });
             }}
@@ -76,14 +76,14 @@ const PartsTableFilters = ({ partGroups }: PartsTableFiltersProps) => {
         )}
       </HStack>
       <HStack spacing={2}>
-        {permissions.can("create", "parts") && (
+        {permissions.can("create", "services") && (
           <Button
             as={Link}
-            to={path.to.newPart}
+            to={path.to.newService}
             colorScheme="brand"
             leftIcon={<IoMdAdd />}
           >
-            New Part
+            New Service
           </Button>
         )}
       </HStack>
@@ -91,4 +91,4 @@ const PartsTableFilters = ({ partGroups }: PartsTableFiltersProps) => {
   );
 };
 
-export default PartsTableFilters;
+export default ServicesTableFilters;

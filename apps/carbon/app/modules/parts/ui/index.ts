@@ -1,8 +1,9 @@
 import usePartsSidebar from "./usePartsSidebar";
 
-export { usePartsSidebar };
 export * from "./Part";
-export * from "./Parts";
 export * from "./PartGroups";
+export * from "./Parts";
 export * from "./Routing";
+export * from "./Services";
 export * from "./UnitOfMeasure";
+export { usePartsSidebar };
