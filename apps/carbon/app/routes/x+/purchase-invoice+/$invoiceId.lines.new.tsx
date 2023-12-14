@@ -40,7 +40,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   if (createPurchaseInvoiceLine.error) {
     return redirect(
-      path.to.purchaseInvoiceDetails(invoiceId),
+      path.to.purchaseInvoiceLines(invoiceId),
       await flash(
         request,
         error(
@@ -51,7 +51,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  return redirect(path.to.purchaseInvoiceDetails(invoiceId));
+  return redirect(path.to.purchaseInvoiceLines(invoiceId));
 }
 
 export default function NewPurchaseInvoiceLineRoute() {
@@ -63,7 +63,7 @@ export default function NewPurchaseInvoiceLineRoute() {
     invoiceId: invoiceId,
     invoiceLineType: "Part" as PurchaseInvoiceLineType,
     partId: "",
-    purchaseQuantity: 1,
+    quantity: 1,
     unitPrice: 0,
     setupPrice: 0,
     unitOfMeasureCode: "",

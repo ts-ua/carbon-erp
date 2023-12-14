@@ -40,7 +40,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   if (createPurchaseOrderLine.error) {
     return redirect(
-      path.to.purchaseOrderDetails(orderId),
+      path.to.purchaseOrderLines(orderId),
       await flash(
         request,
         error(
@@ -51,13 +51,15 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  return redirect(path.to.purchaseOrderDetails(orderId));
+  return redirect(path.to.purchaseOrderLines(orderId));
 }
 
 export default function NewPurchaseOrderLineRoute() {
   const { orderId } = useParams();
 
   if (!orderId) throw new Error("Could not find purchase order id");
+
+  console.log({ orderId });
 
   const initialValues = {
     purchaseOrderId: orderId,

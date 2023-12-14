@@ -2,7 +2,7 @@ import { Grid } from "@chakra-ui/react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
-import { getPartSummary, PartPreview, PartSidebar } from "~/modules/parts";
+import { PartPreview, PartSidebar, getPartSummary } from "~/modules/parts";
 import { requirePermissions } from "~/services/auth";
 import { flash } from "~/services/session";
 import { path } from "~/utils/path";
@@ -41,6 +41,7 @@ export default function PartRoute() {
         gridTemplateColumns={["1fr", "1fr", "1fr 4fr"]}
         gridColumnGap={4}
         w="full"
+        h="full"
       >
         <PartSidebar />
         <Outlet />

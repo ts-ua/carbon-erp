@@ -59,6 +59,7 @@ export default function CustomerRoute() {
         gridTemplateColumns={["1fr", "1fr", "1fr 4fr"]}
         gridColumnGap={4}
         w="full"
+        h="full"
       >
         <CustomerSidebar />
         <Outlet />
