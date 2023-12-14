@@ -23,7 +23,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const purchaseOrderLine = await getPurchaseOrderLine(client, lineId);
   if (purchaseOrderLine.error) {
     return redirect(
-      path.to.purchaseOrderDetails(orderId),
+      path.to.purchaseOrderLines(orderId),
       await flash(
         request,
         error(purchaseOrderLine.error, "Failed to get purchase order line")
@@ -49,7 +49,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   );
   if (deleteTypeError) {
     return redirect(
-      path.to.purchaseOrderDetails(orderId),
+      path.to.purchaseOrderLines(orderId),
       await flash(
         request,
         error(deleteTypeError, "Failed to delete purchase order line")
@@ -58,7 +58,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   return redirect(
-    path.to.purchaseOrderDetails(orderId),
+    path.to.purchaseOrderLines(orderId),
     await flash(request, success("Successfully deleted purchase order line"))
   );
 }
@@ -72,7 +72,7 @@ export default function DeletePurchaseOrderLineRoute() {
   if (!lineId) throw notFound("Could not find lineId");
   if (!orderId) throw notFound("Could not find orderId");
 
-  const onCancel = () => navigate(path.to.purchaseOrderDetails(orderId));
+  const onCancel = () => navigate(path.to.purchaseOrderLines(orderId));
 
   return (
     <ConfirmDelete

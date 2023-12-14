@@ -74,7 +74,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   if (updatePurchaseInvoiceLine.error) {
     return redirect(
-      path.to.purchaseInvoiceDetails(invoiceId),
+      path.to.purchaseInvoiceLines(invoiceId),
       await flash(
         request,
         error(
@@ -85,7 +85,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  return redirect(path.to.purchaseInvoiceDetails(invoiceId));
+  return redirect(path.to.purchaseInvoiceLines(invoiceId));
 }
 
 export default function EditPurchaseInvoiceLineRoute() {

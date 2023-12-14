@@ -278,7 +278,7 @@ const PurchaseOrderLines = () => {
 
   return (
     <>
-      <Card w="full" minH={320}>
+      <Card w="full" h="full">
         <CardHeader display="flex" justifyContent="space-between">
           <Heading size="md" display="inline-flex">
             Purchase Order Lines

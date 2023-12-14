@@ -1,13 +1,11 @@
-import { Flex } from "@chakra-ui/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Outlet, useParams } from "@remix-run/react";
+import { useParams } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import { useRouteData } from "~/hooks";
 import type { PurchaseOrder } from "~/modules/purchasing";
 import {
   PurchaseOrderForm,
-  PurchaseOrderLines,
   purchaseOrderValidator,
   upsertPurchaseOrder,
 } from "~/modules/purchasing";
@@ -82,13 +80,5 @@ export default function PurchaseOrderBasicRoute() {
     notes: orderData?.purchaseOrder?.notes ?? "",
   };
 
-  return (
-    <>
-      <Flex w="full" rowGap={4} flexDirection="column">
-        <PurchaseOrderForm initialValues={initialValues} />
-        <PurchaseOrderLines />
-        <Outlet />
-      </Flex>
-    </>
-  );
+  return <PurchaseOrderForm initialValues={initialValues} />;
 }

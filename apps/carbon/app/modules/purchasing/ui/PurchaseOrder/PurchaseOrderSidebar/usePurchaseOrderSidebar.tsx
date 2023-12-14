@@ -2,19 +2,26 @@ import { usePermissions } from "~/hooks";
 import type { Role } from "~/types";
 
 type Props = {
+  lines?: number;
   externalDocuments?: number;
   internalDocuments?: number;
 };
 
 export function usePurchaseOrderSidebar({
+  lines = 0,
   internalDocuments = 0,
   externalDocuments = 0,
 }: Props) {
   const permissions = usePermissions();
   return [
     {
-      name: "Details",
+      name: "Summary",
       to: "details",
+    },
+    {
+      name: "Lines",
+      to: "lines",
+      count: lines,
     },
     {
       name: "Delivery",

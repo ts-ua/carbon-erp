@@ -44,6 +44,7 @@ export default function ServiceRoute() {
         gridTemplateColumns={["1fr", "1fr", "1fr 4fr"]}
         gridColumnGap={4}
         w="full"
+        h="full"
       >
         <ServiceSidebar />
         <Outlet />
