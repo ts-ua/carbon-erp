@@ -165,6 +165,7 @@ export const serviceValidator = withZod(
     id: zfd.text(z.string().optional()),
     name: z.string().min(1, { message: "Name is required" }).max(255),
     description: z.string().optional(),
+    partGroupId: zfd.text(z.string().optional()),
     serviceType: z.enum(serviceType, {
       errorMap: (issue, ctx) => ({
         message: "Service type is required",

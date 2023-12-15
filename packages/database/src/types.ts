@@ -3168,6 +3168,12 @@ export interface Database {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "part_partGroupId_fkey";
+            columns: ["partGroupId"];
+            referencedRelation: "services";
+            referencedColumns: ["partGroupId"];
+          },
+          {
             foreignKeyName: "part_unitOfMeasureCode_fkey";
             columns: ["unitOfMeasureCode"];
             referencedRelation: "unitOfMeasure";
@@ -4404,6 +4410,12 @@ export interface Database {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "postingGroupInventory_partGroupId_fkey";
+            columns: ["partGroupId"];
+            referencedRelation: "services";
+            referencedColumns: ["partGroupId"];
+          },
+          {
             foreignKeyName: "postingGroupInventory_purchaseVarianceAccount_fkey";
             columns: ["purchaseVarianceAccount"];
             referencedRelation: "account";
@@ -4484,6 +4496,12 @@ export interface Database {
             columns: ["partGroupId"];
             referencedRelation: "partGroup";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "postingGroupPurchasing_partGroupId_fkey";
+            columns: ["partGroupId"];
+            referencedRelation: "services";
+            referencedColumns: ["partGroupId"];
           },
           {
             foreignKeyName: "postingGroupPurchasing_payablesAccount_fkey";
@@ -4626,6 +4644,12 @@ export interface Database {
             columns: ["partGroupId"];
             referencedRelation: "partGroup";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "postingGroupSales_partGroupId_fkey";
+            columns: ["partGroupId"];
+            referencedRelation: "services";
+            referencedColumns: ["partGroupId"];
           },
           {
             foreignKeyName: "postingGroupSales_receivablesAccount_fkey";
@@ -6346,7 +6370,7 @@ export interface Database {
           fromDate: string | null;
           id: string;
           name: string;
-          serviceGroupId: string | null;
+          partGroupId: string | null;
           serviceType: Database["public"]["Enums"]["serviceType"];
           toDate: string | null;
           updatedAt: string | null;
@@ -6363,7 +6387,7 @@ export interface Database {
           fromDate?: string | null;
           id?: string;
           name: string;
-          serviceGroupId?: string | null;
+          partGroupId?: string | null;
           serviceType: Database["public"]["Enums"]["serviceType"];
           toDate?: string | null;
           updatedAt?: string | null;
@@ -6380,7 +6404,7 @@ export interface Database {
           fromDate?: string | null;
           id?: string;
           name?: string;
-          serviceGroupId?: string | null;
+          partGroupId?: string | null;
           serviceType?: Database["public"]["Enums"]["serviceType"];
           toDate?: string | null;
           updatedAt?: string | null;
@@ -6412,16 +6436,16 @@ export interface Database {
             referencedColumns: ["userId"];
           },
           {
-            foreignKeyName: "service_serviceGroupId_fkey";
-            columns: ["serviceGroupId"];
-            referencedRelation: "serviceGroup";
+            foreignKeyName: "service_partGroupId_fkey";
+            columns: ["partGroupId"];
+            referencedRelation: "partGroup";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "service_serviceGroupId_fkey";
-            columns: ["serviceGroupId"];
+            foreignKeyName: "service_partGroupId_fkey";
+            columns: ["partGroupId"];
             referencedRelation: "services";
-            referencedColumns: ["serviceGroupId"];
+            referencedColumns: ["partGroupId"];
           },
           {
             foreignKeyName: "service_updatedBy_fkey";
@@ -6431,64 +6455,6 @@ export interface Database {
           },
           {
             foreignKeyName: "service_updatedBy_fkey";
-            columns: ["updatedBy"];
-            referencedRelation: "userDefaults";
-            referencedColumns: ["userId"];
-          }
-        ];
-      };
-      serviceGroup: {
-        Row: {
-          active: boolean;
-          createdAt: string;
-          createdBy: string;
-          description: string | null;
-          id: string;
-          name: string;
-          updatedAt: string | null;
-          updatedBy: string | null;
-        };
-        Insert: {
-          active?: boolean;
-          createdAt?: string;
-          createdBy: string;
-          description?: string | null;
-          id?: string;
-          name: string;
-          updatedAt?: string | null;
-          updatedBy?: string | null;
-        };
-        Update: {
-          active?: boolean;
-          createdAt?: string;
-          createdBy?: string;
-          description?: string | null;
-          id?: string;
-          name?: string;
-          updatedAt?: string | null;
-          updatedBy?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "serviceGroup_createdBy_fkey";
-            columns: ["createdBy"];
-            referencedRelation: "user";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "serviceGroup_createdBy_fkey";
-            columns: ["createdBy"];
-            referencedRelation: "userDefaults";
-            referencedColumns: ["userId"];
-          },
-          {
-            foreignKeyName: "serviceGroup_updatedBy_fkey";
-            columns: ["updatedBy"];
-            referencedRelation: "user";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "serviceGroup_updatedBy_fkey";
             columns: ["updatedBy"];
             referencedRelation: "userDefaults";
             referencedColumns: ["userId"];
@@ -8560,6 +8526,12 @@ export interface Database {
             columns: ["partGroupId"];
             referencedRelation: "partGroup";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "part_partGroupId_fkey";
+            columns: ["partGroupId"];
+            referencedRelation: "services";
+            referencedColumns: ["partGroupId"];
           }
         ];
       };
@@ -8876,8 +8848,8 @@ export interface Database {
           description: string | null;
           id: string | null;
           name: string | null;
-          serviceGroup: string | null;
-          serviceGroupId: string | null;
+          partGroup: string | null;
+          partGroupId: string | null;
           serviceType: Database["public"]["Enums"]["serviceType"] | null;
           supplierIds: string[] | null;
         };

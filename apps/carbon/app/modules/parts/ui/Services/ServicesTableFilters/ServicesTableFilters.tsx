@@ -9,10 +9,10 @@ import type { ListItem } from "~/types";
 import { path } from "~/utils/path";
 
 type ServicesTableFiltersProps = {
-  serviceGroups: ListItem[];
+  partGroups: ListItem[];
 };
 
-const ServicesTableFilters = ({ serviceGroups }: ServicesTableFiltersProps) => {
+const ServicesTableFilters = ({ partGroups }: ServicesTableFiltersProps) => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
   const serviceTypeOptions = serviceType.map((type) => ({
@@ -20,7 +20,7 @@ const ServicesTableFilters = ({ serviceGroups }: ServicesTableFiltersProps) => {
     label: type,
   }));
 
-  const serviceGroupsOptions = serviceGroups.map((group) => ({
+  const partGroupsOptions = partGroups.map((group) => ({
     value: group.id,
     label: group.name,
   }));
@@ -44,14 +44,14 @@ const ServicesTableFilters = ({ serviceGroups }: ServicesTableFiltersProps) => {
           minW={180}
           placeholder="Search Services"
         />
-        {serviceGroupsOptions.length > 0 && (
+        {partGroupsOptions.length > 0 && (
           <Select
             size="sm"
             isClearable
-            value={serviceGroupsOptions.find(
+            value={partGroupsOptions.find(
               (type) => type.value === params.get("group")
             )}
-            options={serviceGroupsOptions}
+            options={partGroupsOptions}
             onChange={(selected) => {
               setParams({ group: selected?.value });
             }}

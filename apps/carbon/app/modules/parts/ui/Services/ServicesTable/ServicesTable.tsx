@@ -40,8 +40,8 @@ const ServicesTable = memo(({ data, count }: ServicesTableProps) => {
       },
       {
         // @ts-ignore
-        accessorKey: "serviceGroup",
-        header: "Service Group",
+        accessorKey: "partGroup",
+        header: "Part Group",
         cell: (item) => item.getValue(),
       },
     ];

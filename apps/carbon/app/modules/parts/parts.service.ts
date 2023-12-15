@@ -250,7 +250,7 @@ export async function getServices(
   }
 
   if (args.group) {
-    query = query.eq("serviceGroupId", args.group);
+    query = query.eq("partGroupId", args.group);
   }
 
   if (args.supplierId) {
@@ -277,44 +277,6 @@ export async function getServicesList(
 
   if (type) {
     query = query.eq("serviceType", type);
-  }
-
-  return query;
-}
-
-export async function getServiceGroups(
-  client: SupabaseClient<Database>,
-  args?: GenericQueryFilters & { name: string | null }
-) {
-  let query = client.from("serviceGroup").select("*", {
-    count: "exact",
-  });
-
-  if (args?.name) {
-    query = query.ilike("name", `%${args.name}%`);
-  }
-
-  if (args) {
-    query = setGenericQueryFilters(query, args, "name");
-  }
-
-  return query;
-}
-
-export async function getServiceGroupsList(
-  client: SupabaseClient<Database>,
-  args?: GenericQueryFilters & { name: string | null }
-) {
-  let query = client
-    .from("serviceGroup")
-    .select("id, name", { count: "exact" });
-
-  if (args?.name) {
-    query = query.ilike("name", `%${args.name}%`);
-  }
-
-  if (args) {
-    query = setGenericQueryFilters(query, args, "name");
   }
 
   return query;

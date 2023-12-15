@@ -52,8 +52,8 @@ const ServicePreview = () => {
             alignItems="start"
             justifyContent="space-between"
           >
-            <Text color="gray.500">Service Group</Text>
-            <Text fontWeight="bold">{routeData?.service?.serviceGroup}</Text>
+            <Text color="gray.500">Part Group</Text>
+            <Text fontWeight="bold">{routeData?.service?.partGroup}</Text>
           </Stack>
         </Stack>
       </CardBody>

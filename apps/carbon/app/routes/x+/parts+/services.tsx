@@ -5,7 +5,7 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 import {
   ServicesTable,
   ServicesTableFilters,
-  getServiceGroupsList,
+  getPartGroupsList,
   getServices,
 } from "~/modules/parts";
 import { requirePermissions } from "~/services/auth";
@@ -35,7 +35,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { limit, offset, sorts, filters } =
     getGenericQueryFilters(searchParams);
 
-  const [services, serviceGroups] = await Promise.all([
+  const [services, partGroups] = await Promise.all([
     getServices(client, {
       search,
       type,
@@ -46,7 +46,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       sorts,
       filters,
     }),
-    getServiceGroupsList(client),
+    getPartGroupsList(client),
   ]);
 
   if (services.error) {
@@ -59,16 +59,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({
     count: services.count ?? 0,
     services: services.data ?? [],
-    serviceGroups: serviceGroups.data ?? [],
+    partGroups: partGroups.data ?? [],
   });
 }
 
 export default function ServicesSearchRoute() {
-  const { count, services, serviceGroups } = useLoaderData<typeof loader>();
+  const { count, services, partGroups } = useLoaderData<typeof loader>();
 
   return (
     <VStack w="full" h="full" spacing={0}>
-      <ServicesTableFilters serviceGroups={serviceGroups} />
+      <ServicesTableFilters partGroups={partGroups} />
       <ServicesTable data={services} count={count} />
       <Outlet />
     </VStack>
