@@ -66,7 +66,7 @@ function Hero() {
                   <span className="dark:bg-clip-text dark:text-transparent dark:bg-gradient-to-b dark:from-white  dark:to-gray-400">
                     ERP for
                   </span>{" "}
-                  <span className="bg-gradient-to-b bg-clip-text text-transparent dark:bg-gradient-to-br dark:from-[#3ECF8E] dark:via-[#3ECF8E] dark:to-[#3ecfb2] from-black via-orange-600 to-amber-500 ">
+                  <span className="bg-gradient-to-r bg-clip-text text-transparent dark:bg-gradient-to-b dark:from-[#3ECF8E] dark:via-[#3ECF8E] dark:to-[#3ecfb2] from-black via-orange-600 to-amber-500 ">
                     the builders
                   </span>
                 </motion.h1>
