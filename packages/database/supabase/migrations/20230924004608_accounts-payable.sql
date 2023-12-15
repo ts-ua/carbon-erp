@@ -110,6 +110,7 @@ CREATE POLICY "Employees with invoicing_view can view AP invoices status history
 CREATE TYPE "payableLineType" AS ENUM (
   'G/L Account',
   'Part',
+  'Service',
   'Fixed Asset',
   'Comment'
 );
@@ -121,6 +122,7 @@ CREATE TABLE "purchaseInvoiceLine" (
   "purchaseOrderId" TEXT,
   "purchaseOrderLineId" TEXT,
   "partId" TEXT,
+  "serviceId" TEXT,
   "locationId" TEXT,
   "shelfId" TEXT,
   "accountNumber" TEXT,
@@ -137,11 +139,52 @@ CREATE TABLE "purchaseInvoiceLine" (
   "updatedBy" TEXT,
   "updatedAt" TIMESTAMP WITH TIME ZONE,
 
+  CONSTRAINT "invoiceLineType_number"
+    CHECK (
+      (
+        "invoiceLineType" = 'Comment' AND
+        "partId" IS NULL AND
+        "serviceId" IS NULL AND
+        "accountNumber" IS NULL AND
+        "assetId" IS NULL AND
+        "description" IS NOT NULL
+      ) 
+      OR (
+        "invoiceLineType" = 'G/L Account' AND
+        "partId" IS NULL AND
+        "serviceId" IS NULL AND
+        "accountNumber" IS NOT NULL AND
+        "assetId" IS NULL 
+      ) 
+      OR (
+        "invoiceLineType" = 'Part' AND
+        "partId" IS NOT NULL AND
+        "serviceId" IS NULL AND
+        "accountNumber" IS NULL AND
+        "assetId" IS NULL 
+      ) 
+      OR (
+        "invoiceLineType" = 'Service' AND
+        "partId" IS NULL AND
+        "serviceId" IS NOT NULL AND
+        "accountNumber" IS NULL AND
+        "assetId" IS NULL 
+      ) 
+      OR (
+        "invoiceLineType" = 'Fixed Asset' AND
+        "partId" IS NULL AND
+        "serviceId" IS NULL AND
+        "accountNumber" IS NULL AND
+        "assetId" IS NOT NULL 
+      ) 
+    ),
+
   CONSTRAINT "purchaseInvoiceLines_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "purchaseInvoiceLines_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "purchaseInvoice" ("id") ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT "purchaseInvoiceLines_purchaseOrderId_fkey" FOREIGN KEY ("purchaseOrderId") REFERENCES "purchaseOrder" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_purchaseOrderLineId_fkey" FOREIGN KEY ("purchaseOrderLineId") REFERENCES "purchaseOrderLine" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_partId_fkey" FOREIGN KEY ("partId") REFERENCES "part" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT "purchaseInvoiceLines_serviceId_fkey" FOREIGN KEY ("serviceId") REFERENCES "service" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "location" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_shelfId_fkey" FOREIGN KEY ("shelfId", "locationId") REFERENCES "shelf" ("id", "locationId") ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT "purchaseInvoiceLines_accountNumber_fkey" FOREIGN KEY ("accountNumber") REFERENCES "account" ("number") ON UPDATE CASCADE ON DELETE RESTRICT,

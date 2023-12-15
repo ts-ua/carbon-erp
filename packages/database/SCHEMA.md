@@ -3959,6 +3959,162 @@ CREATE POLICY "Employees with parts_update can update part planning" ON "partInv
 
 
 
+## `services`
+
+```sql
+CREATE TYPE "serviceType" AS ENUM (
+  'Internal',
+  'External'
+);
+
+CREATE TABLE "service" (
+  "id" TEXT NOT NULL DEFAULT xid(),
+  "name" TEXT NOT NULL,
+  "description" TEXT,
+  "blocked" BOOLEAN NOT NULL DEFAULT false,
+  "partGroupId" TEXT,
+  "serviceType" "serviceType" NOT NULL,
+  "active" BOOLEAN NOT NULL DEFAULT true,
+  "approved" BOOLEAN NOT NULL DEFAULT false,
+  "approvedBy" TEXT,
+  "fromDate" DATE,
+  "toDate" DATE,
+  "createdBy" TEXT NOT NULL,
+  "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  "updatedBy" TEXT,
+  "updatedAt" TIMESTAMP WITH TIME ZONE,
+
+  CONSTRAINT "service_pkey" PRIMARY KEY ("id"),
+  CONSTRAINT "service_partGroupId_fkey" FOREIGN KEY ("partGroupId") REFERENCES "partGroup"("id"),
+  CONSTRAINT "service_approvedBy_fkey" FOREIGN KEY ("approvedBy") REFERENCES "user"("id"),
+  CONSTRAINT "service_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user"("id"),
+  CONSTRAINT "service_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user"("id")
+);
+
+CREATE POLICY "Employees can view services" ON "service"
+  FOR SELECT
+  USING (
+    (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+
+CREATE POLICY "Employees with parts_create can insert services" ON "service"
+  FOR INSERT
+  WITH CHECK (   
+    coalesce(get_my_claim('parts_create')::boolean,false) 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+
+CREATE POLICY "Employees with parts_update can update services" ON "service"
+  FOR UPDATE
+  USING (
+    coalesce(get_my_claim('parts_update')::boolean, false) = true 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+
+CREATE POLICY "Employees with parts_delete can delete services" ON "service"
+  FOR DELETE
+  USING (
+    coalesce(get_my_claim('parts_delete')::boolean, false) = true 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+
+
+CREATE TABLE "serviceSupplier" (
+  "id" TEXT NOT NULL DEFAULT xid(),
+  "serviceId" TEXT NOT NULL,
+  "supplierId" TEXT NOT NULL,
+  "supplierServiceId" TEXT,
+  "active" BOOLEAN NOT NULL DEFAULT true,
+  "createdBy" TEXT NOT NULL,
+  "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  "updatedBy" TEXT,
+  "updatedAt" TIMESTAMP WITH TIME ZONE,
+
+  CONSTRAINT "serviceSupplier_id_pkey" PRIMARY KEY ("id"),
+  CONSTRAINT "serviceSupplier_serviceId_fkey" FOREIGN KEY ("serviceId") REFERENCES "service"("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "serviceSupplier_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "supplier"("id") ON DELETE CASCADE,
+  CONSTRAINT "serviceSupplier_service_supplier_unique" UNIQUE ("serviceId", "supplierId"),
+  CONSTRAINT "serviceSupplier_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user"("id"),
+  CONSTRAINT "serviceSupplier_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user"("id")
+);
+
+CREATE INDEX "serviceSupplier_serviceId_index" ON "serviceSupplier"("serviceId");
+
+ALTER TABLE "serviceSupplier" ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Employees with part_view can view service suppliers" ON "serviceSupplier"
+  FOR SELECT
+  USING (
+    coalesce(get_my_claim('parts_view')::boolean,false) 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+
+CREATE POLICY "Employees with parts_update can update service suppliers" ON "serviceSupplier"
+  FOR UPDATE
+  USING (
+    coalesce(get_my_claim('parts_update')::boolean, false) = true 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+
+CREATE POLICY "Employees with parts_create can create service suppliers" ON "serviceSupplier"
+  FOR INSERT
+  WITH CHECK (
+    coalesce(get_my_claim('parts_create')::boolean, false) = true 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+
+CREATE POLICY "Employees with parts_delete can delete service suppliers" ON "serviceSupplier"
+  FOR DELETE
+  USING (
+    coalesce(get_my_claim('parts_delete')::boolean, false) = true 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+
+CREATE POLICY "Suppliers with parts_view can view their own part suppliers" ON "serviceSupplier"
+  FOR SELECT
+  USING (
+    coalesce(get_my_claim('parts_view')::boolean,false) 
+    AND (get_my_claim('role'::text)) = '"supplier"'::jsonb
+    AND "supplierId" IN (
+      SELECT "supplierId" FROM "supplierAccount" WHERE id::uuid = auth.uid()
+    )
+  );
+
+CREATE POLICY "Suppliers with parts_update can update their own part suppliers" ON "serviceSupplier"
+  FOR UPDATE
+  USING (
+    coalesce(get_my_claim('parts_update')::boolean,false) 
+    AND (get_my_claim('role'::text)) = '"supplier"'::jsonb
+    AND "supplierId" IN (
+      SELECT "supplierId" FROM "supplierAccount" WHERE id::uuid = auth.uid()
+    )
+  );
+
+CREATE OR REPLACE VIEW "services" WITH(SECURITY_INVOKER=true) AS
+  SELECT
+    s.id,
+    s.name,
+    s.description,
+    s."serviceType",
+    pg.id AS "partGroupId",
+    pg.name AS "partGroup",
+    s.active,
+    s.blocked,
+    array_agg(ss."supplierId") AS "supplierIds"
+  FROM "service" s
+  LEFT JOIN "partGroup" pg ON pg.id = s."partGroupId"
+  LEFT JOIN "serviceSupplier" ss ON ss."serviceId" = s.id
+  GROUP BY s.id,
+    s.name,
+    s.description,
+    s."serviceType",
+    pg.id,
+    pg.name,
+    s.active;
+```
+
+
+
 ## `documents`
 
 ```sql
@@ -4409,6 +4565,7 @@ CREATE TYPE "purchaseOrderLineType" AS ENUM (
   'Comment',
   'G/L Account',
   'Part',
+  'Service',
   'Fixed Asset'
 );
 
@@ -4430,6 +4587,7 @@ CREATE TABLE "purchaseOrderLine" (
   "purchaseOrderId" TEXT NOT NULL,
   "purchaseOrderLineType" "purchaseOrderLineType" NOT NULL,
   "partId" TEXT,
+  "serviceId" TEXT,
   "accountNumber" TEXT,
   "assetId" TEXT,
   "description" TEXT,
@@ -4456,6 +4614,7 @@ CREATE TABLE "purchaseOrderLine" (
       (
         "purchaseOrderLineType" = 'Comment' AND
         "partId" IS NULL AND
+        "serviceId" IS NULL AND
         "accountNumber" IS NULL AND
         "assetId" IS NULL AND
         "description" IS NOT NULL
@@ -4463,18 +4622,28 @@ CREATE TABLE "purchaseOrderLine" (
       OR (
         "purchaseOrderLineType" = 'G/L Account' AND
         "partId" IS NULL AND
+        "serviceId" IS NULL AND
         "accountNumber" IS NOT NULL AND
         "assetId" IS NULL 
       ) 
       OR (
         "purchaseOrderLineType" = 'Part' AND
         "partId" IS NOT NULL AND
+        "serviceId" IS NULL AND
+        "accountNumber" IS NULL AND
+        "assetId" IS NULL 
+      ) 
+      OR (
+        "purchaseOrderLineType" = 'Service' AND
+        "partId" IS NULL AND
+        "serviceId" IS NOT NULL AND
         "accountNumber" IS NULL AND
         "assetId" IS NULL 
       ) 
       OR (
         "purchaseOrderLineType" = 'Fixed Asset' AND
         "partId" IS NULL AND
+        "serviceId" IS NULL AND
         "accountNumber" IS NULL AND
         "assetId" IS NOT NULL 
       ) 
@@ -4483,6 +4652,7 @@ CREATE TABLE "purchaseOrderLine" (
   CONSTRAINT "purchaseOrderLine_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "purchaseOrderLine_purchaseOrderId_fkey" FOREIGN KEY ("purchaseOrderId") REFERENCES "purchaseOrder" ("id") ON DELETE CASCADE,
   CONSTRAINT "purchaseOrderLine_partId_fkey" FOREIGN KEY ("partId") REFERENCES "part" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "purchaseOrderLine_serviceId_fkey" FOREIGN KEY ("serviceId") REFERENCES "service" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT "purchaseOrderLine_accountNumber_fkey" FOREIGN KEY ("accountNumber") REFERENCES "account" ("number") ON DELETE CASCADE ON UPDATE CASCADE,
   -- TODO: Add assetId foreign key
   CONSTRAINT "purchaseOrderLine_shelfId_fkey" FOREIGN KEY ("shelfId", "locationId") REFERENCES "shelf" ("id", "locationId") ON DELETE CASCADE,
@@ -6587,6 +6757,7 @@ CREATE POLICY "Employees with invoicing_view can view AP invoices status history
 CREATE TYPE "payableLineType" AS ENUM (
   'G/L Account',
   'Part',
+  'Service',
   'Fixed Asset',
   'Comment'
 );
@@ -6598,6 +6769,7 @@ CREATE TABLE "purchaseInvoiceLine" (
   "purchaseOrderId" TEXT,
   "purchaseOrderLineId" TEXT,
   "partId" TEXT,
+  "serviceId" TEXT,
   "locationId" TEXT,
   "shelfId" TEXT,
   "accountNumber" TEXT,
@@ -6614,11 +6786,52 @@ CREATE TABLE "purchaseInvoiceLine" (
   "updatedBy" TEXT,
   "updatedAt" TIMESTAMP WITH TIME ZONE,
 
+  CONSTRAINT "invoiceLineType_number"
+    CHECK (
+      (
+        "invoiceLineType" = 'Comment' AND
+        "partId" IS NULL AND
+        "serviceId" IS NULL AND
+        "accountNumber" IS NULL AND
+        "assetId" IS NULL AND
+        "description" IS NOT NULL
+      ) 
+      OR (
+        "invoiceLineType" = 'G/L Account' AND
+        "partId" IS NULL AND
+        "serviceId" IS NULL AND
+        "accountNumber" IS NOT NULL AND
+        "assetId" IS NULL 
+      ) 
+      OR (
+        "invoiceLineType" = 'Part' AND
+        "partId" IS NOT NULL AND
+        "serviceId" IS NULL AND
+        "accountNumber" IS NULL AND
+        "assetId" IS NULL 
+      ) 
+      OR (
+        "invoiceLineType" = 'Service' AND
+        "partId" IS NULL AND
+        "serviceId" IS NOT NULL AND
+        "accountNumber" IS NULL AND
+        "assetId" IS NULL 
+      ) 
+      OR (
+        "invoiceLineType" = 'Fixed Asset' AND
+        "partId" IS NULL AND
+        "serviceId" IS NULL AND
+        "accountNumber" IS NULL AND
+        "assetId" IS NOT NULL 
+      ) 
+    ),
+
   CONSTRAINT "purchaseInvoiceLines_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "purchaseInvoiceLines_invoiceId_fkey" FOREIGN KEY ("invoiceId") REFERENCES "purchaseInvoice" ("id") ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT "purchaseInvoiceLines_purchaseOrderId_fkey" FOREIGN KEY ("purchaseOrderId") REFERENCES "purchaseOrder" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_purchaseOrderLineId_fkey" FOREIGN KEY ("purchaseOrderLineId") REFERENCES "purchaseOrderLine" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_partId_fkey" FOREIGN KEY ("partId") REFERENCES "part" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT "purchaseInvoiceLines_serviceId_fkey" FOREIGN KEY ("serviceId") REFERENCES "service" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "location" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseInvoiceLines_shelfId_fkey" FOREIGN KEY ("shelfId", "locationId") REFERENCES "shelf" ("id", "locationId") ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT "purchaseInvoiceLines_accountNumber_fkey" FOREIGN KEY ("accountNumber") REFERENCES "account" ("number") ON UPDATE CASCADE ON DELETE RESTRICT,
@@ -6999,161 +7212,5 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE TRIGGER create_customer_entries
   AFTER INSERT on public.customer
   FOR EACH ROW EXECUTE PROCEDURE public.create_customer_entries();
-```
-
-
-
-## `services`
-
-```sql
-CREATE TYPE "serviceType" AS ENUM (
-  'Internal',
-  'External'
-);
-
-CREATE TABLE "service" (
-  "id" TEXT NOT NULL DEFAULT xid(),
-  "name" TEXT NOT NULL,
-  "description" TEXT,
-  "blocked" BOOLEAN NOT NULL DEFAULT false,
-  "partGroupId" TEXT,
-  "serviceType" "serviceType" NOT NULL,
-  "active" BOOLEAN NOT NULL DEFAULT true,
-  "approved" BOOLEAN NOT NULL DEFAULT false,
-  "approvedBy" TEXT,
-  "fromDate" DATE,
-  "toDate" DATE,
-  "createdBy" TEXT NOT NULL,
-  "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
-  "updatedBy" TEXT,
-  "updatedAt" TIMESTAMP WITH TIME ZONE,
-
-  CONSTRAINT "service_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "service_partGroupId_fkey" FOREIGN KEY ("partGroupId") REFERENCES "partGroup"("id"),
-  CONSTRAINT "service_approvedBy_fkey" FOREIGN KEY ("approvedBy") REFERENCES "user"("id"),
-  CONSTRAINT "service_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user"("id"),
-  CONSTRAINT "service_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user"("id")
-);
-
-CREATE POLICY "Employees can view services" ON "service"
-  FOR SELECT
-  USING (
-    (get_my_claim('role'::text)) = '"employee"'::jsonb
-  );
-
-CREATE POLICY "Employees with parts_create can insert services" ON "service"
-  FOR INSERT
-  WITH CHECK (   
-    coalesce(get_my_claim('parts_create')::boolean,false) 
-    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
-  );
-
-CREATE POLICY "Employees with parts_update can update services" ON "service"
-  FOR UPDATE
-  USING (
-    coalesce(get_my_claim('parts_update')::boolean, false) = true 
-    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
-  );
-
-CREATE POLICY "Employees with parts_delete can delete services" ON "service"
-  FOR DELETE
-  USING (
-    coalesce(get_my_claim('parts_delete')::boolean, false) = true 
-    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
-  );
-
-
-CREATE TABLE "serviceSupplier" (
-  "id" TEXT NOT NULL DEFAULT xid(),
-  "serviceId" TEXT NOT NULL,
-  "supplierId" TEXT NOT NULL,
-  "supplierServiceId" TEXT,
-  "active" BOOLEAN NOT NULL DEFAULT true,
-  "createdBy" TEXT NOT NULL,
-  "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
-  "updatedBy" TEXT,
-  "updatedAt" TIMESTAMP WITH TIME ZONE,
-
-  CONSTRAINT "serviceSupplier_id_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "serviceSupplier_serviceId_fkey" FOREIGN KEY ("serviceId") REFERENCES "service"("id") ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT "serviceSupplier_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "supplier"("id") ON DELETE CASCADE,
-  CONSTRAINT "serviceSupplier_service_supplier_unique" UNIQUE ("serviceId", "supplierId"),
-  CONSTRAINT "serviceSupplier_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user"("id"),
-  CONSTRAINT "serviceSupplier_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user"("id")
-);
-
-CREATE INDEX "serviceSupplier_serviceId_index" ON "serviceSupplier"("serviceId");
-
-ALTER TABLE "serviceSupplier" ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Employees with part_view can view service suppliers" ON "serviceSupplier"
-  FOR SELECT
-  USING (
-    coalesce(get_my_claim('parts_view')::boolean,false) 
-    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
-  );
-
-CREATE POLICY "Employees with parts_update can update service suppliers" ON "serviceSupplier"
-  FOR UPDATE
-  USING (
-    coalesce(get_my_claim('parts_update')::boolean, false) = true 
-    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
-  );
-
-CREATE POLICY "Employees with parts_create can create service suppliers" ON "serviceSupplier"
-  FOR INSERT
-  WITH CHECK (
-    coalesce(get_my_claim('parts_create')::boolean, false) = true 
-    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
-  );
-
-CREATE POLICY "Employees with parts_delete can delete service suppliers" ON "serviceSupplier"
-  FOR DELETE
-  USING (
-    coalesce(get_my_claim('parts_delete')::boolean, false) = true 
-    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
-  );
-
-CREATE POLICY "Suppliers with parts_view can view their own part suppliers" ON "serviceSupplier"
-  FOR SELECT
-  USING (
-    coalesce(get_my_claim('parts_view')::boolean,false) 
-    AND (get_my_claim('role'::text)) = '"supplier"'::jsonb
-    AND "supplierId" IN (
-      SELECT "supplierId" FROM "supplierAccount" WHERE id::uuid = auth.uid()
-    )
-  );
-
-CREATE POLICY "Suppliers with parts_update can update their own part suppliers" ON "serviceSupplier"
-  FOR UPDATE
-  USING (
-    coalesce(get_my_claim('parts_update')::boolean,false) 
-    AND (get_my_claim('role'::text)) = '"supplier"'::jsonb
-    AND "supplierId" IN (
-      SELECT "supplierId" FROM "supplierAccount" WHERE id::uuid = auth.uid()
-    )
-  );
-
-CREATE OR REPLACE VIEW "services" WITH(SECURITY_INVOKER=true) AS
-  SELECT
-    s.id,
-    s.name,
-    s.description,
-    s."serviceType",
-    pg.id AS "partGroupId",
-    pg.name AS "partGroup",
-    s.active,
-    s.blocked,
-    array_agg(ss."supplierId") AS "supplierIds"
-  FROM "service" s
-  LEFT JOIN "partGroup" pg ON pg.id = s."partGroupId"
-  LEFT JOIN "serviceSupplier" ss ON ss."serviceId" = s.id
-  GROUP BY s.id,
-    s.name,
-    s.description,
-    s."serviceType",
-    pg.id,
-    pg.name,
-    s.active;
 ```
 

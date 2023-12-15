@@ -4944,6 +4944,7 @@ export interface Database {
           purchaseOrderId: string | null;
           purchaseOrderLineId: string | null;
           quantity: number;
+          serviceId: string | null;
           shelfId: string | null;
           totalAmount: number | null;
           unitOfMeasureCode: string | null;
@@ -4967,6 +4968,7 @@ export interface Database {
           purchaseOrderId?: string | null;
           purchaseOrderLineId?: string | null;
           quantity?: number;
+          serviceId?: string | null;
           shelfId?: string | null;
           totalAmount?: number | null;
           unitOfMeasureCode?: string | null;
@@ -4990,6 +4992,7 @@ export interface Database {
           purchaseOrderId?: string | null;
           purchaseOrderLineId?: string | null;
           quantity?: number;
+          serviceId?: string | null;
           shelfId?: string | null;
           totalAmount?: number | null;
           unitOfMeasureCode?: string | null;
@@ -5092,6 +5095,18 @@ export interface Database {
             foreignKeyName: "purchaseInvoiceLines_purchaseOrderLineId_fkey";
             columns: ["purchaseOrderLineId"];
             referencedRelation: "purchaseOrderLine";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseInvoiceLines_serviceId_fkey";
+            columns: ["serviceId"];
+            referencedRelation: "service";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseInvoiceLines_serviceId_fkey";
+            columns: ["serviceId"];
+            referencedRelation: "services";
             referencedColumns: ["id"];
           },
           {
@@ -5566,6 +5581,7 @@ export interface Database {
           quantityToReceive: number | null;
           receivedComplete: boolean;
           requiresInspection: boolean;
+          serviceId: string | null;
           setupPrice: number | null;
           shelfId: string | null;
           unitOfMeasureCode: string | null;
@@ -5592,6 +5608,7 @@ export interface Database {
           quantityToReceive?: number | null;
           receivedComplete?: boolean;
           requiresInspection?: boolean;
+          serviceId?: string | null;
           setupPrice?: number | null;
           shelfId?: string | null;
           unitOfMeasureCode?: string | null;
@@ -5618,6 +5635,7 @@ export interface Database {
           quantityToReceive?: number | null;
           receivedComplete?: boolean;
           requiresInspection?: boolean;
+          serviceId?: string | null;
           setupPrice?: number | null;
           shelfId?: string | null;
           unitOfMeasureCode?: string | null;
@@ -5678,6 +5696,18 @@ export interface Database {
             foreignKeyName: "purchaseOrderLine_purchaseOrderId_fkey";
             columns: ["purchaseOrderId"];
             referencedRelation: "purchaseOrders";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_serviceId_fkey";
+            columns: ["serviceId"];
+            referencedRelation: "service";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_serviceId_fkey";
+            columns: ["serviceId"];
+            referencedRelation: "services";
             referencedColumns: ["id"];
           },
           {
@@ -9152,7 +9182,12 @@ export interface Database {
         | "Maximum Quantity";
       partReplenishmentSystem: "Buy" | "Make" | "Buy and Make";
       partType: "Inventory" | "Non-Inventory";
-      payableLineType: "G/L Account" | "Part" | "Fixed Asset" | "Comment";
+      payableLineType:
+        | "G/L Account"
+        | "Part"
+        | "Service"
+        | "Fixed Asset"
+        | "Comment";
       paymentTermCalculationMethod: "Net" | "End of Month" | "Day of Month";
       purchaseInvoiceStatus:
         | "Draft"
@@ -9164,7 +9199,12 @@ export interface Database {
         | "Partially Paid"
         | "Overdue"
         | "Voided";
-      purchaseOrderLineType: "Comment" | "G/L Account" | "Part" | "Fixed Asset";
+      purchaseOrderLineType:
+        | "Comment"
+        | "G/L Account"
+        | "Part"
+        | "Service"
+        | "Fixed Asset";
       purchaseOrderStatus:
         | "Draft"
         | "To Review"
