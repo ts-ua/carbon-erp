@@ -59,7 +59,7 @@ export default function ServiceDetailsRoute() {
     name: routeData.service?.name ?? "",
     description: routeData.service?.description ?? undefined,
     serviceType: routeData.service?.serviceType ?? "Internal",
-    serviceGroupId: routeData.service?.serviceGroupId ?? undefined,
+    partGroupId: routeData.service?.partGroupId ?? undefined,
     active: routeData.service?.active ?? true,
     blocked: routeData.service?.blocked ?? false,
   };

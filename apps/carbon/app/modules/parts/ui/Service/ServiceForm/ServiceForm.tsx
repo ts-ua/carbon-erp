@@ -29,16 +29,16 @@ type ServiceFormProps = {
 
 const ServiceForm = ({ initialValues }: ServiceFormProps) => {
   const sharedData = useRouteData<{
-    serviceGroups: ListItem[];
+    partGroups: ListItem[];
   }>(path.to.serviceRoot);
 
   const permissions = usePermissions();
   const isEditing = initialValues.id !== undefined;
 
-  const serviceGroupOptions =
-    sharedData?.serviceGroups.map((serviceGroup) => ({
-      label: serviceGroup.name,
-      value: serviceGroup.id,
+  const partGroupOptions =
+    sharedData?.partGroups.map((partGroup) => ({
+      label: partGroup.name,
+      value: partGroup.id,
     })) ?? [];
 
   const serviceTypeOptions =
@@ -85,9 +85,9 @@ const ServiceForm = ({ initialValues }: ServiceFormProps) => {
                 options={serviceTypeOptions}
               />
               <Select
-                name="serviceGroupId"
-                label="Service Group"
-                options={serviceGroupOptions}
+                name="partGroupId"
+                label="Part Group"
+                options={partGroupOptions}
               />
             </VStack>
             <VStack alignItems="start" spacing={2} w="full">
