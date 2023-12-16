@@ -5,6 +5,7 @@ import { address, contact } from "~/types/validators";
 
 export const purchaseOrderLineType = [
   "Part",
+  "Service",
   "G/L Account",
   "Fixed Asset",
   "Comment",
@@ -94,6 +95,7 @@ export const purchaseOrderLineValidator = withZod(
         }),
       }),
       partId: zfd.text(z.string().optional()),
+      serviceId: zfd.text(z.string().optional()),
       accountNumber: zfd.text(z.string().optional()),
       assetId: zfd.text(z.string().optional()),
       description: zfd.text(z.string().optional()),

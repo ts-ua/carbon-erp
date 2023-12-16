@@ -1,6 +1,5 @@
 import {
   Button,
-  Input as ChakraInput,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -11,6 +10,7 @@ import {
   FormControl,
   FormLabel,
   HStack,
+  Input,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
@@ -164,6 +164,23 @@ const PurchaseOrderLineForm = ({
     });
   };
 
+  const onServiceChange = async (serviceId: string) => {
+    if (!supabase) return;
+    const service = await supabase
+      .from("service")
+      .select("name")
+      .eq("id", serviceId)
+      .single();
+
+    setPartData({
+      partId: "",
+      description: service.data?.name ?? "",
+      unitPrice: "0",
+      uom: "EA",
+      shelfId: "",
+    });
+  };
+
   const onLocationChange = async (
     newLocationId: string | number | undefined
   ) => {
@@ -228,6 +245,17 @@ const PurchaseOrderLineForm = ({
                 />
               )}
 
+              {type === "Service" && (
+                <Service
+                  name="serviceId"
+                  label="Service"
+                  serviceType="External"
+                  onChange={({ value }) => {
+                    onServiceChange(value as string);
+                  }}
+                />
+              )}
+
               {type === "G/L Account" && (
                 <Account
                   name="accountNumber"
@@ -250,7 +278,7 @@ const PurchaseOrderLineForm = ({
               )}
               <FormControl>
                 <FormLabel>Description</FormLabel>
-                <ChakraInput
+                <Input
                   value={partData.description}
                   onChange={(e) =>
                     setPartData((d) => ({ ...d, description: e.target.value }))

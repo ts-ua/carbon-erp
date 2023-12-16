@@ -5477,7 +5477,8 @@ CREATE TABLE "journalLine" (
   "documentType" "journalLineDocumentType", 
   "documentId" TEXT,
   "externalDocumentId" TEXT,
-  "reference" TEXT,
+  "journalLineReference" TEXT NOT NULL,
+  "documentLineReference" TEXT,
   "accrual" BOOLEAN NOT NULL DEFAULT false,
   "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 

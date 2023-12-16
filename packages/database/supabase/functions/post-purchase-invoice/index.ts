@@ -1,6 +1,7 @@
 // deno-lint-ignore-file no-case-declarations
 import { serve } from "https://deno.land/std@0.175.0/http/server.ts";
 import { format } from "https://deno.land/std@0.205.0/datetime/mod.ts";
+import { nanoid } from "https://deno.land/x/nanoid@v3.0.0/mod.ts";
 import type { Database } from "../../../src/types.ts";
 import { DB, getConnectionPool, getDatabaseClient } from "../lib/database.ts";
 import { corsHeaders } from "../lib/headers.ts";
@@ -165,7 +166,7 @@ serve(async (req: Request) => {
       .from("journalLine")
       .select("*")
       .in(
-        "reference",
+        "documentLineReference",
         purchaseOrderLines.data.reduce<string[]>((acc, purchaseOrderLine) => {
           if (
             (purchaseOrderLine.quantityReceived ?? 0) >
@@ -183,9 +184,9 @@ serve(async (req: Request) => {
     const journalLinesByPurchaseOrderLine = journalLines.data.reduce<
       Record<string, Database["public"]["Tables"]["journalLine"]["Row"][]>
     >((acc, journalEntry) => {
-      const [type, purchaseOrderLineId] = (journalEntry.reference ?? "").split(
-        ":"
-      );
+      const [type, purchaseOrderLineId] = (
+        journalEntry.documentLineReference ?? ""
+      ).split(":");
       if (type === "receipt") {
         if (
           acc[purchaseOrderLineId] &&
@@ -229,6 +230,8 @@ serve(async (req: Request) => {
           if (accountDefaults.error || !accountDefaults.data)
             throw new Error("Failed to fetch account defaults");
 
+          let journalLineReference = nanoid();
+
           // debit the G/L account
           journalLineInserts.push({
             accountNumber: account.data.number!,
@@ -242,9 +245,10 @@ serve(async (req: Request) => {
             documentType: "Invoice",
             documentId: purchaseInvoice.data?.id,
             externalDocumentId: purchaseInvoice.data?.supplierReference,
-            reference: journalReference.to.purchaseInvoice(
+            documentLineReference: journalReference.to.purchaseInvoice(
               invoiceLine.purchaseOrderLineId!
             ),
+            journalLineReference,
           });
 
           // creidt the direct cost applied account
@@ -259,10 +263,13 @@ serve(async (req: Request) => {
             documentType: "Invoice",
             documentId: purchaseInvoice.data?.id,
             externalDocumentId: purchaseInvoice.data?.supplierReference,
-            reference: journalReference.to.purchaseInvoice(
+            documentLineReference: journalReference.to.purchaseInvoice(
               invoiceLine.purchaseOrderLineId!
             ),
+            journalLineReference,
           });
+
+          journalLineReference = nanoid();
 
           // debit the purchase account
           journalLineInserts.push({
@@ -276,9 +283,10 @@ serve(async (req: Request) => {
             documentType: "Invoice",
             documentId: purchaseInvoice.data?.id,
             externalDocumentId: purchaseInvoice.data?.supplierReference,
-            reference: journalReference.to.purchaseInvoice(
+            documentLineReference: journalReference.to.purchaseInvoice(
               invoiceLine.purchaseOrderLineId!
             ),
+            journalLineReference,
           });
 
           // credit the accounts payable account
@@ -293,9 +301,10 @@ serve(async (req: Request) => {
             documentType: "Invoice",
             documentId: purchaseInvoice.data?.id,
             externalDocumentId: purchaseInvoice.data?.supplierReference,
-            reference: journalReference.to.purchaseInvoice(
+            documentLineReference: journalReference.to.purchaseInvoice(
               invoiceLine.purchaseOrderLineId!
             ),
+            journalLineReference,
           });
           break;
         case "Part":
@@ -419,6 +428,8 @@ serve(async (req: Request) => {
 
             // create the normal GL entries
 
+            let journalLineReference = nanoid();
+
             // debit the inventory account
             journalLineInserts.push({
               accountNumber: postingGroupInventory.inventoryAccount,
@@ -431,6 +442,7 @@ serve(async (req: Request) => {
               documentType: "Invoice",
               documentId: purchaseInvoice.data?.id,
               externalDocumentId: purchaseInvoice.data?.supplierReference,
+              journalLineReference,
             });
 
             // creidt the direct cost applied account
@@ -445,7 +457,10 @@ serve(async (req: Request) => {
               documentType: "Invoice",
               documentId: purchaseInvoice.data?.id,
               externalDocumentId: purchaseInvoice.data?.supplierReference,
+              journalLineReference,
             });
+
+            journalLineReference = nanoid();
 
             // debit the purchase account
             journalLineInserts.push({
@@ -459,9 +474,10 @@ serve(async (req: Request) => {
               documentType: "Invoice",
               documentId: purchaseInvoice.data?.id,
               externalDocumentId: purchaseInvoice.data?.supplierReference,
-              reference: journalReference.to.purchaseInvoice(
+              documentLineReference: journalReference.to.purchaseInvoice(
                 invoiceLine.purchaseOrderLineId!
               ),
+              journalLineReference,
             });
 
             // credit the accounts payable account
@@ -476,9 +492,10 @@ serve(async (req: Request) => {
               documentType: "Invoice",
               documentId: purchaseInvoice.data?.id,
               externalDocumentId: purchaseInvoice.data?.supplierReference,
-              reference: journalReference.to.purchaseInvoice(
+              documentLineReference: journalReference.to.purchaseInvoice(
                 invoiceLine.purchaseOrderLineId!
               ),
+              journalLineReference,
             });
           } // if the line is associated with a purchase order line, we do accrual/reversing
           else {
@@ -561,6 +578,8 @@ serve(async (req: Request) => {
                   );
 
                   if (quantityToReverseForEntry > 0) {
+                    const journalLineReference = nanoid();
+
                     // create the reversal entries
                     journalLineInserts.push({
                       accountNumber: entry[0].accountNumber!,
@@ -580,11 +599,12 @@ serve(async (req: Request) => {
                       documentId: purchaseInvoice.data?.id,
                       externalDocumentId:
                         purchaseInvoice?.data.supplierReference,
-                      reference: invoiceLine.purchaseOrderLineId
+                      documentLineReference: invoiceLine.purchaseOrderLineId
                         ? journalReference.to.purchaseInvoice(
                             invoiceLine.purchaseOrderLineId
                           )
                         : null,
+                      journalLineReference,
                     });
 
                     journalLineInserts.push({
@@ -605,9 +625,11 @@ serve(async (req: Request) => {
                       documentId: purchaseInvoice.data?.id,
                       externalDocumentId:
                         purchaseInvoice?.data.supplierReference,
-                      reference: journalReference.to.purchaseInvoice(
-                        invoiceLine.purchaseOrderLineId!
-                      ),
+                      documentLineReference:
+                        journalReference.to.purchaseInvoice(
+                          invoiceLine.purchaseOrderLineId!
+                        ),
+                      journalLineReference,
                     });
                   }
 
@@ -633,6 +655,8 @@ serve(async (req: Request) => {
 
               // create the normal GL entries
 
+              let journalLineReference = nanoid();
+
               // debit the inventory account
               journalLineInserts.push({
                 accountNumber: postingGroupInventory.inventoryAccount,
@@ -645,9 +669,10 @@ serve(async (req: Request) => {
                 documentType: "Invoice",
                 documentId: purchaseInvoice.data?.id,
                 externalDocumentId: purchaseInvoice.data?.supplierReference,
-                reference: journalReference.to.purchaseInvoice(
+                documentLineReference: journalReference.to.purchaseInvoice(
                   invoiceLine.purchaseOrderLineId!
                 ),
+                journalLineReference,
               });
 
               // creidt the direct cost applied account
@@ -662,10 +687,13 @@ serve(async (req: Request) => {
                 documentType: "Invoice",
                 documentId: purchaseInvoice.data?.id,
                 externalDocumentId: purchaseInvoice.data?.supplierReference,
-                reference: journalReference.to.purchaseInvoice(
+                documentLineReference: journalReference.to.purchaseInvoice(
                   invoiceLine.purchaseOrderLineId!
                 ),
+                journalLineReference,
               });
+
+              journalLineReference = nanoid();
 
               // debit the purchase account
               journalLineInserts.push({
@@ -679,9 +707,10 @@ serve(async (req: Request) => {
                 documentType: "Invoice",
                 documentId: purchaseInvoice.data?.id,
                 externalDocumentId: purchaseInvoice.data?.supplierReference,
-                reference: journalReference.to.purchaseInvoice(
+                documentLineReference: journalReference.to.purchaseInvoice(
                   invoiceLine.purchaseOrderLineId!
                 ),
+                journalLineReference,
               });
 
               // credit the accounts payable account
@@ -696,15 +725,18 @@ serve(async (req: Request) => {
                 documentType: "Invoice",
                 documentId: purchaseInvoice.data?.id,
                 externalDocumentId: purchaseInvoice.data?.supplierReference,
-                reference: journalReference.to.purchaseInvoice(
+                documentLineReference: journalReference.to.purchaseInvoice(
                   invoiceLine.purchaseOrderLineId!
                 ),
+                journalLineReference,
               });
             }
 
             if (invoiceLine.quantity > quantityToReverse) {
               // create the accrual entries for invoiced not received
               const quantityToAccrue = invoiceLine.quantity - quantityToReverse;
+
+              const journalLineReference = nanoid();
 
               // debit the inventory invoiced not received account
               journalLineInserts.push({
@@ -720,11 +752,12 @@ serve(async (req: Request) => {
                 documentType: "Invoice",
                 documentId: purchaseInvoice.data?.id,
                 externalDocumentId: purchaseInvoice.data?.supplierReference,
-                reference: invoiceLine.purchaseOrderLineId
+                documentLineReference: invoiceLine.purchaseOrderLineId
                   ? journalReference.to.purchaseInvoice(
                       invoiceLine.purchaseOrderLineId
                     )
                   : null,
+                journalLineReference,
               });
 
               // credit the inventory interim accrual account
@@ -741,11 +774,12 @@ serve(async (req: Request) => {
                 documentType: "Invoice",
                 documentId: purchaseInvoice.data?.id,
                 externalDocumentId: purchaseInvoice.data?.supplierReference,
-                reference: invoiceLine.purchaseOrderLineId
+                documentLineReference: invoiceLine.purchaseOrderLineId
                   ? journalReference.to.purchaseInvoice(
                       invoiceLine.purchaseOrderLineId
                     )
                   : null,
+                journalLineReference,
               });
             }
           }
