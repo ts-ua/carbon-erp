@@ -28,6 +28,7 @@ import {
   Part,
   Select,
   SelectControlled,
+  Service,
   Submit,
 } from "~/components/Form";
 import { usePermissions, useRouteData, useUser } from "~/hooks";
@@ -312,28 +313,28 @@ const PurchaseInvoiceLineForm = ({
                       </NumberInputStepper>
                     </NumberInput>
                   </FormControl>
+                  {["Part", "Service"].includes(type) && (
+                    <SelectControlled
+                      name="locationId"
+                      label="Location"
+                      options={locationOptions}
+                      value={locationId}
+                      onChange={onLocationChange}
+                    />
+                  )}
                   {type === "Part" && (
-                    <>
-                      <SelectControlled
-                        name="locationId"
-                        label="Location"
-                        options={locationOptions}
-                        value={locationId}
-                        onChange={onLocationChange}
-                      />
-                      <SelectControlled
-                        name="shelfId"
-                        label="Shelf"
-                        options={shelfOptions}
-                        value={partData.shelfId}
-                        onChange={(newValue) =>
-                          setPartData((d) => ({
-                            ...d,
-                            shelfId: newValue as string,
-                          }))
-                        }
-                      />
-                    </>
+                    <SelectControlled
+                      name="shelfId"
+                      label="Shelf"
+                      options={shelfOptions}
+                      value={partData.shelfId}
+                      onChange={(newValue) =>
+                        setPartData((d) => ({
+                          ...d,
+                          shelfId: newValue as string,
+                        }))
+                      }
+                    />
                   )}
                 </>
               )}

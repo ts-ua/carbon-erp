@@ -113,6 +113,8 @@ const PurchaseOrderLines = () => {
           switch (row.original.purchaseOrderLineType) {
             case "Part":
               return <span>{row.original.partId}</span>;
+            case "Service":
+              return <span>{row.original.serviceId}</span>;
             case "G/L Account":
               return <span>{row.original.accountNumber}</span>;
             case "Comment":

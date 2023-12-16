@@ -54,16 +54,24 @@ export async function action({ request, params }: ActionFunctionArgs) {
   if (data.purchaseOrderLineType === "Part") {
     data.accountNumber = undefined;
     data.assetId = undefined;
+    data.serviceId = undefined;
+  } else if (data.purchaseOrderLineType === "Service") {
+    data.accountNumber = undefined;
+    data.assetId = undefined;
+    data.partId = undefined;
   } else if (data.purchaseOrderLineType === "G/L Account") {
     data.assetId = undefined;
     data.partId = undefined;
+    data.serviceId = undefined;
   } else if (data.purchaseOrderLineType === "Fixed Asset") {
     data.accountNumber = undefined;
     data.partId = undefined;
+    data.serviceId = undefined;
   } else if (data.purchaseOrderLineType === "Comment") {
     data.accountNumber = undefined;
     data.assetId = undefined;
     data.partId = undefined;
+    data.serviceId = undefined;
   }
 
   const updatePurchaseOrderLine = await upsertPurchaseOrderLine(client, {
@@ -98,6 +106,7 @@ export default function EditPurchaseOrderLineRoute() {
       purchaseOrderLine?.purchaseOrderLineType ??
       ("Part" as PurchaseOrderLineType),
     partId: purchaseOrderLine?.partId ?? "",
+    serviceId: purchaseOrderLine?.serviceId ?? "",
     accountNumber: purchaseOrderLine?.accountNumber ?? "",
     assetId: purchaseOrderLine?.assetId ?? "",
     description: purchaseOrderLine?.description ?? "",

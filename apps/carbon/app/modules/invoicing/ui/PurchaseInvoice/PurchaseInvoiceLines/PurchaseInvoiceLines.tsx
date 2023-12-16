@@ -109,6 +109,8 @@ const PurchaseInvoiceLines = () => {
           switch (row.original.invoiceLineType) {
             case "Part":
               return <span>{row.original.partId}</span>;
+            case "Service":
+              return <span>{row.original.serviceId}</span>;
             case "G/L Account":
               return <span>{row.original.accountNumber}</span>;
             case "Fixed Asset":
