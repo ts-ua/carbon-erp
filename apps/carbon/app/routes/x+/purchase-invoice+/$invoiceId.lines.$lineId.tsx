@@ -54,16 +54,24 @@ export async function action({ request, params }: ActionFunctionArgs) {
   if (data.invoiceLineType === "Part") {
     data.accountNumber = undefined;
     data.assetId = undefined;
+    data.serviceId = undefined;
+  } else if (data.invoiceLineType === "Service") {
+    data.accountNumber = undefined;
+    data.assetId = undefined;
+    data.partId = undefined;
   } else if (data.invoiceLineType === "G/L Account") {
     data.assetId = undefined;
     data.partId = undefined;
+    data.serviceId = undefined;
   } else if (data.invoiceLineType === "Fixed Asset") {
     data.accountNumber = undefined;
     data.partId = undefined;
+    data.serviceId = undefined;
   } else if (data.invoiceLineType === "Comment") {
     data.accountNumber = undefined;
     data.assetId = undefined;
     data.partId = undefined;
+    data.serviceId = undefined;
   }
 
   const updatePurchaseInvoiceLine = await upsertPurchaseInvoiceLine(client, {
@@ -98,6 +106,7 @@ export default function EditPurchaseInvoiceLineRoute() {
       purchaseInvoiceLine?.invoiceLineType ??
       ("Part" as PurchaseInvoiceLineType),
     partId: purchaseInvoiceLine?.partId ?? "",
+    serviceId: purchaseInvoiceLine?.serviceId ?? "",
     accountNumber: purchaseInvoiceLine?.accountNumber ?? "",
     assetId: purchaseInvoiceLine?.assetId ?? "",
     description: purchaseInvoiceLine?.description ?? "",

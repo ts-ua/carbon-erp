@@ -27,6 +27,7 @@ export const path = {
           `${api}/settings/sequence/rollback?table=${table}&currentSequence=${id}`
         ),
       sequences: (table: string) => `${api}/settings/sequences?table=${table}`,
+      services: `${api}/parts/services`,
       shifts: (id: string) =>
         generatePath(`${api}/resources/shifts?location=${id}`),
       shelves: (id: string) =>

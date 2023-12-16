@@ -1,13 +1,11 @@
-import { Flex } from "@chakra-ui/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Outlet, useParams } from "@remix-run/react";
+import { useParams } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import { useRouteData } from "~/hooks";
 import type { PurchaseInvoice } from "~/modules/invoicing";
 import {
   PurchaseInvoiceForm,
-  PurchaseInvoiceLines,
   purchaseInvoiceValidator,
   upsertPurchaseInvoice,
 } from "~/modules/invoicing";
@@ -92,15 +90,9 @@ export default function PurchaseInvoiceBasicRoute() {
   };
 
   return (
-    <>
-      <Flex w="full" rowGap={4} flexDirection="column">
-        <PurchaseInvoiceForm
-          initialValues={initialValues}
-          paymentTerms={sharedData?.paymentTerms ?? []}
-        />
-        <PurchaseInvoiceLines />
-        <Outlet />
-      </Flex>
-    </>
+    <PurchaseInvoiceForm
+      initialValues={initialValues}
+      paymentTerms={sharedData?.paymentTerms ?? []}
+    />
   );
 }

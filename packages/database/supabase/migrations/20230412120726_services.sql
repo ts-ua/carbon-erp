@@ -4,7 +4,7 @@ CREATE TYPE "serviceType" AS ENUM (
 );
 
 CREATE TABLE "service" (
-  "id" TEXT NOT NULL DEFAULT xid(),
+  "id" TEXT NOT NULL,
   "name" TEXT NOT NULL,
   "description" TEXT,
   "blocked" BOOLEAN NOT NULL DEFAULT false,
