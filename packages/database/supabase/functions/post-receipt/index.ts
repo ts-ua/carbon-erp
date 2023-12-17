@@ -36,9 +36,9 @@ serve(async (req: Request) => {
     if (receipt.error) throw new Error("Failed to fetch receipt");
     if (receiptLines.error) throw new Error("Failed to fetch receipt lines");
 
-    const partGroups = await client
+    const parts = await client
       .from("part")
-      .select("id, partGroupId")
+      .select("id, partGroupId, partType")
       .in(
         "id",
         receiptLines.data.reduce<string[]>((acc, receiptLine) => {
@@ -48,7 +48,7 @@ serve(async (req: Request) => {
           return acc;
         }, [])
       );
-    if (partGroups.error) throw new Error("Failed to fetch part groups");
+    if (parts.error) throw new Error("Failed to fetch part groups");
 
     switch (receipt.data?.sourceDocument) {
       case "Purchase Order": {
@@ -186,10 +186,13 @@ serve(async (req: Request) => {
             | Database["public"]["Tables"]["postingGroupInventory"]["Row"]
             | null = null;
 
+          const partType =
+            parts.data.find((part) => part.id === receiptLine.partId)
+              ?.partType ?? "Inventory";
+
           const partGroupId: string | null =
-            partGroups.data.find(
-              (partGroup) => partGroup.id === receiptLine.partId
-            )?.partGroupId ?? null;
+            parts.data.find((part) => part.id === receiptLine.partId)
+              ?.partGroupId ?? null;
           const locationId = receiptLine.locationId ?? null;
           const supplierTypeId: string | null =
             supplier.data.supplierTypeId ?? null;
@@ -413,35 +416,67 @@ serve(async (req: Request) => {
 
             let journalLineReference = nanoid();
 
-            // debit the inventory account
-            journalLineInserts.push({
-              accountNumber: postingGroupInventory.inventoryAccount,
-              description: "Inventory Account",
-              amount: debit("asset", value),
-              quantity: quantityToReverse,
-              documentType: "Receipt",
-              documentId: receipt.data?.id,
-              externalDocumentId: receipt.data?.externalDocumentId,
-              documentLineReference: journalReference.to.receipt(
-                receiptLine.lineId!
-              ),
-              journalLineReference,
-            });
+            if (partType === "Inventory") {
+              // debit the inventory account
+              journalLineInserts.push({
+                accountNumber: postingGroupInventory.inventoryAccount,
+                description: "Inventory Account",
+                amount: debit("asset", value),
+                quantity: quantityToReverse,
+                documentType: "Receipt",
+                documentId: receipt.data?.id,
+                externalDocumentId: receipt.data?.externalDocumentId,
+                documentLineReference: journalReference.to.receipt(
+                  receiptLine.lineId!
+                ),
+                journalLineReference,
+              });
 
-            // creidt the direct cost applied account
-            journalLineInserts.push({
-              accountNumber: postingGroupInventory.directCostAppliedAccount,
-              description: "Direct Cost Applied",
-              amount: credit("expense", value),
-              quantity: quantityToReverse,
-              documentType: "Receipt",
-              documentId: receipt.data?.id,
-              externalDocumentId: receipt.data?.externalDocumentId,
-              documentLineReference: journalReference.to.receipt(
-                receiptLine.lineId!
-              ),
-              journalLineReference,
-            });
+              // creidt the direct cost applied account
+              journalLineInserts.push({
+                accountNumber: postingGroupInventory.directCostAppliedAccount,
+                description: "Direct Cost Applied",
+                amount: credit("expense", value),
+                quantity: quantityToReverse,
+                documentType: "Receipt",
+                documentId: receipt.data?.id,
+                externalDocumentId: receipt.data?.externalDocumentId,
+                documentLineReference: journalReference.to.receipt(
+                  receiptLine.lineId!
+                ),
+                journalLineReference,
+              });
+            } else {
+              // debit the overhead account
+              journalLineInserts.push({
+                accountNumber: postingGroupInventory.overheadAccount,
+                description: "Overhead Account",
+                amount: debit("asset", value),
+                quantity: quantityToReverse,
+                documentType: "Receipt",
+                documentId: receipt.data?.id,
+                externalDocumentId: receipt.data?.externalDocumentId,
+                documentLineReference: journalReference.to.receipt(
+                  receiptLine.lineId!
+                ),
+                journalLineReference,
+              });
+
+              // creidt the overhead cost applied account
+              journalLineInserts.push({
+                accountNumber: postingGroupInventory.overheadCostAppliedAccount,
+                description: "Overhead Cost Applied",
+                amount: credit("expense", value),
+                quantity: quantityToReverse,
+                documentType: "Receipt",
+                documentId: receipt.data?.id,
+                externalDocumentId: receipt.data?.externalDocumentId,
+                documentLineReference: journalReference.to.receipt(
+                  receiptLine.lineId!
+                ),
+                journalLineReference,
+              });
+            }
 
             journalLineReference = nanoid();
 
@@ -518,17 +553,19 @@ serve(async (req: Request) => {
             });
           }
 
-          partLedgerInserts.push({
-            postingDate: today,
-            partId: receiptLine.partId,
-            quantity: receiptLine.receivedQuantity,
-            locationId: receiptLine.locationId,
-            shelfId: receiptLine.shelfId,
-            entryType: "Positive Adjmt.",
-            documentType: "Purchase Receipt",
-            documentId: receipt.data?.id ?? undefined,
-            externalDocumentId: receipt.data?.externalDocumentId ?? undefined,
-          });
+          if (partType === "Inventory") {
+            partLedgerInserts.push({
+              postingDate: today,
+              partId: receiptLine.partId,
+              quantity: receiptLine.receivedQuantity,
+              locationId: receiptLine.locationId,
+              shelfId: receiptLine.shelfId,
+              entryType: "Positive Adjmt.",
+              documentType: "Purchase Receipt",
+              documentId: receipt.data?.id ?? undefined,
+              externalDocumentId: receipt.data?.externalDocumentId ?? undefined,
+            });
+          }
         }
 
         const accountingPeriodId = await getCurrentAccountingPeriod(client, db);
