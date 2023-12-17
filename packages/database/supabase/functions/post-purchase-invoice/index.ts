@@ -40,41 +40,59 @@ serve(async (req: Request) => {
     if (purchaseInvoiceLines.error)
       throw new Error("Failed to fetch receipt lines");
 
-    const [partGroups, purchaseOrderLines, supplier] = await Promise.all([
-      client
-        .from("part")
-        .select("id, partGroupId")
-        .in(
-          "id",
-          purchaseInvoiceLines.data.reduce<string[]>((acc, invoiceLine) => {
-            if (invoiceLine.partId && !acc.includes(invoiceLine.partId)) {
-              acc.push(invoiceLine.partId);
-            }
-            return acc;
-          }, [])
-        ),
-      client
-        .from("purchaseOrderLine")
-        .select("*")
-        .in(
-          "id",
-          purchaseInvoiceLines.data.reduce<string[]>((acc, invoiceLine) => {
-            if (
-              invoiceLine.purchaseOrderLineId &&
-              !acc.includes(invoiceLine.purchaseOrderLineId)
-            ) {
-              acc.push(invoiceLine.purchaseOrderLineId);
-            }
-            return acc;
-          }, [])
-        ),
-      client
-        .from("supplier")
-        .select("*")
-        .eq("id", purchaseInvoice.data.supplierId ?? "")
-        .single(),
-    ]);
+    const [partGroups, servicePartGroups, purchaseOrderLines, supplier] =
+      await Promise.all([
+        client
+          .from("part")
+          .select("id, partGroupId")
+          .in(
+            "id",
+            purchaseInvoiceLines.data.reduce<string[]>((acc, invoiceLine) => {
+              if (invoiceLine.partId && !acc.includes(invoiceLine.partId)) {
+                acc.push(invoiceLine.partId);
+              }
+              return acc;
+            }, [])
+          ),
+        client
+          .from("service")
+          .select("id, partGroupId")
+          .in(
+            "id",
+            purchaseInvoiceLines.data.reduce<string[]>((acc, invoiceLine) => {
+              if (
+                invoiceLine.serviceId &&
+                !acc.includes(invoiceLine.serviceId)
+              ) {
+                acc.push(invoiceLine.serviceId);
+              }
+              return acc;
+            }, [])
+          ),
+        client
+          .from("purchaseOrderLine")
+          .select("*")
+          .in(
+            "id",
+            purchaseInvoiceLines.data.reduce<string[]>((acc, invoiceLine) => {
+              if (
+                invoiceLine.purchaseOrderLineId &&
+                !acc.includes(invoiceLine.purchaseOrderLineId)
+              ) {
+                acc.push(invoiceLine.purchaseOrderLineId);
+              }
+              return acc;
+            }, [])
+          ),
+        client
+          .from("supplier")
+          .select("*")
+          .eq("id", purchaseInvoice.data.supplierId ?? "")
+          .single(),
+      ]);
     if (partGroups.error) throw new Error("Failed to fetch part groups");
+    if (servicePartGroups.error)
+      throw new Error("Failed to fetch service part groups");
     if (purchaseOrderLines.error)
       throw new Error("Failed to fetch purchase order lines");
     if (supplier.error) throw new Error("Failed to fetch supplier");
@@ -207,6 +225,30 @@ serve(async (req: Request) => {
     > = {};
 
     for await (const invoiceLine of purchaseInvoiceLines.data) {
+      // declaring shared variables between part and service cases
+      // outside of the switch case to avoid redeclaring them
+      let postingGroupInventory:
+        | Database["public"]["Tables"]["postingGroupInventory"]["Row"]
+        | null = null;
+
+      let partGroupId: string | null = null;
+
+      // purchasing posting group
+      const purchasingPostingGroups: Record<
+        string,
+        Database["public"]["Tables"]["postingGroupPurchasing"]["Row"] | null
+      > = {};
+
+      let postingGroupPurchasing:
+        | Database["public"]["Tables"]["postingGroupPurchasing"]["Row"]
+        | null = null;
+
+      const locationId = invoiceLine.locationId ?? null;
+      const supplierTypeId: string | null =
+        supplier.data.supplierTypeId ?? null;
+
+      let journalLineReference: string;
+
       switch (invoiceLine.invoiceLineType) {
         case "G/L Account":
           const [account, accountDefaults] = await Promise.all([
@@ -230,7 +272,7 @@ serve(async (req: Request) => {
           if (accountDefaults.error || !accountDefaults.data)
             throw new Error("Failed to fetch account defaults");
 
-          let journalLineReference = nanoid();
+          journalLineReference = nanoid();
 
           // debit the G/L account
           journalLineInserts.push({
@@ -307,18 +349,11 @@ serve(async (req: Request) => {
             journalLineReference,
           });
           break;
-        case "Part":
-          let postingGroupInventory:
-            | Database["public"]["Tables"]["postingGroupInventory"]["Row"]
-            | null = null;
-
-          const partGroupId: string | null =
-            partGroups.data.find(
-              (partGroup) => partGroup.id === invoiceLine.partId
+        case "Service":
+          partGroupId =
+            servicePartGroups.data.find(
+              (partGroup) => partGroup.id === invoiceLine.serviceId
             )?.partGroupId ?? null;
-          const locationId = invoiceLine.locationId ?? null;
-          const supplierTypeId: string | null =
-            supplier.data.supplierTypeId ?? null;
 
           // inventory posting group
           if (`${partGroupId}-${locationId}` in inventoryPostingGroups) {
@@ -346,15 +381,149 @@ serve(async (req: Request) => {
             throw new Error("No inventory posting group found");
           }
 
-          // purchasing posting group
-          const purchasingPostingGroups: Record<
-            string,
-            Database["public"]["Tables"]["postingGroupPurchasing"]["Row"] | null
-          > = {};
+          if (`${partGroupId}-${supplierTypeId}` in purchasingPostingGroups) {
+            postingGroupPurchasing =
+              purchasingPostingGroups[`${partGroupId}-${supplierTypeId}`];
+          } else {
+            const purchasingPostingGroup = await getPurchasingPostingGroup(
+              client,
+              {
+                partGroupId,
+                supplierTypeId,
+              }
+            );
 
-          let postingGroupPurchasing:
-            | Database["public"]["Tables"]["postingGroupPurchasing"]["Row"]
-            | null = null;
+            if (purchasingPostingGroup.error || !purchasingPostingGroup.data) {
+              throw new Error("Error getting purchasing posting group");
+            }
+
+            postingGroupPurchasing = purchasingPostingGroup.data ?? null;
+            purchasingPostingGroups[`${partGroupId}-${supplierTypeId}`] =
+              postingGroupPurchasing;
+          }
+
+          if (!postingGroupPurchasing) {
+            throw new Error("No purchasing posting group found");
+          }
+
+          if (
+            invoiceLine.purchaseOrderLineId !== null &&
+            invoiceLine.purchaseOrderLineId in purchaseOrderLineUpdates
+          ) {
+            // we don't receive services, so match the received to the invoiced
+            const update =
+              purchaseOrderLineUpdates[invoiceLine.purchaseOrderLineId];
+            purchaseOrderLineUpdates[invoiceLine.purchaseOrderLineId] = {
+              ...update,
+              receivedComplete: update.invoicedComplete,
+              quantityReceived: update.quantityInvoiced,
+            };
+          }
+
+          // create the normal GL entries for a service
+
+          journalLineReference = nanoid();
+
+          // debit the inventory account
+          journalLineInserts.push({
+            accountNumber: postingGroupInventory.overheadAccount,
+            description: "Overhead Account",
+            amount: debit(
+              "expense",
+              invoiceLine.quantity * invoiceLine.unitPrice
+            ),
+            quantity: invoiceLine.quantity,
+            documentType: "Invoice",
+            documentId: purchaseInvoice.data?.id,
+            externalDocumentId: purchaseInvoice.data?.supplierReference,
+            journalLineReference,
+          });
+
+          // creidt the direct cost applied account
+          journalLineInserts.push({
+            accountNumber: postingGroupInventory.overheadCostAppliedAccount,
+            description: "Over Cost Applied",
+            amount: credit(
+              "expense",
+              invoiceLine.quantity * invoiceLine.unitPrice
+            ),
+            quantity: invoiceLine.quantity,
+            documentType: "Invoice",
+            documentId: purchaseInvoice.data?.id,
+            externalDocumentId: purchaseInvoice.data?.supplierReference,
+            journalLineReference,
+          });
+
+          journalLineReference = nanoid();
+
+          // debit the purchase account
+          journalLineInserts.push({
+            accountNumber: postingGroupPurchasing.purchaseAccount,
+            description: "Purchase Account",
+            amount: debit(
+              "expense",
+              invoiceLine.quantity * invoiceLine.unitPrice
+            ),
+            quantity: invoiceLine.quantity,
+            documentType: "Invoice",
+            documentId: purchaseInvoice.data?.id,
+            externalDocumentId: purchaseInvoice.data?.supplierReference,
+            documentLineReference: journalReference.to.purchaseInvoice(
+              invoiceLine.purchaseOrderLineId!
+            ),
+            journalLineReference,
+          });
+
+          // credit the accounts payable account
+          journalLineInserts.push({
+            accountNumber: postingGroupPurchasing.payablesAccount,
+            description: "Accounts Payable",
+            amount: credit(
+              "liability",
+              invoiceLine.quantity * invoiceLine.unitPrice
+            ),
+            quantity: invoiceLine.quantity,
+            documentType: "Invoice",
+            documentId: purchaseInvoice.data?.id,
+            externalDocumentId: purchaseInvoice.data?.supplierReference,
+            documentLineReference: journalReference.to.purchaseInvoice(
+              invoiceLine.purchaseOrderLineId!
+            ),
+            journalLineReference,
+          });
+
+          break;
+        case "Part":
+          partGroupId =
+            partGroups.data.find(
+              (partGroup) => partGroup.id === invoiceLine.partId
+            )?.partGroupId ?? null;
+
+          // inventory posting group
+          if (`${partGroupId}-${locationId}` in inventoryPostingGroups) {
+            postingGroupInventory =
+              inventoryPostingGroups[`${partGroupId}-${locationId}`];
+          } else {
+            const inventoryPostingGroup = await getInventoryPostingGroup(
+              client,
+              {
+                partGroupId,
+                locationId,
+              }
+            );
+
+            if (inventoryPostingGroup.error || !inventoryPostingGroup.data) {
+              throw new Error("Error getting inventory posting group");
+            }
+
+            postingGroupInventory = inventoryPostingGroup.data ?? null;
+            inventoryPostingGroups[`${partGroupId}-${locationId}`] =
+              postingGroupInventory;
+          }
+
+          if (!postingGroupInventory) {
+            throw new Error("No inventory posting group found");
+          }
 
           if (`${partGroupId}-${supplierTypeId}` in purchasingPostingGroups) {
             postingGroupPurchasing =
@@ -426,9 +595,9 @@ serve(async (req: Request) => {
               costPostedToGL: invoiceLine.quantity * invoiceLine.unitPrice,
             });
 
-            // create the normal GL entries
+            // create the normal GL entries for a part
 
-            let journalLineReference = nanoid();
+            journalLineReference = nanoid();
 
             // debit the inventory account
             journalLineInserts.push({
@@ -578,7 +747,7 @@ serve(async (req: Request) => {
                   );
 
                   if (quantityToReverseForEntry > 0) {
-                    const journalLineReference = nanoid();
+                    journalLineReference = nanoid();
 
                     // create the reversal entries
                     journalLineInserts.push({
@@ -655,7 +824,7 @@ serve(async (req: Request) => {
 
               // create the normal GL entries
 
-              let journalLineReference = nanoid();
+              journalLineReference = nanoid();
 
               // debit the inventory account
               journalLineInserts.push({
@@ -736,7 +905,7 @@ serve(async (req: Request) => {
               // create the accrual entries for invoiced not received
               const quantityToAccrue = invoiceLine.quantity - quantityToReverse;
 
-              const journalLineReference = nanoid();
+              journalLineReference = nanoid();
 
               // debit the inventory invoiced not received account
               journalLineInserts.push({
@@ -873,16 +1042,23 @@ serve(async (req: Request) => {
       for await (const purchaseOrderId of purchaseOrdersUpdated) {
         const purchaseOrderLines = await trx
           .selectFrom("purchaseOrderLine")
-          .select(["id", "invoicedComplete", "receivedComplete"])
+          .select([
+            "id",
+            "purchaseOrderLineType",
+            "invoicedComplete",
+            "receivedComplete",
+          ])
           .where("purchaseOrderId", "=", purchaseOrderId)
           .execute();
 
         const areAllLinesInvoiced = purchaseOrderLines.every(
-          (line) => line.invoicedComplete
+          (line) =>
+            line.purchaseOrderLineType === "Comment" || line.invoicedComplete
         );
 
         const areAllLinesReceived = purchaseOrderLines.every(
-          (line) => line.receivedComplete
+          (line) =>
+            line.purchaseOrderLineType === "Comment" || line.receivedComplete
         );
 
         let status: Database["public"]["Tables"]["purchaseOrder"]["Row"]["status"] =
