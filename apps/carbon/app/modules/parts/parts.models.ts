@@ -2,6 +2,32 @@ import { withZod } from "@remix-validated-form/with-zod";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 
+export const partTypes = ["Inventory", "Non-Inventory"] as const;
+export const partReplenishmentSystems = [
+  "Buy",
+  "Make",
+  "Buy and Make",
+] as const;
+export const partCostingMethods = [
+  "Standard",
+  "Average",
+  "FIFO",
+  "LIFO",
+] as const;
+export const partReorderingPolicies = [
+  "Manual Reorder",
+  "Demand-Based Reorder",
+  "Fixed Reorder Quantity",
+  "Maximum Quantity",
+] as const;
+
+export const partManufacturingPolicies = [
+  "Make to Stock",
+  "Make to Order",
+] as const;
+
+export const serviceType = ["Internal", "External"] as const;
+
 export const partValidator = withZod(
   z.object({
     id: z.string().min(1, { message: "Part ID is required" }).max(255),
@@ -9,13 +35,13 @@ export const partValidator = withZod(
     description: zfd.text(z.string().optional()),
     blocked: zfd.checkbox(),
     active: zfd.checkbox(),
-    replenishmentSystem: z.enum(["Buy", "Make", "Buy and Make"], {
+    replenishmentSystem: z.enum(partReplenishmentSystems, {
       errorMap: (issue, ctx) => ({
         message: "Replenishment system is required",
       }),
     }),
     partGroupId: z.string().optional(),
-    partType: z.enum(["Inventory", "Non-Inventory", "Service"], {
+    partType: z.enum(partTypes, {
       errorMap: (issue, ctx) => ({
         message: "Part type is required",
       }),
@@ -29,7 +55,7 @@ export const partValidator = withZod(
 export const partCostValidator = withZod(
   z.object({
     partId: z.string().min(1, { message: "Part ID is required" }),
-    costingMethod: z.enum(["Standard", "Average", "FIFO", "LIFO"], {
+    costingMethod: z.enum(partCostingMethods, {
       errorMap: (issue, ctx) => ({
         message: "Costing method is required",
       }),
@@ -60,7 +86,7 @@ export const partInventoryValidator = withZod(
 export const partManufacturingValidator = withZod(
   z.object({
     partId: z.string().min(1, { message: "Part ID is required" }),
-    manufacturingPolicy: z.enum(["Make to Order", "Make to Stock"], {
+    manufacturingPolicy: z.enum(partManufacturingPolicies, {
       errorMap: (issue, ctx) => ({
         message: "Manufacturing policy is required",
       }),
@@ -77,19 +103,11 @@ export const partPlanningValidator = withZod(
   z.object({
     partId: z.string().min(1, { message: "Part ID is required" }),
     locationId: z.string().min(20, { message: "Location is required" }),
-    reorderingPolicy: z.enum(
-      [
-        "Manual Reorder",
-        "Demand-Based Reorder",
-        "Fixed Reorder Quantity",
-        "Maximum Quantity",
-      ],
-      {
-        errorMap: (issue, ctx) => ({
-          message: "Reordering policy is required",
-        }),
-      }
-    ),
+    reorderingPolicy: z.enum(partReorderingPolicies, {
+      errorMap: (issue, ctx) => ({
+        message: "Reordering policy is required",
+      }),
+    }),
     critical: zfd.checkbox(),
     safetyStockQuantity: zfd.numeric(z.number().min(0)),
     safetyStockLeadTime: zfd.numeric(z.number().min(0)),
@@ -139,6 +157,31 @@ export const partUnitSalePriceValidator = withZod(
     salesBlocked: zfd.checkbox(),
     priceIncludesTax: zfd.checkbox(),
     allowInvoiceDiscount: zfd.checkbox(),
+  })
+);
+
+export const serviceValidator = withZod(
+  z.object({
+    id: z.string().min(1, { message: "Service ID is required" }).max(255),
+    name: z.string().min(1, { message: "Name is required" }).max(255),
+    description: z.string().optional(),
+    partGroupId: zfd.text(z.string().optional()),
+    serviceType: z.enum(serviceType, {
+      errorMap: (issue, ctx) => ({
+        message: "Service type is required",
+      }),
+    }),
+    blocked: zfd.checkbox(),
+    active: zfd.checkbox(),
+  })
+);
+
+export const serviceSupplierValidator = withZod(
+  z.object({
+    id: zfd.text(z.string().optional()),
+    serviceId: z.string().min(1, { message: "Part ID is required" }),
+    supplierId: z.string().min(36, { message: "Supplier ID is required" }),
+    supplierServiceId: z.string().optional(),
   })
 );
 

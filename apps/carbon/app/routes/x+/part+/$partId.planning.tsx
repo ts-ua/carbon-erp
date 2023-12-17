@@ -3,7 +3,6 @@ import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import { useRouteData } from "~/hooks";
-import type { PartReorderingPolicy } from "~/modules/parts";
 import {
   PartPlanningForm,
   getPartPlanning,
@@ -137,7 +136,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function PartPlanningRoute() {
   const sharedPartsData = useRouteData<{
-    partReorderingPolicies: PartReorderingPolicy[];
     locations: ListItem[];
   }>(path.to.partRoot);
 
@@ -149,7 +147,6 @@ export default function PartPlanningRoute() {
     <PartPlanningForm
       initialValues={partPlanning}
       locations={sharedPartsData.locations ?? []}
-      partReorderingPolicies={sharedPartsData.partReorderingPolicies}
     />
   );
 }

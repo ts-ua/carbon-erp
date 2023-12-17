@@ -53,7 +53,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 export default function NewPartSupplierRoute() {
   const { partId } = useParams();
 
-  if (!partId) throw new Error("Could not find purchase order id");
+  if (!partId) throw new Error("partId not found");
 
   const initialValues = {
     partId: partId,

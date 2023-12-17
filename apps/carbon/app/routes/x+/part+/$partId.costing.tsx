@@ -2,12 +2,10 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
-import { useRouteData } from "~/hooks";
 import { getAccountsList } from "~/modules/accounting";
-import type { PartCostingMethod } from "~/modules/parts";
 import {
-  getPartCost,
   PartCostingForm,
+  getPartCost,
   partCostValidator,
   upsertPartCost,
 } from "~/modules/parts";
@@ -87,15 +85,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function PartCostingRoute() {
-  const sharedPartsData = useRouteData<{
-    partCostingMethods: PartCostingMethod[];
-  }>(path.to.partRoot);
-
   const { partCost } = useLoaderData<typeof loader>();
-  return (
-    <PartCostingForm
-      initialValues={partCost}
-      partCostingMethods={sharedPartsData?.partCostingMethods ?? []}
-    />
-  );
+  return <PartCostingForm initialValues={partCost} />;
 }

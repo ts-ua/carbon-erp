@@ -10,19 +10,14 @@ import {
 import { ValidatedForm } from "remix-validated-form";
 import { Boolean, Hidden, Number, Select, Submit } from "~/components/Form";
 import { usePermissions } from "~/hooks";
-import type { PartCostingMethod } from "~/modules/parts";
-import { partCostValidator } from "~/modules/parts";
+import { partCostValidator, partCostingMethods } from "~/modules/parts";
 import type { TypeOfValidator } from "~/types/validators";
 
 type PartCostingFormProps = {
   initialValues: TypeOfValidator<typeof partCostValidator>;
-  partCostingMethods: PartCostingMethod[];
 };
 
-const PartCostingForm = ({
-  initialValues,
-  partCostingMethods,
-}: PartCostingFormProps) => {
+const PartCostingForm = ({ initialValues }: PartCostingFormProps) => {
   const permissions = usePermissions();
 
   const partCostingMethodOptions = partCostingMethods.map(

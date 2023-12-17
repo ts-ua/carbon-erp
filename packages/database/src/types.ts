@@ -2873,14 +2873,15 @@ export interface Database {
           createdAt: string
           description: string | null
           documentId: string | null
+          documentLineReference: string | null
           documentType:
             | Database["public"]["Enums"]["journalLineDocumentType"]
             | null
           externalDocumentId: string | null
           id: string
           journalId: number
+          journalLineReference: string
           quantity: number
-          reference: string | null
         }
         Insert: {
           accountNumber: string
@@ -2889,14 +2890,15 @@ export interface Database {
           createdAt?: string
           description?: string | null
           documentId?: string | null
+          documentLineReference?: string | null
           documentType?:
             | Database["public"]["Enums"]["journalLineDocumentType"]
             | null
           externalDocumentId?: string | null
           id?: string
           journalId: number
+          journalLineReference: string
           quantity?: number
-          reference?: string | null
         }
         Update: {
           accountNumber?: string
@@ -2905,14 +2907,15 @@ export interface Database {
           createdAt?: string
           description?: string | null
           documentId?: string | null
+          documentLineReference?: string | null
           documentType?:
             | Database["public"]["Enums"]["journalLineDocumentType"]
             | null
           externalDocumentId?: string | null
           id?: string
           journalId?: number
+          journalLineReference?: string
           quantity?: number
-          reference?: string | null
         }
         Relationships: [
           {
@@ -3166,6 +3169,12 @@ export interface Database {
             columns: ["partGroupId"]
             referencedRelation: "partGroup"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "part_partGroupId_fkey"
+            columns: ["partGroupId"]
+            referencedRelation: "services"
+            referencedColumns: ["partGroupId"]
           },
           {
             foreignKeyName: "part_unitOfMeasureCode_fkey"
@@ -4404,6 +4413,12 @@ export interface Database {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "postingGroupInventory_partGroupId_fkey"
+            columns: ["partGroupId"]
+            referencedRelation: "services"
+            referencedColumns: ["partGroupId"]
+          },
+          {
             foreignKeyName: "postingGroupInventory_purchaseVarianceAccount_fkey"
             columns: ["purchaseVarianceAccount"]
             referencedRelation: "account"
@@ -4484,6 +4499,12 @@ export interface Database {
             columns: ["partGroupId"]
             referencedRelation: "partGroup"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "postingGroupPurchasing_partGroupId_fkey"
+            columns: ["partGroupId"]
+            referencedRelation: "services"
+            referencedColumns: ["partGroupId"]
           },
           {
             foreignKeyName: "postingGroupPurchasing_payablesAccount_fkey"
@@ -4626,6 +4647,12 @@ export interface Database {
             columns: ["partGroupId"]
             referencedRelation: "partGroup"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "postingGroupSales_partGroupId_fkey"
+            columns: ["partGroupId"]
+            referencedRelation: "services"
+            referencedColumns: ["partGroupId"]
           },
           {
             foreignKeyName: "postingGroupSales_receivablesAccount_fkey"
@@ -4920,6 +4947,7 @@ export interface Database {
           purchaseOrderId: string | null
           purchaseOrderLineId: string | null
           quantity: number
+          serviceId: string | null
           shelfId: string | null
           totalAmount: number | null
           unitOfMeasureCode: string | null
@@ -4943,6 +4971,7 @@ export interface Database {
           purchaseOrderId?: string | null
           purchaseOrderLineId?: string | null
           quantity?: number
+          serviceId?: string | null
           shelfId?: string | null
           totalAmount?: number | null
           unitOfMeasureCode?: string | null
@@ -4966,6 +4995,7 @@ export interface Database {
           purchaseOrderId?: string | null
           purchaseOrderLineId?: string | null
           quantity?: number
+          serviceId?: string | null
           shelfId?: string | null
           totalAmount?: number | null
           unitOfMeasureCode?: string | null
@@ -5068,6 +5098,18 @@ export interface Database {
             foreignKeyName: "purchaseInvoiceLines_purchaseOrderLineId_fkey"
             columns: ["purchaseOrderLineId"]
             referencedRelation: "purchaseOrderLine"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchaseInvoiceLines_serviceId_fkey"
+            columns: ["serviceId"]
+            referencedRelation: "service"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchaseInvoiceLines_serviceId_fkey"
+            columns: ["serviceId"]
+            referencedRelation: "services"
             referencedColumns: ["id"]
           },
           {
@@ -5542,6 +5584,7 @@ export interface Database {
           quantityToReceive: number | null
           receivedComplete: boolean
           requiresInspection: boolean
+          serviceId: string | null
           setupPrice: number | null
           shelfId: string | null
           unitOfMeasureCode: string | null
@@ -5568,6 +5611,7 @@ export interface Database {
           quantityToReceive?: number | null
           receivedComplete?: boolean
           requiresInspection?: boolean
+          serviceId?: string | null
           setupPrice?: number | null
           shelfId?: string | null
           unitOfMeasureCode?: string | null
@@ -5594,6 +5638,7 @@ export interface Database {
           quantityToReceive?: number | null
           receivedComplete?: boolean
           requiresInspection?: boolean
+          serviceId?: string | null
           setupPrice?: number | null
           shelfId?: string | null
           unitOfMeasureCode?: string | null
@@ -5654,6 +5699,18 @@ export interface Database {
             foreignKeyName: "purchaseOrderLine_purchaseOrderId_fkey"
             columns: ["purchaseOrderId"]
             referencedRelation: "purchaseOrders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_serviceId_fkey"
+            columns: ["serviceId"]
+            referencedRelation: "service"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_serviceId_fkey"
+            columns: ["serviceId"]
+            referencedRelation: "services"
             referencedColumns: ["id"]
           },
           {
@@ -6328,6 +6385,212 @@ export interface Database {
           },
           {
             foreignKeyName: "sequence_updatedBy_fkey"
+            columns: ["updatedBy"]
+            referencedRelation: "userDefaults"
+            referencedColumns: ["userId"]
+          }
+        ]
+      }
+      service: {
+        Row: {
+          active: boolean
+          approved: boolean
+          approvedBy: string | null
+          blocked: boolean
+          createdAt: string
+          createdBy: string
+          description: string | null
+          fromDate: string | null
+          id: string
+          name: string
+          partGroupId: string | null
+          serviceType: Database["public"]["Enums"]["serviceType"]
+          toDate: string | null
+          updatedAt: string | null
+          updatedBy: string | null
+        }
+        Insert: {
+          active?: boolean
+          approved?: boolean
+          approvedBy?: string | null
+          blocked?: boolean
+          createdAt?: string
+          createdBy: string
+          description?: string | null
+          fromDate?: string | null
+          id: string
+          name: string
+          partGroupId?: string | null
+          serviceType: Database["public"]["Enums"]["serviceType"]
+          toDate?: string | null
+          updatedAt?: string | null
+          updatedBy?: string | null
+        }
+        Update: {
+          active?: boolean
+          approved?: boolean
+          approvedBy?: string | null
+          blocked?: boolean
+          createdAt?: string
+          createdBy?: string
+          description?: string | null
+          fromDate?: string | null
+          id?: string
+          name?: string
+          partGroupId?: string | null
+          serviceType?: Database["public"]["Enums"]["serviceType"]
+          toDate?: string | null
+          updatedAt?: string | null
+          updatedBy?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_approvedBy_fkey"
+            columns: ["approvedBy"]
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_approvedBy_fkey"
+            columns: ["approvedBy"]
+            referencedRelation: "userDefaults"
+            referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "service_createdBy_fkey"
+            columns: ["createdBy"]
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_createdBy_fkey"
+            columns: ["createdBy"]
+            referencedRelation: "userDefaults"
+            referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "service_partGroupId_fkey"
+            columns: ["partGroupId"]
+            referencedRelation: "partGroup"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_partGroupId_fkey"
+            columns: ["partGroupId"]
+            referencedRelation: "services"
+            referencedColumns: ["partGroupId"]
+          },
+          {
+            foreignKeyName: "service_updatedBy_fkey"
+            columns: ["updatedBy"]
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_updatedBy_fkey"
+            columns: ["updatedBy"]
+            referencedRelation: "userDefaults"
+            referencedColumns: ["userId"]
+          }
+        ]
+      }
+      serviceSupplier: {
+        Row: {
+          active: boolean
+          createdAt: string
+          createdBy: string
+          id: string
+          serviceId: string
+          supplierId: string
+          supplierServiceId: string | null
+          updatedAt: string | null
+          updatedBy: string | null
+        }
+        Insert: {
+          active?: boolean
+          createdAt?: string
+          createdBy: string
+          id?: string
+          serviceId: string
+          supplierId: string
+          supplierServiceId?: string | null
+          updatedAt?: string | null
+          updatedBy?: string | null
+        }
+        Update: {
+          active?: boolean
+          createdAt?: string
+          createdBy?: string
+          id?: string
+          serviceId?: string
+          supplierId?: string
+          supplierServiceId?: string | null
+          updatedAt?: string | null
+          updatedBy?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "serviceSupplier_createdBy_fkey"
+            columns: ["createdBy"]
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "serviceSupplier_createdBy_fkey"
+            columns: ["createdBy"]
+            referencedRelation: "userDefaults"
+            referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "serviceSupplier_serviceId_fkey"
+            columns: ["serviceId"]
+            referencedRelation: "service"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "serviceSupplier_serviceId_fkey"
+            columns: ["serviceId"]
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "serviceSupplier_supplierId_fkey"
+            columns: ["supplierId"]
+            referencedRelation: "supplier"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "serviceSupplier_supplierId_fkey"
+            columns: ["supplierId"]
+            referencedRelation: "contractors"
+            referencedColumns: ["supplierId"]
+          },
+          {
+            foreignKeyName: "serviceSupplier_supplierId_fkey"
+            columns: ["supplierId"]
+            referencedRelation: "partners"
+            referencedColumns: ["supplierId"]
+          },
+          {
+            foreignKeyName: "serviceSupplier_supplierId_fkey"
+            columns: ["supplierId"]
+            referencedRelation: "purchaseOrderSuppliers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "serviceSupplier_supplierId_fkey"
+            columns: ["supplierId"]
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "serviceSupplier_updatedBy_fkey"
+            columns: ["updatedBy"]
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "serviceSupplier_updatedBy_fkey"
             columns: ["updatedBy"]
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
@@ -8296,6 +8559,12 @@ export interface Database {
             columns: ["partGroupId"]
             referencedRelation: "partGroup"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "part_partGroupId_fkey"
+            columns: ["partGroupId"]
+            referencedRelation: "services"
+            referencedColumns: ["partGroupId"]
           }
         ]
       }
@@ -8605,6 +8874,20 @@ export interface Database {
           }
         ]
       }
+      services: {
+        Row: {
+          active: boolean | null
+          blocked: boolean | null
+          description: string | null
+          id: string | null
+          name: string | null
+          partGroup: string | null
+          partGroupId: string | null
+          serviceType: Database["public"]["Enums"]["serviceType"] | null
+          supplierIds: string[] | null
+        }
+        Relationships: []
+      }
       suppliers: {
         Row: {
           id: string | null
@@ -8901,8 +9184,13 @@ export interface Database {
         | "Fixed Reorder Quantity"
         | "Maximum Quantity"
       partReplenishmentSystem: "Buy" | "Make" | "Buy and Make"
-      partType: "Inventory" | "Non-Inventory" | "Service"
-      payableLineType: "G/L Account" | "Part" | "Fixed Asset" | "Comment"
+      partType: "Inventory" | "Non-Inventory"
+      payableLineType:
+        | "G/L Account"
+        | "Part"
+        | "Service"
+        | "Fixed Asset"
+        | "Comment"
       paymentTermCalculationMethod: "Net" | "End of Month" | "Day of Month"
       purchaseInvoiceStatus:
         | "Draft"
@@ -8914,7 +9202,12 @@ export interface Database {
         | "Partially Paid"
         | "Overdue"
         | "Voided"
-      purchaseOrderLineType: "Comment" | "G/L Account" | "Part" | "Fixed Asset"
+      purchaseOrderLineType:
+        | "Comment"
+        | "G/L Account"
+        | "Part"
+        | "Service"
+        | "Fixed Asset"
       purchaseOrderStatus:
         | "Draft"
         | "To Review"
@@ -8954,6 +9247,7 @@ export interface Database {
         | "Purchase Order"
         | "Sales Order"
         | "Document"
+      serviceType: "Internal" | "External"
       shippingCarrier: "UPS" | "FedEx" | "USPS" | "DHL" | "Other"
       supplierLedgerDocumentType:
         | "Payment"

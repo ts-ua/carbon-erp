@@ -10,18 +10,18 @@ import {
 import { ValidatedForm } from "remix-validated-form";
 import { Boolean, Hidden, Number, Select, Submit } from "~/components/Form";
 import { usePermissions } from "~/hooks";
-import type { PartManufacturingPolicy } from "~/modules/parts";
-import { partManufacturingValidator } from "~/modules/parts";
+import {
+  partManufacturingPolicies,
+  partManufacturingValidator,
+} from "~/modules/parts";
 import type { TypeOfValidator } from "~/types/validators";
 
 type PartManufacturingFormProps = {
   initialValues: TypeOfValidator<typeof partManufacturingValidator>;
-  partManufacturingPolicies: PartManufacturingPolicy[];
 };
 
 const PartManufacturingForm = ({
   initialValues,
-  partManufacturingPolicies,
 }: PartManufacturingFormProps) => {
   const permissions = usePermissions();
 
