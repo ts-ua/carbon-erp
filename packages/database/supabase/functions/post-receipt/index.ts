@@ -546,16 +546,23 @@ serve(async (req: Request) => {
 
           const purchaseOrderLines = await trx
             .selectFrom("purchaseOrderLine")
-            .select(["id", "invoicedComplete", "receivedComplete"])
+            .select([
+              "id",
+              "purchaseOrderLineType",
+              "invoicedComplete",
+              "receivedComplete",
+            ])
             .where("purchaseOrderId", "=", purchaseOrder.data.id)
             .execute();
 
           const areAllLinesInvoiced = purchaseOrderLines.every(
-            (line) => line.invoicedComplete
+            (line) =>
+              line.purchaseOrderLineType === "Comment" || line.invoicedComplete
           );
 
           const areAllLinesReceived = purchaseOrderLines.every(
-            (line) => line.receivedComplete
+            (line) =>
+              line.purchaseOrderLineType === "Comment" || line.receivedComplete
           );
 
           let status: Database["public"]["Tables"]["purchaseOrder"]["Row"]["status"] =
