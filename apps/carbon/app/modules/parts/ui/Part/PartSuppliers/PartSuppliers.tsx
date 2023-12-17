@@ -73,7 +73,7 @@ const PartSuppliers = ({ partSuppliers }: PartSuppliersProps) => {
       },
       {
         accessorKey: "supplierPartId",
-        header: "Part ID",
+        header: "Supplier ID",
         cell: (item) => item.getValue(),
       },
       {

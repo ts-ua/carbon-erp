@@ -4,6 +4,7 @@ import { zfd } from "zod-form-data";
 
 export const purchaseInvoiceLineType = [
   "Part",
+  "Service",
   "G/L Account",
   "Fixed Asset",
   "Comment",
@@ -51,6 +52,7 @@ export const purchaseInvoiceLineValidator = withZod(
       purchaseOrderId: zfd.text(z.string().optional()),
       purchaseOrderLineId: zfd.text(z.string().optional()),
       partId: zfd.text(z.string().optional()),
+      serviceId: zfd.text(z.string().optional()),
       accountNumber: zfd.text(z.string().optional()),
       assetId: zfd.text(z.string().optional()),
       description: zfd.text(z.string().optional()),

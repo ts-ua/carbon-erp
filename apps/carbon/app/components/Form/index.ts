@@ -29,6 +29,7 @@ import RichText from "./RichText";
 import Select from "./Select";
 import SelectControlled from "./SelectControlled";
 import Sequence from "./Sequence";
+import Service from "./Service";
 import Slider from "./Slider";
 import Submit from "./Submit";
 import Supplier from "./Supplier";
@@ -72,6 +73,7 @@ export {
   Select,
   SelectControlled,
   Sequence,
+  Service,
   Slider,
   Submit,
   Supplier,

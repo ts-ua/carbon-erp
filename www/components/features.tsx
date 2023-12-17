@@ -48,7 +48,7 @@ function Features({ showIcons = false }) {
       <div className="grid grid-cols-1 gap-6 my-12 sm:grid-cols-2 md:grid-cols-3 ">
         {features.map(({ icon: Icon, ...feature }, i) => (
           <div
-            className="flex items-start p-8 space-x-4 backdrop-blur-sm  bg-black/[0.03] hover:bg-black/[0.05] dark:bg-zinc-900 dark:hover:bg-zinc-800/50 sm:-inset-x-6 rounded-md shadow-sm hover:scale-105 hover:translate hover:shadow-xl transition-all duration-300 ease-in-out"
+            className="flex items-start p-8 space-x-4 bg-black/[0.03] hover:bg-black/[0.05] dark:bg-zinc-900 dark:hover:bg-zinc-800/50 sm:-inset-x-6 rounded-md shadow-sm hover:scale-105 hover:translate hover:shadow-xl transition-all duration-300 ease-in-out"
             key={feature.name.split(" ").join("-")}
           >
             {showIcons && (

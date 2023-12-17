@@ -11,6 +11,10 @@ const partsRoutes: AuthenticatedRouteGroup[] = [
         to: path.to.partsSearch,
       },
       {
+        name: "Services",
+        to: path.to.services,
+      },
+      {
         name: "Routing",
         to: path.to.routings,
         role: "employee",

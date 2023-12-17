@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.175.0/http/server.ts";
 import { format } from "https://deno.land/std@0.205.0/datetime/mod.ts";
+import { nanoid } from "https://deno.land/x/nanoid@v3.0.0/mod.ts";
 import type { Database } from "../../../src/types.ts";
 import { DB, getConnectionPool, getDatabaseClient } from "../lib/database.ts";
 import { corsHeaders } from "../lib/headers.ts";
@@ -135,7 +136,7 @@ serve(async (req: Request) => {
           .from("journalLine")
           .select("*")
           .in(
-            "reference",
+            "documentLineReference",
             purchaseOrderLines.data.reduce<string[]>(
               (acc, purchaseOrderLine) => {
                 if (
@@ -159,7 +160,7 @@ serve(async (req: Request) => {
           Record<string, Database["public"]["Tables"]["journalLine"]["Row"][]>
         >((acc, journalEntry) => {
           const [type, purchaseOrderLineId] = (
-            journalEntry.reference ?? ""
+            journalEntry.documentLineReference ?? ""
           ).split(":");
           if (type === "purchase-invoice") {
             if (
@@ -339,6 +340,8 @@ serve(async (req: Request) => {
                     throw new Error("Cannot reverse non-accrual entries");
                   }
 
+                  const journalLineReference = nanoid();
+
                   // create the reversal entries
                   journalLineInserts.push({
                     accountNumber: entry[0].accountNumber!,
@@ -357,7 +360,10 @@ serve(async (req: Request) => {
                     documentType: "Invoice",
                     documentId: receipt.data?.id,
                     externalDocumentId: receipt?.data.externalDocumentId,
-                    reference: journalReference.to.receipt(receiptLine.lineId!),
+                    documentLineReference: journalReference.to.receipt(
+                      receiptLine.lineId!
+                    ),
+                    journalLineReference,
                   });
                   journalLineInserts.push({
                     accountNumber: entry[1].accountNumber!,
@@ -376,7 +382,10 @@ serve(async (req: Request) => {
                     documentType: "Invoice",
                     documentId: receipt.data?.id,
                     externalDocumentId: receipt?.data.externalDocumentId,
-                    reference: journalReference.to.receipt(receiptLine.lineId!),
+                    documentLineReference: journalReference.to.receipt(
+                      receiptLine.lineId!
+                    ),
+                    journalLineReference,
                   });
                 }
 
@@ -402,6 +411,8 @@ serve(async (req: Request) => {
 
             // create the normal GL entries
 
+            let journalLineReference = nanoid();
+
             // debit the inventory account
             journalLineInserts.push({
               accountNumber: postingGroupInventory.inventoryAccount,
@@ -411,7 +422,10 @@ serve(async (req: Request) => {
               documentType: "Receipt",
               documentId: receipt.data?.id,
               externalDocumentId: receipt.data?.externalDocumentId,
-              reference: journalReference.to.receipt(receiptLine.lineId!),
+              documentLineReference: journalReference.to.receipt(
+                receiptLine.lineId!
+              ),
+              journalLineReference,
             });
 
             // creidt the direct cost applied account
@@ -423,8 +437,13 @@ serve(async (req: Request) => {
               documentType: "Receipt",
               documentId: receipt.data?.id,
               externalDocumentId: receipt.data?.externalDocumentId,
-              reference: journalReference.to.receipt(receiptLine.lineId!),
+              documentLineReference: journalReference.to.receipt(
+                receiptLine.lineId!
+              ),
+              journalLineReference,
             });
+
+            journalLineReference = nanoid();
 
             // debit the purchase account
             journalLineInserts.push({
@@ -435,7 +454,10 @@ serve(async (req: Request) => {
               documentType: "Receipt",
               documentId: receipt.data?.id,
               externalDocumentId: receipt.data?.externalDocumentId,
-              reference: journalReference.to.receipt(receiptLine.lineId!),
+              documentLineReference: journalReference.to.receipt(
+                receiptLine.lineId!
+              ),
+              journalLineReference,
             });
 
             // credit the accounts payable account
@@ -447,7 +469,10 @@ serve(async (req: Request) => {
               documentType: "Receipt",
               documentId: receipt.data?.id,
               externalDocumentId: receipt.data?.externalDocumentId,
-              reference: journalReference.to.receipt(receiptLine.lineId!),
+              documentLineReference: journalReference.to.receipt(
+                receiptLine.lineId!
+              ),
+              journalLineReference,
             });
           }
 
@@ -460,6 +485,8 @@ serve(async (req: Request) => {
               (receiptLine.receivedQuantity - quantityToReverse) *
               receiptLine.unitPrice;
 
+            const journalLineReference = nanoid();
+
             journalLineInserts.push({
               accountNumber:
                 postingGroupInventory.inventoryInterimAccrualAccount,
@@ -471,7 +498,8 @@ serve(async (req: Request) => {
               documentId: receipt.data?.id ?? undefined,
               externalDocumentId:
                 purchaseOrder.data?.supplierReference ?? undefined,
-              reference: `receipt:${receiptLine.lineId}`,
+              documentLineReference: `receipt:${receiptLine.lineId}`,
+              journalLineReference,
             });
 
             journalLineInserts.push({
@@ -485,7 +513,8 @@ serve(async (req: Request) => {
               documentId: receipt.data?.id ?? undefined,
               externalDocumentId:
                 purchaseOrder.data?.supplierReference ?? undefined,
-              reference: `receipt:${receiptLine.lineId}`,
+              documentLineReference: `receipt:${receiptLine.lineId}`,
+              journalLineReference,
             });
           }
 
@@ -517,16 +546,23 @@ serve(async (req: Request) => {
 
           const purchaseOrderLines = await trx
             .selectFrom("purchaseOrderLine")
-            .select(["id", "invoicedComplete", "receivedComplete"])
+            .select([
+              "id",
+              "purchaseOrderLineType",
+              "invoicedComplete",
+              "receivedComplete",
+            ])
             .where("purchaseOrderId", "=", purchaseOrder.data.id)
             .execute();
 
           const areAllLinesInvoiced = purchaseOrderLines.every(
-            (line) => line.invoicedComplete
+            (line) =>
+              line.purchaseOrderLineType === "Comment" || line.invoicedComplete
           );
 
           const areAllLinesReceived = purchaseOrderLines.every(
-            (line) => line.receivedComplete
+            (line) =>
+              line.purchaseOrderLineType === "Comment" || line.receivedComplete
           );
 
           let status: Database["public"]["Tables"]["purchaseOrder"]["Row"]["status"] =

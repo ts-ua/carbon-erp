@@ -1,6 +1,9 @@
-import { useColor } from "@carbon/react";
+import { Count, useColor } from "@carbon/react";
 import { Box, Button, VStack } from "@chakra-ui/react";
 import { Link, useMatches, useParams } from "@remix-run/react";
+import { useRouteData } from "~/hooks";
+import type { PurchaseInvoiceLine } from "~/modules/invoicing";
+import { path } from "~/utils/path";
 import { usePurchaseInvoiceSidebar } from "./usePurchaseInvoiceSidebar";
 
 const PurchaseInvoiceSidebar = () => {
@@ -11,7 +14,13 @@ const PurchaseInvoiceSidebar = () => {
       "PurchaseInvoiceSidebar requires an invoiceId and could not find invoiceId in params"
     );
 
-  const links = usePurchaseInvoiceSidebar();
+  const routeData = useRouteData<{
+    purchaseInvoiceLines: PurchaseInvoiceLine[];
+  }>(path.to.purchaseInvoice(invoiceId));
+
+  const links = usePurchaseInvoiceSidebar({
+    lines: routeData?.purchaseInvoiceLines.length ?? 0,
+  });
   const matches = useMatches();
 
   return (
@@ -35,11 +44,14 @@ const PurchaseInvoiceSidebar = () => {
                   border={isActive ? "1px solid" : "none"}
                   borderColor={borderColor}
                   fontWeight={isActive ? "bold" : "normal"}
-                  justifyContent="start"
+                  justifyContent={
+                    route.count === undefined ? "start" : "space-between"
+                  }
                   size="md"
                   w="full"
                 >
                   <span>{route.name}</span>
+                  {route.count !== undefined && <Count count={route.count} />}
                 </Button>
               );
             })}

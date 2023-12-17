@@ -14,8 +14,10 @@ import type {
   partSupplierValidator,
   partUnitSalePriceValidator,
   partValidator,
+  serviceSupplierValidator,
+  serviceValidator,
 } from "./parts.models";
-import type { PartReplenishmentSystem } from "./types";
+import type { PartReplenishmentSystem, ServiceType } from "./types";
 
 export async function deletePartGroup(
   client: SupabaseClient<Database>,
@@ -170,6 +172,7 @@ export async function getPartsList(
       `replenishmentSystem.eq.${replenishmentSystem},replenishmentSystem.eq.Buy and Make`
     );
   }
+
   return query;
 }
 
@@ -223,29 +226,71 @@ export async function getPartUnitSalePrice(
   return client.from("partUnitSalePrice").select("*").eq("partId", id).single();
 }
 
-export function getPartTypes(): Database["public"]["Enums"]["partType"][] {
-  return ["Inventory", "Non-Inventory", "Service"];
+export async function getServices(
+  client: SupabaseClient<Database>,
+  args: GenericQueryFilters & {
+    search: string | null;
+    type: string | null;
+    group: string | null;
+    supplierId: string | null;
+  }
+) {
+  let query = client.from("services").select("*", {
+    count: "exact",
+  });
+
+  if (args.search) {
+    query = query.or(
+      `name.ilike.%${args.search}%,description.ilike.%${args.search}%`
+    );
+  }
+
+  if (args.type) {
+    query = query.eq("serviceType", args.type);
+  }
+
+  if (args.group) {
+    query = query.eq("partGroupId", args.group);
+  }
+
+  if (args.supplierId) {
+    query = query.contains("supplierIds", [args.supplierId]);
+  }
+
+  query = setGenericQueryFilters(query, args, "id");
+  return query;
 }
 
-export function getPartRorderdingPolicies(): Database["public"]["Enums"]["partReorderingPolicy"][] {
-  return [
-    "Manual Reorder",
-    "Demand-Based Reorder",
-    "Fixed Reorder Quantity",
-    "Maximum Quantity",
-  ];
+export async function getService(client: SupabaseClient<Database>, id: string) {
+  return client.from("services").select("*").eq("id", id).single();
 }
 
-export function getPartReplenishmentSystems(): Database["public"]["Enums"]["partReplenishmentSystem"][] {
-  return ["Buy", "Make", "Buy and Make"];
+export async function getServicesList(
+  client: SupabaseClient<Database>,
+  type: ServiceType | null
+) {
+  let query = client
+    .from("service")
+    .select("id, name")
+    .eq("blocked", false)
+    .eq("active", true);
+
+  if (type) {
+    query = query.eq("serviceType", type);
+  }
+
+  return query;
 }
 
-export function getPartManufacturingPolicies(): Database["public"]["Enums"]["partManufacturingPolicy"][] {
-  return ["Make to Order", "Make to Stock"];
-}
-
-export function getPartCostingMethods(): Database["public"]["Enums"]["partCostingMethod"][] {
-  return ["Standard", "Average", "FIFO", "LIFO"];
+export async function getServiceSuppliers(
+  client: SupabaseClient<Database>,
+  id: string
+) {
+  return client
+    .from("serviceSupplier")
+    .select(`id, supplier(id, name), supplierServiceId`)
+    .eq("active", true)
+    .eq("serviceId", id);
 }
 
 export async function getShelvesList(
@@ -475,6 +520,47 @@ export async function upsertPartUnitSalePrice(
     .from("partUnitSalePrice")
     .update(sanitize(partUnitSalePrice))
     .eq("partId", partUnitSalePrice.partId);
+}
+
+export async function upsertService(
+  client: SupabaseClient<Database>,
+  service:
+    | (TypeOfValidator<typeof serviceValidator> & { createdBy: string })
+    | (Omit<TypeOfValidator<typeof serviceValidator>, "id"> & {
+        id: string;
+        updatedBy: string;
+      })
+) {
+  if ("createdBy" in service) {
+    return client.from("service").insert(service).select("id").single();
+  }
+  return client.from("service").update(sanitize(service)).eq("id", service.id);
+}
+
+export async function upsertServiceSupplier(
+  client: SupabaseClient<Database>,
+  serviceSupplier:
+    | (Omit<TypeOfValidator<typeof serviceSupplierValidator>, "id"> & {
+        createdBy: string;
+      })
+    | (Omit<TypeOfValidator<typeof serviceSupplierValidator>, "id"> & {
+        id: string;
+        updatedBy: string;
+      })
+) {
+  if ("createdBy" in serviceSupplier) {
+    return client
+      .from("serviceSupplier")
+      .insert([serviceSupplier])
+      .select("id")
+      .single();
+  }
+  return client
+    .from("serviceSupplier")
+    .update(sanitize(serviceSupplier))
+    .eq("id", serviceSupplier.id)
+    .select("id")
+    .single();
 }
 
 export async function upsertUnitOfMeasure(

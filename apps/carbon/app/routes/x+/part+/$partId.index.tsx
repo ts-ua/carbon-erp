@@ -54,15 +54,15 @@ export default function PartBasicRoute() {
   if (!partData) throw new Error("Could not find part data");
 
   const initialValues = {
-    id: partData.partSummary?.id,
+    id: partData.partSummary?.id ?? "",
     name: partData.partSummary?.name ?? "",
     description: partData.partSummary?.description ?? undefined,
-    partType: partData.partSummary?.partType,
+    partType: partData.partSummary?.partType ?? "Inventory",
     partGroupId: partData.partSummary?.partGroupId ?? undefined,
-    replenishmentSystem: partData.partSummary?.replenishmentSystem,
-    unitOfMeasureCode: partData.partSummary?.unitOfMeasureCode,
-    blocked: partData.partSummary?.blocked,
-    active: partData.partSummary?.active,
+    replenishmentSystem: partData.partSummary?.replenishmentSystem ?? "Buy",
+    unitOfMeasureCode: partData.partSummary?.unitOfMeasureCode ?? "EA",
+    blocked: partData.partSummary?.blocked ?? false,
+    active: partData.partSummary?.active ?? false,
   };
 
   return <PartForm initialValues={initialValues} />;

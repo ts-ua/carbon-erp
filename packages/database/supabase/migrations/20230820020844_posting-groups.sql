@@ -13,7 +13,7 @@ CREATE TABLE "accountDefault" (
     "purchaseVarianceAccount" TEXT NOT NULL,
     "inventoryAdjustmentVarianceAccount" TEXT NOT NULL,
 
-    -- direct costs
+    -- costs
     "materialVarianceAccount" TEXT NOT NULL,
     "capacityVarianceAccount" TEXT NOT NULL,
     "overheadAccount" TEXT NOT NULL,
@@ -139,12 +139,12 @@ CREATE TABLE "postingGroupInventory" (
   "inventoryShippedNotInvoicedAccount" TEXT NOT NULL,
   "workInProgressAccount" TEXT NOT NULL,
   "directCostAppliedAccount" TEXT NOT NULL,
+  "overheadAccount" TEXT NOT NULL,
   "overheadCostAppliedAccount" TEXT NOT NULL,
   "purchaseVarianceAccount" TEXT NOT NULL,
   "inventoryAdjustmentVarianceAccount" TEXT NOT NULL,
   "materialVarianceAccount" TEXT NOT NULL,
   "capacityVarianceAccount" TEXT NOT NULL,
-  "overheadAccount" TEXT NOT NULL,
   "updatedBy" TEXT,
 
   CONSTRAINT "postingGroupInventory_pkey" PRIMARY KEY ("id"),

@@ -109,6 +109,8 @@ const PurchaseInvoiceLines = () => {
           switch (row.original.invoiceLineType) {
             case "Part":
               return <span>{row.original.partId}</span>;
+            case "Service":
+              return <span>{row.original.serviceId}</span>;
             case "G/L Account":
               return <span>{row.original.accountNumber}</span>;
             case "Fixed Asset":
@@ -191,7 +193,7 @@ const PurchaseInvoiceLines = () => {
 
   return (
     <>
-      <Card w="full" minH={320}>
+      <Card w="full" h="full">
         <CardHeader display="flex" justifyContent="space-between">
           <Heading size="md" display="inline-flex">
             Purchase Invoice Lines

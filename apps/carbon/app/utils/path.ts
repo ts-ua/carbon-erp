@@ -27,6 +27,7 @@ export const path = {
           `${api}/settings/sequence/rollback?table=${table}&currentSequence=${id}`
         ),
       sequences: (table: string) => `${api}/settings/sequences?table=${table}`,
+      services: `${api}/parts/services`,
       shifts: (id: string) =>
         generatePath(`${api}/resources/shifts?location=${id}`),
       shelves: (id: string) =>
@@ -143,13 +144,11 @@ export const path = {
     deletePurchaseInvoice: (id: string) =>
       generatePath(`${x}/purchase-invoice/delete/${id}`),
     deletePurchaseInvoiceLine: (invoiceId: string, lineId: string) =>
-      generatePath(
-        `${x}/purchase-invoice/${invoiceId}/details/delete/${lineId}`
-      ),
+      generatePath(`${x}/purchase-invoice/${invoiceId}/lines/delete/${lineId}`),
     deletePurchaseOrder: (id: string) =>
       generatePath(`${x}/purchase-order/delete/${id}`),
     deletePurchaseOrderLine: (orderId: string, lineId: string) =>
-      generatePath(`${x}/purchase-order/${orderId}/details/delete/${lineId}`),
+      generatePath(`${x}/purchase-order/${orderId}/lines/delete/${lineId}`),
     deleteReceipt: (id: string) =>
       generatePath(`${x}/inventory/receipts/delete/${id}`),
     deleteShift: (id: string) =>
@@ -245,13 +244,16 @@ export const path = {
     newPaymentTerm: `${x}/accounting/payment-terms/new`,
     newPurchaseInvoice: `${x}/purchase-invoice/new`,
     newPurchaseInvoiceLine: (id: string) =>
-      generatePath(`${x}/purchase-invoice/${id}/details/new`),
+      generatePath(`${x}/purchase-invoice/${id}/lines/new`),
     newPurchaseOrder: `${x}/purchase-order/new`,
     newPurchaseOrderLine: (id: string) =>
-      generatePath(`${x}/purchase-order/${id}/details/new`),
+      generatePath(`${x}/purchase-order/${id}/lines/new`),
     newReceipt: `${x}/inventory/receipts/new`,
     newShift: `${x}/resources/shifts/new`,
     newShippingMethod: `${x}/inventory/shipping-methods/new`,
+    newService: `${x}/service/new`,
+    newServiceSupplier: (id: string) =>
+      generatePath(`${x}/service/${id}/suppliers/new`),
     newSupplier: `${x}/supplier/new`,
     newSupplierAccount: `${x}/users/suppliers/new`,
     newSupplierContact: (id: string) =>
@@ -298,7 +300,9 @@ export const path = {
     purchaseInvoiceDetails: (id: string) =>
       generatePath(`${x}/purchase-invoice/${id}/details`),
     purchaseInvoiceLine: (invoiceId: string, id: string) =>
-      generatePath(`${x}/purchase-invoice/${invoiceId}/details/${id}`),
+      generatePath(`${x}/purchase-invoice/${invoiceId}/lines/${id}`),
+    purchaseInvoiceLines: (id: string) =>
+      generatePath(`${x}/purchase-invoice/${id}/lines`),
     purchaseInvoicePost: (id: string) =>
       generatePath(`${x}/purchase-invoice/${id}/post`),
     purchaseInvoiceRoot: `${x}/purchase-invoice`,
@@ -308,8 +312,10 @@ export const path = {
       generatePath(`${x}/purchase-order/${id}/delivery`),
     purchaseOrderDetails: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/details`),
+    purchaseOrderLines: (orderId: string) =>
+      generatePath(`${x}/purchase-order/${orderId}/lines`),
     purchaseOrderLine: (orderId: string, id: string) =>
-      generatePath(`${x}/purchase-order/${orderId}/details/${id}`),
+      generatePath(`${x}/purchase-order/${orderId}/lines/${id}`),
     purchaseOrderPayment: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/payment`),
     purchaseOrders: `${x}/purchasing/orders`,
@@ -328,6 +334,13 @@ export const path = {
     sales: `${x}/sales`,
     salesInvoices: `${x}/invoicing/sales`,
     scheduling: `${x}/scheduling`,
+    service: (id: string) => generatePath(`${x}/service/${id}`),
+    services: `${x}/parts/services`,
+    serviceRoot: `${x}/service`,
+    serviceSupplier: (serviceId: string, id: string) =>
+      generatePath(`${x}/service/${serviceId}/suppliers/${id}`),
+    serviceSuppliers: (id: string) =>
+      generatePath(`${x}/service/${id}/suppliers`),
     settings: `${x}/settings`,
     sequences: `${x}/settings/sequences`,
     shift: (id: string) => generatePath(`${x}/resources/shifts/${id}`),

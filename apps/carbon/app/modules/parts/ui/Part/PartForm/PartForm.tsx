@@ -20,29 +20,17 @@ import {
 } from "~/components/Form";
 import { usePermissions, useRouteData } from "~/hooks";
 import { useSupabase } from "~/lib/supabase";
-import type {
-  PartGroupListItem,
-  PartReplenishmentSystem,
-  PartType,
-  UnitOfMeasureListItem,
+import type { PartGroupListItem, UnitOfMeasureListItem } from "~/modules/parts";
+import {
+  partReplenishmentSystems,
+  partTypes,
+  partValidator,
 } from "~/modules/parts";
-import { partValidator } from "~/modules/parts";
+import type { TypeOfValidator } from "~/types/validators";
 import { path } from "~/utils/path";
 
-type PartFormValues = {
-  id?: string;
-  name: string;
-  description?: string;
-  partType?: PartType;
-  partGroupId?: string;
-  replenishmentSystem?: PartReplenishmentSystem;
-  unitOfMeasureCode?: string;
-  blocked?: boolean;
-  active?: boolean;
-};
-
 type PartFormProps = {
-  initialValues: PartFormValues;
+  initialValues: TypeOfValidator<typeof partValidator>;
 };
 
 const useNextPartIdShortcut = () => {
@@ -93,8 +81,6 @@ const useNextPartIdShortcut = () => {
 const PartForm = ({ initialValues }: PartFormProps) => {
   const sharedPartsData = useRouteData<{
     partGroups: PartGroupListItem[];
-    partTypes: PartType[];
-    partReplenishmentSystems: PartReplenishmentSystem[];
     unitOfMeasures: UnitOfMeasureListItem[];
   }>(path.to.partRoot);
 
@@ -109,18 +95,16 @@ const PartForm = ({ initialValues }: PartFormProps) => {
     })) ?? [];
 
   const partTypeOptions =
-    sharedPartsData?.partTypes.map((partType) => ({
+    partTypes.map((partType) => ({
       label: partType,
       value: partType,
     })) ?? [];
 
   const partReplenishmentSystemOptions =
-    sharedPartsData?.partReplenishmentSystems.map(
-      (partReplenishmentSystem) => ({
-        label: partReplenishmentSystem,
-        value: partReplenishmentSystem,
-      })
-    ) ?? [];
+    partReplenishmentSystems.map((partReplenishmentSystem) => ({
+      label: partReplenishmentSystem,
+      value: partReplenishmentSystem,
+    })) ?? [];
 
   const unitOfMeasureOptions =
     sharedPartsData?.unitOfMeasures.map((uom) => ({

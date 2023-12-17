@@ -5,11 +5,11 @@ import { memo, useMemo } from "react";
 import { BsPencilSquare } from "react-icons/bs";
 import { Table } from "~/components";
 import { useUrlParams } from "~/hooks";
-import type { PartsTableRow } from "~/modules/parts";
+import type { Part } from "~/modules/parts";
 import { path } from "~/utils/path";
 
 type PartsTableProps = {
-  data: PartsTableRow[];
+  data: Part[];
   count: number;
 };
 
@@ -17,13 +17,13 @@ const PartsTable = memo(({ data, count }: PartsTableProps) => {
   const navigate = useNavigate();
   const [params] = useUrlParams();
 
-  const columns = useMemo<ColumnDef<PartsTableRow>[]>(() => {
+  const columns = useMemo<ColumnDef<Part>[]>(() => {
     return [
       {
         accessorKey: "id",
         header: "Part ID",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(path.to.part(row.original.id))}>
+          <Link onClick={() => navigate(path.to.part(row.original.id!))}>
             {row.original.id}
           </Link>
         ),
@@ -60,10 +60,10 @@ const PartsTable = memo(({ data, count }: PartsTableProps) => {
 
   const renderContextMenu = useMemo(() => {
     // eslint-disable-next-line react/display-name
-    return (row: PartsTableRow) => (
+    return (row: Part) => (
       <MenuItem
         icon={<BsPencilSquare />}
-        onClick={() => navigate(path.to.part(row.id))}
+        onClick={() => navigate(path.to.part(row.id!))}
       >
         Edit Part
       </MenuItem>
@@ -72,7 +72,7 @@ const PartsTable = memo(({ data, count }: PartsTableProps) => {
 
   return (
     <>
-      <Table<PartsTableRow>
+      <Table<Part>
         count={count}
         columns={columns}
         data={data}

@@ -80,6 +80,7 @@ export default function PurchaseInvoiceRoute() {
         gridTemplateColumns={["1fr", "1fr", "1fr 4fr"]}
         gridGap={4}
         w="full"
+        h="full"
       >
         <PurchaseInvoiceSidebar />
         <Outlet />
