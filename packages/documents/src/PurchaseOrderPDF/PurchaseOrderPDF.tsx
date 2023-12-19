@@ -6,11 +6,13 @@ import type { PDF } from "../types";
 
 interface PurchaseOrderPDFProps extends PDF {
   lines?: Database["public"]["Tables"]["purchaseOrderLine"]["Row"];
+  purchaseOrder: Database["public"]["Views"]["purchaseOrders"]["Row"];
 }
 
 const PurchaseOrderPDF = ({
   company,
   meta,
+  purchaseOrder,
   title = "Purchase Order",
 }: PurchaseOrderPDFProps) => {
   const styles = StyleSheet.create({
@@ -99,6 +101,22 @@ const PurchaseOrderPDF = ({
       color: "#7d7d7d",
       textTransform: "uppercase",
     },
+    tableCol1: {
+      width: "40%",
+      textAlign: "left",
+    },
+    tableCol2: {
+      width: "20%",
+      textAlign: "center",
+    },
+    tableCol3: {
+      width: "20%",
+      textAlign: "center",
+    },
+    tableCol4: {
+      width: "20%",
+      textAlign: "right",
+    },
   });
 
   return (
@@ -117,11 +135,11 @@ const PurchaseOrderPDF = ({
           items={[
             {
               label: "Date",
-              value: "12/3/2023",
+              value: purchaseOrder?.orderDate,
             },
             {
               label: "PO #",
-              value: "PO00000000001",
+              value: purchaseOrder?.purchaseOrderId,
             },
           ]}
         />
@@ -142,54 +160,54 @@ const PurchaseOrderPDF = ({
         <View style={styles.row}>
           <View style={styles.colThird}>
             <Text style={styles.label}>Supplier Order #</Text>
-            <Text></Text>
+            <Text>{purchaseOrder?.supplierReference}</Text>
           </View>
           <View style={styles.colThird}>
             <Text style={styles.label}>Requested Date</Text>
-            <Text>1/15/2024</Text>
+            <Text>{purchaseOrder?.receiptRequestedDate}</Text>
           </View>
           <View style={styles.colThird}>
             <Text style={styles.label}>Promised Date</Text>
-            <Text></Text>
+            <Text>{purchaseOrder?.receiptPromisedDate}</Text>
           </View>
         </View>
         <View style={styles.row}>
           <View style={styles.colThird}>
             <Text style={styles.label}>Shipping Method</Text>
-            <Text></Text>
+            <Text>{purchaseOrder?.shippingMethodName}</Text>
           </View>
           <View style={styles.colThird}>
             <Text style={styles.label}>Shipping Terms</Text>
-            <Text></Text>
+            <Text>{purchaseOrder?.shippingTermName}</Text>
           </View>
           <View style={styles.colThird}>
             <Text style={styles.label}>Payment Terms</Text>
-            <Text>Net 30</Text>
+            <Text>{purchaseOrder?.paymentTermName}</Text>
           </View>
         </View>
         <View style={styles.table}>
           <View style={styles.thead}>
-            <Text style={{ width: "40%" }}>Description</Text>
-            <Text style={{ width: "20%", textAlign: "center" }}>Qty</Text>
-            <Text style={{ width: "20%", textAlign: "center" }}>Price</Text>
-            <Text style={{ width: "20%", textAlign: "right" }}>Total</Text>
+            <Text style={styles.tableCol1}>Description</Text>
+            <Text style={styles.tableCol2}>Qty</Text>
+            <Text style={styles.tableCol3}>Price</Text>
+            <Text style={styles.tableCol4}>Total</Text>
           </View>
           {/* {lines.map(({ id, description, details, rate, quantity, amount }) => (
             <View style={styles.tr} key={id}>
-              <View style={{textAlign: "left", width: "40%"}}>
+              <View style={styles.tableCol1}>
                 <Text style={{ marginBottom: "10" }}>{description}</Text>
                 <Text style={{ fontSize: "10", opacity: 0.8, width: "95%" }}>
                   {details}
                 </Text>
               </View>
-              <Text style={{ width: "20%", textAlign: "center" }}>
+              <Text style={styles.tableCol2}>
                 {quantity}
               </Text>
-              <Text style={{ width: "20%", textAlign: "center" }}>
+              <Text style={styles.tableCol3}>
                 <Text>{currencySymbol}</Text>
                 <Text>{rate ? rate.toFixed(2) : "0.00"}</Text>
               </Text>
-              <Text style={{ width: "20%", textAlign: "right" }}>
+              <Text style={styles.tableCol4}>
                 <Text>{currencySymbol}</Text>
                 <Text>{amount}</Text>
               </Text>
@@ -203,12 +221,14 @@ const PurchaseOrderPDF = ({
             </Text>
           </View>
         </View>
-        <View style={styles.row}>
-          <View style={styles.colHalf}>
-            <Text style={styles.label}>Notes</Text>
-            <Text>This is a note</Text>
+        {purchaseOrder?.notes && (
+          <View style={styles.row}>
+            <View style={styles.colHalf}>
+              <Text style={styles.label}>Notes</Text>
+              <Text>{purchaseOrder?.notes}</Text>
+            </View>
           </View>
-        </View>
+        )}
       </View>
     </Template>
   );

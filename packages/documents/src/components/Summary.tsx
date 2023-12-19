@@ -5,7 +5,7 @@ type SummaryProps = {
   company: Company;
   items: {
     label: string;
-    value: string;
+    value?: string | null;
   }[];
 };
 
@@ -59,9 +59,10 @@ const Summary = ({ company, items }: SummaryProps) => {
     <View style={styles.summary}>
       <View style={styles.companyDetails}>
         <Text style={styles.companyName}>{company.name}</Text>
-        {company.address && <Text>{company.address}</Text>}
-        {company.city && company.state && company.zip && (
-          <Text>{`${company.city}, ${company.state}, ${company.zip}`}</Text>
+        {company.addressLine1 && <Text>{company.addressLine1}</Text>}
+        {company.addressLine2 && <Text>{company.addressLine2}</Text>}
+        {company.city && company.state && company.postalCode && (
+          <Text>{`${company.city}, ${company.state}, ${company.postalCode}`}</Text>
         )}
         {company.phone && <Text>Phone: {company.phone}</Text>}
         {company.email && <Text>Email: {company.email}</Text>}

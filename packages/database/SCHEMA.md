@@ -4767,11 +4767,12 @@ CREATE POLICY "Users can delete their own purchase order favorites" ON "purchase
 CREATE OR REPLACE VIEW "purchaseOrders" AS
   SELECT
     p.*,
+    sm."name" AS "shippingMethodName",
+    st."name" AS "shippingTermName",
+    pt."name" AS "paymentTermName",
     pd."receiptRequestedDate",
     pd."receiptPromisedDate",
     pd."dropShipment",
-    pol."lineCount",
-    pol."subtotal",
     l."id" AS "locationId",
     l."name" AS "locationName",
     s."name" AS "supplierName",
@@ -4784,11 +4785,10 @@ CREATE OR REPLACE VIEW "purchaseOrders" AS
     EXISTS(SELECT 1 FROM "purchaseOrderFavorite" pf WHERE pf."purchaseOrderId" = p.id AND pf."userId" = auth.uid()::text) AS favorite
   FROM "purchaseOrder" p
   LEFT JOIN "purchaseOrderDelivery" pd ON pd."id" = p."id"
-  LEFT JOIN (
-    SELECT "purchaseOrderId", COUNT(*) AS "lineCount", SUM("unitPrice" * "purchaseQuantity") AS "subtotal"
-    FROM "purchaseOrderLine"
-    GROUP BY "purchaseOrderId"
-  ) pol ON pol."purchaseOrderId" = p."id"
+  LEFT JOIN "shippingMethod" sm ON sm."id" = pd."shippingMethodId"
+  LEFT JOIN "shippingTerm" st ON st."id" = pd."shippingTermId"
+  LEFT JOIN "purchaseOrderPayment" pp ON pp."id" = p."id"
+  LEFT JOIN "paymentTerm" pt ON pt."id" = pp."paymentTermId"
   LEFT JOIN "location" l ON l."id" = pd."locationId"
   LEFT JOIN "supplier" s ON s."id" = p."supplierId"
   LEFT JOIN "user" u ON u."id" = p."createdBy"
@@ -7213,5 +7213,48 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE TRIGGER create_customer_entries
   AFTER INSERT on public.customer
   FOR EACH ROW EXECUTE PROCEDURE public.create_customer_entries();
+```
+
+
+
+## `company`
+
+```sql
+CREATE TABLE "company" (
+  "id" BOOLEAN NOT NULL DEFAULT TRUE,
+  "name" TEXT NOT NULL,
+  "taxId" TEXT,
+  "logo" TEXT,
+  "addressLine1" TEXT,
+  "addressLine2" TEXT,
+  "city" TEXT,
+  "state" TEXT,
+  "postalCode" TEXT,
+  "countryCode" TEXT,
+  "phone" TEXT,
+  "fax" TEXT,
+  "email" TEXT,
+  "website" TEXT,
+  
+  CONSTRAINT "company_pkey" PRIMARY KEY ("id"),
+  -- this is a hack to make sure that this table only ever has one row
+  CONSTRAINT "accountDefault_id_check" CHECK ("id" = TRUE),
+  CONSTRAINT "accountDefault_id_unique" UNIQUE ("id")
+);
+
+ALTER TABLE "company" ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Authenticated users can view company" ON "company"
+  FOR SELECT
+  USING (
+    auth.role() = 'authenticated' 
+  );
+
+CREATE POLICY "Employees with settings_update can update company" ON "company"
+  FOR UPDATE
+  USING (
+    coalesce(get_my_claim('settings_update')::boolean, false) = true 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
 ```
 
