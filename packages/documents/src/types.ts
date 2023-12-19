@@ -1,3 +1,5 @@
+import type { Database } from "@carbon/database";
+
 export interface PDF {
   title?: string;
   meta?: Meta;
@@ -10,15 +12,4 @@ export type Meta = {
   subject?: string;
 };
 
-export type Company = {
-  name: string;
-  logo?: string;
-  address?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
-  phone?: string;
-  fax?: string;
-  email?: string;
-  website?: string;
-};
+export type Company = Database["public"]["Tables"]["company"]["Row"];

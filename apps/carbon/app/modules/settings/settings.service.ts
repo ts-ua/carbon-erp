@@ -5,7 +5,11 @@ import type { GenericQueryFilters } from "~/utils/query";
 import { setGenericQueryFilters } from "~/utils/query";
 import { interpolateSequenceDate } from "~/utils/string";
 import { sanitize } from "~/utils/supabase";
-import type { sequenceValidator } from "./settings.models";
+import type { companyValidator, sequenceValidator } from "./settings.models";
+
+export async function getCompany(client: SupabaseClient<Database>) {
+  return client.from("company").select("*").single();
+}
 
 export async function getCurrentSequence(
   client: SupabaseClient<Database>,
@@ -90,6 +94,13 @@ export async function getSequencesList(
   return client.from("sequence").select("id").eq("table", table);
 }
 
+export async function insertCompany(
+  client: SupabaseClient<Database>,
+  company: TypeOfValidator<typeof companyValidator>
+) {
+  return client.from("company").insert(company);
+}
+
 export async function rollbackNextSequence(
   client: SupabaseClient<Database>,
   table: string,
@@ -108,6 +119,29 @@ export async function rollbackNextSequence(
     next: nextValue,
     updatedBy: userId,
   });
+}
+
+export async function updateCompany(
+  client: SupabaseClient<Database>,
+  company: Partial<TypeOfValidator<typeof companyValidator>> & {
+    updatedBy: string;
+  }
+) {
+  return client.from("company").update(sanitize(company)).eq("id", true);
+}
+
+export async function updateLogo(
+  client: SupabaseClient<Database>,
+  logoUrl: string | null
+) {
+  return client
+    .from("company")
+    .update(
+      sanitize({
+        logoUrl,
+      })
+    )
+    .eq("id", true);
 }
 
 export async function updateSequence(

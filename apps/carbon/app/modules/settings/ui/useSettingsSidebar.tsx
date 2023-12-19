@@ -7,6 +7,11 @@ const settingsRoutes: AuthenticatedRouteGroup[] = [
     name: "Configure",
     routes: [
       {
+        name: "Company",
+        to: path.to.company,
+        role: "employee",
+      },
+      {
         name: "Sequences",
         to: path.to.sequences,
         role: "employee",
