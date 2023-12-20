@@ -61,7 +61,7 @@ function Hero() {
                     duration: 2.5,
                     ease: "easeInOut",
                   }}
-                  className="max-w-5xl mx-auto nx-text-6xl font-extrabold tracking-tighter leading-tighter text-6xl sm:text-7xl lg:nx-text-8xl xl:nx-text-8xl"
+                  className="max-w-5xl mx-auto text-7xl font-extrabold tracking-tighter leading-tighter sm:text-7xl lg:text-8xl xl:text-8xl"
                 >
                   <span className="dark:bg-clip-text dark:text-transparent dark:bg-gradient-to-b dark:from-white  dark:to-gray-400">
                     ERP for
