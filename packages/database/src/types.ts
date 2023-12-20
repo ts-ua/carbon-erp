@@ -1088,6 +1088,7 @@ export interface Database {
           postalCode: string | null;
           state: string | null;
           taxId: string | null;
+          updatedBy: string | null;
           website: string | null;
         };
         Insert: {
@@ -1104,6 +1105,7 @@ export interface Database {
           postalCode?: string | null;
           state?: string | null;
           taxId?: string | null;
+          updatedBy?: string | null;
           website?: string | null;
         };
         Update: {
@@ -1120,9 +1122,23 @@ export interface Database {
           postalCode?: string | null;
           state?: string | null;
           taxId?: string | null;
+          updatedBy?: string | null;
           website?: string | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "accountDefault_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "accountDefault_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
       };
       contact: {
         Row: {

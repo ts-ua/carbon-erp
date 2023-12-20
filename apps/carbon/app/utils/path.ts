@@ -3,6 +3,7 @@ import { generatePath } from "@remix-run/react";
 const x = "/x"; // from ~/routes/x+ folder
 const api = "/api"; // from ~/routes/api+ folder
 const file = "/file"; // from ~/routes/file+ folder
+const onboarding = "/onboarding"; // from ~/routes/onboarding+ folder
 
 export const path = {
   to: {
@@ -43,6 +44,12 @@ export const path = {
     file: {
       purchaseOrder: (id: string) =>
         generatePath(`${file}/purchase-order/${id}`),
+    },
+    onboarding: {
+      company: `${onboarding}/company`,
+      location: `${onboarding}/location`,
+      root: `${onboarding}`,
+      user: `${onboarding}/user`,
     },
     authenticatedRoot: x,
     abilities: `${x}/resources/abilities`,
@@ -390,3 +397,8 @@ export const path = {
       generatePath(`/${x}/resources/work-cells/list/${id}`),
   },
 } as const;
+
+export const onboardingList = [
+  path.to.onboarding.user,
+  path.to.onboarding.company,
+] as const;

@@ -827,6 +827,16 @@ export async function insertAttributeCategory(
     .single();
 }
 
+export async function insertEmployeeJob(
+  client: SupabaseClient<Database>,
+  job: {
+    id: string;
+    locationId: string;
+  }
+) {
+  return client.from("employeeJob").insert(job).select("id").single();
+}
+
 export async function updateAbility(
   client: SupabaseClient<Database>,
   id: string,
