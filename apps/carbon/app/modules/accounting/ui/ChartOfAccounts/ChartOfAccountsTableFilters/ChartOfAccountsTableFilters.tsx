@@ -18,7 +18,7 @@ import { MdCalendarMonth, MdClose } from "react-icons/md";
 import { usePermissions, useUrlParams } from "~/hooks";
 import { incomeBalanceTypes } from "~/modules/accounting";
 
-const CurrenciesTableFilters = () => {
+const ChartOfAccountsTableFilters = () => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
   const borderColor = useColor("gray.200");
@@ -125,4 +125,4 @@ const CurrenciesTableFilters = () => {
   );
 };
 
-export default CurrenciesTableFilters;
+export default ChartOfAccountsTableFilters;
