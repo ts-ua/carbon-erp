@@ -41,10 +41,10 @@ const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
   };
 
   const deleteImage = async () => {
-    if (supabase) {
+    if (supabase && user?.avatarUrl) {
       const imageDelete = await supabase.storage
         .from("avatars")
-        .remove([`${user.id}.png`]);
+        .remove([user.avatarUrl]);
 
       if (imageDelete.error) {
         notification.copyableError(imageDelete.error, "Failed to remove image");
