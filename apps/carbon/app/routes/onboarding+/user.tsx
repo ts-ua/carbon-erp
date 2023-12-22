@@ -109,7 +109,7 @@ export default function OnboardingUser() {
           defaultValues={initialValues}
           method="post"
         >
-          <ModalHeader>Welcome! First let's setup your account</ModalHeader>
+          <ModalHeader>First let's setup your account</ModalHeader>
 
           <ModalBody>
             <Hidden name="next" value={next} />

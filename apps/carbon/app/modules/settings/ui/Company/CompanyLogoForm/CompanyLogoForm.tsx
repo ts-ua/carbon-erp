@@ -15,6 +15,10 @@ const CompanyLogoForm = ({ company }: CompanyLogoFormProps) => {
   const notification = useNotification();
   const submit = useSubmit();
 
+  const logoPath = company?.logo
+    ? company.logo.substring(company.logo.lastIndexOf("/") + 1)
+    : null;
+
   const uploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && supabase) {
       const logo = e.target.files[0];
@@ -38,10 +42,10 @@ const CompanyLogoForm = ({ company }: CompanyLogoFormProps) => {
   };
 
   const deleteImage = async () => {
-    if (supabase) {
+    if (supabase && logoPath) {
       const imageDelete = await supabase.storage
         .from("public")
-        .remove(["logo.png"]);
+        .remove([logoPath]);
 
       if (imageDelete.error) {
         notification.copyableError(imageDelete.error, "Failed to remove image");
