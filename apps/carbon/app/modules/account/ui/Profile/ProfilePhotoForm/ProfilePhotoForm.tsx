@@ -26,7 +26,7 @@ const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
       const imageUpload = await supabase.storage
         .from("avatars")
         .upload(`${user.id}.${fileExtension}`, avatarFile, {
-          cacheControl: `${12 * 60 * 60}`,
+          cacheControl: "0",
           upsert: true,
         });
 
@@ -61,6 +61,7 @@ const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
     submit(formData, {
       method: "post",
       action: path.to.profile,
+      replace: true,
     });
   };
 

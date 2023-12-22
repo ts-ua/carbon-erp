@@ -65,9 +65,9 @@ export async function action({ request }: ActionFunctionArgs) {
     return json({}, await flash(request, success("Updated company")));
   }
 
-  if (formData.get("intent") === "photo") {
+  if (formData.get("intent") === "logo") {
     const logoPath = formData.get("path");
-    if (typeof logoPath === "string") {
+    if (logoPath === null || typeof logoPath === "string") {
       const logoUpdate = await updateLogo(client, logoPath);
       if (logoUpdate.error) {
         return redirect(
@@ -78,7 +78,14 @@ export async function action({ request }: ActionFunctionArgs) {
 
       return redirect(
         path.to.company,
-        await flash(request, success("Updated logo"))
+        await flash(
+          request,
+          success(
+            logoPath === null
+              ? "Removed logo. Please refresh the page."
+              : "Updated logo. Please refresh the page."
+          )
+        )
       );
     } else {
       return redirect(

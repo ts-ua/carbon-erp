@@ -1,5 +1,6 @@
 import type { Database } from "@carbon/database";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { SUPABASE_API_URL } from "~/config/env";
 import type { TypeOfValidator } from "~/types/validators";
 import type { GenericQueryFilters } from "~/utils/query";
 import { setGenericQueryFilters } from "~/utils/query";
@@ -8,7 +9,20 @@ import { sanitize } from "~/utils/supabase";
 import type { companyValidator, sequenceValidator } from "./settings.models";
 
 export async function getCompany(client: SupabaseClient<Database>) {
-  return client.from("company").select("*").single();
+  const company = await client.from("company").select("*").single();
+  if (company.error) {
+    return company;
+  }
+
+  return {
+    data: {
+      ...company.data,
+      logo: company.data.logo
+        ? `${SUPABASE_API_URL}/storage/v1/object/public/public/${company.data.logo}`
+        : null,
+    },
+    error: null,
+  };
 }
 
 export async function getCurrentSequence(
@@ -132,13 +146,13 @@ export async function updateCompany(
 
 export async function updateLogo(
   client: SupabaseClient<Database>,
-  logoUrl: string | null
+  logo: string | null
 ) {
   return client
     .from("company")
     .update(
       sanitize({
-        logoUrl,
+        logo,
       })
     )
     .eq("id", true);
