@@ -13,7 +13,7 @@ import { BsFillHexagonFill } from "react-icons/bs";
 import { getLocationsList } from "~/modules/resources";
 import { getCompany } from "~/modules/settings";
 import { requirePermissions } from "~/services/auth";
-import { onboardingList, path } from "~/utils/path";
+import { onboardingSequence, path } from "~/utils/path";
 
 import type { ShouldRevalidateFunction } from "@remix-run/react";
 
@@ -34,19 +34,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   const pathname = new URL(request.url).pathname;
-  const pathIndex = onboardingList.findIndex((p) => p === pathname);
+  const pathIndex = onboardingSequence.findIndex((p) => p === pathname);
 
   const previousPath =
-    pathIndex === 0 ? undefined : onboardingList[pathIndex - 1];
+    pathIndex === 0 ? undefined : onboardingSequence[pathIndex - 1];
 
   const nextPath =
-    pathIndex === onboardingList.length - 1
+    pathIndex === onboardingSequence.length - 1
       ? path.to.authenticatedRoot
-      : onboardingList[pathIndex + 1];
+      : onboardingSequence[pathIndex + 1];
 
   return {
     currentIndex: pathIndex,
-    onboardingSteps: onboardingList.length,
+    onboardingSteps: onboardingSequence.length,
     previousPath,
     nextPath,
   };

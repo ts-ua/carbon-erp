@@ -1,6 +1,6 @@
 import { redirect } from "@remix-run/node";
-import { onboardingList } from "~/utils/path";
+import { onboardingSequence } from "~/utils/path";
 
 export async function loader() {
-  return redirect(onboardingList[0]);
+  return redirect(onboardingSequence[0]);
 }
