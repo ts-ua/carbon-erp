@@ -3,6 +3,7 @@
 import { clamp, motion, useMotionValueEvent, useScroll } from "framer-motion";
 import Head from "next/head";
 import React, { useState } from "react";
+import { useGlowPointer } from "../../hooks/useGlowPointer";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import Features from "../features";
 import Sticky from "../sticky";
@@ -27,6 +28,7 @@ function Gradient() {
 }
 
 function Hero() {
+  useGlowPointer();
   const { height, width } = useWindowSize();
 
   if (!height) return null;
@@ -39,10 +41,6 @@ function Hero() {
         height={height}
         width={width}
         render={({ progress }) => {
-          const scale = {
-            transform: `scale(${clamp(0.8, 1, 1 - progress * 0.3)})`,
-          };
-
           return (
             <div className="flex flex-col justify-between text-center">
               <div>
@@ -82,11 +80,9 @@ function Hero() {
                   Carbon is an open-source starting point for resource planning
                 </motion.p>
               </div>
-              <div
-                className="flex fix-flex-col h-32 mt-4 md:mt-0 mb-6 md:mb-0 items-center justify-center gap-3 md:flex-row xl:flex-row"
-                style={scale}
-              >
+              <div className="flex fix-flex-col h-32 mt-4 md:mt-0 mb-6 md:mb-0 items-center justify-center gap-3 md:flex-row xl:flex-row">
                 <motion.a
+                  data-glow
                   {...fadeIn}
                   transition={{
                     duration: 0.5,
@@ -99,6 +95,7 @@ function Hero() {
                   Learn
                 </motion.a>
                 <motion.a
+                  data-glow
                   {...fadeIn}
                   transition={{
                     duration: 0.5,
@@ -108,6 +105,7 @@ function Hero() {
                   className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white no-underline bg-zinc-800 border border-transparent rounded-md dark:bg-zinc-100 dark:text-black betterhover:dark:hover:bg-gray-300 betterhover:hover:bg-gray-700 md:py-3 md:text-lg md:px-10 md:leading-6 fix-width-auto xl:w-auto"
                   href="/develop/getting-started"
                 >
+                  <div data-glow />
                   Develop
                 </motion.a>
               </div>

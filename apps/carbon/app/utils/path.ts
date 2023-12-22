@@ -398,7 +398,7 @@ export const path = {
   },
 } as const;
 
-export const onboardingList = [
+export const onboardingSequence = [
   path.to.onboarding.user,
   path.to.onboarding.company,
 ] as const;
