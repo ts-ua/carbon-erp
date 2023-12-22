@@ -89,7 +89,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (formData.get("intent") === "photo") {
     const photoPath = formData.get("path");
-    if (typeof photoPath === "string") {
+    if (photoPath === null || typeof photoPath === "string") {
       const avatarUpdate = await updateAvatar(client, userId, photoPath);
       if (avatarUpdate.error) {
         return redirect(
@@ -103,7 +103,14 @@ export async function action({ request }: ActionFunctionArgs) {
 
       return redirect(
         path.to.profile,
-        await flash(request, success("Updated avatar"))
+        await flash(
+          request,
+          success(
+            photoPath === null
+              ? "Removed avatar. Please refresh the page."
+              : "Updated avatar. Please refresh the page."
+          )
+        )
       );
     } else {
       return redirect(

@@ -1,8 +1,7 @@
 import { File, useNotification } from "@carbon/react";
-import { Button, VStack } from "@chakra-ui/react";
+import { Avatar, Button, VStack } from "@chakra-ui/react";
 import { useSubmit } from "@remix-run/react";
 import type { ChangeEvent } from "react";
-import { Avatar } from "~/components";
 import { useSupabase } from "~/lib/supabase";
 import type { Company } from "~/modules/settings";
 import { path } from "~/utils/path";
@@ -24,7 +23,7 @@ const CompanyLogoForm = ({ company }: CompanyLogoFormProps) => {
       const imageUpload = await supabase.storage
         .from("public")
         .upload(`logo.${fileExtension}`, logo, {
-          cacheControl: `${12 * 60 * 60}`,
+          cacheControl: "0",
           upsert: true,
         });
 
@@ -41,8 +40,8 @@ const CompanyLogoForm = ({ company }: CompanyLogoFormProps) => {
   const deleteImage = async () => {
     if (supabase) {
       const imageDelete = await supabase.storage
-        .from("avatars")
-        .remove([`${company.id}.png`]);
+        .from("public")
+        .remove(["logo.png"]);
 
       if (imageDelete.error) {
         notification.copyableError(imageDelete.error, "Failed to remove image");
@@ -54,17 +53,21 @@ const CompanyLogoForm = ({ company }: CompanyLogoFormProps) => {
 
   const submitLogoUrl = (logoUrl: string | null) => {
     const formData = new FormData();
-    formData.append("intent", "photo");
+    formData.append("intent", "logo");
     if (logoUrl) formData.append("path", logoUrl);
     submit(formData, {
       method: "post",
-      action: path.to.profile,
+      action: path.to.company,
     });
   };
 
   return (
     <VStack w="full" spacing={2} px={8}>
-      <Avatar size="2xl" path={company?.logo} title={company?.name ?? ""} />
+      <Avatar
+        size="2xl"
+        src={company?.logo ?? undefined}
+        title={company?.name ?? ""}
+      />
       <File accept="image/*" onChange={uploadImage}>
         {company.logo ? "Change" : "Upload"}
       </File>
