@@ -196,7 +196,7 @@ const PurchaseOrderPDF = ({
             <View style={styles.tr} key={line.id}>
               <View style={styles.tableCol1}>
                 <Text style={{ marginBottom: 4 }}>
-                  {getLineDescription(line)}
+                  {getLineDescription(purchaseOrder, line)}
                 </Text>
                 <Text style={{ fontSize: 9, opacity: 0.8, width: "95%" }}>
                   {line.description}
