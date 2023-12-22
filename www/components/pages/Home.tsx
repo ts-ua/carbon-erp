@@ -82,7 +82,6 @@ function Hero() {
               </div>
               <div className="flex fix-flex-col h-32 mt-4 md:mt-0 mb-6 md:mb-0 items-center justify-center gap-3 md:flex-row xl:flex-row">
                 <motion.a
-                  data-glow
                   {...fadeIn}
                   transition={{
                     duration: 0.5,
@@ -95,7 +94,6 @@ function Hero() {
                   Learn
                 </motion.a>
                 <motion.a
-                  data-glow
                   {...fadeIn}
                   transition={{
                     duration: 0.5,
@@ -105,7 +103,6 @@ function Hero() {
                   className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white no-underline bg-zinc-800 border border-transparent rounded-md dark:bg-zinc-100 dark:text-black betterhover:dark:hover:bg-gray-300 betterhover:hover:bg-gray-700 md:py-3 md:text-lg md:px-10 md:leading-6 fix-width-auto xl:w-auto"
                   href="/develop/getting-started"
                 >
-                  <div data-glow />
                   Develop
                 </motion.a>
               </div>

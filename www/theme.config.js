@@ -55,5 +55,4 @@ export default {
       titleTemplate: "%s – Carbon ERP",
     };
   },
-  additionalMetaTags: [{ content: "en", httpEquiv: "Content-Language" }],
 };
