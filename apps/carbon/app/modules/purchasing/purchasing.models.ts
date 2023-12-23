@@ -37,6 +37,7 @@ export const purchaseOrderValidator = withZod(
     status: z.enum(purchaseOrderStatusType).optional(),
     notes: zfd.text(z.string().optional()),
     supplierId: z.string().min(36, { message: "Supplier is required" }),
+    supplierLocationId: zfd.text(z.string().optional()),
     supplierContactId: zfd.text(z.string().optional()),
     supplierReference: zfd.text(z.string().optional()),
   })

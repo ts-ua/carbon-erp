@@ -6,26 +6,26 @@ type HeaderProps = {
   title: string;
 };
 
-const Header = ({ title, company }: HeaderProps) => {
-  const styles = StyleSheet.create({
-    header: {
-      fontSize: 11,
-      display: "flex",
-      flexDirection: "row-reverse",
-      justifyContent: "space-between",
-      alignItems: "flex-start",
-      marginBottom: 20,
-    },
-    logo: {
-      height: 70,
-    },
-    title: {
-      height: 70,
-      fontSize: 26,
-      fontWeight: 900,
-    },
-  });
+const styles = StyleSheet.create({
+  header: {
+    fontSize: 11,
+    display: "flex",
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 20,
+  },
+  logo: {
+    height: 70,
+  },
+  title: {
+    height: 70,
+    fontSize: 26,
+    fontWeight: 900,
+  },
+});
 
+const Header = ({ title, company }: HeaderProps) => {
   return (
     <View style={styles.header}>
       <View>
