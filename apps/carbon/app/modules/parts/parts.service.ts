@@ -173,7 +173,7 @@ export async function getPartsList(
     );
   }
 
-  return query;
+  return query.order("name");
 }
 
 export async function getPartQuantities(
@@ -273,7 +273,8 @@ export async function getServicesList(
     .from("service")
     .select("id, name")
     .eq("blocked", false)
-    .eq("active", true);
+    .eq("active", true)
+    .order("name");
 
   if (type) {
     query = query.eq("serviceType", type);
@@ -301,7 +302,8 @@ export async function getShelvesList(
     .from("shelf")
     .select("id")
     .eq("active", true)
-    .eq("locationId", locationId);
+    .eq("locationId", locationId)
+    .order("id");
 }
 
 export async function getUnitOfMeasure(
@@ -332,7 +334,7 @@ export async function getUnitOfMeasures(
 }
 
 export async function getUnitOfMeasuresList(client: SupabaseClient<Database>) {
-  return client.from("unitOfMeasure").select("name, code");
+  return client.from("unitOfMeasure").select("name, code").order("name");
 }
 
 export async function insertShelf(

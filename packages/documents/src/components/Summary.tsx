@@ -28,8 +28,8 @@ const Summary = ({ company, items }: SummaryProps) => {
     },
     companyName: {
       fontSize: 13,
-      color: "#4d4d4d",
-      fontWeight: 700,
+      color: "#000000",
+      fontWeight: 900,
     },
     documentSummary: {
       display: "flex",
@@ -46,7 +46,7 @@ const Summary = ({ company, items }: SummaryProps) => {
       marginBottom: 5,
     },
     documentSummaryLabel: {
-      color: "#4d4d4d",
+      color: "#7d7d7d",
       fontWeight: 700,
       width: "30%",
     },

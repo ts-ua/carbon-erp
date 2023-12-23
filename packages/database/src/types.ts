@@ -5168,6 +5168,12 @@ export interface Database {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "purchaseInvoiceLines_purchaseOrderLineId_fkey";
+            columns: ["purchaseOrderLineId"];
+            referencedRelation: "purchaseOrderLines";
+            referencedColumns: ["id"];
+          },
+          {
             foreignKeyName: "purchaseInvoiceLines_serviceId_fkey";
             columns: ["serviceId"];
             referencedRelation: "service";
@@ -8773,6 +8779,166 @@ export interface Database {
           },
           {
             foreignKeyName: "purchaseInvoice_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
+      purchaseOrderLines: {
+        Row: {
+          accountNumber: string | null;
+          assetId: string | null;
+          createdAt: string | null;
+          createdBy: string | null;
+          description: string | null;
+          id: string | null;
+          invoicedComplete: boolean | null;
+          locationId: string | null;
+          partDescription: string | null;
+          partId: string | null;
+          partName: string | null;
+          purchaseOrderId: string | null;
+          purchaseOrderLineType:
+            | Database["public"]["Enums"]["purchaseOrderLineType"]
+            | null;
+          purchaseQuantity: number | null;
+          quantityInvoiced: number | null;
+          quantityReceived: number | null;
+          quantityToInvoice: number | null;
+          quantityToReceive: number | null;
+          receivedComplete: boolean | null;
+          requiresInspection: boolean | null;
+          serviceDescription: string | null;
+          serviceId: string | null;
+          serviceName: string | null;
+          setupPrice: number | null;
+          shelfId: string | null;
+          supplierId: string | null;
+          supplierPartId: string | null;
+          supplierServiceId: string | null;
+          unitOfMeasureCode: string | null;
+          unitPrice: number | null;
+          updatedAt: string | null;
+          updatedBy: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "purchaseOrder_supplierId_fkey";
+            columns: ["supplierId"];
+            referencedRelation: "supplier";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrder_supplierId_fkey";
+            columns: ["supplierId"];
+            referencedRelation: "contractors";
+            referencedColumns: ["supplierId"];
+          },
+          {
+            foreignKeyName: "purchaseOrder_supplierId_fkey";
+            columns: ["supplierId"];
+            referencedRelation: "partners";
+            referencedColumns: ["supplierId"];
+          },
+          {
+            foreignKeyName: "purchaseOrder_supplierId_fkey";
+            columns: ["supplierId"];
+            referencedRelation: "purchaseOrderSuppliers";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrder_supplierId_fkey";
+            columns: ["supplierId"];
+            referencedRelation: "suppliers";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_accountNumber_fkey";
+            columns: ["accountNumber"];
+            referencedRelation: "account";
+            referencedColumns: ["number"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_accountNumber_fkey";
+            columns: ["accountNumber"];
+            referencedRelation: "accounts";
+            referencedColumns: ["number"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_partId_fkey";
+            columns: ["partId"];
+            referencedRelation: "part";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_partId_fkey";
+            columns: ["partId"];
+            referencedRelation: "partQuantities";
+            referencedColumns: ["partId"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_partId_fkey";
+            columns: ["partId"];
+            referencedRelation: "parts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_purchaseOrderId_fkey";
+            columns: ["purchaseOrderId"];
+            referencedRelation: "purchaseOrder";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_purchaseOrderId_fkey";
+            columns: ["purchaseOrderId"];
+            referencedRelation: "purchaseOrders";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_serviceId_fkey";
+            columns: ["serviceId"];
+            referencedRelation: "service";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_serviceId_fkey";
+            columns: ["serviceId"];
+            referencedRelation: "services";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_shelfId_fkey";
+            columns: ["shelfId", "locationId"];
+            referencedRelation: "shelf";
+            referencedColumns: ["id", "locationId"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_unitOfMeasureCode_fkey";
+            columns: ["unitOfMeasureCode"];
+            referencedRelation: "unitOfMeasure";
+            referencedColumns: ["code"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_updatedBy_fkey";
             columns: ["updatedBy"];
             referencedRelation: "userDefaults";
             referencedColumns: ["userId"];

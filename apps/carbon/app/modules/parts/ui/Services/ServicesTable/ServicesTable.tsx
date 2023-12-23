@@ -20,13 +20,18 @@ const ServicesTable = memo(({ data, count }: ServicesTableProps) => {
   const columns = useMemo<ColumnDef<Service>[]>(() => {
     return [
       {
-        accessorKey: "name",
-        header: "Name",
+        accessorKey: "id",
+        header: "Service ID",
         cell: ({ row }) => (
           <Link onClick={() => navigate(path.to.service(row.original.id!))}>
-            {row.original.name}
+            {row.original.id}
           </Link>
         ),
+      },
+      {
+        accessorKey: "name",
+        header: "Name",
+        cell: (item) => item.getValue(),
       },
       {
         accessorKey: "description",
