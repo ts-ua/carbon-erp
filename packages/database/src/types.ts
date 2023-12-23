@@ -1002,7 +1002,7 @@ export interface Database {
           addressLine1: string | null;
           addressLine2: string | null;
           city: string | null;
-          countryId: number | null;
+          countryCode: number | null;
           fax: string | null;
           id: string;
           phone: string | null;
@@ -1013,7 +1013,7 @@ export interface Database {
           addressLine1?: string | null;
           addressLine2?: string | null;
           city?: string | null;
-          countryId?: number | null;
+          countryCode?: number | null;
           fax?: string | null;
           id?: string;
           phone?: string | null;
@@ -1024,7 +1024,7 @@ export interface Database {
           addressLine1?: string | null;
           addressLine2?: string | null;
           city?: string | null;
-          countryId?: number | null;
+          countryCode?: number | null;
           fax?: string | null;
           id?: string;
           phone?: string | null;
@@ -1033,8 +1033,8 @@ export interface Database {
         };
         Relationships: [
           {
-            foreignKeyName: "address_countryId_fkey";
-            columns: ["countryId"];
+            foreignKeyName: "address_countryCode_fkey";
+            columns: ["countryCode"];
             referencedRelation: "country";
             referencedColumns: ["id"];
           }
@@ -1146,7 +1146,7 @@ export interface Database {
           addressLine2: string | null;
           birthday: string | null;
           city: string | null;
-          countryId: number | null;
+          countryCode: number | null;
           email: string;
           fax: string | null;
           firstName: string;
@@ -1166,7 +1166,7 @@ export interface Database {
           addressLine2?: string | null;
           birthday?: string | null;
           city?: string | null;
-          countryId?: number | null;
+          countryCode?: number | null;
           email: string;
           fax?: string | null;
           firstName: string;
@@ -1186,7 +1186,7 @@ export interface Database {
           addressLine2?: string | null;
           birthday?: string | null;
           city?: string | null;
-          countryId?: number | null;
+          countryCode?: number | null;
           email?: string;
           fax?: string | null;
           firstName?: string;
@@ -1203,8 +1203,8 @@ export interface Database {
         };
         Relationships: [
           {
-            foreignKeyName: "contact_countryId_fkey";
-            columns: ["countryId"];
+            foreignKeyName: "contact_countryCode_fkey";
+            columns: ["countryCode"];
             referencedRelation: "country";
             referencedColumns: ["id"];
           }
@@ -3004,7 +3004,7 @@ export interface Database {
           addressLine1: string;
           addressLine2: string | null;
           city: string;
-          country: string | null;
+          countryCode: string | null;
           createdAt: string;
           createdBy: string;
           id: string;
@@ -3021,7 +3021,7 @@ export interface Database {
           addressLine1: string;
           addressLine2?: string | null;
           city: string;
-          country?: string | null;
+          countryCode?: string | null;
           createdAt?: string;
           createdBy: string;
           id?: string;
@@ -3038,7 +3038,7 @@ export interface Database {
           addressLine1?: string;
           addressLine2?: string | null;
           city?: string;
-          country?: string | null;
+          countryCode?: string | null;
           createdAt?: string;
           createdBy?: string;
           id?: string;
@@ -5158,6 +5158,12 @@ export interface Database {
           {
             foreignKeyName: "purchaseInvoiceLines_purchaseOrderId_fkey";
             columns: ["purchaseOrderId"];
+            referencedRelation: "purchaseOrderLocations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseInvoiceLines_purchaseOrderId_fkey";
+            columns: ["purchaseOrderId"];
             referencedRelation: "purchaseOrders";
             referencedColumns: ["id"];
           },
@@ -5359,6 +5365,7 @@ export interface Database {
           status: Database["public"]["Enums"]["purchaseOrderStatus"];
           supplierContactId: string | null;
           supplierId: string;
+          supplierLocationId: string | null;
           supplierReference: string | null;
           type: Database["public"]["Enums"]["purchaseOrderType"];
           updatedAt: string | null;
@@ -5376,6 +5383,7 @@ export interface Database {
           status?: Database["public"]["Enums"]["purchaseOrderStatus"];
           supplierContactId?: string | null;
           supplierId: string;
+          supplierLocationId?: string | null;
           supplierReference?: string | null;
           type: Database["public"]["Enums"]["purchaseOrderType"];
           updatedAt?: string | null;
@@ -5393,6 +5401,7 @@ export interface Database {
           status?: Database["public"]["Enums"]["purchaseOrderStatus"];
           supplierContactId?: string | null;
           supplierId?: string;
+          supplierLocationId?: string | null;
           supplierReference?: string | null;
           type?: Database["public"]["Enums"]["purchaseOrderType"];
           updatedAt?: string | null;
@@ -5457,6 +5466,12 @@ export interface Database {
             foreignKeyName: "purchaseOrder_supplierId_fkey";
             columns: ["supplierId"];
             referencedRelation: "suppliers";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrder_supplierLocationId_fkey";
+            columns: ["supplierLocationId"];
+            referencedRelation: "supplierLocation";
             referencedColumns: ["id"];
           },
           {
@@ -5550,6 +5565,12 @@ export interface Database {
           {
             foreignKeyName: "purchaseOrderDelivery_id_fkey";
             columns: ["id"];
+            referencedRelation: "purchaseOrderLocations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderDelivery_id_fkey";
+            columns: ["id"];
             referencedRelation: "purchaseOrders";
             referencedColumns: ["id"];
           },
@@ -5615,6 +5636,12 @@ export interface Database {
             foreignKeyName: "purchaseOrderFavorites_purchaseOrderId_fkey";
             columns: ["purchaseOrderId"];
             referencedRelation: "purchaseOrder";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderFavorites_purchaseOrderId_fkey";
+            columns: ["purchaseOrderId"];
+            referencedRelation: "purchaseOrderLocations";
             referencedColumns: ["id"];
           },
           {
@@ -5771,6 +5798,12 @@ export interface Database {
           {
             foreignKeyName: "purchaseOrderLine_purchaseOrderId_fkey";
             columns: ["purchaseOrderId"];
+            referencedRelation: "purchaseOrderLocations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_purchaseOrderId_fkey";
+            columns: ["purchaseOrderId"];
             referencedRelation: "purchaseOrders";
             referencedColumns: ["id"];
           },
@@ -5857,6 +5890,12 @@ export interface Database {
             foreignKeyName: "purchaseOrderPayment_id_fkey";
             columns: ["id"];
             referencedRelation: "purchaseOrder";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderPayment_id_fkey";
+            columns: ["id"];
+            referencedRelation: "purchaseOrderLocations";
             referencedColumns: ["id"];
           },
           {
@@ -5959,6 +5998,12 @@ export interface Database {
           {
             foreignKeyName: "purchaseOrderStatusHistory_purchaseOrderId_fkey";
             columns: ["purchaseOrderId"];
+            referencedRelation: "purchaseOrderLocations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderStatusHistory_purchaseOrderId_fkey";
+            columns: ["purchaseOrderId"];
             referencedRelation: "purchaseOrders";
             referencedColumns: ["id"];
           }
@@ -5991,6 +6036,12 @@ export interface Database {
             foreignKeyName: "purchaseOrderTransaction_purchaseOrderId_fkey";
             columns: ["purchaseOrderId"];
             referencedRelation: "purchaseOrder";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderTransaction_purchaseOrderId_fkey";
+            columns: ["purchaseOrderId"];
+            referencedRelation: "purchaseOrderLocations";
             referencedColumns: ["id"];
           },
           {
@@ -8904,6 +8955,12 @@ export interface Database {
           {
             foreignKeyName: "purchaseOrderLine_purchaseOrderId_fkey";
             columns: ["purchaseOrderId"];
+            referencedRelation: "purchaseOrderLocations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrderLine_purchaseOrderId_fkey";
+            columns: ["purchaseOrderId"];
             referencedRelation: "purchaseOrders";
             referencedColumns: ["id"];
           },
@@ -8945,6 +9002,47 @@ export interface Database {
           }
         ];
       };
+      purchaseOrderLocations: {
+        Row: {
+          customerAddressLine1: string | null;
+          customerAddressLine2: string | null;
+          customerCity: string | null;
+          customerCountryCode: number | null;
+          customerName: string | null;
+          customerPostalCode: string | null;
+          customerState: string | null;
+          deliveryAddressLine1: string | null;
+          deliveryAddressLine2: string | null;
+          deliveryCity: string | null;
+          deliveryCountryCode: string | null;
+          deliveryName: string | null;
+          deliveryPostalCode: string | null;
+          deliveryState: string | null;
+          dropShipment: boolean | null;
+          id: string | null;
+          supplierAddressLine1: string | null;
+          supplierAddressLine2: string | null;
+          supplierCity: string | null;
+          supplierCountryCode: number | null;
+          supplierName: string | null;
+          supplierPostalCode: string | null;
+          supplierState: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "address_countryCode_fkey";
+            columns: ["supplierCountryCode"];
+            referencedRelation: "country";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "address_countryCode_fkey";
+            columns: ["customerCountryCode"];
+            referencedRelation: "country";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
       purchaseOrders: {
         Row: {
           closedAt: string | null;
@@ -8971,6 +9069,7 @@ export interface Database {
           status: Database["public"]["Enums"]["purchaseOrderStatus"] | null;
           supplierContactId: string | null;
           supplierId: string | null;
+          supplierLocationId: string | null;
           supplierName: string | null;
           supplierReference: string | null;
           type: Database["public"]["Enums"]["purchaseOrderType"] | null;
@@ -9038,6 +9137,12 @@ export interface Database {
             foreignKeyName: "purchaseOrder_supplierId_fkey";
             columns: ["supplierId"];
             referencedRelation: "suppliers";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "purchaseOrder_supplierLocationId_fkey";
+            columns: ["supplierLocationId"];
+            referencedRelation: "supplierLocation";
             referencedColumns: ["id"];
           },
           {

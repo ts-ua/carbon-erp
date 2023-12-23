@@ -36,6 +36,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { purchaseOrderId, ...data } = validation.data;
   if (!purchaseOrderId) throw new Error("Could not find purchaseOrderId");
 
+  console.log({ data });
+
   const updatePurchaseOrder = await upsertPurchaseOrder(client, {
     id: orderId,
     purchaseOrderId,
@@ -71,6 +73,7 @@ export default function PurchaseOrderBasicRoute() {
     purchaseOrderId: orderData?.purchaseOrder?.purchaseOrderId ?? "",
     supplierId: orderData?.purchaseOrder?.supplierId ?? "",
     supplierContactId: orderData?.purchaseOrder?.supplierContactId ?? "",
+    supplierLocationId: orderData?.purchaseOrder?.supplierLocationId ?? "",
     supplierReference: orderData?.purchaseOrder?.supplierReference ?? "",
     orderDate: orderData?.purchaseOrder?.orderDate ?? "",
     type: orderData?.purchaseOrder?.type ?? ("Purchase" as "Purchase"),

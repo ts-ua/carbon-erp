@@ -9,52 +9,52 @@ type SummaryProps = {
   }[];
 };
 
-const Summary = ({ company, items }: SummaryProps) => {
-  const styles = StyleSheet.create({
-    summary: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "flex-start",
-      marginBottom: 20,
-    },
-    companyDetails: {
-      display: "flex",
-      flexDirection: "column",
-      rowGap: 3,
-      fontSize: 11,
-      fontWeight: 500,
-      width: "68%",
-    },
-    companyName: {
-      fontSize: 13,
-      color: "#000000",
-      fontWeight: 900,
-    },
-    documentSummary: {
-      display: "flex",
-      flexDirection: "column",
-      rowGap: 3,
-      fontSize: 11,
-      fontWeight: 500,
-      width: "32%",
-    },
-    documentSummaryItem: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "flex-start",
-      marginBottom: 5,
-    },
-    documentSummaryLabel: {
-      color: "#7d7d7d",
-      fontWeight: 700,
-      width: "30%",
-    },
-    documentSummaryValue: {
-      fontWeight: 500,
-    },
-  });
+const styles = StyleSheet.create({
+  summary: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 20,
+  },
+  companyDetails: {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: 3,
+    fontSize: 11,
+    fontWeight: 500,
+    width: "68%",
+  },
+  companyName: {
+    fontSize: 13,
+    color: "#000000",
+    fontWeight: 900,
+  },
+  documentSummary: {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: 3,
+    fontSize: 11,
+    fontWeight: 500,
+    width: "32%",
+  },
+  documentSummaryItem: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    marginBottom: 5,
+  },
+  documentSummaryLabel: {
+    color: "#7d7d7d",
+    fontWeight: 700,
+    width: "30%",
+  },
+  documentSummaryValue: {
+    fontWeight: 500,
+  },
+});
 
+const Summary = ({ company, items }: SummaryProps) => {
   return (
     <View style={styles.summary}>
       <View style={styles.companyDetails}>

@@ -166,6 +166,7 @@ CREATE TABLE "purchaseOrder" (
   "orderDate" DATE NOT NULL DEFAULT CURRENT_DATE,
   "notes" TEXT,
   "supplierId" TEXT NOT NULL,
+  "supplierLocationId" TEXT,
   "supplierContactId" TEXT,
   "supplierReference" TEXT,
   "closedAt" DATE,
@@ -178,7 +179,8 @@ CREATE TABLE "purchaseOrder" (
   CONSTRAINT "purchaseOrder_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "purchaseOrder_purchaseOrderId_key" UNIQUE ("purchaseOrderId"),
   CONSTRAINT "purchaseOrder_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "supplier" ("id") ON DELETE CASCADE,
-  CONSTRAINT "purchaseOrder_supplierContactId_fkey" FOREIGN KEY ("supplierContactId") REFERENCES "supplierContact" ("id") ON DELETE CASCADE,
+  CONSTRAINT "purchaseOrder_supplierLocationId_fkey" FOREIGN KEY ("supplierLocationId") REFERENCES "supplierLocation" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT "purchaseOrder_supplierContactId_fkey" FOREIGN KEY ("supplierContactId") REFERENCES "supplierContact" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseOrder_closedBy_fkey" FOREIGN KEY ("closedBy") REFERENCES "user" ("id") ON DELETE RESTRICT,
   CONSTRAINT "purchaseOrder_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT,
   CONSTRAINT "purchaseOrder_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT

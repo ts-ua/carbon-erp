@@ -149,6 +149,17 @@ export async function getPurchaseOrderDelivery(
     .single();
 }
 
+export async function getPurchaseOrderLocations(
+  client: SupabaseClient<Database>,
+  purchaseOrderId: string
+) {
+  return client
+    .from("purchaseOrderLocations")
+    .select("*")
+    .eq("id", purchaseOrderId)
+    .single();
+}
+
 export async function getPurchaseOrderPayment(
   client: SupabaseClient<Database>,
   purchaseOrderId: string
