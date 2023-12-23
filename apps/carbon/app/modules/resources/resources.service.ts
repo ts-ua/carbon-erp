@@ -153,7 +153,7 @@ export async function getAbilities(
 }
 
 export async function getAbilitiesList(client: SupabaseClient<Database>) {
-  return client.from("ability").select(`id, name`);
+  return client.from("ability").select(`id, name`).order("name");
 }
 
 export async function getAbility(
@@ -326,7 +326,7 @@ export async function getDepartments(
 }
 
 export async function getDepartmentsList(client: SupabaseClient<Database>) {
-  return client.from("department").select(`id, name`);
+  return client.from("department").select(`id, name`).order("name");
 }
 
 export async function getEmployeeAbility(
@@ -486,7 +486,7 @@ export async function getLocations(
 }
 
 export async function getLocationsList(client: SupabaseClient<Database>) {
-  return client.from("location").select(`id, name`);
+  return client.from("location").select(`id, name`).order("name");
 }
 
 export async function getPartner(
@@ -576,7 +576,7 @@ export async function getShiftsList(
     query = query.eq("locationId", locationId);
   }
 
-  return query;
+  return query.order("name");
 }
 
 type UserAttributeId = string;
@@ -705,7 +705,7 @@ export async function getWorkCellList(
     query = query.eq("workCellTypeId", workCellTypeId);
   }
 
-  return query;
+  return query.order("name");
 }
 
 export async function getWorkCellType(

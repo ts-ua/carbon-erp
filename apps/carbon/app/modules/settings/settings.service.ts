@@ -105,7 +105,7 @@ export async function getSequencesList(
   client: SupabaseClient<Database>,
   table: string
 ) {
-  return client.from("sequence").select("id").eq("table", table);
+  return client.from("sequence").select("id").eq("table", table).order("table");
 }
 
 export async function insertCompany(

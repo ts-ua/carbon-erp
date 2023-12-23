@@ -6,7 +6,7 @@ import type { PDF } from "../types";
 
 interface PurchaseOrderPDFProps extends PDF {
   purchaseOrder: Database["public"]["Views"]["purchaseOrders"]["Row"];
-  purchaseOrderLines: Database["public"]["Tables"]["purchaseOrderLine"]["Row"][];
+  purchaseOrderLines: Database["public"]["Views"]["purchaseOrderLines"]["Row"][];
 }
 
 // TODO: format currency based on settings
@@ -54,13 +54,13 @@ const PurchaseOrderPDF = ({
     label: {
       color: "#7d7d7d",
     },
-    total: {
+    bold: {
       fontWeight: 700,
       color: "#000000",
     },
     table: {
       marginBottom: 20,
-      fontSize: 9,
+      fontSize: 10,
     },
     thead: {
       flexGrow: 1,
@@ -102,16 +102,16 @@ const PurchaseOrderPDF = ({
       textTransform: "uppercase",
     },
     tableCol1: {
-      width: "40%",
+      width: "50%",
       textAlign: "left",
     },
     tableCol2: {
-      width: "20%",
-      textAlign: "center",
+      width: "15%",
+      textAlign: "right",
     },
     tableCol3: {
-      width: "20%",
-      textAlign: "center",
+      width: "15%",
+      textAlign: "right",
     },
     tableCol4: {
       width: "20%",
@@ -152,6 +152,7 @@ const PurchaseOrderPDF = ({
           </View>
           <View style={styles.colThird}>
             <Text style={styles.label}>Ship To</Text>
+            <Text>Headquarters</Text>
             <Text>Barry Mantelow</Text>
             <Text>123 Strange Rd</Text>
             <Text>Bazooka, AL 12345</Text>
@@ -195,11 +196,11 @@ const PurchaseOrderPDF = ({
           {purchaseOrderLines.map((line) => (
             <View style={styles.tr} key={line.id}>
               <View style={styles.tableCol1}>
-                <Text style={{ marginBottom: 4 }}>
-                  {getLineDescription(purchaseOrder, line)}
+                <Text style={{ ...styles.bold, marginBottom: 4 }}>
+                  {getLineDescription(line)}
                 </Text>
-                <Text style={{ fontSize: 9, opacity: 0.8, width: "95%" }}>
-                  {line.description}
+                <Text style={{ fontSize: 9, opacity: 0.8 }}>
+                  {getLineDescriptionDetails(line)}
                 </Text>
               </View>
               <Text style={styles.tableCol2}>
@@ -229,7 +230,7 @@ const PurchaseOrderPDF = ({
           ))}
           <View style={styles.tfoot}>
             <Text>Total</Text>
-            <Text style={styles.total}>
+            <Text style={styles.bold}>
               <Text>$</Text>
               <Text>{getTotal(purchaseOrderLines)}</Text>
             </Text>
@@ -248,8 +249,66 @@ const PurchaseOrderPDF = ({
   );
 };
 
+function getLineDescription(
+  line: Database["public"]["Views"]["purchaseOrderLines"]["Row"]
+) {
+  switch (line?.purchaseOrderLineType) {
+    case "Part":
+      const supplierPartNumber = line.supplierPartId
+        ? ` (${line.supplierPartId})`
+        : "";
+      return line?.partId + supplierPartNumber;
+    case "Service":
+      const supplierServiceNumber = line.supplierServiceId
+        ? ` (${line.supplierServiceId})`
+        : "";
+      return line?.serviceId + supplierServiceNumber;
+    case "Fixed Asset":
+      return line?.assetId;
+    case "G/L Account":
+    case "Comment":
+      return line?.description;
+    default:
+      return "";
+  }
+}
+
+function getLineDescriptionDetails(
+  line: Database["public"]["Views"]["purchaseOrderLines"]["Row"]
+) {
+  switch (line?.purchaseOrderLineType) {
+    case "Part":
+      const partDescription = line?.partDescription
+        ? `\n${line.partDescription}`
+        : "";
+      return line?.description + partDescription;
+    case "Service":
+      const serviceDescription = line?.serviceDescription
+        ? `\n${line.serviceDescription}`
+        : "";
+      return line?.description + serviceDescription;
+    case "Fixed Asset":
+      return line?.description;
+    case "G/L Account":
+      return `GL Account: ${line?.accountNumber}`;
+    case "Comment":
+    default:
+      return "";
+  }
+}
+
+function getLineTotal(
+  line: Database["public"]["Views"]["purchaseOrderLines"]["Row"]
+) {
+  if (line?.purchaseQuantity && line?.unitPrice) {
+    return (line.purchaseQuantity * line.unitPrice).toFixed(2);
+  }
+
+  return "";
+}
+
 function getTotal(
-  lines: Database["public"]["Tables"]["purchaseOrderLine"]["Row"][]
+  lines: Database["public"]["Views"]["purchaseOrderLines"]["Row"][]
 ) {
   let total = 0;
 
@@ -260,34 +319,6 @@ function getTotal(
   });
 
   return total.toFixed(2);
-}
-
-function getLineTotal(
-  line: Database["public"]["Tables"]["purchaseOrderLine"]["Row"]
-) {
-  if (line?.purchaseQuantity && line?.unitPrice) {
-    return (line.purchaseQuantity * line.unitPrice).toFixed(2);
-  }
-
-  return "";
-}
-
-function getLineDescription(
-  purchaseOrder: Database["public"]["Views"]["purchaseOrders"]["Row"],
-  line: Database["public"]["Tables"]["purchaseOrderLine"]["Row"]
-) {
-  switch (line?.purchaseOrderLineType) {
-    case "Comment":
-      return line?.description;
-    case "Part":
-      return line?.description;
-    case "Service":
-      return line?.description;
-    case "Fixed Asset":
-      return line?.description;
-    default:
-      return "";
-  }
 }
 
 const PurchaseOrderPDFView = (props: PurchaseOrderPDFProps) => (

@@ -58,7 +58,7 @@ function Features({ showIcons = false }) {
         {features.map(({ icon: Icon, ...feature }, i) => (
           <div
             data-glow
-            className="flex items-start p-8 space-x-4 bg-black/[0.03] dark:bg-zinc-900 sm:-inset-x-6 round shadow-sm transition-all duration-300 ease-in-out"
+            className="flex items-start p-8 space-x-4 bg-black/[0.03] dark:bg-zinc-900 round shadow-sm transition-all duration-300 ease-in-out"
             key={feature.name.split(" ").join("-")}
           >
             <div data-glow />

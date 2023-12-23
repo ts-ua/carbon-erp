@@ -8,7 +8,7 @@ import { requirePermissions } from "~/services/auth";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client } = await requirePermissions(request, {});
-  const orderId = "cm2mban560l148d36up0";
+  const orderId = "cm2ttji240kgaqs4q1vg";
 
   const [company, purchaseOrder, purchaseOrderLines] = await Promise.all([
     getCompany(client),
