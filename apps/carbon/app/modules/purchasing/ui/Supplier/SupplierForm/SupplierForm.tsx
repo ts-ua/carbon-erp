@@ -1,10 +1,10 @@
+import { Heading } from "@carbon/react";
 import {
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Grid,
-  Heading,
   HStack,
   Text,
   VStack,
@@ -54,7 +54,7 @@ const SupplierForm = ({ initialValues }: SupplierFormProps) => {
     >
       <Card w="full">
         <CardHeader>
-          <Heading size="md">
+          <Heading size="h3">
             {isEditing ? "Supplier Overview" : "New Supplier"}
           </Heading>
           {!isEditing && (

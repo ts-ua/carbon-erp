@@ -1,12 +1,13 @@
-import { useRef } from "react";
-import { useRangeCalendarState } from "@react-stately/calendar";
+import { Box, Icon } from "@chakra-ui/react";
+import type { DateValue } from "@internationalized/date";
+import { createCalendar } from "@internationalized/date";
 import type { RangeCalendarProps } from "@react-aria/calendar";
 import { useRangeCalendar } from "@react-aria/calendar";
 import { useLocale } from "@react-aria/i18n";
-import { createCalendar } from "@internationalized/date";
-import type { DateValue } from "@internationalized/date";
+import { useRangeCalendarState } from "@react-stately/calendar";
+import { useRef } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-import { Box, Icon, Heading } from "@chakra-ui/react";
+import { Heading } from "~/Heading";
 
 import { CalendarButton } from "./Button";
 import { CalendarGrid } from "./CalendarGrid";
@@ -30,7 +31,7 @@ export function RangeCalendar(props: RangeCalendarProps<DateValue>) {
         <CalendarButton {...prevButtonProps}>
           <Icon as={FaAngleLeft} w={6} h={6} />
         </CalendarButton>
-        <Heading as="h2" size="md" flex="1" textAlign="center">
+        <Heading as="h2" size="h3" className="flex-1 text-center">
           {title}
         </Heading>
         <CalendarButton {...nextButtonProps}>

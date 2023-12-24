@@ -1,10 +1,10 @@
+import { Heading } from "@carbon/react";
 import { convertKbToString } from "@carbon/utils";
 import {
   Card,
   CardBody,
   CardHeader,
   Flex,
-  Heading,
   HStack,
   IconButton,
   Link,
@@ -47,7 +47,7 @@ const PurchaseOrderDocuments = ({
     <>
       <Card w="full">
         <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="md" display="inline-flex">
+          <Heading size="h3" className="inline-flex">
             {isExternal ? "External" : "Internal"} Attachments
           </Heading>
           <PurchaseOrderDocumentForm

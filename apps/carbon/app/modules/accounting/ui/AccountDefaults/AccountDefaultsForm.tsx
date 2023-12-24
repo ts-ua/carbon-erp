@@ -1,7 +1,7 @@
+import { Heading } from "@carbon/react";
 import {
   Button,
   Grid,
-  Heading,
   HStack,
   Tab,
   TabList,
@@ -67,7 +67,10 @@ const AccountDefaultsForm = ({
             <TabPanel>
               <VStack w="full" alignItems="start" spacing={8}>
                 <VStack w="full" alignItems="start" spacing={4}>
-                  <Heading size="xs" color="gray.400" textTransform="uppercase">
+                  <Heading
+                    size="h4"
+                    className="uppercase text-muted-foreground"
+                  >
                     Revenue
                   </Heading>
                   <Grid
@@ -90,7 +93,10 @@ const AccountDefaultsForm = ({
                   </Grid>
                 </VStack>
                 <VStack w="full" alignItems="start" spacing={4}>
-                  <Heading size="xs" color="gray.400" textTransform="uppercase">
+                  <Heading
+                    size="h4"
+                    className="uppercase text-muted-foreground"
+                  >
                     Expenses
                   </Heading>
                   <Grid
@@ -154,7 +160,10 @@ const AccountDefaultsForm = ({
                   </Grid>
                 </VStack>
                 <VStack w="full" alignItems="start" spacing={4}>
-                  <Heading size="xs" color="gray.400" textTransform="uppercase">
+                  <Heading
+                    size="h4"
+                    className="uppercase text-muted-foreground"
+                  >
                     Fixed Assets
                   </Heading>
                   <Grid
@@ -182,7 +191,10 @@ const AccountDefaultsForm = ({
                   </Grid>
                 </VStack>
                 <VStack w="full" alignItems="start" spacing={4}>
-                  <Heading size="xs" color="gray.400" textTransform="uppercase">
+                  <Heading
+                    size="h4"
+                    className="uppercase text-muted-foreground"
+                  >
                     Interest
                   </Heading>
                   <Grid
@@ -219,7 +231,10 @@ const AccountDefaultsForm = ({
             <TabPanel>
               <VStack w="full" alignItems="start" spacing={8}>
                 <VStack w="full" alignItems="start" spacing={4}>
-                  <Heading size="xs" color="gray.400" textTransform="uppercase">
+                  <Heading
+                    size="h4"
+                    className="uppercase text-muted-foreground"
+                  >
                     Current Assets
                   </Heading>
                   <Grid
@@ -273,7 +288,10 @@ const AccountDefaultsForm = ({
                   </Grid>
                 </VStack>
                 <VStack w="full" alignItems="start" spacing={4}>
-                  <Heading size="xs" color="gray.400" textTransform="uppercase">
+                  <Heading
+                    size="h4"
+                    className="uppercase text-muted-foreground"
+                  >
                     Fixed Assets
                   </Heading>
                   <Grid
@@ -306,7 +324,10 @@ const AccountDefaultsForm = ({
                   </Grid>
                 </VStack>
                 <VStack w="full" alignItems="start" spacing={4}>
-                  <Heading size="xs" color="gray.400" textTransform="uppercase">
+                  <Heading
+                    size="h4"
+                    className="uppercase text-muted-foreground"
+                  >
                     Liabilities
                   </Heading>
                   <Grid
@@ -354,7 +375,10 @@ const AccountDefaultsForm = ({
                   </Grid>
                 </VStack>
                 <VStack w="full" alignItems="start" spacing={4}>
-                  <Heading size="xs" color="gray.400" textTransform="uppercase">
+                  <Heading
+                    size="h4"
+                    className="uppercase text-muted-foreground"
+                  >
                     Equity
                   </Heading>
                   <Grid

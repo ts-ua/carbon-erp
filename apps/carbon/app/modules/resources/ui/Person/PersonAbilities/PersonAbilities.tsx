@@ -1,3 +1,4 @@
+import { Heading } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
 import {
   Box,
@@ -7,7 +8,6 @@ import {
   Center,
   Flex,
   Grid,
-  Heading,
   Icon,
   List,
   ListItem,
@@ -59,7 +59,7 @@ const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
   return (
     <Card w="full">
       <CardHeader>
-        <Heading size="md">Abilities</Heading>
+        <Heading size="h3">Abilities</Heading>
       </CardHeader>
       <CardBody>
         {abilities?.length > 0 ? (

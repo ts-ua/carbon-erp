@@ -1,3 +1,4 @@
+import { Heading } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,7 +8,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  Heading,
   HStack,
   Text,
   VStack,
@@ -62,7 +62,7 @@ const SequenceForm = ({ initialValues }: SequenceFormProps) => {
           <DrawerBody pb={8}>
             <Hidden name="table" />
             <VStack spacing={4} alignItems="start">
-              <Heading size="lg">{makePreview()}</Heading>
+              <Heading size="h2">{makePreview()}</Heading>
 
               <Input
                 name="prefix"

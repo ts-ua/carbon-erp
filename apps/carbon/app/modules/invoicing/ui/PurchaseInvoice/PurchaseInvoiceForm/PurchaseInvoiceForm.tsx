@@ -1,10 +1,10 @@
+import { Heading } from "@carbon/react";
 import {
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Grid,
-  Heading,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -68,7 +68,7 @@ const PurchaseInvoiceForm = ({
     >
       <Card w="full">
         <CardHeader>
-          <Heading size="md">
+          <Heading size="h3">
             {isEditing ? "Purchase Invoice" : "New Purchase Invoice"}
           </Heading>
           {!isEditing && (

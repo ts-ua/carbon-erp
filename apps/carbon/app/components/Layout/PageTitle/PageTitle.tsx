@@ -1,4 +1,4 @@
-import { Heading, Text, VStack } from "@chakra-ui/react";
+import { Heading, VStack } from "@carbon/react";
 
 type PageTitleProps = {
   title: string;
@@ -7,13 +7,9 @@ type PageTitleProps = {
 
 const PageTitle = ({ title, subtitle }: PageTitleProps) => {
   return (
-    <VStack spacing={2} alignItems="start" w="full" mb={4}>
-      <Heading size="lg">{title}</Heading>
-      {subtitle && (
-        <Text fontSize={14} color="gray.500">
-          {subtitle}
-        </Text>
-      )}
+    <VStack spacing={2} className="mb-4">
+      <Heading size="h1">{title}</Heading>
+      {subtitle && <p className="text-muted-foreground">{subtitle}</p>}
     </VStack>
   );
 };

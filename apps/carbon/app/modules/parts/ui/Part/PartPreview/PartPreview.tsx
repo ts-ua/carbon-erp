@@ -1,9 +1,9 @@
+import { Heading, VStack } from "@carbon/react";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
-  Heading,
   HStack,
   Stack,
   Text,
@@ -26,10 +26,10 @@ const PartPreview = () => {
     <Card w="full">
       <CardHeader>
         <HStack justifyContent="space-between" alignItems="start">
-          <Stack direction={["column", "column", "row"]} spacing={2}>
-            <Heading size="md">{routeData?.partSummary?.id}</Heading>
+          <VStack spacing={0}>
+            <Heading size="h3">{routeData?.partSummary?.id}</Heading>
             <Text color="gray.500">{routeData?.partSummary?.name}</Text>
-          </Stack>
+          </VStack>
           <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
             View History
           </Button>

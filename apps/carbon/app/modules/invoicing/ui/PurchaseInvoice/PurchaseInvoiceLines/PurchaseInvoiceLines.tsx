@@ -1,10 +1,10 @@
+import { Heading } from "@carbon/react";
 import {
   Box,
   Button,
   Card,
   CardBody,
   CardHeader,
-  Heading,
   HStack,
   IconButton,
   Menu,
@@ -195,7 +195,7 @@ const PurchaseInvoiceLines = () => {
     <>
       <Card w="full" h="full">
         <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="md" display="inline-flex">
+          <Heading size="h3" className="inline-flex">
             Purchase Invoice Lines
           </Heading>
           {canEdit && isEditable && (

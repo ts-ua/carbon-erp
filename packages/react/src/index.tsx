@@ -2,16 +2,8 @@ import Button from "./Button";
 import Count from "./Count";
 import DataTable, { DataTableColumnHeader } from "./DataTable";
 import Dot from "./Dot";
-import {
-  useColor,
-  useDebounce,
-  useEscape,
-  useHydrated,
-  useInterval,
-  useKeyboardShortcuts,
-  useMount,
-} from "./hooks";
 import HTML from "./HTML";
+import { Heading } from "./Heading";
 import type {
   GroupBase,
   MultiValue,
@@ -21,7 +13,6 @@ import type {
 } from "./Inputs";
 import {
   CreatableSelect,
-  createFilter,
   DatePicker,
   DateRangePicker,
   DateTimePicker,
@@ -29,6 +20,7 @@ import {
   File,
   Select,
   TimePicker,
+  createFilter,
   useEditor,
 } from "./Inputs";
 import Loading from "./Loading";
@@ -38,8 +30,17 @@ import { ActionMenu, ContextMenu } from "./Overlay";
 import { ClientOnly } from "./SSR";
 import Status from "./Status";
 import ThemeProvider, { theme } from "./Theme";
+import { VStack } from "./VStack";
+import {
+  useColor,
+  useDebounce,
+  useEscape,
+  useHydrated,
+  useInterval,
+  useKeyboardShortcuts,
+  useMount,
+} from "./hooks";
 
-export type { GroupBase, MultiValue, OptionBase, OptionProps, SingleValue };
 export {
   ActionMenu,
   Button,
@@ -50,12 +51,13 @@ export {
   DataTable,
   DataTableColumnHeader,
   DatePicker,
-  DateTimePicker,
   DateRangePicker,
+  DateTimePicker,
   Dot,
   Editor,
   File,
   HTML,
+  Heading,
   Loading,
   Menubar,
   MenubarItem,
@@ -64,6 +66,7 @@ export {
   Status,
   ThemeProvider,
   TimePicker,
+  VStack,
   createFilter,
   theme,
   useColor,
@@ -76,3 +79,4 @@ export {
   useMount,
   useNotification,
 };
+export type { GroupBase, MultiValue, OptionBase, OptionProps, SingleValue };

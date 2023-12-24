@@ -1,8 +1,7 @@
-import { useColor } from "@carbon/react";
+import { Heading, useColor } from "@carbon/react";
 import {
   Box,
   Button,
-  Heading,
   HStack,
   IconButton,
   NumberDecrementStepper,
@@ -25,8 +24,8 @@ import { Hidden, Input, Submit } from "~/components/Form";
 import type { AbilityDatum } from "~/modules/resources";
 import {
   AbilityChart,
-  abilityCurveValidator,
   AbilityEmployeesTable,
+  abilityCurveValidator,
   abilityNameValidator,
   getAbility,
   updateAbility,
@@ -202,7 +201,7 @@ export default function AbilitiesRoute() {
                 icon={<MdOutlineArrowBackIos />}
                 onClick={() => navigate(path.to.abilities)}
               />
-              <Heading size="md">{ability.name}</Heading>
+              <Heading size="h3">{ability.name}</Heading>
               <IconButton
                 aria-label="Edit"
                 variant="ghost"

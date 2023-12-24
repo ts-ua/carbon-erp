@@ -1,6 +1,5 @@
 import { useColor, useNotification } from "@carbon/react";
 import { Flex, Grid, GridItem, VStack } from "@chakra-ui/react";
-import { SkipNavContent } from "@chakra-ui/skip-nav";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Outlet, useLoaderData, useNavigation } from "@remix-run/react";
@@ -103,7 +102,6 @@ export default function AuthenticatedRoute() {
             <Grid templateRows="auto 1fr" h="full" w="full">
               <Topbar />
               <Flex w="full" h="full">
-                <SkipNavContent />
                 <VStack spacing={0} w="full" bg={useColor("gray.50")}>
                   <Outlet />
                 </VStack>

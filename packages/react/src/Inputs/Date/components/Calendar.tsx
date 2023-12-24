@@ -1,4 +1,4 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import type { CalendarDate, DateValue } from "@internationalized/date";
 import { createCalendar } from "@internationalized/date";
 import type { CalendarProps } from "@react-aria/calendar";
@@ -6,6 +6,7 @@ import { useCalendar } from "@react-aria/calendar";
 import { useCalendarState } from "@react-stately/calendar";
 import { useMemo, useRef } from "react";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
+import { Heading } from "~/Heading";
 import { CalendarButton } from "./Button";
 import { CalendarGrid } from "./CalendarGrid";
 
@@ -40,7 +41,7 @@ export const Calendar = (props: CalendarProps<DateValue>) => {
           aria-label="Previous"
         />
 
-        <Heading as="h2" size="md" flex="1" textAlign="center">
+        <Heading as="h2" size="h3" className="flex-1 text-center">
           {title}
         </Heading>
         <CalendarButton

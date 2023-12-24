@@ -1,4 +1,4 @@
-import { Select } from "@carbon/react";
+import { Heading, Select } from "@carbon/react";
 import {
   Box,
   Card,
@@ -6,7 +6,6 @@ import {
   CardFooter,
   CardHeader,
   Grid,
-  Heading,
   HStack,
   VStack,
 } from "@chakra-ui/react";
@@ -53,7 +52,7 @@ const PartInventoryForm = ({
       <Card w="full">
         <CardHeader>
           <HStack w="full" justifyContent="space-between">
-            <Heading size="md">Inventory</Heading>
+            <Heading size="h3">Inventory</Heading>
             <Box w={180}>
               <Select
                 // @ts-ignore
