@@ -1,5 +1,5 @@
 import type { Database } from "@carbon/database";
-import { PDFViewer, StyleSheet, Text, View } from "@react-pdf/renderer";
+import { StyleSheet, Text, View } from "@react-pdf/renderer";
 
 import { Header, Summary, Template } from "../components";
 import type { PDF } from "../types";
@@ -380,16 +380,4 @@ function getTotal(
   return total.toFixed(2);
 }
 
-const PurchaseOrderPDFView = (props: PurchaseOrderPDFProps) => (
-  <PDFViewer
-    style={{
-      width: "100%",
-      height: "100%",
-      backgroundColor: "#FFFFFF",
-    }}
-  >
-    <PurchaseOrderPDF {...props} />
-  </PDFViewer>
-);
-
-export { PurchaseOrderPDF, PurchaseOrderPDFView };
+export default PurchaseOrderPDF;

@@ -5,14 +5,15 @@ import type { Meta } from "../types";
 type TemplateProps = PropsWithChildren<{ title: string; meta: Meta }>;
 
 const Template = ({ title, meta, children }: TemplateProps) => {
+  // TODO: build fonts -- right now remix is struggling server side to load fonts
   Font.register({
     family: "Satoshi",
     fonts: [
-      { src: "/fonts/Satoshi-Regular.ttf" },
-      { src: "/fonts/Satoshi-Light.ttf", fontWeight: 300 },
-      { src: "/fonts/Satoshi-Medium.ttf", fontWeight: 500 },
-      { src: "/fonts/Satoshi-Bold.ttf", fontWeight: 700 },
-      { src: "/fonts/Satoshi-Black.ttf", fontWeight: 900 },
+      { src: "https://bradbarb.in/fonts/Satoshi-Regular.ttf" },
+      { src: "https://bradbarb.in/fonts/Satoshi-Light.ttf", fontWeight: 300 },
+      { src: "https://bradbarb.in/fonts/Satoshi-Medium.ttf", fontWeight: 500 },
+      { src: "https://bradbarb.in/fonts/Satoshi-Bold.ttf", fontWeight: 700 },
+      { src: "https://bradbarb.in/fonts/Satoshi-Black.ttf", fontWeight: 900 },
     ],
   });
 
