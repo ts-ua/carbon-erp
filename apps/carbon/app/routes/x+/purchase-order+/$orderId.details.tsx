@@ -36,8 +36,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { purchaseOrderId, ...data } = validation.data;
   if (!purchaseOrderId) throw new Error("Could not find purchaseOrderId");
 
-  console.log({ data });
-
   const updatePurchaseOrder = await upsertPurchaseOrder(client, {
     id: orderId,
     purchaseOrderId,
