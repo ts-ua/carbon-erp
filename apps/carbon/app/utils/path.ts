@@ -43,7 +43,7 @@ export const path = {
     },
     file: {
       purchaseOrder: (id: string) =>
-        generatePath(`${file}/purchase-order/${id}`),
+        generatePath(`${file}/pdf/purchase-order/${id}`),
     },
     onboarding: {
       company: `${onboarding}/company`,

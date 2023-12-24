@@ -1,3 +1,3 @@
-import { PurchaseOrderPDF, PurchaseOrderPDFView } from "./PurchaseOrderPDF";
+import PurchaseOrderPDF from "./PurchaseOrderPDF";
 
-export { PurchaseOrderPDF, PurchaseOrderPDFView };
+export { PurchaseOrderPDF };
