@@ -166,6 +166,7 @@ CREATE TABLE "purchaseOrder" (
   "orderDate" DATE NOT NULL DEFAULT CURRENT_DATE,
   "notes" TEXT,
   "supplierId" TEXT NOT NULL,
+  "supplierLocationId" TEXT,
   "supplierContactId" TEXT,
   "supplierReference" TEXT,
   "closedAt" DATE,
@@ -178,7 +179,8 @@ CREATE TABLE "purchaseOrder" (
   CONSTRAINT "purchaseOrder_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "purchaseOrder_purchaseOrderId_key" UNIQUE ("purchaseOrderId"),
   CONSTRAINT "purchaseOrder_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "supplier" ("id") ON DELETE CASCADE,
-  CONSTRAINT "purchaseOrder_supplierContactId_fkey" FOREIGN KEY ("supplierContactId") REFERENCES "supplierContact" ("id") ON DELETE CASCADE,
+  CONSTRAINT "purchaseOrder_supplierLocationId_fkey" FOREIGN KEY ("supplierLocationId") REFERENCES "supplierLocation" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT "purchaseOrder_supplierContactId_fkey" FOREIGN KEY ("supplierContactId") REFERENCES "supplierContact" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseOrder_closedBy_fkey" FOREIGN KEY ("closedBy") REFERENCES "user" ("id") ON DELETE RESTRICT,
   CONSTRAINT "purchaseOrder_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT,
   CONSTRAINT "purchaseOrder_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT
@@ -395,11 +397,12 @@ CREATE POLICY "Users can delete their own purchase order favorites" ON "purchase
 CREATE OR REPLACE VIEW "purchaseOrders" AS
   SELECT
     p.*,
+    sm."name" AS "shippingMethodName",
+    st."name" AS "shippingTermName",
+    pt."name" AS "paymentTermName",
     pd."receiptRequestedDate",
     pd."receiptPromisedDate",
     pd."dropShipment",
-    pol."lineCount",
-    pol."subtotal",
     l."id" AS "locationId",
     l."name" AS "locationName",
     s."name" AS "supplierName",
@@ -412,11 +415,10 @@ CREATE OR REPLACE VIEW "purchaseOrders" AS
     EXISTS(SELECT 1 FROM "purchaseOrderFavorite" pf WHERE pf."purchaseOrderId" = p.id AND pf."userId" = auth.uid()::text) AS favorite
   FROM "purchaseOrder" p
   LEFT JOIN "purchaseOrderDelivery" pd ON pd."id" = p."id"
-  LEFT JOIN (
-    SELECT "purchaseOrderId", COUNT(*) AS "lineCount", SUM("unitPrice" * "purchaseQuantity") AS "subtotal"
-    FROM "purchaseOrderLine"
-    GROUP BY "purchaseOrderId"
-  ) pol ON pol."purchaseOrderId" = p."id"
+  LEFT JOIN "shippingMethod" sm ON sm."id" = pd."shippingMethodId"
+  LEFT JOIN "shippingTerm" st ON st."id" = pd."shippingTermId"
+  LEFT JOIN "purchaseOrderPayment" pp ON pp."id" = p."id"
+  LEFT JOIN "paymentTerm" pt ON pt."id" = pp."paymentTermId"
   LEFT JOIN "location" l ON l."id" = pd."locationId"
   LEFT JOIN "supplier" s ON s."id" = p."supplierId"
   LEFT JOIN "user" u ON u."id" = p."createdBy"

@@ -76,24 +76,15 @@ export async function updateAvatar(
 
 export async function updatePublicAccount(
   client: SupabaseClient<Database>,
-  args: {
+  account: {
     id: string;
+    email?: string;
     firstName: string;
     lastName: string;
     about: string;
   }
 ) {
-  const { id, firstName, lastName, about } = args;
-  return client
-    .from("user")
-    .update(
-      sanitize({
-        firstName,
-        lastName,
-        about,
-      })
-    )
-    .eq("id", id);
+  return client.from("user").update(sanitize(account)).eq("id", account.id);
 }
 
 export async function upsertUserAttributeValue(

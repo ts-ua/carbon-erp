@@ -20,12 +20,12 @@ CREATE TABLE "contact" (
   "city" TEXT,
   "state" TEXT,
   "postalCode" TEXT,
-  "countryId" INTEGER,
+  "countryCode" INTEGER,
   "birthday" DATE,
   "notes" TEXT,
 
   CONSTRAINT "contact_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "contact_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "country"("id") ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT "contact_countryCode_fkey" FOREIGN KEY ("countryCode") REFERENCES "country"("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 
@@ -36,12 +36,12 @@ CREATE TABLE "address" (
   "city" TEXT,
   "state" TEXT,
   "postalCode" TEXT,
-  "countryId" INTEGER,
+  "countryCode" INTEGER,
   "phone" TEXT,
   "fax" TEXT,
 
   CONSTRAINT "address_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "address_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "country"("id") ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT "address_countryCode_fkey" FOREIGN KEY ("countryCode") REFERENCES "country"("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE "supplierStatus" (

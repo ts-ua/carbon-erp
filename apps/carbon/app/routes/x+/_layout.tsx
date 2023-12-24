@@ -2,12 +2,13 @@ import { useColor, useNotification } from "@carbon/react";
 import { Flex, Grid, GridItem, VStack } from "@chakra-ui/react";
 import { SkipNavContent } from "@chakra-ui/skip-nav";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Outlet, useLoaderData, useNavigation } from "@remix-run/react";
 import NProgress from "nprogress";
 import { useEffect } from "react";
 import { IconSidebar, Topbar } from "~/components/Layout";
 import { SupabaseProvider, getSupabase } from "~/lib/supabase";
+import { getCompany } from "~/modules/settings";
 import { RealtimeDataProvider } from "~/modules/shared";
 import {
   getUser,
@@ -20,6 +21,7 @@ import {
   getSessionFlash,
   requireAuthSession,
 } from "~/services/session";
+import { path } from "~/utils/path";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { accessToken, expiresAt, expiresIn, userId } =
@@ -29,16 +31,23 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const client = getSupabase(accessToken);
 
   // parallelize the requests
-  const [sessionFlash, user, claims, groups, defaults] = await Promise.all([
-    getSessionFlash(request),
-    getUser(client, userId),
-    getUserClaims(request),
-    getUserGroups(client, userId),
-    getUserDefaults(client, userId),
-  ]);
+  const [sessionFlash, company, user, claims, groups, defaults] =
+    await Promise.all([
+      getSessionFlash(request),
+      getCompany(client),
+      getUser(client, userId),
+      getUserClaims(request),
+      getUserGroups(client, userId),
+      getUserDefaults(client, userId),
+    ]);
 
   if (!claims || user.error || !user.data || !groups.data) {
     await destroyAuthSession(request);
+  }
+
+  const requiresOnboarding = !company.data?.name;
+  if (requiresOnboarding) {
+    return redirect(path.to.onboarding.root);
   }
 
   return json(
@@ -48,7 +57,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         expiresIn,
         expiresAt,
       },
-
+      company: company.data,
       user: user.data,
       groups: groups.data,
       defaults: defaults.data,

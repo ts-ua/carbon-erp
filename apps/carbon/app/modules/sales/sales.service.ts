@@ -151,7 +151,7 @@ export async function getCustomers(
 }
 
 export async function getCustomersList(client: SupabaseClient<Database>) {
-  return client.from("customer").select("id, name");
+  return client.from("customer").select("id, name").order("name");
 }
 
 export async function getCustomerStatuses(
@@ -204,7 +204,7 @@ export async function getCustomerTypes(
 }
 
 export async function getCustomerTypesList(client: SupabaseClient<Database>) {
-  return client.from("customerType").select("id, name");
+  return client.from("customerType").select("id, name").order("name");
 }
 
 export async function insertCustomer(

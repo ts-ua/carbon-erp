@@ -56,7 +56,7 @@ export const purchaseInvoiceLineValidator = withZod(
       accountNumber: zfd.text(z.string().optional()),
       assetId: zfd.text(z.string().optional()),
       description: zfd.text(z.string().optional()),
-      quantity: zfd.numeric(z.number()),
+      quantity: zfd.numeric(z.number().optional()),
       unitPrice: zfd.numeric(z.number().optional()),
       locationId: zfd.text(z.string().optional()),
       shelfId: zfd.text(z.string().optional()),

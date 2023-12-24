@@ -30,8 +30,6 @@ const Service = ({
   const { getInputProps, error } = useField(name);
   const [value, setValue] = useControlField<string | undefined>(name);
 
-  console.log(value);
-
   const servicesFetcher =
     useFetcher<Awaited<ReturnType<typeof getServicesList>>>();
 

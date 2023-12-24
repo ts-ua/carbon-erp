@@ -1,4 +1,5 @@
 import useSettingsSidebar from "./useSettingsSidebar";
 
-export { useSettingsSidebar };
+export * from "./Company";
 export * from "./Sequences";
+export { useSettingsSidebar };

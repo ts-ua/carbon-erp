@@ -48,8 +48,6 @@ const Sequence = ({
     [sequenceFetcher.data]
   );
 
-  console.log(sequenceFetcher.data?.data);
-
   const handleChange = (selection: {
     value: string | number;
     label: string;

@@ -1,0 +1,42 @@
+{
+  "name": "@carbon/documents",
+  "version": "0.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
+    "clean": "rimraf .turbo node_modules dist",
+    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
+    "lint": "TIMING=1 eslint \"src/**/*.ts*\"",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "@carbon/jest/node"
+  },
+  "dependencies": {
+    "@react-pdf/renderer": "^3.1.14",
+    "react-icons": "^4.12.0"
+  },
+  "devDependencies": {
+    "@carbon/database": "*",
+    "@carbon/jest": "*",
+    "@carbon/tsconfig": "*",
+    "@testing-library/dom": "^8.11.1",
+    "@types/dompurify": "^2.4.0",
+    "@types/jest": "^26.0.22",
+    "@types/react": "^18.0.21",
+    "eslint": "^8.23.1",
+    "eslint-config-carbon": "*",
+    "jest": "^26.6.3",
+    "react": "^18.2.0",
+    "tsup": "^6.2.3",
+    "typescript": "^5.2.2"
+  }
+}
