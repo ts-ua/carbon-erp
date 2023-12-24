@@ -26,7 +26,7 @@ const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
       const imageUpload = await supabase.storage
         .from("avatars")
         .upload(`${user.id}.${fileExtension}`, avatarFile, {
-          cacheControl: `${12 * 60 * 60}`,
+          cacheControl: "0",
           upsert: true,
         });
 
@@ -41,10 +41,10 @@ const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
   };
 
   const deleteImage = async () => {
-    if (supabase) {
+    if (supabase && user?.avatarUrl) {
       const imageDelete = await supabase.storage
         .from("avatars")
-        .remove([`${user.id}.png`]);
+        .remove([user.avatarUrl]);
 
       if (imageDelete.error) {
         notification.copyableError(imageDelete.error, "Failed to remove image");
@@ -61,6 +61,7 @@ const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
     submit(formData, {
       method: "post",
       action: path.to.profile,
+      replace: true,
     });
   };
 

@@ -4,6 +4,13 @@ import { GiSpeedometer } from "react-icons/gi";
 import { GoSync } from "react-icons/go";
 import { HiCode, HiFingerPrint } from "react-icons/hi";
 import { TbBuildingFactory2 } from "react-icons/tb";
+import { useGlowPointer } from "../hooks/useGlowPointer";
+
+declare global {
+  interface Window {
+    usingGlowPointer: boolean;
+  }
+}
 
 const features = [
   {
@@ -43,14 +50,18 @@ const features = [
 ] as const;
 
 function Features({ showIcons = false }) {
+  useGlowPointer();
+
   return (
     <>
       <div className="grid grid-cols-1 gap-6 my-12 sm:grid-cols-2 md:grid-cols-3 ">
         {features.map(({ icon: Icon, ...feature }, i) => (
           <div
-            className="flex items-start p-8 space-x-4 bg-black/[0.03] hover:bg-black/[0.05] dark:bg-zinc-900 dark:hover:bg-zinc-800/50 sm:-inset-x-6 rounded-md shadow-sm hover:scale-105 hover:translate hover:shadow-xl transition-all duration-300 ease-in-out"
+            data-glow
+            className="flex items-start p-8 space-x-4 bg-black/[0.03] dark:bg-zinc-900 round shadow-sm transition-all duration-300 ease-in-out"
             key={feature.name.split(" ").join("-")}
           >
+            <div data-glow />
             {showIcons && (
               <Icon
                 className="mt-0.5 block w-8 h-8"

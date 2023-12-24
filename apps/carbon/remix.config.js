@@ -8,6 +8,7 @@ module.exports = {
   // assetsBuildDirectory: "public/build",
   // publicPath: "/build/",
   // serverBuildPath: "build/index.js",
+  browserNodeBuiltinsPolyfill: { modules: { events: true } },
   dev: {
     port: 3601,
   },
@@ -24,6 +25,7 @@ module.exports = {
   },
   serverDependenciesToBundle: [
     "@carbon/database",
+    "@carbon/documents",
     "@carbon/logger",
     "@carbon/react",
     "@carbon/utils",
@@ -32,9 +34,10 @@ module.exports = {
   ],
   watchPaths: async () => {
     return [
-      "../../packages/react/src/**/*",
       "../../packages/database/src/**/*",
+      "../../packages/documents/src/**/*",
       "../../packages/logger/src/**/*",
+      "../../packages/react/src/**/*",
       "../../packages/utils/src/**/*",
     ];
   },

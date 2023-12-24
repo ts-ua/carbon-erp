@@ -62,7 +62,6 @@ export default function PurchaseInvoiceRoute() {
   const [, setPurchaseInvoiceTotals] = usePurchaseInvoiceTotals();
 
   useEffect(() => {
-    console.log({ purchaseInvoiceLines });
     const totals = purchaseInvoiceLines.reduce(
       (acc, line) => {
         acc.total += line?.totalAmount ?? 0;

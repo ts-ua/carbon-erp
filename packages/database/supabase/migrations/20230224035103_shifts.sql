@@ -6,7 +6,7 @@ CREATE TABLE "location" (
   "city" TEXT NOT NULL,
   "state" TEXT NOT NULL,
   "postalCode" TEXT NOT NULL,
-  "country" TEXT,
+  "countryCode" TEXT,
   "timezone" TEXT NOT NULL,
   "latitude" NUMERIC,
   "longitude" NUMERIC,

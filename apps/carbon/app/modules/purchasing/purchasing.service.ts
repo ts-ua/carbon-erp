@@ -149,6 +149,17 @@ export async function getPurchaseOrderDelivery(
     .single();
 }
 
+export async function getPurchaseOrderLocations(
+  client: SupabaseClient<Database>,
+  purchaseOrderId: string
+) {
+  return client
+    .from("purchaseOrderLocations")
+    .select("*")
+    .eq("id", purchaseOrderId)
+    .single();
+}
+
 export async function getPurchaseOrderPayment(
   client: SupabaseClient<Database>,
   purchaseOrderId: string
@@ -165,7 +176,7 @@ export async function getPurchaseOrderLines(
   purchaseOrderId: string
 ) {
   return client
-    .from("purchaseOrderLine")
+    .from("purchaseOrderLines")
     .select("*")
     .eq("purchaseOrderId", purchaseOrderId);
 }
@@ -295,7 +306,7 @@ export async function getSuppliers(
 }
 
 export async function getSuppliersList(client: SupabaseClient<Database>) {
-  return client.from("supplier").select("id, name");
+  return client.from("supplier").select("id, name").order("name");
 }
 
 export async function getSupplierStatuses(
@@ -348,7 +359,7 @@ export async function getSupplierTypes(
 }
 
 export async function getSupplierTypesList(client: SupabaseClient<Database>) {
-  return client.from("supplierType").select("id, name");
+  return client.from("supplierType").select("id, name").order("name");
 }
 
 export async function insertSupplier(

@@ -78,10 +78,13 @@ CREATE INDEX "serviceSupplier_serviceId_index" ON "serviceSupplier"("serviceId")
 
 ALTER TABLE "serviceSupplier" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Employees with part_view can view service suppliers" ON "serviceSupplier"
+CREATE POLICY "Employees with part/purchasing_view can view service suppliers" ON "serviceSupplier"
   FOR SELECT
   USING (
-    coalesce(get_my_claim('parts_view')::boolean,false) 
+    (
+      coalesce(get_my_claim('parts_view')::boolean,false) OR
+      coalesce(get_my_claim('purchasing_view')::boolean,false)
+    )
     AND (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
 

@@ -19,6 +19,7 @@ import {
   Submit,
   Supplier,
   SupplierContact,
+  SupplierLocation,
   TextArea,
 } from "~/components/Form";
 import { usePermissions } from "~/hooks";
@@ -91,15 +92,22 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
                   }
                 />
                 {isEditing && (
-                  <SupplierContact
-                    name="supplierContactId"
-                    label="Supplier Contact"
-                    supplier={supplier}
-                  />
+                  <>
+                    <SupplierLocation
+                      name="supplierLocationId"
+                      label="Supplier Location"
+                      supplier={supplier}
+                    />
+                    <SupplierContact
+                      name="supplierContactId"
+                      label="Supplier Contact"
+                      supplier={supplier}
+                    />
+                  </>
                 )}
-                <Input name="supplierReference" label="Supplier Order Number" />
               </VStack>
               <VStack alignItems="start" spacing={2} w="full">
+                <Input name="supplierReference" label="Supplier Order Number" />
                 <DatePicker
                   name="orderDate"
                   label="Order Date"
@@ -111,19 +119,19 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
                   options={typeOptions}
                   isReadOnly={isSupplier}
                 />
-                {isEditing && permissions.can("delete", "purchasing") && (
-                  <SelectControlled
-                    name="status"
-                    label="Status"
-                    value={initialValues.status}
-                    options={statusOptions}
-                    isReadOnly={isSupplier}
-                  />
-                )}
               </VStack>
               <VStack alignItems="start" spacing={2} w="full">
                 {isEditing && (
                   <>
+                    {permissions.can("delete", "purchasing") && (
+                      <SelectControlled
+                        name="status"
+                        label="Status"
+                        value={initialValues.status}
+                        options={statusOptions}
+                        isReadOnly={isSupplier}
+                      />
+                    )}
                     <TextArea
                       name="notes"
                       label="Notes"

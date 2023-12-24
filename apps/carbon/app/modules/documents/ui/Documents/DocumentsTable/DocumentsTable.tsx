@@ -20,13 +20,7 @@ import {
 } from "@chakra-ui/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import {
-  BsEyeFill,
-  BsPencilSquare,
-  BsStar,
-  BsStarFill,
-  BsTag,
-} from "react-icons/bs";
+import { BsPencilSquare, BsStar, BsStarFill } from "react-icons/bs";
 import { IoMdAdd, IoMdTrash } from "react-icons/io";
 import { VscOpenPreview } from "react-icons/vsc";
 import { Avatar, Table } from "~/components";
@@ -239,40 +233,40 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
 
   const actions = useMemo(() => {
     return [
-      {
-        label: "Add to Favorites",
-        icon: <BsStar />,
-        onClick: (selected: Document[]) => {
-          console.log("move to favorites", selected);
-        },
-      },
-      {
-        label: "Add Labels",
-        icon: <BsTag />,
-        // TODO - disabled can be a function of selected
-        disabled: true,
-        onClick: (selected: Document[]) => {
-          console.log("move to favorites", selected);
-        },
-      },
-      {
-        label: "Move to Trash",
-        icon: <IoMdTrash />,
-        // TODO - disabled can be a function of selected
-        disabled: true,
-        onClick: (selected: Document[]) => {
-          console.log("move to trash", selected);
-        },
-      },
-      {
-        label: "Update Visibility",
-        icon: <BsEyeFill />,
-        // TODO - disabled can be a function of selected
-        disabled: true,
-        onClick: (selected: Document[]) => {
-          console.log("update visibility", selected);
-        },
-      },
+      // {
+      //   label: "Add to Favorites",
+      //   icon: <BsStar />,
+      //   onClick: (selected: Document[]) => {
+      //     console.log("move to favorites", selected);
+      //   },
+      // },
+      // {
+      //   label: "Add Labels",
+      //   icon: <BsTag />,
+      //   // TODO - disabled can be a function of selected
+      //   disabled: true,
+      //   onClick: (selected: Document[]) => {
+      //     console.log("move to favorites", selected);
+      //   },
+      // },
+      // {
+      //   label: "Move to Trash",
+      //   icon: <IoMdTrash />,
+      //   // TODO - disabled can be a function of selected
+      //   disabled: true,
+      //   onClick: (selected: Document[]) => {
+      //     console.log("move to trash", selected);
+      //   },
+      // },
+      // {
+      //   label: "Update Visibility",
+      //   icon: <BsEyeFill />,
+      //   // TODO - disabled can be a function of selected
+      //   disabled: true,
+      //   onClick: (selected: Document[]) => {
+      //     console.log("update visibility", selected);
+      //   },
+      // },
     ];
   }, []);
 

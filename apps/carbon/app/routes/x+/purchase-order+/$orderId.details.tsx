@@ -71,6 +71,7 @@ export default function PurchaseOrderBasicRoute() {
     purchaseOrderId: orderData?.purchaseOrder?.purchaseOrderId ?? "",
     supplierId: orderData?.purchaseOrder?.supplierId ?? "",
     supplierContactId: orderData?.purchaseOrder?.supplierContactId ?? "",
+    supplierLocationId: orderData?.purchaseOrder?.supplierLocationId ?? "",
     supplierReference: orderData?.purchaseOrder?.supplierReference ?? "",
     orderDate: orderData?.purchaseOrder?.orderDate ?? "",
     type: orderData?.purchaseOrder?.type ?? ("Purchase" as "Purchase"),

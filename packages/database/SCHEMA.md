@@ -412,6 +412,33 @@ VALUES
   ('avatars', 'avatars', true),
   ('private', 'private', false);
 
+CREATE POLICY "Anyone can read public buckets"
+ON storage.objects FOR SELECT USING (
+    bucket_id = 'public'
+    AND (auth.role() = 'authenticated')
+);
+
+CREATE POLICY "Employees with settings_create can insert into the public bucket"
+ON storage.objects FOR INSERT WITH CHECK (
+    bucket_id = 'public'
+    AND (auth.role() = 'authenticated')
+    AND coalesce(get_my_claim('settings_create')::boolean,false)
+);
+
+CREATE POLICY "Employees with settings_update can update the public bucket"
+ON storage.objects FOR UPDATE USING (
+    bucket_id = 'public'
+    AND (auth.role() = 'authenticated')
+    AND coalesce(get_my_claim('settings_update')::boolean,false)
+);
+
+CREATE POLICY "Employees with settings_delete can delete from public bucket"
+ON storage.objects FOR DELETE USING (
+    bucket_id = 'public'
+    AND (auth.role() = 'authenticated')
+    AND coalesce(get_my_claim('settings_delete')::boolean,false)
+);
+
 CREATE POLICY "Anyone can view avatars"
 ON storage.objects FOR SELECT USING (
     bucket_id = 'avatars'
@@ -689,12 +716,12 @@ CREATE TABLE "contact" (
   "city" TEXT,
   "state" TEXT,
   "postalCode" TEXT,
-  "countryId" INTEGER,
+  "countryCode" INTEGER,
   "birthday" DATE,
   "notes" TEXT,
 
   CONSTRAINT "contact_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "contact_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "country"("id") ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT "contact_countryCode_fkey" FOREIGN KEY ("countryCode") REFERENCES "country"("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 
@@ -705,12 +732,12 @@ CREATE TABLE "address" (
   "city" TEXT,
   "state" TEXT,
   "postalCode" TEXT,
-  "countryId" INTEGER,
+  "countryCode" INTEGER,
   "phone" TEXT,
   "fax" TEXT,
 
   CONSTRAINT "address_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "address_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "country"("id") ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT "address_countryCode_fkey" FOREIGN KEY ("countryCode") REFERENCES "country"("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE TABLE "supplierStatus" (
@@ -2114,7 +2141,7 @@ CREATE TABLE "location" (
   "city" TEXT NOT NULL,
   "state" TEXT NOT NULL,
   "postalCode" TEXT NOT NULL,
-  "country" TEXT,
+  "countryCode" TEXT,
   "timezone" TEXT NOT NULL,
   "latitude" NUMERIC,
   "longitude" NUMERIC,
@@ -3573,10 +3600,13 @@ CREATE INDEX "partSupplier_partId_index" ON "partSupplier"("partId");
 
 ALTER TABLE "partSupplier" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Employees with part_view can view part suppliers" ON "partSupplier"
+CREATE POLICY "Employees with part/purchasing_view can view part suppliers" ON "partSupplier"
   FOR SELECT
   USING (
-    coalesce(get_my_claim('parts_view')::boolean,false) 
+    (
+      coalesce(get_my_claim('parts_view')::boolean,false) OR
+      coalesce(get_my_claim('purchasing_view')::boolean,false)
+    )
     AND (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
 
@@ -4044,10 +4074,13 @@ CREATE INDEX "serviceSupplier_serviceId_index" ON "serviceSupplier"("serviceId")
 
 ALTER TABLE "serviceSupplier" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Employees with part_view can view service suppliers" ON "serviceSupplier"
+CREATE POLICY "Employees with part/purchasing_view can view service suppliers" ON "serviceSupplier"
   FOR SELECT
   USING (
-    coalesce(get_my_claim('parts_view')::boolean,false) 
+    (
+      coalesce(get_my_claim('parts_view')::boolean,false) OR
+      coalesce(get_my_claim('purchasing_view')::boolean,false)
+    )
     AND (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
 
@@ -4540,6 +4573,7 @@ CREATE TABLE "purchaseOrder" (
   "orderDate" DATE NOT NULL DEFAULT CURRENT_DATE,
   "notes" TEXT,
   "supplierId" TEXT NOT NULL,
+  "supplierLocationId" TEXT,
   "supplierContactId" TEXT,
   "supplierReference" TEXT,
   "closedAt" DATE,
@@ -4552,7 +4586,8 @@ CREATE TABLE "purchaseOrder" (
   CONSTRAINT "purchaseOrder_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "purchaseOrder_purchaseOrderId_key" UNIQUE ("purchaseOrderId"),
   CONSTRAINT "purchaseOrder_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "supplier" ("id") ON DELETE CASCADE,
-  CONSTRAINT "purchaseOrder_supplierContactId_fkey" FOREIGN KEY ("supplierContactId") REFERENCES "supplierContact" ("id") ON DELETE CASCADE,
+  CONSTRAINT "purchaseOrder_supplierLocationId_fkey" FOREIGN KEY ("supplierLocationId") REFERENCES "supplierLocation" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT "purchaseOrder_supplierContactId_fkey" FOREIGN KEY ("supplierContactId") REFERENCES "supplierContact" ("id") ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT "purchaseOrder_closedBy_fkey" FOREIGN KEY ("closedBy") REFERENCES "user" ("id") ON DELETE RESTRICT,
   CONSTRAINT "purchaseOrder_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT,
   CONSTRAINT "purchaseOrder_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT
@@ -4769,11 +4804,12 @@ CREATE POLICY "Users can delete their own purchase order favorites" ON "purchase
 CREATE OR REPLACE VIEW "purchaseOrders" AS
   SELECT
     p.*,
+    sm."name" AS "shippingMethodName",
+    st."name" AS "shippingTermName",
+    pt."name" AS "paymentTermName",
     pd."receiptRequestedDate",
     pd."receiptPromisedDate",
     pd."dropShipment",
-    pol."lineCount",
-    pol."subtotal",
     l."id" AS "locationId",
     l."name" AS "locationName",
     s."name" AS "supplierName",
@@ -4786,11 +4822,10 @@ CREATE OR REPLACE VIEW "purchaseOrders" AS
     EXISTS(SELECT 1 FROM "purchaseOrderFavorite" pf WHERE pf."purchaseOrderId" = p.id AND pf."userId" = auth.uid()::text) AS favorite
   FROM "purchaseOrder" p
   LEFT JOIN "purchaseOrderDelivery" pd ON pd."id" = p."id"
-  LEFT JOIN (
-    SELECT "purchaseOrderId", COUNT(*) AS "lineCount", SUM("unitPrice" * "purchaseQuantity") AS "subtotal"
-    FROM "purchaseOrderLine"
-    GROUP BY "purchaseOrderId"
-  ) pol ON pol."purchaseOrderId" = p."id"
+  LEFT JOIN "shippingMethod" sm ON sm."id" = pd."shippingMethodId"
+  LEFT JOIN "shippingTerm" st ON st."id" = pd."shippingTermId"
+  LEFT JOIN "purchaseOrderPayment" pp ON pp."id" = p."id"
+  LEFT JOIN "paymentTerm" pt ON pt."id" = pp."paymentTermId"
   LEFT JOIN "location" l ON l."id" = pd."locationId"
   LEFT JOIN "supplier" s ON s."id" = p."supplierId"
   LEFT JOIN "user" u ON u."id" = p."createdBy"
@@ -7215,5 +7250,131 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE TRIGGER create_customer_entries
   AFTER INSERT on public.customer
   FOR EACH ROW EXECUTE PROCEDURE public.create_customer_entries();
+```
+
+
+
+## `company`
+
+```sql
+CREATE TABLE "company" (
+  "id" BOOLEAN NOT NULL DEFAULT TRUE,
+  "name" TEXT NOT NULL,
+  "taxId" TEXT,
+  "logo" TEXT,
+  "addressLine1" TEXT,
+  "addressLine2" TEXT,
+  "city" TEXT,
+  "state" TEXT,
+  "postalCode" TEXT,
+  "countryCode" TEXT,
+  "phone" TEXT,
+  "fax" TEXT,
+  "email" TEXT,
+  "website" TEXT,
+  "updatedBy" TEXT,
+  
+  CONSTRAINT "company_pkey" PRIMARY KEY ("id"),
+  -- this is a hack to make sure that this table only ever has one row
+  CONSTRAINT "accountDefault_id_check" CHECK ("id" = TRUE),
+  CONSTRAINT "accountDefault_id_unique" UNIQUE ("id"),
+  CONSTRAINT "accountDefault_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user"("id")
+);
+
+ALTER TABLE "company" ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Authenticated users can view company" ON "company"
+  FOR SELECT
+  USING (
+    auth.role() = 'authenticated' 
+  );
+
+CREATE POLICY "Employees with settings_create can create company" ON "company"
+  FOR INSERT
+  WITH CHECK (
+    coalesce(get_my_claim('settings_create')::boolean, false) = true 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+
+CREATE POLICY "Employees with settings_update can update company" ON "company"
+  FOR UPDATE
+  USING (
+    coalesce(get_my_claim('settings_update')::boolean, false) = true 
+    AND (get_my_claim('role'::text)) = '"employee"'::jsonb
+  );
+```
+
+
+
+## `purchase-order-document`
+
+```sql
+CREATE OR REPLACE VIEW "purchaseOrderLines" WITH(SECURITY_INVOKER=true) AS
+  SELECT 
+    pol.*,
+    po."supplierId" ,
+    p.name AS "partName",
+    p.description AS "partDescription",
+    ps."supplierPartId",
+    s.name AS "serviceName",
+    s.description AS "serviceDescription",
+    ss."supplierServiceId"
+  FROM "purchaseOrderLine" pol
+    INNER JOIN "purchaseOrder" po 
+      ON po.id = pol."purchaseOrderId"
+    LEFT OUTER JOIN "part" p
+      ON p.id = pol."partId"
+    LEFT OUTER JOIN "partSupplier" ps 
+      ON p.id = ps."partId" AND po."supplierId" = ps."supplierId"
+    LEFT OUTER JOIN "service" s
+      ON s.id = pol."serviceId"
+    LEFT OUTER JOIN "serviceSupplier" ss 
+      ON s.id = ss."serviceId" AND po."supplierId" = ss."supplierId";
+
+CREATE OR REPLACE VIEW "purchaseOrderLocations" WITH(SECURITY_INVOKER=true) AS
+  SELECT 
+    po.id,
+    s.name AS "supplierName",
+    sa."addressLine1" AS "supplierAddressLine1",
+    sa."addressLine2" AS "supplierAddressLine2",
+    sa."city" AS "supplierCity",
+    sa."state" AS "supplierState",
+    sa."postalCode" AS "supplierPostalCode",
+    sa."countryCode" AS "supplierCountryCode",
+    dl.name AS "deliveryName",
+    dl."addressLine1" AS "deliveryAddressLine1",
+    dl."addressLine2" AS "deliveryAddressLine2",
+    dl."city" AS "deliveryCity",
+    dl."state" AS "deliveryState",
+    dl."postalCode" AS "deliveryPostalCode",
+    dl."countryCode" AS "deliveryCountryCode",
+    pod."dropShipment",
+    c.name AS "customerName",
+    ca."addressLine1" AS "customerAddressLine1",
+    ca."addressLine2" AS "customerAddressLine2",
+    ca."city" AS "customerCity",
+    ca."state" AS "customerState",
+    ca."postalCode" AS "customerPostalCode",
+    ca."countryCode" AS "customerCountryCode"
+  FROM "purchaseOrder" po 
+  LEFT OUTER JOIN "supplier" s 
+    ON s.id = po."supplierId"
+  LEFT OUTER JOIN "supplierLocation" sl
+    ON sl.id = po."supplierLocationId"
+  LEFT OUTER JOIN "address" sa
+    ON sa.id = sl."addressId"
+  INNER JOIN "purchaseOrderDelivery" pod 
+    ON pod.id = po.id 
+  LEFT OUTER JOIN "location" dl
+    ON dl.id = pod."locationId"
+  LEFT OUTER JOIN "customer" c
+    ON c.id = pod."customerId"
+  LEFT OUTER JOIN "customerLocation" cl
+    ON cl.id = pod."customerLocationId"
+  LEFT OUTER JOIN "address" ca
+    ON ca.id = cl."addressId";
+  
+  
+
 ```
 

@@ -20,9 +20,10 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
         .from("part")
         .select("id, name, replenishmentSystem")
         .eq("active", true)
-        .eq("blocked", false),
-      supabase.from("supplier").select("id, name"),
-      supabase.from("customer").select("id, name"),
+        .eq("blocked", false)
+        .order("name"),
+      supabase.from("supplier").select("id, name").order("name"),
+      supabase.from("customer").select("id, name").order("name"),
     ]);
 
     if (parts.error || suppliers.error || customers.error) {
@@ -54,28 +55,32 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
           switch (payload.eventType) {
             case "INSERT":
               const { new: inserted } = payload;
-              setParts((parts) => [
-                ...parts,
-                {
-                  id: inserted.id,
-                  name: inserted.name,
-                  replenishmentSystem: inserted.replenishmentSystem,
-                },
-              ]);
+              setParts((parts) =>
+                [
+                  ...parts,
+                  {
+                    id: inserted.id,
+                    name: inserted.name,
+                    replenishmentSystem: inserted.replenishmentSystem,
+                  },
+                ].sort((a, b) => a.name.localeCompare(b.name))
+              );
               break;
             case "UPDATE":
               const { new: updated } = payload;
               setParts((parts) =>
-                parts.map((p) => {
-                  if (p.id === updated.id) {
-                    return {
-                      ...p,
-                      name: updated.name,
-                      replenishmentSystem: updated.replenishmentSystem,
-                    };
-                  }
-                  return p;
-                })
+                parts
+                  .map((p) => {
+                    if (p.id === updated.id) {
+                      return {
+                        ...p,
+                        name: updated.name,
+                        replenishmentSystem: updated.replenishmentSystem,
+                      };
+                    }
+                    return p;
+                  })
+                  .sort((a, b) => a.name.localeCompare(b.name))
               );
               break;
             case "DELETE":
@@ -98,26 +103,30 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
           switch (payload.eventType) {
             case "INSERT":
               const { new: inserted } = payload;
-              setCustomers((customers) => [
-                ...customers,
-                {
-                  id: inserted.id,
-                  name: inserted.name,
-                },
-              ]);
+              setCustomers((customers) =>
+                [
+                  ...customers,
+                  {
+                    id: inserted.id,
+                    name: inserted.name,
+                  },
+                ].sort((a, b) => a.name.localeCompare(b.name))
+              );
               break;
             case "UPDATE":
               const { new: updated } = payload;
               setCustomers((customers) =>
-                customers.map((p) => {
-                  if (p.id === updated.id) {
-                    return {
-                      ...p,
-                      name: updated.name,
-                    };
-                  }
-                  return p;
-                })
+                customers
+                  .map((p) => {
+                    if (p.id === updated.id) {
+                      return {
+                        ...p,
+                        name: updated.name,
+                      };
+                    }
+                    return p;
+                  })
+                  .sort((a, b) => a.name.localeCompare(b.name))
               );
               break;
             case "DELETE":
@@ -142,26 +151,30 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
           switch (payload.eventType) {
             case "INSERT":
               const { new: inserted } = payload;
-              setSuppliers((suppliers) => [
-                ...suppliers,
-                {
-                  id: inserted.id,
-                  name: inserted.name,
-                },
-              ]);
+              setSuppliers((suppliers) =>
+                [
+                  ...suppliers,
+                  {
+                    id: inserted.id,
+                    name: inserted.name,
+                  },
+                ].sort((a, b) => a.name.localeCompare(b.name))
+              );
               break;
             case "UPDATE":
               const { new: updated } = payload;
               setSuppliers((suppliers) =>
-                suppliers.map((p) => {
-                  if (p.id === updated.id) {
-                    return {
-                      ...p,
-                      name: updated.name,
-                    };
-                  }
-                  return p;
-                })
+                suppliers
+                  .map((p) => {
+                    if (p.id === updated.id) {
+                      return {
+                        ...p,
+                        name: updated.name,
+                      };
+                    }
+                    return p;
+                  })
+                  .sort((a, b) => a.name.localeCompare(b.name))
               );
               break;
             case "DELETE":

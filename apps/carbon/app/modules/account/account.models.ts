@@ -2,6 +2,16 @@ import { withZod } from "@remix-validated-form/with-zod";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 
+export const onboardingUserValidator = withZod(
+  z.object({
+    firstName: z.string().min(1, { message: "First name is required" }),
+    lastName: z.string().min(1, { message: "Last name is required" }),
+    email: z.string().email({ message: "Email is required" }),
+    password: z.string().min(6, { message: "Password is required" }),
+    next: z.string().min(1, { message: "Next is required" }),
+  })
+);
+
 export const accountProfileValidator = withZod(
   z.object({
     firstName: z.string().min(1, { message: "First name is required" }),

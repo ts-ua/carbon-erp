@@ -4,7 +4,17 @@ import { path } from "~/utils/path";
 
 const settingsRoutes: AuthenticatedRouteGroup[] = [
   {
-    name: "Configure",
+    name: "Company",
+    routes: [
+      {
+        name: "Business",
+        to: path.to.company,
+        role: "employee",
+      },
+    ],
+  },
+  {
+    name: "System",
     routes: [
       {
         name: "Sequences",

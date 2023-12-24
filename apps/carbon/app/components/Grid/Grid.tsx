@@ -128,7 +128,6 @@ const Grid = <T extends object>({
             }
             return row;
           });
-          console.log("calling onDataChange", newData);
           onDataChange?.(newData);
 
           return newData;

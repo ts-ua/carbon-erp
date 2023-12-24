@@ -39,10 +39,6 @@ function Hero() {
         height={height}
         width={width}
         render={({ progress }) => {
-          const scale = {
-            transform: `scale(${clamp(0.8, 1, 1 - progress * 0.3)})`,
-          };
-
           return (
             <div className="flex flex-col justify-between text-center">
               <div>
@@ -61,7 +57,7 @@ function Hero() {
                     duration: 2.5,
                     ease: "easeInOut",
                   }}
-                  className="max-w-5xl mx-auto nx-text-6xl font-extrabold tracking-tighter leading-tighter text-6xl sm:text-7xl lg:nx-text-8xl xl:nx-text-8xl"
+                  className="max-w-5xl mx-auto text-7xl font-extrabold tracking-tighter leading-tighter sm:text-7xl lg:text-8xl xl:text-8xl"
                 >
                   <span className="dark:bg-clip-text dark:text-transparent dark:bg-gradient-to-b dark:from-white  dark:to-gray-400">
                     ERP for
@@ -82,10 +78,7 @@ function Hero() {
                   Carbon is an open-source starting point for resource planning
                 </motion.p>
               </div>
-              <div
-                className="flex fix-flex-col h-32 mt-4 md:mt-0 mb-6 md:mb-0 items-center justify-center gap-3 md:flex-row xl:flex-row"
-                style={scale}
-              >
+              <div className="flex fix-flex-col h-32 mt-4 md:mt-0 mb-6 md:mb-0 items-center justify-center gap-3 md:flex-row xl:flex-row">
                 <motion.a
                   {...fadeIn}
                   transition={{
@@ -93,7 +86,7 @@ function Hero() {
                     delay: 3.0,
                     ease: "easeInOut",
                   }}
-                  className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-black no-underline bg-zinc-200 border border-transparent rounded-md dark:bg-zinc-800 dark:text-white betterhover:dark:hover:bg-gray-800 betterhover:hover:bg-zinc-300 md:py-3 md:text-lg md:px-10 md:leading-6 fix-width-auto xl:w-auto"
+                  className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-black no-underline bg-zinc-200 border border-zinc-300 dark:border-zinc-700 rounded-md dark:bg-zinc-800 dark:text-white betterhover:dark:hover:bg-gray-800 betterhover:hover:bg-zinc-300 md:text-lg md:px-12 md:leading-6 fix-width-auto xl:w-auto"
                   href="/learn/introduction"
                 >
                   Learn
@@ -105,7 +98,7 @@ function Hero() {
                     delay: 3.2,
                     ease: "easeInOut",
                   }}
-                  className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white no-underline bg-zinc-800 border border-transparent rounded-md dark:bg-zinc-100 dark:text-black betterhover:dark:hover:bg-gray-300 betterhover:hover:bg-gray-700 md:py-3 md:text-lg md:px-10 md:leading-6 fix-width-auto xl:w-auto"
+                  className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white no-underline bg-zinc-800 border border-zinc-700 dark:border-zinc-200 rounded-md dark:bg-zinc-100 dark:text-black betterhover:dark:hover:bg-gray-300 betterhover:hover:bg-gray-700 md:text-lg md:px-12 md:leading-6 fix-width-auto xl:w-auto"
                   href="/develop/getting-started"
                 >
                   Develop
