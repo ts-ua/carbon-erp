@@ -24,8 +24,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const { id, ...data } = validation.data;
 
-  console.log(data);
-
   const insertEquipment = await upsertEquipment(client, {
     ...data,
     createdBy: userId,

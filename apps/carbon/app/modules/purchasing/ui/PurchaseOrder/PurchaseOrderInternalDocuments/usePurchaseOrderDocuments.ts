@@ -21,59 +21,12 @@ export const usePurchaseOrderDocuments = ({
   const permissions = usePermissions();
   const { supabase } = useSupabase();
 
-  // const [users, setUsers] = useState<
-  //   {
-  //     id: string;
-  //     firstName: string | null;
-  //     lastName: string | null;
-  //     avatarUrl: string | null;
-  //   }[]
-  // >([]);
-
   const canDelete = permissions.can("delete", "purchasing"); // TODO: or is document owner
 
   const refresh = useCallback(
     () => fetcher.submit(null, { method: "post" }),
     [fetcher]
   );
-
-  // const getUsers = useCallback(async () => {
-  //   const userIds = [
-  //     ...new Set(attachments.map((attachment) => attachment.owner)),
-  //   ];
-
-  //   if (!supabase) return {};
-
-  //   const { data, error } = await supabase
-  //     .from("users")
-  //     .select("*")
-  //     .in("id", userIds);
-
-  //   if (error) {
-  //     setUsers([]);
-  //   } else {
-  //     console.log(data);
-  //     setUsers(data);
-  //   }
-  // }, [attachments, supabase]);
-
-  // useEffect(() => {
-  //   getUsers();
-  // }, [getUsers]);
-
-  // const usersMap = useMemo<
-  //   Record<string, { fullName: string; avatarUrl: string | null }>
-  // >(() => {
-  //   return users.reduce<
-  //     Record<string, { fullName: string; avatarUrl: string | null }>
-  //   >((acc, user) => {
-  //     acc[user.id] = {
-  //       fullName: `${user.firstName} ${user.lastName}`,
-  //       avatarUrl: user.avatarUrl,
-  //     };
-  //     return acc;
-  //   }, {});
-  // }, [users]);
 
   const deleteAttachment = useCallback(
     async (attachment: PurchaseOrderAttachment) => {

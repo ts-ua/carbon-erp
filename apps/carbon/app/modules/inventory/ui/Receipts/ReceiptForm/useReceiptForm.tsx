@@ -100,9 +100,7 @@ export default function useReceiptForm({
     try {
       await fetch(path.to.api.rollback("receipt", receipt.id), {
         method: "DELETE",
-      })
-        .then(() => console.log("successfully rolled back receipt sequence"))
-        .catch(console.error);
+      }).catch(console.error);
 
       await supabase.from("receipt").delete().eq("receiptId", receipt.id);
     } catch {
@@ -229,7 +227,7 @@ export default function useReceiptForm({
 
           const outstandingQuantity =
             d.purchaseQuantity -
-            (previouslyReceivedQuantitiesByLine[d.id] ?? 0);
+            (previouslyReceivedQuantitiesByLine[d.id!] ?? 0);
 
           acc.push({
             receiptId: receipt.id,
