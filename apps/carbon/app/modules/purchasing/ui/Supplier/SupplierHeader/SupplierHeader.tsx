@@ -1,9 +1,9 @@
+import { Heading } from "@carbon/react";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
-  Heading,
   HStack,
   Stack,
   Text,
@@ -39,7 +39,7 @@ const SupplierHeader = () => {
         <CardHeader>
           <HStack justifyContent="space-between" alignItems="start">
             <Stack direction="column" spacing={2}>
-              <Heading size="md">{routeData?.supplier?.name}</Heading>
+              <Heading size="h3">{routeData?.supplier?.name}</Heading>
             </Stack>
             <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
               Supplier Details

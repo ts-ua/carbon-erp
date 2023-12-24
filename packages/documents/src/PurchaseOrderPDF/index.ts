@@ -1,3 +1,3 @@
 import PurchaseOrderPDF from "./PurchaseOrderPDF";
 
-export { PurchaseOrderPDF };
+export default PurchaseOrderPDF;

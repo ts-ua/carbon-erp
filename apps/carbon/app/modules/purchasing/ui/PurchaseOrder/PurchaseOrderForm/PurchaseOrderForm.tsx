@@ -1,10 +1,10 @@
+import { Heading } from "@carbon/react";
 import {
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Grid,
-  Heading,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -62,7 +62,7 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
     >
       <Card w="full">
         <CardHeader>
-          <Heading size="md">
+          <Heading size="h3">
             {isEditing ? "Purchase Order" : "New Purchase Order"}
           </Heading>
           {!isEditing && (

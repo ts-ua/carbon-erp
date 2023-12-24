@@ -1,10 +1,10 @@
+import { Heading } from "@carbon/react";
 import {
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Grid,
-  Heading,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -120,7 +120,7 @@ const PartForm = ({ initialValues }: PartFormProps) => {
     >
       <Card w="full">
         <CardHeader>
-          <Heading size="md">{isEditing ? "Part Details" : "New Part"}</Heading>
+          <Heading size="h3">{isEditing ? "Part Details" : "New Part"}</Heading>
           {!isEditing && (
             <Text color="gray.500" fontWeight="normal">
               A part contains the information about a specific item that can be

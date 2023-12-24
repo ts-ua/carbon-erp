@@ -1,10 +1,10 @@
+import { Heading } from "@carbon/react";
 import {
   Box,
   Button,
   Card,
   CardBody,
   CardHeader,
-  Heading,
   List,
   ListItem,
   Text,
@@ -67,7 +67,7 @@ const CustomerLocations = ({ locations }: CustomerLocationsProps) => {
     <>
       <Card w="full">
         <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="md" display="inline-flex">
+          <Heading size="h3" className="inline-flex">
             Locations
           </Heading>
           {canEdit && (

@@ -1,10 +1,10 @@
+import { Heading } from "@carbon/react";
 import {
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Grid,
-  Heading,
   VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -64,7 +64,7 @@ const PurchaseOrderDeliveryForm = ({
     >
       <Card w="full">
         <CardHeader>
-          <Heading size="md">Delivery</Heading>
+          <Heading size="h3">Delivery</Heading>
         </CardHeader>
         <CardBody>
           <Hidden name="id" />

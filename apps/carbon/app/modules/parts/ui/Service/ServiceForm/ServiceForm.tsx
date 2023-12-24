@@ -1,10 +1,10 @@
+import { Heading } from "@carbon/react";
 import {
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Grid,
-  Heading,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -103,7 +103,7 @@ const ServiceForm = ({ initialValues }: ServiceFormProps) => {
     >
       <Card w="full">
         <CardHeader>
-          <Heading size="md">
+          <Heading size="h3">
             {isEditing ? "Service Details" : "New Service"}
           </Heading>
           {!isEditing && (

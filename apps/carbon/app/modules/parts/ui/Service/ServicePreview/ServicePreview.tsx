@@ -1,9 +1,9 @@
+import { Heading } from "@carbon/react";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
-  Heading,
   HStack,
   Stack,
   Text,
@@ -27,7 +27,7 @@ const ServicePreview = () => {
       <CardHeader>
         <HStack justifyContent="space-between" alignItems="start">
           <Stack direction="column" spacing={2}>
-            <Heading size="md">{routeData?.service?.name}</Heading>
+            <Heading size="h3">{routeData?.service?.name}</Heading>
             <Text color="gray.500" noOfLines={1}>
               {routeData?.service?.description}
             </Text>

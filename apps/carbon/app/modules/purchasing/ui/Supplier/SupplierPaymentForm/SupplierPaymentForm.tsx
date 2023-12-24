@@ -1,10 +1,10 @@
+import { Heading } from "@carbon/react";
 import {
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Grid,
-  Heading,
   HStack,
   VStack,
 } from "@chakra-ui/react";
@@ -55,7 +55,7 @@ const SupplierPaymentForm = ({ initialValues }: SupplierPaymentFormProps) => {
     >
       <Card w="full">
         <CardHeader>
-          <Heading size="md">Supplier Payment</Heading>
+          <Heading size="h3">Supplier Payment</Heading>
         </CardHeader>
         <CardBody>
           <Hidden name="supplierId" />

@@ -1,11 +1,10 @@
-import { Menubar, MenubarItem } from "@carbon/react";
+import { Heading, Menubar, MenubarItem } from "@carbon/react";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
   HStack,
-  Heading,
   Stack,
   Text,
   VStack,
@@ -90,7 +89,7 @@ const PurchaseInvoiceHeader = () => {
           <CardHeader>
             <HStack justifyContent="space-between" alignItems="start">
               <Stack direction="column" spacing={2}>
-                <Heading size="md">{purchaseInvoice.invoiceId}</Heading>
+                <Heading size="h3">{purchaseInvoice.invoiceId}</Heading>
                 <Text color="gray.500" fontWeight="normal">
                   {purchaseInvoice.supplierName}
                 </Text>

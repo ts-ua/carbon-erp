@@ -1,7 +1,5 @@
 // root.tsx
-import { ThemeProvider } from "@carbon/react";
-import { Heading, VStack } from "@chakra-ui/react";
-import { SkipNavLink } from "@chakra-ui/skip-nav";
+import { Heading, ThemeProvider } from "@carbon/react";
 import type { MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
@@ -20,9 +18,11 @@ import React from "react";
 import { getBrowserEnv } from "~/config/env";
 import Background from "~/styles/background.css";
 import NProgress from "~/styles/nprogress.css";
+import Tailwind from "~/styles/tailwind.css";
 
 export function links() {
   return [
+    { rel: "stylesheet", href: Tailwind },
     { rel: "stylesheet", href: Background },
     { rel: "stylesheet", href: NProgress },
   ];
@@ -84,7 +84,6 @@ export default function App() {
   return (
     <Document>
       <ThemeProvider>
-        <SkipNavLink zIndex={7}>Skip to content</SkipNavLink>
         <Outlet />
       </ThemeProvider>
       <script
@@ -108,18 +107,12 @@ export function ErrorBoundary() {
   return (
     <Document title="Error!">
       <ThemeProvider>
-        <VStack
-          w="full"
-          h="100vh"
-          alignItems="center"
-          justifyContent="center"
-          gap={4}
-          bg="black"
-          color="white"
-        >
-          <Heading as="h1">Something went wrong</Heading>
-          <p>{message}</p>
-        </VStack>
+        <div className="dark">
+          <div className="flex flex-col w-full h-screen bg-zinc-900 items-center justify-center space-y-4">
+            <Heading size="display">Something went wrong</Heading>
+            <p className="text-foreground">{message}</p>
+          </div>
+        </div>
       </ThemeProvider>
     </Document>
   );

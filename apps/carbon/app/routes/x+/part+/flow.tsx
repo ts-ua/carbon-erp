@@ -4,23 +4,18 @@ import { useLoaderData } from "@remix-run/react";
 import { useCallback } from "react";
 import type { Connection, Edge, Node } from "reactflow";
 import ReactFlow, {
-  addEdge,
   Background,
   BackgroundVariant,
   Controls,
+  addEdge,
   useEdgesState,
   useNodesState,
 } from "reactflow";
-import reactFlowStyles from "reactflow/dist/style.css";
 import { requirePermissions } from "~/services/auth";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Carbon | Parts" }];
 };
-
-export function links() {
-  return [{ rel: "stylesheet", href: reactFlowStyles }];
-}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await requirePermissions(request, {

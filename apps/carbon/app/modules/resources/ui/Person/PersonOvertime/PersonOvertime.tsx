@@ -1,4 +1,5 @@
-import { Box, Card, CardBody, CardHeader, Heading } from "@chakra-ui/react";
+import { Heading } from "@carbon/react";
+import { Box, Card, CardBody, CardHeader } from "@chakra-ui/react";
 
 type PersonOvertimeProps = {};
 
@@ -6,7 +7,7 @@ const PersonOvertime = (props: PersonOvertimeProps) => {
   return (
     <Card w="full">
       <CardHeader>
-        <Heading size="md">Overtime</Heading>
+        <Heading size="h3">Overtime</Heading>
       </CardHeader>
       <CardBody>
         <Box color="gray.500" p={4} w="full" textAlign="center">

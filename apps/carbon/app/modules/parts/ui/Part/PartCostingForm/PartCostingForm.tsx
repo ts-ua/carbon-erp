@@ -1,10 +1,10 @@
+import { Heading } from "@carbon/react";
 import {
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Grid,
-  Heading,
   VStack,
 } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
@@ -35,7 +35,7 @@ const PartCostingForm = ({ initialValues }: PartCostingFormProps) => {
     >
       <Card w="full">
         <CardHeader>
-          <Heading size="md">Costing & Posting</Heading>
+          <Heading size="h3">Costing & Posting</Heading>
         </CardHeader>
         <CardBody>
           <Hidden name="partId" />

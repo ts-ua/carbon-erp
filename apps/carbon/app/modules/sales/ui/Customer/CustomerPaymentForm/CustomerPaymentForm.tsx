@@ -1,10 +1,10 @@
+import { Heading } from "@carbon/react";
 import {
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Grid,
-  Heading,
   HStack,
   VStack,
 } from "@chakra-ui/react";
@@ -55,7 +55,7 @@ const CustomerPaymentForm = ({ initialValues }: CustomerPaymentFormProps) => {
     >
       <Card w="full">
         <CardHeader>
-          <Heading size="md">Customer Payment</Heading>
+          <Heading size="h3">Customer Payment</Heading>
         </CardHeader>
         <CardBody>
           <Hidden name="customerId" />

@@ -1,19 +1,15 @@
-import type { StackProps } from "@chakra-ui/react";
-import { Heading, Text, VStack } from "@chakra-ui/react";
+import { Heading, VStack } from "@carbon/react";
+import type { PropsWithChildren } from "react";
 
-type SectionTitleProps = StackProps & {
+type SectionTitleProps = PropsWithChildren<{
   subtitle?: string;
-};
+}>;
 
 const SectionTitle = ({ children, subtitle, ...props }: SectionTitleProps) => {
   return (
-    <VStack spacing={2} alignItems="start" w="full" my={4} {...props}>
-      <Heading size="md">{children}</Heading>
-      {subtitle && (
-        <Text fontSize={14} color="gray.500">
-          {subtitle}
-        </Text>
-      )}
+    <VStack spacing={2} className="mb4" {...props}>
+      <Heading size="h2">{children}</Heading>
+      {subtitle && <p className="text-muted-foreground">{subtitle}</p>}
     </VStack>
   );
 };

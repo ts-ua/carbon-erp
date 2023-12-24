@@ -1,10 +1,10 @@
+import { Heading } from "@carbon/react";
 import {
   Box,
   Button,
   Card,
   CardBody,
   CardHeader,
-  Heading,
   HStack,
   IconButton,
 } from "@chakra-ui/react";
@@ -72,7 +72,7 @@ const ServiceSuppliers = ({ serviceSuppliers }: ServiceSuppliersProps) => {
     <>
       <Card w="full">
         <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="md" display="inline-flex">
+          <Heading size="h3" className="inline-flex">
             Suppliers
           </Heading>
           {canEdit && (
