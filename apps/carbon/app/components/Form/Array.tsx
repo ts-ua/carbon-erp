@@ -1,13 +1,12 @@
+import { HStack, VStack } from "@carbon/react";
 import type { InputProps } from "@chakra-ui/react";
-import { Button } from "@chakra-ui/react";
-import { VStack } from "@chakra-ui/react";
-import { IconButton } from "@chakra-ui/react";
-import { HStack } from "@chakra-ui/react";
 import {
+  Button,
+  Input as ChakraInput,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Input as ChakraInput,
+  IconButton,
 } from "@chakra-ui/react";
 import { forwardRef } from "react";
 import { IoMdAdd, IoMdClose } from "react-icons/io";
@@ -26,7 +25,7 @@ const Array = forwardRef<HTMLInputElement, FormArrayProps>(
     return (
       <FormControl isInvalid={!!error} isRequired={isRequired}>
         {label && <FormLabel htmlFor={`${name}`}>{label}</FormLabel>}
-        <VStack alignItems="start" spacing={2} w="full" mb={4}>
+        <VStack className="mb-4">
           {items.map((item, index) => (
             <ArrayInput
               key={`${item}-${index}`}
@@ -60,7 +59,7 @@ const ArrayInput = forwardRef<HTMLInputElement, ArrayInputProps>(
 
     return (
       <FormControl isInvalid={!!error} isRequired>
-        <HStack w="full" alignContent="space-between">
+        <HStack className="w-full content-between">
           <ChakraInput
             ref={ref}
             {...getInputProps({

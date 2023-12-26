@@ -1,13 +1,5 @@
-import { Heading } from "@carbon/react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Grid,
-  HStack,
-  VStack,
-} from "@chakra-ui/react";
+import { Heading, HStack, VStack } from "@carbon/react";
+import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -71,7 +63,7 @@ const CustomerShippingForm = ({ initialValues }: CustomerShippingFormProps) => {
             gridRowGap={2}
             w="full"
           >
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Customer
                 name="shippingCustomerId"
                 label="Shipping Customer"
@@ -88,7 +80,7 @@ const CustomerShippingForm = ({ initialValues }: CustomerShippingFormProps) => {
                 customer={customer}
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Select
                 name="shippingMethodId"
                 label="Shipping Method"
@@ -103,7 +95,7 @@ const CustomerShippingForm = ({ initialValues }: CustomerShippingFormProps) => {
           </Grid>
         </CardBody>
         <CardFooter>
-          <HStack spacing={2}>
+          <HStack>
             <Submit isDisabled={isDisabled}>Save</Submit>
           </HStack>
         </CardFooter>

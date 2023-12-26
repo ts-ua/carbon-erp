@@ -1,14 +1,5 @@
-import { Heading, Select } from "@carbon/react";
-import {
-  Box,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Grid,
-  HStack,
-  VStack,
-} from "@chakra-ui/react";
+import { HStack, Heading, Select, VStack } from "@carbon/react";
+import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import { CreatableSelect, Hidden, Number, Submit } from "~/components/Form";
@@ -51,9 +42,9 @@ const PartInventoryForm = ({
     >
       <Card w="full">
         <CardHeader>
-          <HStack w="full" justifyContent="space-between">
+          <HStack className="w-full justify-between">
             <Heading size="h3">Inventory</Heading>
-            <Box w={180}>
+            <div className="w-[180px]">
               <Select
                 // @ts-ignore
                 size="sm"
@@ -68,7 +59,7 @@ const PartInventoryForm = ({
                   )}?location=${selected?.value}`;
                 }}
               />
-            </Box>
+            </div>
           </HStack>
         </CardHeader>
         <CardBody>
@@ -81,7 +72,7 @@ const PartInventoryForm = ({
             gridRowGap={2}
             w="full"
           >
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <CreatableSelect
                 options={shelfOptions}
                 name="defaultShelfId"
@@ -96,7 +87,7 @@ const PartInventoryForm = ({
                 isReadOnly
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Number
                 name="quantityAvailable"
                 label="Quantity Available"
@@ -108,7 +99,7 @@ const PartInventoryForm = ({
                 isReadOnly
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Number
                 name="quantityOnProdOrder"
                 label="Quantity On Prod Order"

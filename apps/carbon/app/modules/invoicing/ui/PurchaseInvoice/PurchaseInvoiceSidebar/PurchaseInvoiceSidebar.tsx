@@ -1,5 +1,5 @@
-import { Count, useColor } from "@carbon/react";
-import { Box, Button, VStack } from "@chakra-ui/react";
+import { Count, VStack, useColor } from "@carbon/react";
+import { Button } from "@chakra-ui/react";
 import { Link, useMatches, useParams } from "@remix-run/react";
 import { useRouteData } from "~/hooks";
 import type { PurchaseInvoiceLine } from "~/modules/invoicing";
@@ -24,10 +24,10 @@ const PurchaseInvoiceSidebar = () => {
   const matches = useMatches();
 
   return (
-    <VStack h="full" alignItems="start">
-      <Box overflowY="auto" w="full" h="full">
+    <VStack className="h-full">
+      <div className="overflow-y-auto h-full w-full">
         <VStack spacing={2}>
-          <VStack spacing={1} alignItems="start" w="full">
+          <VStack spacing={1}>
             {links.map((route) => {
               const isActive = matches.some(
                 (match) =>
@@ -57,7 +57,7 @@ const PurchaseInvoiceSidebar = () => {
             })}
           </VStack>
         </VStack>
-      </Box>
+      </div>
     </VStack>
   );
 };

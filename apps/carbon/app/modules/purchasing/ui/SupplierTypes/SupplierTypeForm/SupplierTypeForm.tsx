@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,8 +8,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
@@ -52,13 +51,13 @@ const SupplierTypeForm = ({ initialValues }: SupplierTypeFormProps) => {
           </DrawerHeader>
           <DrawerBody pb={8}>
             <Hidden name="id" />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Input name="name" label="Supplier Type" />
               <Color name="color" label="Color" />
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
               <Button
                 size="md"

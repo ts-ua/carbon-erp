@@ -1,5 +1,5 @@
-import { Heading } from "@carbon/react";
-import { Button, HStack, Text, VStack } from "@chakra-ui/react";
+import { Heading, HStack, VStack } from "@carbon/react";
+import { Button, Text } from "@chakra-ui/react";
 import { BsEnvelopeFill } from "react-icons/bs";
 import { Avatar } from "~/components";
 import { usePermissions } from "~/hooks";
@@ -8,17 +8,17 @@ import type { Account } from "~/modules/account";
 const PersonHeader = ({ user }: { user: Account }) => {
   const permissions = usePermissions();
   return (
-    <HStack py={4} justifyContent="space-between" spacing={4} w="full">
+    <HStack className="py-4 justify-between w-full" spacing={4}>
       <HStack spacing={4}>
         <Avatar size="lg" path={user.avatarUrl} />
-        <VStack align="start" spacing={1}>
+        <VStack spacing={1}>
           <Heading size="h3">{user.fullName}</Heading>
           <Text color="gray.500" fontSize="sm">
             {user.about}
           </Text>
         </VStack>
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "messaging") && (
           <Button
             size="md"

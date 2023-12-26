@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,8 +8,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Hidden, Input, Select, Submit } from "~/components/Form";
@@ -57,7 +56,7 @@ const AccountCategoryForm = ({
           </DrawerHeader>
           <DrawerBody pb={8}>
             <Hidden name="id" />
-            <VStack spacing={2} alignItems="start">
+            <VStack>
               <Input name="category" label="Category" />
               <Select
                 name="incomeBalance"
@@ -78,7 +77,7 @@ const AccountCategoryForm = ({
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
               <Button
                 size="md"

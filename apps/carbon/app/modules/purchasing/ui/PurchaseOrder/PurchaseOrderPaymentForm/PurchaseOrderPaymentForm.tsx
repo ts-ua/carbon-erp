@@ -1,12 +1,5 @@
-import { Heading } from "@carbon/react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Grid,
-  VStack,
-} from "@chakra-ui/react";
+import { Heading, VStack } from "@carbon/react";
+import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -62,7 +55,7 @@ const PurchaseOrderPaymentForm = ({
             gridRowGap={2}
             w="full"
           >
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Supplier
                 name="invoiceSupplierId"
                 label="Invoice Supplier"
@@ -79,7 +72,7 @@ const PurchaseOrderPaymentForm = ({
                 supplier={supplier}
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Select
                 name="paymentTermId"
                 label="Payment Terms"
@@ -87,7 +80,7 @@ const PurchaseOrderPaymentForm = ({
               />
               <Currency name="currencyCode" label="Currency" />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Boolean name="paymentComplete" label="Payment Complete" />
             </VStack>
           </Grid>

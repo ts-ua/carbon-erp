@@ -1,12 +1,5 @@
-import { Heading } from "@carbon/react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Grid,
-  VStack,
-} from "@chakra-ui/react";
+import { Heading, VStack } from "@carbon/react";
+import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Boolean, Hidden, Number, Select, Submit } from "~/components/Form";
 import { usePermissions } from "~/hooks";
@@ -45,7 +38,7 @@ const PartCostingForm = ({ initialValues }: PartCostingFormProps) => {
             gridRowGap={2}
             w="full"
           >
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Select
                 name="costingMethod"
                 label="Part Costing Method"
@@ -54,7 +47,7 @@ const PartCostingForm = ({ initialValues }: PartCostingFormProps) => {
               <Number name="standardCost" label="Standard Cost" precision={2} />
               <Number name="unitCost" label="Unit Cost" precision={2} />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Number
                 name="salesHistory"
                 label="Sales History"

@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -9,9 +10,7 @@ import {
   DrawerOverlay,
   FormControl,
   FormLabel,
-  HStack,
-  Input as ChakraInput,
-  VStack,
+  Input as InputBase,
 } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
@@ -69,16 +68,16 @@ const AccountSubcategoryForm = ({
           <DrawerBody pb={8}>
             <Hidden name="id" />
             <Hidden name="accountCategoryId" />
-            <VStack spacing={2} alignItems="start">
+            <VStack>
               <FormControl>
                 <FormLabel>Category</FormLabel>
-                <ChakraInput value={category} isReadOnly />
+                <InputBase value={category} isReadOnly />
               </FormControl>
               <Input name="name" label="Name" />
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
               <Button
                 size="md"

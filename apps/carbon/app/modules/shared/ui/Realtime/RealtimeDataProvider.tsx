@@ -1,4 +1,5 @@
-import { Image, Text, useColorModeValue, VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
+import { Image, useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Background } from "~/components/Layout";
 import { useSupabase } from "~/lib/supabase";
@@ -206,10 +207,7 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
 function Loading() {
   return (
     <VStack
-      h="100vh"
-      w="100vw"
-      alignItems="center"
-      justifyContent="center"
+      className="h-screen w-screen items-center justify-center"
       spacing={4}
     >
       <Image
@@ -221,9 +219,7 @@ function Loading() {
         maxW={100}
         marginBottom={3}
       />
-      <Text letterSpacing={-1} textTransform="uppercase" fontWeight={700}>
-        Loading...
-      </Text>
+      <p className="uppercase tracking-tight font-bold">Loading...</p>
       <Background />
     </VStack>
   );

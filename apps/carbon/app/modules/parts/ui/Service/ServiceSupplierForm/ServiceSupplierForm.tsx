@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,8 +8,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useNavigate, useParams } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
@@ -58,7 +57,7 @@ const ServiceSupplierForm = ({ initialValues }: ServiceSupplierFormProps) => {
             <Hidden name="id" />
             <Hidden name="serviceId" />
 
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Supplier name="supplierId" label="Supplier" />
               <Input name="supplierServiceId" label="Supplier Service ID" />
             </VStack>

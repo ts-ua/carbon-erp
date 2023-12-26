@@ -4,15 +4,15 @@ import type { ComponentProps } from "react";
 import { forwardRef } from "react";
 import { cn } from "./utils/cn";
 
-const vStackVariants = cva("flex flex-col w-full items-start", {
+const hStackVariants = cva("flex", {
   variants: {
     spacing: {
-      0: "space-y-0",
-      1: "space-y-1",
-      2: "space-y-2",
-      3: "space-y-3",
-      4: "space-y-4",
-      8: "space-y-8",
+      0: "space-x-0",
+      1: "space-x-1",
+      2: "space-x-2",
+      3: "space-x-3",
+      4: "space-x-4",
+      8: "space-x-8",
     },
   },
   defaultVariants: {
@@ -20,16 +20,16 @@ const vStackVariants = cva("flex flex-col w-full items-start", {
   },
 });
 
-export interface VStackProps
+export interface HStackProps
   extends ComponentProps<"div">,
-    VariantProps<typeof vStackVariants> {}
+    VariantProps<typeof hStackVariants> {}
 
-const VStack = forwardRef<HTMLDivElement, VStackProps>(
+const HStack = forwardRef<HTMLDivElement, HStackProps>(
   ({ className, children, spacing, ...props }, ref) => {
     return (
       <div
         className={cn(
-          vStackVariants({
+          hStackVariants({
             spacing,
             className,
           })
@@ -42,6 +42,6 @@ const VStack = forwardRef<HTMLDivElement, VStackProps>(
     );
   }
 );
-VStack.displayName = "VStack";
+HStack.displayName = "HStack";
 
-export { VStack };
+export { HStack };

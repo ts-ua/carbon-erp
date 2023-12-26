@@ -1,17 +1,8 @@
-import { useColor } from "@carbon/react";
-import {
-  Box,
-  IconButton,
-  Tooltip,
-  useDisclosure,
-  useOutsideClick,
-  VStack,
-} from "@chakra-ui/react";
+import { VStack, useDisclosure, useOutsideClick } from "@carbon/react";
+import { IconButton, Tooltip } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import type { ReactElement } from "react";
 import { useRef, useState } from "react";
-
-const MotionBox = motion(Box);
 
 type MultiTabSidebarNode = {
   id: string;
@@ -25,22 +16,6 @@ type MultiTabSidebarProps = {
   defaultIsOpen?: boolean;
   hideOnClickOutside?: boolean;
   nodes: MultiTabSidebarNode[];
-};
-
-const variants = {
-  visible: {
-    position: "asbolute",
-    x: "0%",
-    z: "0px",
-    left: "48px",
-  },
-  hidden: {
-    position: "relative",
-    x: "-100%",
-    z: "0px",
-    left: "0",
-  },
-  transition: { duration: 0.5 },
 };
 
 const MultiTabSidebar = ({
@@ -66,18 +41,6 @@ const MultiTabSidebar = ({
     },
   });
 
-  const initialState = defaultIsOpen
-    ? {
-        position: "relative",
-        x: "0%",
-        left: "48px",
-      }
-    : {
-        position: "fixed",
-        x: "-100%",
-        left: "-100%",
-      };
-
   const getActiveNode = () => {
     if (activeNode === null) return null;
     const node = nodes.find((n) => n.id === activeNode);
@@ -96,34 +59,50 @@ const MultiTabSidebar = ({
 
   return (
     <>
-      <MotionBox
+      <motion.div
         animate={!sidebar.isOpen ? "hidden" : "visible"}
-        initial={initialState}
-        variants={variants}
+        initial={
+          defaultIsOpen
+            ? {
+                position: "relative",
+                x: "0%",
+                left: "48px",
+              }
+            : {
+                position: "fixed",
+                x: "-100%",
+                left: "-100%",
+              }
+        }
+        variants={{
+          visible: {
+            position: "absolute",
+            x: "0%",
+            z: "0px",
+            left: "48px",
+          },
+          hidden: {
+            position: "relative",
+            x: "-100%",
+            z: "0px",
+            left: "0",
+          },
+        }}
+        transition={{
+          duration: 0.5,
+        }}
         ref={ref}
-        h="full"
-        w="20rem"
-        bg={useColor("white")}
-        borderRight={1}
-        borderRightColor={useColor("gray.300")}
-        borderRightStyle="solid"
+        className="h-full w-[20rem] bg-background border-r"
       >
-        <VStack h="full" alignItems="start">
-          <Box pb={8} overflowY="auto" w="full" h="full" p={2}>
+        <VStack className="h-full">
+          <div className="p-2 pb-8 overflow-y-auto w-full h-full">
             {/* TODO: persist state between changes */}
             {getActiveNode()}
-          </Box>
+          </div>
         </VStack>
-      </MotionBox>
+      </motion.div>
 
-      <Box
-        position="absolute"
-        h="full"
-        bg={useColor("white")}
-        borderRight={1}
-        borderRightColor={useColor("gray.200")}
-        borderRightStyle="solid"
-      >
+      <div className="absolute h-full bg-background border-r">
         <VStack spacing={0}>
           {nodes.map((node) => (
             <Tooltip key={node.id} label={node.label} placement="right">
@@ -140,7 +119,7 @@ const MultiTabSidebar = ({
             </Tooltip>
           ))}
         </VStack>
-      </Box>
+      </div>
     </>
   );
 };

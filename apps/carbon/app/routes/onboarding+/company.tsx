@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Modal,
@@ -6,7 +7,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  VStack,
 } from "@chakra-ui/react";
 import { getLocalTimeZone } from "@internationalized/date";
 import { json, redirect, type ActionFunctionArgs } from "@remix-run/node";
@@ -143,7 +143,7 @@ export default function OnboardingUser() {
 
           <ModalBody>
             <Hidden name="next" value={next} />
-            <VStack w="full" spacing={4}>
+            <VStack spacing={4}>
               <Input name="name" label="Company Name" />
               <Input name="addressLine1" label="Address" />
               <Input name="city" label="City" />
@@ -152,16 +152,18 @@ export default function OnboardingUser() {
             </VStack>
           </ModalBody>
 
-          <ModalFooter justifyContent="space-between">
-            <Button
-              isDisabled={!previous}
-              size="md"
-              disabled
-              onClick={onPrevious}
-            >
-              Previous
-            </Button>
-            <Submit>Next</Submit>
+          <ModalFooter>
+            <HStack>
+              <Button
+                isDisabled={!previous}
+                size="md"
+                disabled
+                onClick={onPrevious}
+              >
+                Previous
+              </Button>
+              <Submit>Next</Submit>
+            </HStack>
           </ModalFooter>
         </ValidatedForm>
       </ModalContent>

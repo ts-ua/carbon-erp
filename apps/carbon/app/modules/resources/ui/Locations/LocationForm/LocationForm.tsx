@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,8 +8,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
@@ -48,7 +47,7 @@ const LocationForm = ({ initialValues }: LocationFormProps) => {
           <DrawerHeader>{isEditing ? "Edit" : "New"} Location</DrawerHeader>
           <DrawerBody pb={8}>
             <Hidden name="id" />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Input name="name" label="Location Name" />
               <Input name="addressLine1" label="Address Line 1" />
               <Input name="addressLine2" label="Address Line 2" />
@@ -62,7 +61,7 @@ const LocationForm = ({ initialValues }: LocationFormProps) => {
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
               <Button
                 size="md"

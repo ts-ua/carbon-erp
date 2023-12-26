@@ -1,5 +1,5 @@
-import { ActionMenu } from "@carbon/react";
-import { Grid, Icon, MenuItem, Text, VStack } from "@chakra-ui/react";
+import { ActionMenu, VStack } from "@carbon/react";
+import { Grid, Icon, MenuItem, Text } from "@chakra-ui/react";
 import { BsPinMapFill } from "react-icons/bs";
 import type { Action } from "~/types";
 
@@ -21,7 +21,7 @@ const Address = ({ address, actions }: AddressProps) => {
   return (
     <Grid w="full" gridColumnGap={4} gridTemplateColumns="auto 1fr auto">
       <Icon as={BsPinMapFill} w={8} h={8} />
-      <VStack spacing={0} alignItems="start">
+      <VStack spacing={0}>
         <Text fontWeight="bold" noOfLines={1}>
           {location}
         </Text>

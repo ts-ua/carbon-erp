@@ -1,13 +1,11 @@
-import { Heading } from "@carbon/react";
+import { Heading, HStack, VStack } from "@carbon/react";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
-  HStack,
   Stack,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
@@ -33,13 +31,13 @@ const CustomerHeader = () => {
   }>(path.to.customerRoot);
 
   return (
-    <VStack w="full" alignItems="start" spacing={2}>
+    <VStack>
       <Card w="full">
         <CardHeader>
-          <HStack justifyContent="space-between" alignItems="start">
-            <Stack direction="column" spacing={2}>
+          <HStack className="justify-between items-start">
+            <VStack>
               <Heading size="h3">{routeData?.customer?.name}</Heading>
-            </Stack>
+            </VStack>
             <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
               Customer Details
             </Button>

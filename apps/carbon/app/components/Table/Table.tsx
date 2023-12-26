@@ -1,6 +1,7 @@
 import {
   ActionMenu,
   ContextMenu,
+  VStack,
   useColor,
   useEscape,
   useMount,
@@ -8,18 +9,14 @@ import {
 import { clip } from "@carbon/utils";
 import type { ThemeTypings } from "@chakra-ui/react";
 import {
-  Box,
-  chakra,
-  Flex,
+  Table as ChakraTable,
   Grid,
   MenuList,
-  Table as ChakraTable,
   Tbody,
   Th,
   Thead,
   Tr,
   VisuallyHidden,
-  VStack,
 } from "@chakra-ui/react";
 import type {
   ColumnDef,
@@ -428,7 +425,7 @@ const Table = <T extends object>({
   const rowBackground = useColor("gray.50");
 
   return (
-    <VStack w="full" h="full" spacing={0}>
+    <VStack spacing={0} className="h-full">
       {(withColumnOrdering ||
         withFilters ||
         withSelectableRows ||
@@ -450,11 +447,8 @@ const Table = <T extends object>({
           withSelectableRows={withSelectableRows}
         />
       )}
-      <Box
-        w="full"
-        h="full"
-        bg={useColor("white")}
-        overflow="scroll"
+      <div
+        className="w-full h-full bg-background overflow-scroll"
         style={{ contain: "strict" }}
         ref={tableContainerRef}
         onKeyDown={editMode ? onKeyDown : undefined}
@@ -505,17 +499,12 @@ const Table = <T extends object>({
                           whiteSpace="nowrap"
                         >
                           {header.isPlaceholder ? null : (
-                            <Flex
-                              justify="flex-start"
-                              align="center"
-                              fontSize="xs"
-                              color="gray.500"
-                            >
+                            <div className="flex justify-start items-center text-xs text-muted-foreground">
                               {flexRender(
                                 header.column.columnDef.header,
                                 header.getContext()
                               )}
-                              <chakra.span pl="4">
+                              <span className="pl-4">
                                 {sorted ? (
                                   sorted === -1 ? (
                                     <FaSortDown aria-label="sorted descending" />
@@ -525,8 +514,8 @@ const Table = <T extends object>({
                                 ) : sortable ? (
                                   <FaSort aria-label="sort" />
                                 ) : null}
-                              </chakra.span>
-                            </Flex>
+                              </span>
+                            </div>
                           )}
                         </Th>
                       );
@@ -639,17 +628,12 @@ const Table = <T extends object>({
                         whiteSpace="nowrap"
                       >
                         {header.isPlaceholder ? null : (
-                          <Flex
-                            justify="flex-start"
-                            align="center"
-                            fontSize="xs"
-                            color="gray.500"
-                          >
+                          <div className="flex justify-start items-center text-xs text-muted-foreground">
                             {flexRender(
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                            <chakra.span pl="4">
+                            <span className="pl-4">
                               {sorted ? (
                                 sorted === -1 ? (
                                   <FaSortDown aria-label="sorted descending" />
@@ -662,8 +646,8 @@ const Table = <T extends object>({
                                   style={{ opacity: 0.4 }}
                                 />
                               ) : null}
-                            </chakra.span>
-                          </Flex>
+                            </span>
+                          </div>
                         )}
                       </Th>
                     );
@@ -751,7 +735,7 @@ const Table = <T extends object>({
             </Tbody>
           </ChakraTable>
         </Grid>
-      </Box>
+      </div>
       {withPagination && (
         <Pagination {...pagination} colorScheme={colorScheme} />
       )}
@@ -794,9 +778,9 @@ function getActionColumn<T>(
       id: "Actions",
       header: () => <VisuallyHidden>Actions</VisuallyHidden>,
       cell: (item) => (
-        <Flex justifyContent="end">
+        <div className="flex justify-end">
           <ActionMenu>{renderContextMenu(item.row.original)}</ActionMenu>
-        </Flex>
+        </div>
       ),
     },
   ];

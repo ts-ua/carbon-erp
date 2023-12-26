@@ -1,13 +1,11 @@
-import { Heading } from "@carbon/react";
+import { Heading, HStack, VStack } from "@carbon/react";
 import {
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Grid,
-  HStack,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Employee, Hidden, Input, Select, Submit } from "~/components/Form";
@@ -74,11 +72,11 @@ const CustomerForm = ({ initialValues }: CustomerFormProps) => {
             gridRowGap={2}
             w="full"
           >
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Input name="name" label="Name" />
               <Input name="taxId" label="Tax ID" />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Select
                 name="customerTypeId"
                 label="Customer Type"
@@ -94,7 +92,7 @@ const CustomerForm = ({ initialValues }: CustomerFormProps) => {
             </VStack>
             {isEditing && (
               <>
-                <VStack alignItems="start" spacing={2} w="full">
+                <VStack>
                   <Employee name="accountManagerId" label="Account Manager" />
                 </VStack>
               </>
@@ -102,7 +100,7 @@ const CustomerForm = ({ initialValues }: CustomerFormProps) => {
           </Grid>
         </CardBody>
         <CardFooter>
-          <HStack spacing={2}>
+          <HStack>
             <Submit isDisabled={isDisabled}>Save</Submit>
           </HStack>
         </CardFooter>

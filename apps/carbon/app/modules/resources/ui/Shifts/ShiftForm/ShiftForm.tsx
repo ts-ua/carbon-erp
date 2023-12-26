@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -9,8 +10,6 @@ import {
   DrawerOverlay,
   FormControl,
   FormLabel,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
@@ -55,7 +54,7 @@ const ShiftForm = ({ initialValues }: ShiftFormProps) => {
           <DrawerHeader>{isEditing ? "Edit" : "New"} Shift</DrawerHeader>
           <DrawerBody pb={8}>
             <Hidden name="id" />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Input name="name" label="Shift Name" />
               <Location name="locationId" label="Location" />
               <TimePicker name="startTime" label="Start Time" />
@@ -63,7 +62,7 @@ const ShiftForm = ({ initialValues }: ShiftFormProps) => {
 
               <FormControl>
                 <FormLabel>Days</FormLabel>
-                <VStack w="full" alignItems="start">
+                <VStack>
                   <Boolean name="monday" description="Monday" />
                   <Boolean name="tuesday" description="Tuesday" />
                   <Boolean name="wednesday" description="Wednesday" />
@@ -76,7 +75,7 @@ const ShiftForm = ({ initialValues }: ShiftFormProps) => {
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
               <Button
                 size="md"

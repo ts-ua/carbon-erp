@@ -1,14 +1,12 @@
-import { Heading } from "@carbon/react";
+import { Heading, HStack, VStack } from "@carbon/react";
 import {
   Button,
   Grid,
-  HStack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
-  VStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
@@ -47,7 +45,7 @@ const AccountDefaultsForm = ({
   }));
 
   return (
-    <VStack w="full" h="full" spacing={0}>
+    <VStack spacing={0} className="h-full">
       <ValidatedForm
         validator={defaultAcountValidator}
         method="post"
@@ -65,8 +63,8 @@ const AccountDefaultsForm = ({
 
           <TabPanels>
             <TabPanel>
-              <VStack w="full" alignItems="start" spacing={8}>
-                <VStack w="full" alignItems="start" spacing={4}>
+              <VStack spacing={8}>
+                <VStack spacing={4}>
                   <Heading
                     size="h4"
                     className="uppercase text-muted-foreground"
@@ -92,7 +90,7 @@ const AccountDefaultsForm = ({
                     />
                   </Grid>
                 </VStack>
-                <VStack w="full" alignItems="start" spacing={4}>
+                <VStack spacing={4}>
                   <Heading
                     size="h4"
                     className="uppercase text-muted-foreground"
@@ -159,7 +157,7 @@ const AccountDefaultsForm = ({
                     />
                   </Grid>
                 </VStack>
-                <VStack w="full" alignItems="start" spacing={4}>
+                <VStack spacing={4}>
                   <Heading
                     size="h4"
                     className="uppercase text-muted-foreground"
@@ -190,7 +188,7 @@ const AccountDefaultsForm = ({
                     />
                   </Grid>
                 </VStack>
-                <VStack w="full" alignItems="start" spacing={4}>
+                <VStack spacing={4}>
                   <Heading
                     size="h4"
                     className="uppercase text-muted-foreground"
@@ -229,8 +227,8 @@ const AccountDefaultsForm = ({
               </VStack>
             </TabPanel>
             <TabPanel>
-              <VStack w="full" alignItems="start" spacing={8}>
-                <VStack w="full" alignItems="start" spacing={4}>
+              <VStack spacing={8}>
+                <VStack spacing={4}>
                   <Heading
                     size="h4"
                     className="uppercase text-muted-foreground"
@@ -287,7 +285,7 @@ const AccountDefaultsForm = ({
                     />
                   </Grid>
                 </VStack>
-                <VStack w="full" alignItems="start" spacing={4}>
+                <VStack spacing={4}>
                   <Heading
                     size="h4"
                     className="uppercase text-muted-foreground"
@@ -323,7 +321,7 @@ const AccountDefaultsForm = ({
                     />
                   </Grid>
                 </VStack>
-                <VStack w="full" alignItems="start" spacing={4}>
+                <VStack spacing={4}>
                   <Heading
                     size="h4"
                     className="uppercase text-muted-foreground"
@@ -374,7 +372,7 @@ const AccountDefaultsForm = ({
                     />
                   </Grid>
                 </VStack>
-                <VStack w="full" alignItems="start" spacing={4}>
+                <VStack spacing={4}>
                   <Heading
                     size="h4"
                     className="uppercase text-muted-foreground"
@@ -399,7 +397,7 @@ const AccountDefaultsForm = ({
           </TabPanels>
         </Tabs>
 
-        <HStack spacing={2}>
+        <HStack>
           <Submit isDisabled={isDisabled}>Save</Submit>
           <Button
             size="md"

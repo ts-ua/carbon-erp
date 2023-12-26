@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,8 +8,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Boolean, Hidden, Input, Submit } from "~/components/Form";
@@ -52,7 +51,7 @@ const AttributeCategoryForm = ({
           </DrawerHeader>
           <DrawerBody pb={8}>
             <Hidden name="id" />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Input name="name" label="Category Name" />
               <Boolean
                 name="isPublic"
@@ -62,7 +61,7 @@ const AttributeCategoryForm = ({
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
               <Button
                 size="md"

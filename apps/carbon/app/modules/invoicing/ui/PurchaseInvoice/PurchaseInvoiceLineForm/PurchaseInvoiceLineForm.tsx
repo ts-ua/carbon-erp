@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -9,14 +10,12 @@ import {
   DrawerOverlay,
   FormControl,
   FormLabel,
-  HStack,
   Input,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  VStack,
 } from "@chakra-ui/react";
 import { useFetcher, useNavigate, useParams } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
@@ -228,7 +227,7 @@ const PurchaseInvoiceLineForm = ({
             <Hidden name="id" />
             <Hidden name="invoiceId" />
             <Hidden name="description" value={partData.description} />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Select
                 name="invoiceLineType"
                 label="Type"

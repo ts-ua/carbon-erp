@@ -2,6 +2,7 @@ import Button from "./Button";
 import Count from "./Count";
 import DataTable, { DataTableColumnHeader } from "./DataTable";
 import Dot from "./Dot";
+import { HStack } from "./HStack";
 import HTML from "./HTML";
 import { Heading } from "./Heading";
 import type {
@@ -34,11 +35,13 @@ import { VStack } from "./VStack";
 import {
   useColor,
   useDebounce,
+  useDisclosure,
   useEscape,
   useHydrated,
   useInterval,
   useKeyboardShortcuts,
   useMount,
+  useOutsideClick,
 } from "./hooks";
 
 export {
@@ -56,6 +59,7 @@ export {
   Dot,
   Editor,
   File,
+  HStack,
   HTML,
   Heading,
   Loading,
@@ -71,6 +75,7 @@ export {
   theme,
   useColor,
   useDebounce,
+  useDisclosure,
   useEditor,
   useEscape,
   useHydrated,
@@ -78,5 +83,6 @@ export {
   useKeyboardShortcuts,
   useMount,
   useNotification,
+  useOutsideClick,
 };
 export type { GroupBase, MultiValue, OptionBase, OptionProps, SingleValue };

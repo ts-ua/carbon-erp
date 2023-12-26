@@ -1,12 +1,5 @@
-import { Heading } from "@carbon/react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Grid,
-  VStack,
-} from "@chakra-ui/react";
+import { Heading, VStack } from "@carbon/react";
+import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -74,7 +67,7 @@ const PurchaseOrderDeliveryForm = ({
             gridRowGap={2}
             w="full"
           >
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Location
                 name="locationId"
                 label="Delivery Location"
@@ -93,12 +86,12 @@ const PurchaseOrderDeliveryForm = ({
                 options={shippingTermOptions}
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <DatePicker name="receiptRequestedDate" label="Requested Date" />
               <DatePicker name="receiptPromisedDate" label="Promised Date" />
               <DatePicker name="deliveryDate" label="Delivery Date" />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Input name="trackingNumber" label="Tracking Number" />
               {/* <TextArea name="notes" label="Shipping Notes" /> */}
               <Boolean

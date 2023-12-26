@@ -1,14 +1,5 @@
-import {
-  Box,
-  Grid,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  VStack,
-} from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
+import { Grid, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import type {
   ColumnDef,
   ColumnFiltersState,
@@ -27,7 +18,6 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 
-import { useColor } from "../hooks";
 import { DataTablePagination } from "./DataTablePagination";
 
 interface DataTableProps<TData, TValue> {
@@ -74,14 +64,8 @@ const DataTable = <TData, TValue>({
   });
 
   return (
-    <VStack spacing={0} w="full" h="full">
-      <Box
-        w="full"
-        h="full"
-        bg={useColor("white")}
-        overflow="scroll"
-        style={{ contain: "strict" }}
-      >
+    <VStack spacing={0} className="h-full">
+      <div className="h-full bg-background overflow-scroll">
         <Grid w="full" gridTemplateColumns="1fr">
           <Table>
             <Thead>
@@ -142,7 +126,7 @@ const DataTable = <TData, TValue>({
             </Tbody>
           </Table>
         </Grid>
-      </Box>
+      </div>
       <DataTablePagination table={table} />
     </VStack>
   );

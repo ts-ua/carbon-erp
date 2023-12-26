@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,8 +8,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
@@ -50,14 +49,14 @@ const DepartmentForm = ({ initialValues }: DepartmentFormProps) => {
           <DrawerHeader>{isEditing ? "Edit" : "New"} Department</DrawerHeader>
           <DrawerBody pb={8}>
             <Hidden name="id" />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Input name="name" label="Department Name" />
               <Color name="color" label="Color" />
               <Department name="parentDepartmentId" label="Parent Department" />
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
               <Button
                 size="md"

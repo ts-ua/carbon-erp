@@ -1,5 +1,5 @@
-import { useColor } from "@carbon/react";
-import { Grid, VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -116,7 +116,7 @@ export default function Company() {
   };
 
   return (
-    <VStack w="full" h="full" spacing={0} p={8} bg={useColor("white")}>
+    <VStack spacing={0} className="bg-background p-8 h-full">
       <PageTitle
         title="Company"
         subtitle="This information will be displayed on document headers."

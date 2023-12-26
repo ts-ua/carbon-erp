@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -10,12 +11,10 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
-import { useControlField, useField, ValidatedForm } from "remix-validated-form";
+import { ValidatedForm, useControlField, useField } from "remix-validated-form";
 import {
   Hidden,
   Input,
@@ -102,7 +101,7 @@ const EquipmentForm = ({
           <DrawerHeader>{isEditing ? "Edit" : "New"} Equipment</DrawerHeader>
           <DrawerBody pb={8}>
             <Hidden name="id" />
-            <VStack spacing={2} alignItems="start">
+            <VStack spacing={4}>
               <Input name="name" label="Name" />
               <TextArea name="description" label="Description" />
               <Select
@@ -134,7 +133,7 @@ const EquipmentForm = ({
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
               <Button
                 size="md"

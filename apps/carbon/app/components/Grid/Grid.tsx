@@ -1,19 +1,6 @@
-import { useColor, useEscape, useMount } from "@carbon/react";
+import { HStack, VStack, useColor, useEscape, useMount } from "@carbon/react";
 import { clip } from "@carbon/utils";
-import {
-  Box,
-  Flex,
-  HStack,
-  Icon,
-  Table,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  VStack,
-} from "@chakra-ui/react";
+import { Icon, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import type { ColumnDef, ColumnOrderState } from "@tanstack/react-table";
 import {
   flexRender,
@@ -343,7 +330,7 @@ const Grid = <T extends object>({
   const rowBackground = useColor("gray.50");
 
   return (
-    <VStack w="full" h="full" spacing={0}>
+    <VStack spacing={0} className="h-full">
       {/* {withColumnOrdering && (
         <GridHeader
           columnAccessors={columnAccessors}
@@ -353,11 +340,8 @@ const Grid = <T extends object>({
           withColumnOrdering={withColumnOrdering}
         />
       )} */}
-      <Box
-        w="full"
-        h="full"
-        bg={useColor("white")}
-        overflowX="auto"
+      <div
+        className="w-full h-full bg:white dark:bg-black overflow-x-auto"
         style={{
           contain: contained ? "strict" : undefined,
         }}
@@ -397,17 +381,12 @@ const Grid = <T extends object>({
                       whiteSpace="nowrap"
                     >
                       {header.isPlaceholder ? null : (
-                        <Flex
-                          justify="flex-start"
-                          align="center"
-                          fontSize="xs"
-                          color="gray.500"
-                        >
+                        <div className="flex justify-start items-center text-xs text-gray-500">
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                          {/* <chakra.span pl="4">
+                          {/* <span className="pl-4">
                             {sorted ? (
                               sorted === -1 ? (
                                 <FaSortDown aria-label="sorted descending" />
@@ -420,8 +399,8 @@ const Grid = <T extends object>({
                                 style={{ opacity: 0.4 }}
                               />
                             ) : null}
-                          </chakra.span> */}
-                        </Flex>
+                          </span> */}
+                        </div>
                       )}
                     </Th>
                   );
@@ -471,7 +450,7 @@ const Grid = <T extends object>({
                 }}
               >
                 <Td colSpan={24}>
-                  <HStack spacing={2}>
+                  <HStack>
                     <Icon color="gray.500" as={BsPlus} w={6} h={6} />
                     <Text color="gray.500">New</Text>
                   </HStack>
@@ -480,7 +459,7 @@ const Grid = <T extends object>({
             )}
           </Tbody>
         </Table>
-      </Box>
+      </div>
     </VStack>
   );
 };

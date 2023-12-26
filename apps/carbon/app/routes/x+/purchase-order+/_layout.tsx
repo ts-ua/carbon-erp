@@ -1,4 +1,4 @@
-import { VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
 import type { MetaFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 import type { Handle } from "~/utils/handle";
@@ -16,7 +16,7 @@ export const handle: Handle = {
 
 export default function PurchaseOrderRoute() {
   return (
-    <VStack w="full" h="full" spacing={4} p={4}>
+    <VStack spacing={4} className="h-full p-4">
       <Outlet />
     </VStack>
   );

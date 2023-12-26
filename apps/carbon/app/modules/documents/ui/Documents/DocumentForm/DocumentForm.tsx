@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,8 +8,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
@@ -46,7 +45,7 @@ const DocumentForm = ({ initialValues, ownerId }: DocumentFormProps) => {
             <Hidden name="id" />
             <Hidden name="type" />
             <Hidden name="size" />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Input
                 name="name"
                 label="Name"

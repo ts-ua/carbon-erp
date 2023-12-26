@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,8 +8,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { useState } from "react";
@@ -76,7 +75,7 @@ const EmployeeAbilityForm = ({
           <DrawerCloseButton />
           <DrawerHeader>{isEditing ? "Edit" : "New"} Employee</DrawerHeader>
           <DrawerBody pb={8}>
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Employee
                 name="employeeId"
                 label="Employee"
@@ -120,7 +119,7 @@ const EmployeeAbilityForm = ({
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
               <Button
                 size="md"

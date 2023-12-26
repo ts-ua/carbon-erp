@@ -1,3 +1,4 @@
+import { HStack, VStack, useDisclosure } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,15 +8,12 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
   IconButton,
   List,
   ListItem,
   Tag,
   TagLabel,
   Text,
-  useDisclosure,
-  VStack,
 } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
@@ -62,8 +60,8 @@ const AccountCategoryDetail = ({
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            <VStack spacing={2} w="full" alignItems="start">
-              <HStack justifyContent="space-between" w="full" pr={8}>
+            <VStack>
+              <HStack className="content-between pr-8 w-full">
                 <span>{accountCategory.category}</span>
                 <Tag
                   borderRadius="full"

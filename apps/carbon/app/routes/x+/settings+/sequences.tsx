@@ -35,7 +35,7 @@ export default function SequencesRoute() {
   const { data, count } = useLoaderData<typeof loader>();
 
   return (
-    <VStack w="full" h="full" spacing={0}>
+    <VStack spacing={0} className="h-full">
       <SequencesTableFilters />
       <SequencesTable data={data ?? []} count={count ?? 0} />
       <Outlet />

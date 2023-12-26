@@ -1,4 +1,4 @@
-import { Heading, Menubar, MenubarItem } from "@carbon/react";
+import { Heading, Menubar, MenubarItem, VStack } from "@carbon/react";
 import {
   Button,
   Card,
@@ -7,7 +7,6 @@ import {
   HStack,
   Stack,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { useMemo } from "react";
@@ -39,7 +38,7 @@ const PurchaseOrderHeader = () => {
   const { receive, release, invoice } = usePurchaseOrder();
 
   return (
-    <VStack w="full" alignItems="start" spacing={2}>
+    <VStack>
       {permissions.is("employee") && (
         <Menubar>
           <MenubarItem
@@ -87,7 +86,7 @@ const PurchaseOrderHeader = () => {
 
       <Card w="full">
         <CardHeader>
-          <HStack justifyContent="space-between" alignItems="start">
+          <HStack className="justify-between items-start">
             <Stack direction="column" spacing={2}>
               <Heading size="h3">
                 {routeData?.purchaseOrder?.purchaseOrderId}

@@ -1,13 +1,5 @@
-import { useColor } from "@carbon/react";
-import {
-  Box,
-  Button,
-  HStack,
-  Image,
-  Text,
-  useColorModeValue,
-  VStack,
-} from "@chakra-ui/react";
+import { HStack, VStack } from "@carbon/react";
+import { Button, Image, Text, useColorModeValue } from "@chakra-ui/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
@@ -57,7 +49,6 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function ResetPasswordRoute() {
-  const boxBackground = useColor("white");
   const navigate = useNavigate();
 
   return (
@@ -72,13 +63,13 @@ export default function ResetPasswordRoute() {
         marginBottom={3}
       />
 
-      <Box rounded="lg" bg={boxBackground} boxShadow="lg" w={380} p={8}>
+      <div className="rounded-lg bg-background shadow-lg p-8 w-[380px]">
         <ValidatedForm
           method="post"
           action={path.to.resetPassord}
           validator={resetPasswordValidator}
         >
-          <VStack spacing={4} alignItems="start">
+          <VStack spacing={4}>
             <Text>Please select a new password.</Text>
 
             <Password name="password" label="New Password" />
@@ -93,7 +84,7 @@ export default function ResetPasswordRoute() {
             </HStack>
           </VStack>
         </ValidatedForm>
-      </Box>
+      </div>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { ActionMenu } from "@carbon/react";
+import { ActionMenu, HStack, VStack, useDisclosure } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -8,12 +8,8 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
   MenuItem,
-  StackDivider,
   Text,
-  useDisclosure,
-  VStack,
 } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
@@ -77,12 +73,7 @@ const WorkCellTypeDetail = ({
           <DrawerHeader>{workCellType.name}</DrawerHeader>
           <DrawerBody>
             {Array.isArray(workCellType?.workCell) && (
-              <VStack
-                alignItems="start"
-                divider={<StackDivider borderColor="gray.200" />}
-                spacing={4}
-                w="full"
-              >
+              <VStack spacing={4}>
                 {workCellType.workCell.map((workCell) => {
                   if (
                     !workCell ||
@@ -92,8 +83,8 @@ const WorkCellTypeDetail = ({
                   )
                     return null;
                   return (
-                    <HStack key={workCell.id} w="full">
-                      <VStack spacing={0} flexGrow={1} alignItems="start">
+                    <HStack key={workCell.id} className="w-full">
+                      <VStack spacing={0} className="flex-grow">
                         <Text fontWeight="bold">{workCell.name}</Text>
                         <Text fontSize="sm" color="gray.500">
                           {workCell.location?.name} /{" "}

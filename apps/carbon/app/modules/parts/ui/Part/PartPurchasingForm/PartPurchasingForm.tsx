@@ -1,12 +1,5 @@
-import { Heading } from "@carbon/react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Grid,
-  VStack,
-} from "@chakra-ui/react";
+import { Heading, VStack } from "@carbon/react";
+import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Boolean,
@@ -55,11 +48,11 @@ const PartPurchasingForm = ({
             gridRowGap={2}
             w="full"
           >
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Supplier name="preferredSupplierId" label="Preferred Supplier" />
               <Number name="purchasingLeadTime" label="Lead Time (Days)" />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Select
                 name="purchasingUnitOfMeasureCode"
                 label="Purchasing Unit of Measure"
@@ -71,7 +64,7 @@ const PartPurchasingForm = ({
                 min={0}
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Boolean name="purchasingBlocked" label="Purchasing Blocked" />
             </VStack>
           </Grid>

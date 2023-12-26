@@ -1,4 +1,4 @@
-import { ActionMenu } from "@carbon/react";
+import { ActionMenu, HStack, VStack, useDisclosure } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -8,12 +8,8 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
   MenuItem,
-  StackDivider,
   Text,
-  useDisclosure,
-  VStack,
 } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
@@ -77,16 +73,11 @@ const EquipmentTypeDetail = ({
           <DrawerHeader>{equipmentType.name}</DrawerHeader>
           <DrawerBody>
             {Array.isArray(equipmentType?.equipment) && (
-              <VStack
-                alignItems="start"
-                divider={<StackDivider borderColor="gray.200" />}
-                spacing={4}
-                w="full"
-              >
+              <VStack spacing={4}>
                 {equipmentType.equipment.map((equipment) => {
                   return (
-                    <HStack key={equipment.id} w="full">
-                      <VStack spacing={0} flexGrow={1} alignItems="start">
+                    <HStack key={equipment.id} className="w-full">
+                      <VStack spacing={0} className="flex-grow">
                         <Text fontWeight="bold">{equipment.name}</Text>
                         <Text fontSize="sm" color="gray.500">
                           {/* @ts-ignore */}

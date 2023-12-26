@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,8 +8,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -87,7 +86,7 @@ const AttributeForm = ({
           <DrawerHeader>{isEditing ? "Edit" : "New"} Attribute</DrawerHeader>
           <DrawerBody pb={8}>
             <Hidden name="id" />
-            <VStack spacing={2} alignItems="start">
+            <VStack spacing={4}>
               <Input name="name" label="Name" />
               <Hidden name="userAttributeCategoryId" />
 
@@ -110,7 +109,7 @@ const AttributeForm = ({
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
               <Button
                 size="md"

@@ -1,14 +1,6 @@
-import { HTML, useColor } from "@carbon/react";
+import { HStack, HTML, VStack } from "@carbon/react";
 import { formatTimeAgo } from "@carbon/utils";
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  HStack,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Button, Grid, Text } from "@chakra-ui/react";
 import { Form } from "@remix-run/react";
 import { Fragment } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -30,12 +22,10 @@ const Notes = ({ documentId, notes }: NotesProps) => {
   const permissions = usePermissions();
   const isEmployee = permissions.is("employee");
 
-  const borderColor = useColor("gray.200");
-
   if (!isEmployee) return null;
 
   return (
-    <Box w="full">
+    <div className="w-full">
       <SectionTitle>Notes</SectionTitle>
 
       {notes.length > 0 ? (
@@ -52,7 +42,7 @@ const Notes = ({ documentId, notes }: NotesProps) => {
               <Fragment key={note.id}>
                 {/* @ts-ignore */}
                 <Avatar path={note.user.avatarUrl} />
-                <VStack spacing={1} w="full" alignItems="start">
+                <VStack spacing={1}>
                   {/* @ts-ignore */}
                   <Text fontWeight="bold">{note.user?.fullName!}</Text>
                   <HTML text={note.note} />
@@ -80,12 +70,12 @@ const Notes = ({ documentId, notes }: NotesProps) => {
           })}
         </Grid>
       ) : (
-        <Box color="gray.500" p={4} w="full" textAlign="center">
+        <div className="text-muted-foreground p-4 w-full text-center">
           No notes
-        </Box>
+        </div>
       )}
 
-      <Box pt={8} w="full">
+      <div className="pt-8 w-full">
         <ValidatedForm
           method="post"
           action={path.to.newNote}
@@ -93,23 +83,17 @@ const Notes = ({ documentId, notes }: NotesProps) => {
           validator={noteValidator}
         >
           <Hidden name="documentId" value={documentId} />
-          <VStack spacing={3} w="full">
-            <Box
-              w="full"
-              borderColor={borderColor}
-              borderWidth={1}
-              borderStyle="solid"
-              borderRadius="md"
-            >
+          <VStack spacing={3}>
+            <div className="w-full border rounded-md">
               <RichText name="note" minH={160} />
-            </Box>
-            <Flex justifyContent="flex-end" w="full">
+            </div>
+            <div className="flex justify-end w-full">
               <Submit>Add Note</Submit>
-            </Flex>
+            </div>
           </VStack>
         </ValidatedForm>
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

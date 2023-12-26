@@ -1,5 +1,5 @@
-import { File, useNotification } from "@carbon/react";
-import { Button, VStack } from "@chakra-ui/react";
+import { File, VStack, useNotification } from "@carbon/react";
+import { Button } from "@chakra-ui/react";
 import { useSubmit } from "@remix-run/react";
 import type { ChangeEvent } from "react";
 import { Avatar } from "~/components";
@@ -66,7 +66,7 @@ const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
   };
 
   return (
-    <VStack w="full" spacing={2} px={8}>
+    <VStack className="px-8 items-center">
       <Avatar size="2xl" path={user?.avatarUrl} title={user?.fullName ?? ""} />
       <File accept="image/*" onChange={uploadImage}>
         {user.avatarUrl ? "Change" : "Upload"}

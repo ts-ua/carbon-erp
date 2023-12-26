@@ -1,10 +1,14 @@
-import { useColor, useDebounce, useKeyboardShortcuts } from "@carbon/react";
+import {
+  VStack,
+  useColor,
+  useDebounce,
+  useDisclosure,
+  useKeyboardShortcuts,
+} from "@carbon/react";
 import { clip } from "@carbon/utils";
 import type { ButtonProps } from "@chakra-ui/react";
 import {
-  Box,
   Button,
-  Flex,
   HStack,
   Icon,
   Input,
@@ -18,8 +22,6 @@ import {
   ModalContent,
   ModalOverlay,
   Text,
-  VStack,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "@remix-run/react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -221,16 +223,7 @@ const SearchModal = ({
             />
           </InputGroup>
 
-          <Box
-            bg="white"
-            borderRadius="lg"
-            boxShadow="lg"
-            maxH="66vh"
-            overflowY="scroll"
-            px={4}
-            pt={0}
-            pb={4}
-          >
+          <div className="bg-background rounded-lg shadow-lg max-h-[66vh] overflow-y-scroll p-4 pt-0">
             <List role="listbox" ref={listboxRef}>
               {moduleResults.map((item, itemIndex) => (
                 <Module
@@ -256,7 +249,7 @@ const SearchModal = ({
                 />
               ))}
             </List>
-          </Box>
+          </div>
         </ModalBody>
       </ModalContent>
     </Modal>
@@ -326,7 +319,7 @@ function Result({
         onMouseEnter={onHover}
       >
         <ResultIcon entity={result.entity} />
-        <VStack alignItems="start" flexGrow={1} spacing={0} w="full">
+        <VStack spacing={0} className="flex-1">
           <Text fontSize="sm" color="gray.500">
             {result.entity}
           </Text>
@@ -367,7 +360,7 @@ function Module({
         {/* {item.icon && ( // @ts-expect-error
           <Icon as={item.icon} {...resultIconProps} />
         )} */}
-        <VStack alignItems="start" flexGrow={1} spacing={0} w="full">
+        <VStack spacing={0} className="flex-1">
           <Text fontSize="sm" color="gray.500">
             Module
           </Text>
@@ -399,7 +392,7 @@ const SearchButton = (props: ButtonProps) => {
         {...props}
       >
         <HStack w="full">
-          <Flex flexGrow={1}>Search</Flex>
+          <div className="flex flex-grow">Search</div>
           <Kbd size="lg">/</Kbd>
         </HStack>
       </Button>

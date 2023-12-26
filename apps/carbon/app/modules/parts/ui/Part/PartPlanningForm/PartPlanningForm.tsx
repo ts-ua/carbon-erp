@@ -1,14 +1,5 @@
-import { Heading, Select } from "@carbon/react";
-import {
-  Box,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Grid,
-  HStack,
-  VStack,
-} from "@chakra-ui/react";
+import { HStack, Heading, Select, VStack } from "@carbon/react";
+import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Boolean,
@@ -47,9 +38,9 @@ const PartPlanningForm = ({
     >
       <Card w="full">
         <CardHeader>
-          <HStack w="full" justifyContent="space-between">
+          <HStack className="w-full justify-between">
             <Heading size="h3">Planning</Heading>
-            <Box w={180}>
+            <div className="w-[180px]">
               <Select
                 // @ts-ignore
                 size="sm"
@@ -64,7 +55,7 @@ const PartPlanningForm = ({
                   )}?location=${selected?.value}`;
                 }}
               />
-            </Box>
+            </div>
           </HStack>
         </CardHeader>
         <CardBody>
@@ -76,7 +67,7 @@ const PartPlanningForm = ({
             gridRowGap={2}
             w="full"
           >
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <SelectForm
                 name="reorderingPolicy"
                 label="Reordering Policy"
@@ -104,7 +95,7 @@ const PartPlanningForm = ({
               />
               <Number name="orderMultiple" label="Order Multiple" />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Number
                 name="demandAccumulationPeriod"
                 label="Demand Accumulation Period (Days)"
@@ -118,7 +109,7 @@ const PartPlanningForm = ({
                 label="Demand Includes Inventory"
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Number name="reorderPoint" label="Reorder Point" />
               <Number name="reorderQuantity" label="Reorder Quantity" />
               <Number

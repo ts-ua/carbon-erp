@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,8 +8,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
@@ -60,7 +59,7 @@ const CurrencyForm = ({ initialValues }: CurrencyFormProps) => {
           <DrawerHeader>{isEditing ? "Edit" : "New"} Currency</DrawerHeader>
           <DrawerBody pb={8}>
             <Hidden name="id" />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Input
                 name="name"
                 label="Name"

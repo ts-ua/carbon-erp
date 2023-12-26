@@ -1,4 +1,4 @@
-import { VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 
@@ -7,6 +7,6 @@ export const handle: Handle = {
   to: path.to.routings,
 };
 
-export default function PartsConfiguratorRoute() {
-  return <VStack w="full" h="full" spacing={0}></VStack>;
+export default function PartsRoutingRoute() {
+  return <VStack spacing={0} className="h-full"></VStack>;
 }
