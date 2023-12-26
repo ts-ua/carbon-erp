@@ -1,4 +1,4 @@
-import { Box, Link, MenuItem } from "@chakra-ui/react";
+import { Link, MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -34,13 +34,10 @@ const CustomerTypesTable = memo(({ data, count }: CustomerTypesTableProps) => {
         accessorKey: "color",
         header: "Color",
         cell: (item) => (
-          <Box
+          <div
             aria-label="Color"
-            w={6}
-            h={6}
-            borderRadius="md"
-            bg={item.getValue() ?? "#000000"}
-            role="img"
+            className="w-6 h-6 rounded-md bg-gray-500"
+            style={{ background: item.getValue<string>() ?? "#000000" }}
           />
         ),
       },

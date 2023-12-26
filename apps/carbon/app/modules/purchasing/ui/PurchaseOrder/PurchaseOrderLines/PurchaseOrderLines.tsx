@@ -1,12 +1,10 @@
-import { Heading } from "@carbon/react";
+import { HStack, Heading } from "@carbon/react";
 import {
-  Box,
   Button,
   Card,
   CardBody,
   CardHeader,
   Checkbox,
-  HStack,
   IconButton,
   Menu,
   MenuButton,
@@ -70,9 +68,9 @@ const PurchaseOrderLines = () => {
         accessorKey: "purchaseOrderLineType",
         header: "Type",
         cell: ({ row }) => (
-          <HStack justify="space-between" minW={100}>
+          <HStack className="justify-between min-w-[100px]">
             <span>{row.original.purchaseOrderLineType}</span>
-            <Box position="relative" w={6} h={5}>
+            <div className="relative w-6 h-5">
               <Menu>
                 <MenuButton
                   as={IconButton}
@@ -88,7 +86,7 @@ const PurchaseOrderLines = () => {
                 <MenuList>
                   <MenuItem
                     icon={<BsPencilSquare />}
-                    onClick={() => navigate(row.original.id)}
+                    onClick={() => navigate(row.original.id!)}
                     isDisabled={!isEditable || !canEdit}
                   >
                     Edit Line
@@ -102,7 +100,7 @@ const PurchaseOrderLines = () => {
                   </MenuItem>
                 </MenuList>
               </Menu>
-            </Box>
+            </div>
           </HStack>
         ),
       },
@@ -235,7 +233,7 @@ const PurchaseOrderLines = () => {
             case "Comment":
               return null;
             default:
-              return <Checkbox isChecked={row.original.receivedComplete} />;
+              return <Checkbox isChecked={!!row.original.receivedComplete} />;
           }
         },
       },
@@ -247,7 +245,7 @@ const PurchaseOrderLines = () => {
             case "Comment":
               return null;
             default:
-              return <Checkbox isChecked={row.original.invoicedComplete} />;
+              return <Checkbox isChecked={!!row.original.invoicedComplete} />;
           }
         },
       },

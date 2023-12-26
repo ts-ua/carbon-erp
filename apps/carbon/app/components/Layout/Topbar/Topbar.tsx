@@ -1,5 +1,5 @@
-import { useColor } from "@carbon/react";
-import { Button, GridItem, HStack } from "@chakra-ui/react";
+import { HStack, useColor } from "@carbon/react";
+import { Button, GridItem } from "@chakra-ui/react";
 import { BiHelpCircle } from "react-icons/bi";
 import { BsChatSquare } from "react-icons/bs";
 import { Search } from "~/components/Search";
@@ -26,7 +26,7 @@ const Topbar = () => {
     >
       <Breadcrumbs />
       <Search />
-      <HStack py={2} justifyContent="end" spacing={1}>
+      <HStack spacing={1} className="justify-end py-2">
         <Create />
         <a
           target="_blank"

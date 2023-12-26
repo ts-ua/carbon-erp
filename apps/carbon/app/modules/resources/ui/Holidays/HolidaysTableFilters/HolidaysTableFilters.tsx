@@ -1,5 +1,5 @@
-import { Select, useColor } from "@carbon/react";
-import { Button, HStack } from "@chakra-ui/react";
+import { HStack, Select } from "@carbon/react";
+import { Button } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
 import { DebouncedInput } from "~/components/Search";
@@ -12,7 +12,6 @@ type HolidaysTableFiltersProps = {
 const HolidaysTableFilters = ({ years }: HolidaysTableFiltersProps) => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
-  const borderColor = useColor("gray.200");
 
   const yearsOptions = years.map((year) => ({
     label: year.toString(),
@@ -20,16 +19,8 @@ const HolidaysTableFilters = ({ years }: HolidaysTableFiltersProps) => {
   }));
 
   return (
-    <HStack
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      justifyContent="space-between"
-      px={4}
-      py={3}
-      w="full"
-    >
-      <HStack spacing={2}>
+    <HStack className="px-4 py-3 justify-between border-b w-full" spacing={4}>
+      <HStack>
         <DebouncedInput
           param="name"
           size="sm"
@@ -56,7 +47,7 @@ const HolidaysTableFilters = ({ years }: HolidaysTableFiltersProps) => {
           placeholder="Year"
         />
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "resources") && (
           <Button
             as={Link}

@@ -1,9 +1,13 @@
+import { HStack } from "@carbon/react";
 import {
   Button,
   IconButton,
-  HStack,
   List,
   ListItem,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -13,10 +17,6 @@ import {
   PopoverTrigger,
   Switch,
   Text,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
 } from "@chakra-ui/react";
 import { Reorder } from "framer-motion";
 import { BsChevronDown, BsListUl } from "react-icons/bs";

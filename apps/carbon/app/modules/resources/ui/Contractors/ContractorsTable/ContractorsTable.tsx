@@ -1,4 +1,5 @@
-import { Avatar, HStack, Link, MenuItem } from "@chakra-ui/react";
+import { HStack } from "@carbon/react";
+import { Avatar, Link, MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -25,7 +26,7 @@ const ContractorsTable = memo(({ data, count }: ContractorsTableProps) => {
         accessorKey: "supplier",
         header: "Supplier",
         cell: ({ row }) => (
-          <HStack spacing={2}>
+          <HStack>
             <Avatar size="sm" name={row.original.supplierName ?? ""} />
 
             <Link

@@ -1,5 +1,4 @@
-import { Select, useColor } from "@carbon/react";
-import { HStack } from "@chakra-ui/react";
+import { HStack, Select } from "@carbon/react";
 import { useUrlParams } from "~/hooks";
 import type { ListItem } from "~/types";
 
@@ -13,7 +12,6 @@ const SalesPostingGroupsFilters = ({
   customerTypes,
 }: SalesPostingGroupsFiltersProps) => {
   const [params, setParams] = useUrlParams();
-  const borderColor = useColor("gray.200");
 
   const partGroupOptions = partGroups.map((partGroup) => ({
     label: partGroup.name,
@@ -26,16 +24,7 @@ const SalesPostingGroupsFilters = ({
   }));
 
   return (
-    <HStack
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      justifyContent="flex-start"
-      px={4}
-      py={3}
-      spacing={4}
-      w="full"
-    >
+    <HStack className="px-4 py-3 justify-between border-b w-full" spacing={4}>
       <Select
         size="sm"
         isClearable

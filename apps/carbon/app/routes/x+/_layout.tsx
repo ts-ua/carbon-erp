@@ -102,7 +102,7 @@ export default function AuthenticatedRoute() {
             <Grid templateRows="auto 1fr" h="full" w="full">
               <Topbar />
               <div className="flex w-full h-full">
-                <VStack spacing={0} className="bg-zinc-50 dark:bg-zinc-900">
+                <VStack spacing={0} className="bg-muted">
                   <Outlet />
                 </VStack>
               </div>

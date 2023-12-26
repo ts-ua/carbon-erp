@@ -1,6 +1,6 @@
+import { HStack } from "@carbon/react";
 import {
   Button,
-  HStack,
   ListItem,
   Modal,
   ModalBody,
@@ -56,7 +56,7 @@ const PurchaseInvoicePostModal = ({
         </ModalBody>
 
         <ModalFooter>
-          <HStack spacing={2}>
+          <HStack>
             <Button colorScheme="gray" onClick={onClose}>
               Cancel
             </Button>

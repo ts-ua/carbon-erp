@@ -1,30 +1,18 @@
-import type {
-  ButtonProps,
-  MenuButtonProps,
-  StackProps,
-} from "@chakra-ui/react";
-import { Button, HStack, MenuButton } from "@chakra-ui/react";
+import type { ButtonProps, MenuButtonProps } from "@chakra-ui/react";
+import { Button, MenuButton } from "@chakra-ui/react";
 import { forwardRef } from "react";
 import { MdExpandMore } from "react-icons/md";
-import { useColor } from "../hooks";
+import type { HStackProps } from "~/HStack";
+import { HStack } from "~/HStack";
 
-const Menubar = forwardRef<HTMLDivElement, StackProps>(
+const Menubar = forwardRef<HTMLDivElement, HStackProps>(
   ({ children, ...props }, ref) => {
-    const borderColor = useColor("gray.200");
     return (
       <HStack
         ref={ref}
         {...props}
-        alignItems="center"
-        bg="white"
-        borderWidth={1}
-        borderColor={borderColor}
-        borderRadius="md"
-        boxShadow="sm"
-        justifyContent="start"
-        p={1}
+        className="items-center bg-background border rounded-md shadow-sm justify-start p-1 w-full"
         spacing={1}
-        w="full"
       >
         {children}
       </HStack>

@@ -35,7 +35,7 @@ const Contact = ({ contact, url, user, actions }: ContactProps) => {
     <Grid w="full" gridColumnGap={4} gridTemplateColumns="auto 1fr auto">
       <Avatar size="sm" name={`${name}`} />
       <VStack spacing={0}>
-        <HStack spacing={2}>
+        <HStack>
           {url ? (
             <Link to={url}>
               <Text fontSize="sm" fontWeight="bold">

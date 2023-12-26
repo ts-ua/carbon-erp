@@ -117,7 +117,7 @@ const BulkEditPermissions = ({
                   </div>
                 ))}
               <Hidden name="data" value={JSON.stringify(permissions)} />
-              <HStack spacing={2} className="my-4">
+              <HStack className="my-4">
                 <Submit>Save</Submit>
                 <Button
                   size="md"

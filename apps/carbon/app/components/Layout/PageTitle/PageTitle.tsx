@@ -7,7 +7,7 @@ type PageTitleProps = {
 
 const PageTitle = ({ title, subtitle }: PageTitleProps) => {
   return (
-    <VStack spacing={2} className="mb-4">
+    <VStack className="mb-4">
       <Heading size="h1">{title}</Heading>
       {subtitle && <p className="text-muted-foreground">{subtitle}</p>}
     </VStack>

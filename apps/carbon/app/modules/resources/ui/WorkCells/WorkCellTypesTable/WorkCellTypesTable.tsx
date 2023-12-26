@@ -1,14 +1,12 @@
+import { HStack, useDisclosure } from "@carbon/react";
 import {
-  Box,
   Button,
   ButtonGroup,
-  HStack,
   Icon,
   IconButton,
   Link,
   MenuItem,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -114,13 +112,10 @@ const WorkCellTypesTable = memo(({ data, count }: WorkCellTypesTableProps) => {
         accessorKey: "color",
         header: "Color",
         cell: (item) => (
-          <Box
+          <div
             aria-label="Color"
-            w={6}
-            h={6}
-            borderRadius="md"
-            bg={item.getValue() ?? "#000000"}
-            role="img"
+            className="w-6 h-6 rounded-md bg-gray-500"
+            style={{ background: item.getValue<string>() ?? "#000000" }}
           />
         ),
       },

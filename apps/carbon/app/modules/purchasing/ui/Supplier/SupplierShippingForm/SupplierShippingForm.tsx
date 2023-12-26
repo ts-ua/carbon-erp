@@ -95,7 +95,7 @@ const SupplierShippingForm = ({ initialValues }: SupplierShippingFormProps) => {
           </Grid>
         </CardBody>
         <CardFooter>
-          <HStack spacing={2}>
+          <HStack>
             <Submit isDisabled={isDisabled}>Save</Submit>
           </HStack>
         </CardFooter>

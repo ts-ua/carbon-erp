@@ -1,12 +1,5 @@
-import { useColor } from "@carbon/react";
-import {
-  Avatar,
-  Box,
-  Grid,
-  GridItem,
-  HStack,
-  IconButton,
-} from "@chakra-ui/react";
+import { HStack, useColor } from "@carbon/react";
+import { Avatar, Box, Grid, GridItem, IconButton } from "@chakra-ui/react";
 import { redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 import { BsFillHexagonFill } from "react-icons/bs";
@@ -83,7 +76,7 @@ function TopbarPlaceholder() {
       top={0}
       zIndex={1}
     >
-      <HStack py={2} justifyContent="end" spacing={1}>
+      <HStack className="justify-end py-2" spacing={1}>
         <Avatar size="sm" />
       </HStack>
     </GridItem>

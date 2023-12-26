@@ -4,7 +4,7 @@ import type { ComponentProps } from "react";
 import { forwardRef } from "react";
 import { cn } from "./utils/cn";
 
-const hStackVariants = cva("flex", {
+const hStackVariants = cva("flex items-center", {
   variants: {
     spacing: {
       0: "space-x-0",
@@ -12,6 +12,7 @@ const hStackVariants = cva("flex", {
       2: "space-x-2",
       3: "space-x-3",
       4: "space-x-4",
+      6: "space-x-6",
       8: "space-x-8",
     },
   },

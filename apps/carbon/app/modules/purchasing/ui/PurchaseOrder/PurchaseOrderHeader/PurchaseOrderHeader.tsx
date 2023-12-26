@@ -1,10 +1,9 @@
-import { Heading, Menubar, MenubarItem, VStack } from "@carbon/react";
+import { Heading, HStack, Menubar, MenubarItem, VStack } from "@carbon/react";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
-  HStack,
   Stack,
   Text,
 } from "@chakra-ui/react";

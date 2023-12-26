@@ -1,10 +1,9 @@
-import { Heading } from "@carbon/react";
+import { HStack, Heading } from "@carbon/react";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
-  HStack,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -25,7 +24,7 @@ const ServicePreview = () => {
   return (
     <Card w="full">
       <CardHeader>
-        <HStack justifyContent="space-between" alignItems="start">
+        <HStack className="justify-between items-start">
           <Stack direction="column" spacing={2}>
             <Heading size="h3">{routeData?.service?.name}</Heading>
             <Text color="gray.500" noOfLines={1}>

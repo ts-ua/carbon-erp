@@ -1,4 +1,5 @@
-import { HStack, MenuItem, useDisclosure } from "@chakra-ui/react";
+import { HStack, useDisclosure } from "@carbon/react";
+import { MenuItem } from "@chakra-ui/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BsEnvelope } from "react-icons/bs";
@@ -53,7 +54,7 @@ const CustomerAccountsTable = memo(
         {
           header: "User",
           cell: ({ row }) => (
-            <HStack spacing={2}>
+            <HStack>
               <Avatar
                 size="sm"
                 // @ts-ignore

@@ -1,4 +1,5 @@
-import { Badge, HStack, MenuItem, Progress } from "@chakra-ui/react";
+import { HStack } from "@carbon/react";
+import { Badge, MenuItem, Progress } from "@chakra-ui/react";
 import { useNavigate, useParams } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useCallback, useMemo } from "react";
@@ -62,7 +63,7 @@ const AbilityEmployeesTable = ({
         accessorKey: "name",
         header: "Name",
         cell: ({ row }) => (
-          <HStack spacing={2}>
+          <HStack>
             <Avatar
               size="sm"
               name={row.original.name}

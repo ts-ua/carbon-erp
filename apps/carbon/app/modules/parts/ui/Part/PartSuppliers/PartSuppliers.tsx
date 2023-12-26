@@ -1,11 +1,9 @@
-import { Heading } from "@carbon/react";
+import { Heading, HStack } from "@carbon/react";
 import {
-  Box,
   Button,
   Card,
   CardBody,
   CardHeader,
-  HStack,
   IconButton,
 } from "@chakra-ui/react";
 import { Link, Outlet, useNavigate } from "@remix-run/react";
@@ -49,11 +47,11 @@ const PartSuppliers = ({ partSuppliers }: PartSuppliersProps) => {
         accessorKey: "supplier.id",
         header: "Supplier",
         cell: ({ row }) => (
-          <HStack justify="space-between">
+          <HStack className="justify-between">
             {/* @ts-ignore */}
             <span>{row.original.supplier.name}</span>
             {canEdit && (
-              <Box position="relative" w={6} h={5}>
+              <div className="relative w-6 h-5">
                 <IconButton
                   aria-label="Edit part supplier"
                   as={Link}
@@ -66,7 +64,7 @@ const PartSuppliers = ({ partSuppliers }: PartSuppliersProps) => {
                   onClick={(e) => e.stopPropagation()}
                   variant="ghost"
                 />
-              </Box>
+              </div>
             )}
           </HStack>
         ),

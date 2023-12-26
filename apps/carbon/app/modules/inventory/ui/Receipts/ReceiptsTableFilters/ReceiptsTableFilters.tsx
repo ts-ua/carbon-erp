@@ -1,5 +1,5 @@
-import { Select, useColor } from "@carbon/react";
-import { Button, HStack } from "@chakra-ui/react";
+import { HStack, Select } from "@carbon/react";
+import { Button } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
 import { DebouncedInput } from "~/components/Search";
@@ -14,7 +14,6 @@ type ReceiptsTableFiltersProps = {
 const ReceiptsTableFilters = ({ locations }: ReceiptsTableFiltersProps) => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
-  const borderColor = useColor("gray.200");
   const {
     defaults: { locationId },
   } = useUser();
@@ -30,16 +29,8 @@ const ReceiptsTableFilters = ({ locations }: ReceiptsTableFiltersProps) => {
   }));
 
   return (
-    <HStack
-      px={4}
-      py={3}
-      justifyContent="space-between"
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      w="full"
-    >
-      <HStack spacing={2}>
+    <HStack className="px-4 py-3 justify-between border-b w-full" spacing={4}>
+      <HStack>
         <DebouncedInput
           param="search"
           size="sm"
@@ -78,7 +69,7 @@ const ReceiptsTableFilters = ({ locations }: ReceiptsTableFiltersProps) => {
           placeholder="Location"
         />
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "inventory") && (
           <Button
             as={Link}

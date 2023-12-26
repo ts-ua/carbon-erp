@@ -1,8 +1,6 @@
-import { Heading, useColor } from "@carbon/react";
+import { HStack, Heading, useDisclosure } from "@carbon/react";
 import {
-  Box,
   Button,
-  HStack,
   IconButton,
   NumberDecrementStepper,
   NumberIncrementStepper,
@@ -10,7 +8,6 @@ import {
   NumberInputField,
   NumberInputStepper,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
@@ -157,8 +154,8 @@ export default function AbilitiesRoute() {
 
   return (
     <>
-      <Box bg={useColor("white")} w="full" position="relative">
-        <HStack w="full" justifyContent="space-between" p={4}>
+      <div className="bg-background w-full relative">
+        <HStack className="w-full justify-between p-4">
           {editingTitle.isOpen ? (
             <ValidatedForm
               validator={abilityNameValidator}
@@ -170,7 +167,7 @@ export default function AbilitiesRoute() {
               onSubmit={editingTitle.onClose}
             >
               <Hidden name="intent" value="name" />
-              <HStack spacing={2}>
+              <HStack>
                 <IconButton
                   aria-label="Back"
                   variant="ghost"
@@ -194,7 +191,7 @@ export default function AbilitiesRoute() {
               </HStack>
             </ValidatedForm>
           ) : (
-            <HStack spacing={2}>
+            <HStack>
               <IconButton
                 aria-label="Back"
                 variant="ghost"
@@ -211,7 +208,7 @@ export default function AbilitiesRoute() {
             </HStack>
           )}
 
-          <HStack spacing={2}>
+          <HStack>
             <Text fontSize="sm">Weeks Shadowing:</Text>
             <NumberInput
               maxW="100px"
@@ -253,7 +250,7 @@ export default function AbilitiesRoute() {
             </ValidatedForm>
           </HStack>
         </HStack>
-        <Box w="full" h="33vh">
+        <div className="w-full h-[33vh]">
           <ParentSize>
             {({ height, width }) => (
               <AbilityChart
@@ -265,8 +262,8 @@ export default function AbilitiesRoute() {
               />
             )}
           </ParentSize>
-        </Box>
-        <Box position="absolute" bottom={-4} right={4} zIndex={3}>
+        </div>
+        <div className="absolute bottom--4 right-4 z-[3]">
           <Button
             as={Link}
             to="employee/new"
@@ -275,8 +272,8 @@ export default function AbilitiesRoute() {
           >
             New Employee
           </Button>
-        </Box>
-      </Box>
+        </div>
+      </div>
       <AbilityEmployeesTable
         employees={ability.employeeAbility ?? []}
         weeks={weeks}

@@ -96,7 +96,7 @@ const PaymentTermForm = ({ initialValues }: PaymentTermFormProps) => {
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
               <Button
                 size="md"

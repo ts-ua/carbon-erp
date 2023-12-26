@@ -1,7 +1,6 @@
-import { CreatableSelect } from "@carbon/react";
+import { CreatableSelect, HStack } from "@carbon/react";
 import { convertKbToString } from "@carbon/utils";
 import {
-  HStack,
   Icon,
   Image,
   Link,

@@ -1,11 +1,10 @@
-import { Heading } from "@carbon/react";
+import { HStack, Heading } from "@carbon/react";
 import { convertKbToString } from "@carbon/utils";
 import {
   Card,
   CardBody,
   CardHeader,
   Flex,
-  HStack,
   IconButton,
   Link,
   Menu,

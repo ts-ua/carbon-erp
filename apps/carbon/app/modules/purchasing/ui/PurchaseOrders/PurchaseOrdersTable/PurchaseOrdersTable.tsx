@@ -1,11 +1,5 @@
-import {
-  HStack,
-  Icon,
-  Link,
-  MenuItem,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { HStack, useDisclosure } from "@carbon/react";
+import { Icon, Link, MenuItem, Text } from "@chakra-ui/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { BsPencilSquare, BsStar, BsStarFill } from "react-icons/bs";

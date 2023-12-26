@@ -1,3 +1,4 @@
+import { HStack, useDisclosure } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,14 +8,12 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
   IconButton,
   List,
   ListItem,
   Tag,
   TagLabel,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { Link, useFetcher } from "@remix-run/react";
 import { Reorder } from "framer-motion";
@@ -51,6 +50,7 @@ const AttributeCategoryDetail = ({
         ? attributeCategory.userAttribute.reduce<
             Record<string, AttributeCategoryDetailType["userAttribute"]>
           >((acc, attribute) => {
+            if (!attribute) return acc;
             return {
               ...acc,
               [attribute.id]: attribute,
@@ -107,7 +107,7 @@ const AttributeCategoryDetail = ({
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            <HStack justifyContent="space-between" w="full" pr={8}>
+            <HStack className="justify-between w-full pr-8">
               <span>{attributeCategory.name}</span>
               <Tag
                 size="lg"

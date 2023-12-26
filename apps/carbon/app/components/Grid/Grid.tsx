@@ -341,7 +341,7 @@ const Grid = <T extends object>({
         />
       )} */}
       <div
-        className="w-full h-full bg:white dark:bg-black overflow-x-auto"
+        className="w-full h-full bg-background overflow-x-auto"
         style={{
           contain: contained ? "strict" : undefined,
         }}

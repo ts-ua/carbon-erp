@@ -178,7 +178,7 @@ const ReceiptForm = ({
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit formId={formId} isDisabled={isDisabled}>
                 Save
               </Submit>
