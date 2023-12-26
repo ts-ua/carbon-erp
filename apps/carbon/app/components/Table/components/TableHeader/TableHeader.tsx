@@ -1,5 +1,5 @@
-import { useColor } from "@carbon/react";
-import { Button, HStack } from "@chakra-ui/react";
+import { HStack } from "@carbon/react";
+import { Button } from "@chakra-ui/react";
 import type { Column, ColumnOrderState } from "@tanstack/react-table";
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { MdOutlineEditNote } from "react-icons/md";
@@ -44,20 +44,9 @@ const TableHeader = <T extends object>({
   withPagination,
   withSelectableRows,
 }: HeaderProps<T>) => {
-  const borderColor = useColor("gray.200");
-
   return (
-    <HStack
-      px={4}
-      py={3}
-      justifyContent="space-between"
-      bg={useColor("white")}
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      w="full"
-    >
-      <HStack spacing={2}>
+    <HStack className="px-4 py-3 justify-between bg-background border-b w-full">
+      <HStack>
         {withSelectableRows && actions.length > 0 && (
           <Actions actions={actions} selectedRows={selectedRows} />
         )}
@@ -81,7 +70,7 @@ const TableHeader = <T extends object>({
             </Button>
           ))}
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {withFilters && (
           <>
             <Filter columnAccessors={columnAccessors} />

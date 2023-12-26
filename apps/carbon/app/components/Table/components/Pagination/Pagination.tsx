@@ -1,9 +1,7 @@
-import { useColor } from "@carbon/react";
+import { HStack } from "@carbon/react";
 import type { ThemeTypings } from "@chakra-ui/react";
 import {
   Button,
-  Flex,
-  HStack,
   IconButton,
   Menu,
   MenuButton,
@@ -37,21 +35,10 @@ const Pagination = (props: PaginationProps) => {
     pageSizes.sort();
   }
 
-  const borderColor = useColor("gray.200");
-
   return (
     <HStack
-      align="center"
-      bg={useColor("white")}
-      borderTopColor={borderColor}
-      borderTopWidth={1}
-      borderTopStyle="solid"
-      justify="space-between"
-      px={4}
-      py={2}
-      spacing="6"
-      w="full"
-      zIndex={1}
+      className="text-center bg-background border-t justify-between px-4 py-2 w-full z-[1]"
+      spacing={6}
     >
       <Menu>
         <MenuButton as={Button} variant="ghost">
@@ -70,7 +57,7 @@ const Pagination = (props: PaginationProps) => {
           ))}
         </MenuList>
       </Menu>
-      <HStack spacing={2}>
+      <HStack>
         <PaginationButtons {...props} />
       </HStack>
     </HStack>
@@ -106,10 +93,10 @@ export const PaginationButtons = ({
         </>
       ) : (
         <>
-          <Flex fontSize="sm" h={8} fontWeight="medium" alignItems="center">
+          <div className="flex font-sm font-medium align-center">
             {count > 0 ? offset + 1 : 0} - {Math.min(offset + pageSize, count)}{" "}
             of {count}
-          </Flex>
+          </div>
           <Button
             isDisabled={!canPreviousPage}
             onClick={previousPage}

@@ -1,5 +1,5 @@
-import { Select, useColor } from "@carbon/react";
-import { Button, HStack } from "@chakra-ui/react";
+import { HStack, Select } from "@carbon/react";
+import { Button } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
 import { DebouncedInput } from "~/components/Search";
@@ -9,19 +9,10 @@ import { accountClassTypes, incomeBalanceTypes } from "~/modules/accounting";
 const AttributeCategoriesTableFilters = () => {
   const permissions = usePermissions();
   const [params, setParams] = useUrlParams();
-  const borderColor = useColor("gray.200");
 
   return (
-    <HStack
-      px={4}
-      py={3}
-      justifyContent="space-between"
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      w="full"
-    >
-      <HStack spacing={2}>
+    <HStack spacing={4} className="px-4 py-3 justify-between border-b w-full">
+      <HStack>
         <DebouncedInput
           param="name"
           size="sm"
@@ -65,7 +56,7 @@ const AttributeCategoriesTableFilters = () => {
           }}
         />
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("update", "resources") && (
           <Button
             as={Link}

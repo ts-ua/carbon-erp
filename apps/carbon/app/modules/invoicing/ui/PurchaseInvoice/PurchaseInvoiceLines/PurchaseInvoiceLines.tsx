@@ -1,11 +1,10 @@
-import { Heading } from "@carbon/react";
+import { Heading, HStack } from "@carbon/react";
 import {
   Box,
   Button,
   Card,
   CardBody,
   CardHeader,
-  HStack,
   IconButton,
   Menu,
   MenuButton,
@@ -66,7 +65,7 @@ const PurchaseInvoiceLines = () => {
         accessorKey: "invoiceLineType",
         header: "Type",
         cell: ({ row }) => (
-          <HStack justify="space-between" minW={100}>
+          <HStack className="justify-between min-w-[100px]">
             <span>{row.original.invoiceLineType}</span>
             <Box position="relative" w={6} h={5}>
               <Menu>

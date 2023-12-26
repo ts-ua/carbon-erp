@@ -1,5 +1,5 @@
-import { Select, useColor } from "@carbon/react";
-import { Button, HStack } from "@chakra-ui/react";
+import { HStack, Select } from "@carbon/react";
+import { Button } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
 import { DebouncedInput } from "~/components/Search";
@@ -13,7 +13,6 @@ type ShiftsTableFiltersProps = {
 const ShiftsTableFilters = ({ locations }: ShiftsTableFiltersProps) => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
-  const borderColor = useColor("gray.200");
 
   const locationOptions =
     locations?.map((location) => ({
@@ -22,16 +21,8 @@ const ShiftsTableFilters = ({ locations }: ShiftsTableFiltersProps) => {
     })) ?? [];
 
   return (
-    <HStack
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      justifyContent="space-between"
-      px={4}
-      py={3}
-      w="full"
-    >
-      <HStack spacing={2}>
+    <HStack className="px-4 py-3 justify-between border-b w-full" spacing={4}>
+      <HStack>
         <DebouncedInput
           param="name"
           size="sm"
@@ -52,7 +43,7 @@ const ShiftsTableFilters = ({ locations }: ShiftsTableFiltersProps) => {
           placeholder="Location"
         />
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "resources") && (
           <Button
             as={Link}

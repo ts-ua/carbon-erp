@@ -1,5 +1,4 @@
-import { Select, useColor } from "@carbon/react";
-import { HStack } from "@chakra-ui/react";
+import { HStack, Select } from "@carbon/react";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 import type { DocumentLabel } from "~/modules/documents/types";
@@ -27,24 +26,14 @@ const DocumentsTableFilters = ({ labels }: DocumentTableFiltersProps) => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
 
-  const borderColor = useColor("gray.200");
-
   const labelOptions = labels.map((l) => ({
     value: l.label,
     label: l.label,
   }));
 
   return (
-    <HStack
-      px={4}
-      py={3}
-      justifyContent="space-between"
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      w="full"
-    >
-      <HStack spacing={2}>
+    <HStack className="px-4 py-3 justify-between border-b w-full" spacing={4}>
+      <HStack>
         <DebouncedInput
           param="search"
           size="sm"
@@ -82,7 +71,7 @@ const DocumentsTableFilters = ({ labels }: DocumentTableFiltersProps) => {
           />
         )}
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "documents") && <DocumentCreateForm />}
       </HStack>
     </HStack>

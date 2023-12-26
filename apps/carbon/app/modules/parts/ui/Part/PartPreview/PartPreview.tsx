@@ -1,10 +1,9 @@
-import { Heading, VStack } from "@carbon/react";
+import { HStack, Heading, VStack } from "@carbon/react";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
-  HStack,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -25,7 +24,7 @@ const PartPreview = () => {
   return (
     <Card w="full">
       <CardHeader>
-        <HStack justifyContent="space-between" alignItems="start">
+        <HStack className="justify-between align-start">
           <VStack spacing={0}>
             <Heading size="h3">{routeData?.partSummary?.id}</Heading>
             <Text color="gray.500">{routeData?.partSummary?.name}</Text>

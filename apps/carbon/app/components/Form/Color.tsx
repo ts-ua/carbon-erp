@@ -1,11 +1,10 @@
-import { useColor } from "@carbon/react";
+import { HStack, useColor } from "@carbon/react";
 import {
   Box,
   Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  HStack,
   useDisclosure,
   useOutsideClick,
 } from "@chakra-ui/react";
@@ -36,7 +35,7 @@ const ColorPicker = ({ name, label }: ColorFieldProps) => {
     <FormControl>
       <FormLabel>{label}</FormLabel>
       <input type="hidden" name={name} value={value} />
-      <Box position="relative" ref={containerRef}>
+      <div className="relative" ref={containerRef}>
         <HStack>
           <Box
             as={Button}
@@ -57,26 +56,15 @@ const ColorPicker = ({ name, label }: ColorFieldProps) => {
           <HexColorInput
             color={value}
             onChange={setValue}
-            style={{
-              padding: "0 0.5rem",
-              height: "2.25rem",
-              borderRadius: "0.275rem",
-              outline: "2px solid transparent",
-              outlineOffset: "2px",
-              border: `1px solid ${borderColor}`,
-            }}
+            className="py-0 px-2 h-9 rounded-md outline-2 outline-offset-2 outline-transparent border z-50"
           />
         </HStack>
-        <Box
-          position="absolute"
-          marginTop={1}
-          top={10}
-          zIndex={3}
-          hidden={!disclosure.isOpen}
-        >
-          <HexColorPicker color={value} onChange={setValue} />
-        </Box>
-      </Box>
+        {disclosure.isOpen && (
+          <div className="absolute mt-1 top-10 z-50">
+            <HexColorPicker color={value} onChange={setValue} />
+          </div>
+        )}
+      </div>
       {error && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>
   );

@@ -1,5 +1,5 @@
-import { Select, useColor } from "@carbon/react";
-import { Button, HStack } from "@chakra-ui/react";
+import { HStack, Select } from "@carbon/react";
+import { Button } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
 import { DebouncedInput } from "~/components/Search";
@@ -12,8 +12,6 @@ const PurchaseOrdersTableFilters = () => {
   const [suppliers] = useSuppliers();
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
-
-  const borderColor = useColor("gray.200");
 
   const supplierOptions = suppliers
     .filter((supplier) => supplier.id && supplier.name)
@@ -28,16 +26,8 @@ const PurchaseOrdersTableFilters = () => {
   }));
 
   return (
-    <HStack
-      px={4}
-      py={3}
-      justifyContent="space-between"
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      w="full"
-    >
-      <HStack spacing={2}>
+    <HStack className="px-4 py-3 justify-between border-b w-full" spacing={4}>
+      <HStack>
         <DebouncedInput
           param="search"
           size="sm"
@@ -71,7 +61,7 @@ const PurchaseOrdersTableFilters = () => {
           placeholder="Supplier"
         />
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "purchasing") && (
           <Button
             as={Link}

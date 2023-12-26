@@ -29,7 +29,7 @@ const CustomerSidebar = () => {
   return (
     <VStack className="h-full">
       <div className="overflow-y-auto h-full w-full">
-        <VStack spacing={2}>
+        <VStack>
           <VStack spacing={1}>
             {links.map((route) => {
               const isActive = matches.some(

@@ -11,7 +11,7 @@ const GroupedContentSidebar = ({ groups }: { groups: RouteGroup[] }) => {
   return (
     <CollapsibleSidebar>
       <div className="overflow-y-auto h-full w-full pb-8">
-        <VStack spacing={2}>
+        <VStack>
           {groups.map((group) => (
             <VStack key={group.name} spacing={1} className="border-b p-2">
               <Text

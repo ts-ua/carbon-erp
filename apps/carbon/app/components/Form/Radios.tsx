@@ -1,7 +1,7 @@
 import type { StackDirection } from "@chakra-ui/react";
-import { FormErrorMessage } from "@chakra-ui/react";
 import {
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Radio,
   RadioGroup,
@@ -34,7 +34,7 @@ const Radios = ({
         })}
         name={name}
       >
-        <Stack spacing={2} alignItems="start" direction={direction}>
+        <Stack alignItems="start" direction={direction}>
           {options.map(({ label, value }) => (
             <Radio key={value} value={value}>
               {label}

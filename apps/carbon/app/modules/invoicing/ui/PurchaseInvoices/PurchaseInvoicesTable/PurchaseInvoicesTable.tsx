@@ -1,4 +1,5 @@
-import { HStack, Link, MenuItem, Text, useDisclosure } from "@chakra-ui/react";
+import { HStack } from "@carbon/react";
+import { Link, MenuItem, Text, useDisclosure } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo, useState } from "react";
@@ -126,7 +127,7 @@ const PurchaseInvoicesTable = memo(
           <MenuItem
             icon={<BsPencilSquare />}
             isDisabled={!permissions.can("view", "invoicing")}
-            onClick={() => navigate(row.id!)}
+            onClick={() => navigate(path.to.purchaseInvoice(row.id!))}
           >
             Edit
           </MenuItem>

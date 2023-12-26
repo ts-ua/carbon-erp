@@ -1,10 +1,5 @@
-import { useColor } from "@carbon/react";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  HStack,
-} from "@chakra-ui/react";
+import { HStack, useColor } from "@carbon/react";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
 import { Link, useMatches } from "@remix-run/react";
 import { z } from "zod";
 
@@ -35,7 +30,7 @@ const Breadcrumbs = () => {
     .filter(Boolean);
 
   return (
-    <HStack>
+    <HStack className="items-center h-full">
       <Breadcrumb noOfLines={1}>
         {breadcrumbs.map((breadcrumb, i) => (
           <BreadcrumbItem key={i}>

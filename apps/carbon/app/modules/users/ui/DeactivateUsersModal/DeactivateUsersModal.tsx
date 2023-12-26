@@ -1,6 +1,6 @@
+import { HStack } from "@carbon/react";
 import {
   Button,
-  HStack,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -46,7 +46,7 @@ const DeactivateUsersModal = ({
           <UserSelect value={userIds} readOnly isMulti />
         </ModalBody>
         <ModalFooter>
-          <HStack spacing={2}>
+          <HStack>
             <Button variant="ghost" onClick={onClose}>
               Cancel
             </Button>

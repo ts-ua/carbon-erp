@@ -1,7 +1,7 @@
+import { HStack } from "@carbon/react";
 import {
   Avatar,
   AvatarGroup,
-  HStack,
   IconButton,
   Input,
   InputGroup,
@@ -60,7 +60,7 @@ const SelectInput = () => {
       />
 
       <InputRightElement w="auto">
-        <HStack spacing={1} mr={2}>
+        <HStack spacing={1} className="mr-2">
           {loading && <Spinner size="sm" />}
           {!loading && !disabled && inputValue.length > 0 && (
             <IconButton

@@ -1,5 +1,5 @@
-import { VStack, useColor, useDisclosure } from "@carbon/react";
-import { Button, Grid, HStack, Switch, Text } from "@chakra-ui/react";
+import { HStack, VStack, useColor, useDisclosure } from "@carbon/react";
+import { Button, Grid, Switch, Text } from "@chakra-ui/react";
 import { parseDate } from "@internationalized/date";
 import { useFetcher, useParams } from "@remix-run/react";
 import { useState } from "react";
@@ -171,7 +171,7 @@ function renderTypedForm({
               <Hidden name="userAttributeValueId" />
               <BooleanInput name="value" />
             </div>
-            <HStack justifyContent="end" w="full" alignSelf="center">
+            <HStack className="justify-end w-full self-center">
               <Submit size="sm" type="submit">
                 Save
               </Submit>
@@ -213,7 +213,7 @@ function renderTypedForm({
               <Hidden name="userAttributeValueId" />
               <DatePicker name="value" />
             </div>
-            <HStack justifyContent="end" w="full" alignSelf="center">
+            <HStack className="justify-end w-full self-center">
               <Submit size="sm" type="submit">
                 Save
               </Submit>
@@ -263,7 +263,7 @@ function renderTypedForm({
                 }
               />
             </div>
-            <HStack justifyContent="end" w="full" alignSelf="center">
+            <HStack className="justify-between w-full self-center">
               <Submit size="sm" type="submit">
                 Save
               </Submit>
@@ -305,7 +305,7 @@ function renderTypedForm({
               <Hidden name="userAttributeValueId" />
               <NumberInput name="value" />
             </div>
-            <HStack justifyContent="end" w="full" alignSelf="center">
+            <HStack className="justify-between w-full self-center">
               <Submit size="sm" type="submit">
                 Save
               </Submit>
@@ -347,7 +347,7 @@ function renderTypedForm({
               <Hidden name="userAttributeValueId" />
               <Input name="value" />
             </div>
-            <HStack justifyContent="end" w="full" alignSelf="center">
+            <HStack className="justify-between w-full self-center">
               <Submit size="sm" type="submit">
                 Save
               </Submit>
@@ -389,7 +389,7 @@ function renderTypedForm({
               <Hidden name="userAttributeValueId" />
               <Employee name="value" />
             </div>
-            <HStack justifyContent="end" w="full" alignSelf="center">
+            <HStack className="justify-between w-full self-center">
               <Submit size="sm" type="submit">
                 Save
               </Submit>
@@ -452,7 +452,7 @@ function renderTypedDisplay({
           ) : (
             <Switch isReadOnly isChecked={displayValue === true} />
           )}
-          <HStack justifyContent="end" w="full" alignSelf="center">
+          <HStack className="justify-between w-full self-center">
             <Button
               isDisabled={!isAuthorized && (!attribute.canSelfManage ?? true)}
               variant="ghost"
@@ -649,7 +649,7 @@ function UpdateRemoveButtons({
   onSubmit: (value: string | boolean | number | undefined) => void;
 }) {
   return (
-    <HStack justifyContent="end" w="full" alignSelf="center">
+    <HStack className="justify-between w-full self-center">
       {userAttributeValueId && (
         <ValidatedForm
           method="post"

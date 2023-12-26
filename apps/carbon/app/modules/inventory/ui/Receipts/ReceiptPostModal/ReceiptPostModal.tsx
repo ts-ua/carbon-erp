@@ -1,6 +1,6 @@
+import { HStack } from "@carbon/react";
 import {
   Button,
-  HStack,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -27,7 +27,7 @@ const ReceiptPostModal = (props: ReceiptPostModalProps) => {
         <ModalBody>Are you sure you want to post this receipt?</ModalBody>
 
         <ModalFooter>
-          <HStack spacing={2}>
+          <HStack>
             <Button colorScheme="gray" onClick={onCancel}>
               Cancel
             </Button>

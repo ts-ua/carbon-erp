@@ -1,8 +1,7 @@
-import { DatePicker, Select, useColor } from "@carbon/react";
+import { DatePicker, HStack, Select } from "@carbon/react";
 import {
   Button,
   Grid,
-  HStack,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -21,7 +20,6 @@ import { incomeBalanceTypes } from "~/modules/accounting";
 const ChartOfAccountsTableFilters = () => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
-  const borderColor = useColor("gray.200");
 
   const startDate = params.get("startDate");
   const endDate = params.get("endDate");
@@ -32,16 +30,8 @@ const ChartOfAccountsTableFilters = () => {
   }));
 
   return (
-    <HStack
-      px={4}
-      py={3}
-      justifyContent="space-between"
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      w="full"
-    >
-      <HStack spacing={2}>
+    <HStack spacing={4} className="px-4 py-3 justify-between border-b w-full">
+      <HStack>
         <Select
           // @ts-ignore
           minW={200}
@@ -109,7 +99,7 @@ const ChartOfAccountsTableFilters = () => {
           </Button>
         )}
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "accounting") && (
           <Button
             as={Link}
