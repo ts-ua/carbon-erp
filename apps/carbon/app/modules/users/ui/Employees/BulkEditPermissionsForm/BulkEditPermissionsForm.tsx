@@ -1,6 +1,5 @@
-import { useColor, useMount } from "@carbon/react";
+import { HStack, VStack, useMount } from "@carbon/react";
 import {
-  Box,
   Button,
   Drawer,
   DrawerBody,
@@ -9,16 +8,14 @@ import {
   DrawerHeader,
   DrawerOverlay,
   FormLabel,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import { Employees, Hidden, Radios, Submit } from "~/components/Form";
+import type { Permission } from "~/modules/users";
 import { bulkPermissionsValidator } from "~/modules/users";
 import { path } from "~/utils/path";
-import type { Permission } from "../../../types";
 import PermissionCheckboxes from "../../components/Permission";
 
 type BulkEditPermissionsProps = {
@@ -83,15 +80,8 @@ const BulkEditPermissions = ({
             onSubmit={onClose}
             defaultValues={{ userIds }}
           >
-            <VStack spacing={4} alignItems="start">
-              <Box
-                borderColor={useColor("gray.200")}
-                borderRadius="lg"
-                borderStyle="solid"
-                borderWidth={1}
-                p={4}
-                w="full"
-              >
+            <VStack spacing={4}>
+              <div className="border p-4 w-full rounded-lg">
                 <Radios
                   name="editType"
                   label="Type of Permission Update"
@@ -106,7 +96,7 @@ const BulkEditPermissions = ({
                     },
                   ]}
                 />
-              </Box>
+              </div>
 
               <Employees
                 name="userIds"
@@ -118,16 +108,16 @@ const BulkEditPermissions = ({
               {Object.entries(permissions)
                 .sort((a, b) => a[0].localeCompare(b[0]))
                 .map(([module, data], index) => (
-                  <Box key={index}>
+                  <div key={index}>
                     <PermissionCheckboxes
                       module={module}
                       permissions={data}
                       updatePermissions={updatePermissions}
                     />
-                  </Box>
+                  </div>
                 ))}
               <Hidden name="data" value={JSON.stringify(permissions)} />
-              <HStack spacing={2} my={4}>
+              <HStack spacing={2} className="my-4">
                 <Submit>Save</Submit>
                 <Button
                   size="md"

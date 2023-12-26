@@ -1,8 +1,8 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   FormControl,
   FormLabel,
   Grid,
-  HStack,
   Input,
   Modal,
   ModalBody,
@@ -10,7 +10,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  VStack,
 } from "@chakra-ui/react";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import { useRef, useState } from "react";
@@ -64,7 +63,7 @@ const CreateCustomerModal = () => {
             // @ts-ignore
             fetcher={formFetcher}
           >
-            <VStack spacing={4} alignItems="start" w="full">
+            <VStack spacing={4}>
               <Customer
                 name="customer"
                 label="Customer"
@@ -112,7 +111,7 @@ const CreateCustomerModal = () => {
                 </>
               )}
 
-              <HStack spacing={4}>
+              <HStack>
                 <Submit>Create User</Submit>
               </HStack>
             </VStack>

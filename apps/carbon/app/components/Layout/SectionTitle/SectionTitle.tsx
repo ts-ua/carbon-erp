@@ -8,7 +8,7 @@ type SectionTitleProps = PropsWithChildren<{
 const SectionTitle = ({ children, subtitle, ...props }: SectionTitleProps) => {
   return (
     <VStack spacing={2} className="mb4" {...props}>
-      <Heading size="h2">{children}</Heading>
+      <Heading size="h3">{children}</Heading>
       {subtitle && <p className="text-muted-foreground">{subtitle}</p>}
     </VStack>
   );

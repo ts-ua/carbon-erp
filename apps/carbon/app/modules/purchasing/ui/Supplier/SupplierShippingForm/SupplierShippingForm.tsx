@@ -1,13 +1,5 @@
-import { Heading } from "@carbon/react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Grid,
-  HStack,
-  VStack,
-} from "@chakra-ui/react";
+import { Heading, HStack, VStack } from "@carbon/react";
+import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -71,7 +63,7 @@ const SupplierShippingForm = ({ initialValues }: SupplierShippingFormProps) => {
             gridRowGap={2}
             w="full"
           >
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Supplier
                 name="shippingSupplierId"
                 label="Shipping Supplier"
@@ -88,7 +80,7 @@ const SupplierShippingForm = ({ initialValues }: SupplierShippingFormProps) => {
                 supplier={supplier}
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Select
                 name="shippingMethodId"
                 label="Shipping Method"

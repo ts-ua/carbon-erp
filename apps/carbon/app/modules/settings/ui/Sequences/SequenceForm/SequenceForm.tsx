@@ -1,4 +1,4 @@
-import { Heading } from "@carbon/react";
+import { Heading, HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -8,9 +8,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
-  Text,
-  VStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
@@ -61,7 +58,7 @@ const SequenceForm = ({ initialValues }: SequenceFormProps) => {
           <DrawerHeader>{`${initialValues.name}`} Sequence</DrawerHeader>
           <DrawerBody pb={8}>
             <Hidden name="table" />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Heading size="h2">{makePreview()}</Heading>
 
               <Input
@@ -88,22 +85,19 @@ const SequenceForm = ({ initialValues }: SequenceFormProps) => {
                 label="Suffix"
                 onChange={(e) => setSuffix(e.target.value)}
               />
-              <VStack spacing={0} alignItems="start">
-                <Text
-                  color="gray.500"
-                  fontSize="sm"
-                >{`%{yyyy} = Full Year`}</Text>
-                <Text color="gray.500" fontSize="sm">{`%{yy} = Year`}</Text>
-                <Text color="gray.500" fontSize="sm">{`%{mm} = Month`}</Text>
-                <Text color="gray.500" fontSize="sm">{`%{dd} = Day`}</Text>
-                <Text color="gray.500" fontSize="sm">{`%{hh} = Hour`}</Text>
-                <Text color="gray.500" fontSize="sm">{`%{mm} = Minute`}</Text>
-                <Text color="gray.500" fontSize="sm">{`%{ss} = Second`}</Text>
+              <VStack spacing={0}>
+                <p className="text-muted-foreground text-sm">{`%{yyyy} = Full Year`}</p>
+                <p className="text-muted-foreground text-sm">{`%{yy} = Year`}</p>
+                <p className="text-muted-foreground text-sm">{`%{mm} = Month`}</p>
+                <p className="text-muted-foreground text-sm">{`%{dd} = Day`}</p>
+                <p className="text-muted-foreground text-sm">{`%{hh} = Hour`}</p>
+                <p className="text-muted-foreground text-sm">{`%{mm} = Minute`}</p>
+                <p className="text-muted-foreground text-sm">{`%{ss} = Second`}</p>
               </VStack>
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
               <Button
                 size="md"

@@ -1,4 +1,4 @@
-import { Select, useMount } from "@carbon/react";
+import { HStack, Select, VStack, useMount } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -11,12 +11,10 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect, useMemo } from "react";
-import { useControlField, useField, ValidatedForm } from "remix-validated-form";
+import { ValidatedForm, useControlField, useField } from "remix-validated-form";
 import { Abilities, Number, Submit, Supplier } from "~/components/Form";
 import { usePermissions } from "~/hooks";
 import type { getSupplierLocations } from "~/modules/purchasing";
@@ -77,7 +75,7 @@ const PartnerForm = ({ initialValues }: PartnerFormProps) => {
           <DrawerCloseButton />
           <DrawerHeader>{isEditing ? "Edit" : "New"} Partner</DrawerHeader>
           <DrawerBody pb={8}>
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Supplier
                 name="supplierId"
                 label="Supplier"
@@ -100,7 +98,7 @@ const PartnerForm = ({ initialValues }: PartnerFormProps) => {
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
               <Button
                 size="md"

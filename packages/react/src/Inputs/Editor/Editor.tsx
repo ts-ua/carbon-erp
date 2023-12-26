@@ -1,11 +1,12 @@
 import type { BoxProps } from "@chakra-ui/react";
-import { Box, VStack } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { Color } from "@tiptap/extension-color";
 import ListItem from "@tiptap/extension-list-item";
 import TextStyle from "@tiptap/extension-text-style";
 import { EditorContent, useEditor as useEditorInternal } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { reset } from "../../Theme";
+import { reset } from "~/Theme";
+import { VStack } from "~/VStack";
 import { Toolbar } from "./Toolbar";
 
 export const useEditor = (content: string) => {
@@ -40,7 +41,7 @@ export const Editor = ({ editor, ...props }: EditorProps) => {
   }
 
   return (
-    <VStack w="full" alignItems="start" spacing={0}>
+    <VStack spacing={0}>
       <Toolbar editor={editor} />
       <Box
         as={EditorContent}

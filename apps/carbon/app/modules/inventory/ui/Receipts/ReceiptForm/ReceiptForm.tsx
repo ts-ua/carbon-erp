@@ -1,6 +1,5 @@
-import { Menubar, MenubarItem } from "@carbon/react";
+import { HStack, Menubar, MenubarItem, VStack } from "@carbon/react";
 import {
-  Box,
   Button,
   Drawer,
   DrawerBody,
@@ -10,8 +9,6 @@ import {
   DrawerHeader,
   DrawerOverlay,
   Grid,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { Outlet } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
@@ -80,14 +77,14 @@ const ReceiptForm = ({
           <DrawerCloseButton />
           <DrawerHeader>{initialValues.receiptId}</DrawerHeader>
           <DrawerBody pb={8}>
-            <VStack spacing={4} w="full" alignItems="start">
+            <VStack spacing={4}>
               <Menubar mb={2} mt={-2}>
                 <MenubarItem isDisabled={!canPost || isPosted} onClick={onPost}>
                   Post
                 </MenubarItem>
               </Menubar>
 
-              <Box w="full">
+              <div className="w-full">
                 <ValidatedForm
                   id={formId}
                   validator={receiptValidator}
@@ -105,7 +102,7 @@ const ReceiptForm = ({
                     }
                   />
                   <Hidden name="supplierId" value={supplierId ?? ""} />
-                  <VStack spacing={4} w="full" alignItems="start" minH="full">
+                  <VStack spacing={4} className="min-h-full">
                     <Grid
                       gridTemplateColumns={["1fr", "1fr", "1fr 1fr"]}
                       gridColumnGap={8}
@@ -163,9 +160,9 @@ const ReceiptForm = ({
                     </Grid>
                   </VStack>
                 </ValidatedForm>
-              </Box>
+              </div>
 
-              <VStack w="full" alignItems="start">
+              <VStack>
                 <SectionTitle>Receipt Lines</SectionTitle>
                 <DataGrid<ReceiptLine>
                   data={internalReceiptLines}

@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -8,8 +9,6 @@ import {
   DrawerHeader,
   DrawerOverlay,
   Grid,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
@@ -102,7 +101,7 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
               gridRowGap={2}
               w="full"
             >
-              <VStack spacing={4} alignItems="start">
+              <VStack spacing={4}>
                 <Input name="number" label="Account Number" />
                 <Input name="name" label="Name" />
                 <Select
@@ -114,7 +113,7 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
                   }))}
                 />
               </VStack>
-              <VStack spacing={4} alignItems="start">
+              <VStack spacing={4}>
                 <AccountCategory
                   name="accountCategoryId"
                   onChange={onAccountCategoryChange}
@@ -137,7 +136,7 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
                   }}
                 />
               </VStack>
-              <VStack spacing={4} alignItems="start">
+              <VStack spacing={4}>
                 <SelectControlled
                   name="class"
                   label="Class"

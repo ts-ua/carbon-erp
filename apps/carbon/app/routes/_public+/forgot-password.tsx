@@ -1,14 +1,12 @@
-import { useColor } from "@carbon/react";
+import { VStack } from "@carbon/react";
 import {
   Alert,
   AlertDescription,
   AlertIcon,
   AlertTitle,
-  Box,
   Image,
   Text,
   useColorModeValue,
-  VStack,
 } from "@chakra-ui/react";
 import type {
   ActionFunctionArgs,
@@ -70,7 +68,6 @@ export async function action({ request }: ActionFunctionArgs): FormActionData {
 
 export default function ForgotPasswordRoute() {
   const actionData = useActionData<Result>();
-  const boxBackground = useColor("white");
 
   return (
     <>
@@ -104,9 +101,9 @@ export default function ForgotPasswordRoute() {
           </AlertDescription>
         </Alert>
       ) : (
-        <Box rounded="lg" bg={boxBackground} boxShadow="lg" w={380} p={8}>
+        <div className="rounded-lg bg-background shadow-lg p-8 w-[380px]">
           <ValidatedForm validator={forgotPasswordValidator} method="post">
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Text>
                 Please enter your email address to search for your account.
               </Text>
@@ -120,7 +117,7 @@ export default function ForgotPasswordRoute() {
               <Submit w="full">Search</Submit>
             </VStack>
           </ValidatedForm>
-        </Box>
+        </div>
       )}
     </>
   );

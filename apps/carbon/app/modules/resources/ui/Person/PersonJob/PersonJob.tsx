@@ -1,14 +1,8 @@
-import { Select, useMount } from "@carbon/react";
-import {
-  Box,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  VStack,
-} from "@chakra-ui/react";
+import { Select, VStack, useMount } from "@carbon/react";
+import { FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useMemo } from "react";
-import { useControlField, useField, ValidatedForm } from "remix-validated-form";
+import { ValidatedForm, useControlField, useField } from "remix-validated-form";
 import {
   DatePicker,
   Employee,
@@ -48,7 +42,7 @@ const PersonJob = ({ job }: PersonJobProps) => {
   );
 
   return (
-    <Box w="full">
+    <div className="w-full">
       <ValidatedForm
         validator={employeeJobValidator}
         method="post"
@@ -60,7 +54,7 @@ const PersonJob = ({ job }: PersonJobProps) => {
         }}
       >
         <SectionTitle>Job</SectionTitle>
-        <VStack w="full" alignItems="start" spacing={4}>
+        <VStack spacing={4}>
           <Input name="title" label="Title" />
           <DatePicker name="startDate" label="Start Date" />
           <Location
@@ -77,7 +71,7 @@ const PersonJob = ({ job }: PersonJobProps) => {
           <Submit size="sm">Save</Submit>
         </VStack>
       </ValidatedForm>
-    </Box>
+    </div>
   );
 };
 

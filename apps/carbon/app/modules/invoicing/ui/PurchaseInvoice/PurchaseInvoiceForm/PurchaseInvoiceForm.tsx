@@ -1,4 +1,4 @@
-import { Heading } from "@carbon/react";
+import { Heading, VStack } from "@carbon/react";
 import {
   Card,
   CardBody,
@@ -6,7 +6,6 @@ import {
   CardHeader,
   Grid,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -81,7 +80,7 @@ const PurchaseInvoiceForm = ({
         <CardBody>
           <Hidden name="id" />
           <Hidden name="invoiceId" />
-          <VStack spacing={2} w="full" alignItems="start">
+          <VStack>
             <Grid
               gridTemplateColumns={
                 isEditing ? ["1fr", "1fr", "1fr 1fr 1fr"] : "1fr"
@@ -90,7 +89,7 @@ const PurchaseInvoiceForm = ({
               gridRowGap={2}
               w="full"
             >
-              <VStack alignItems="start" spacing={2} w="full">
+              <VStack>
                 <Supplier
                   name="supplierId"
                   label="Supplier"
@@ -118,7 +117,7 @@ const PurchaseInvoiceForm = ({
                   </>
                 )}
               </VStack>
-              <VStack alignItems="start" spacing={2} w="full">
+              <VStack>
                 <Input
                   name="supplierReference"
                   label="Supplier Invoice Number"
@@ -135,7 +134,7 @@ const PurchaseInvoiceForm = ({
                   />
                 )}
               </VStack>
-              <VStack alignItems="start" spacing={2} w="full">
+              <VStack>
                 {isEditing && (
                   <>
                     <Select

@@ -18,7 +18,7 @@ type PurchaseInvoicePostModalProps = {
   isOpen: boolean;
   onClose: () => void;
   invoiceId: string;
-  linesToReceive: { partId: string; quantity: number }[];
+  linesToReceive: { partId: string | null; quantity: number }[];
 };
 
 const PurchaseInvoicePostModal = ({

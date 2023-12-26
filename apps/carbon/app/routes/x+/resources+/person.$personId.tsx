@@ -1,4 +1,5 @@
-import { Box, Grid, VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -166,7 +167,7 @@ export default function PersonRoute() {
   } = useLoaderData<typeof loader>();
 
   return (
-    <Box p="4" w="full">
+    <div className="w-full p-4">
       <PersonHeader user={user} />
       <Grid gridTemplateColumns="5fr 3fr" gridColumnGap={4} w="full">
         <VStack spacing={4}>
@@ -184,6 +185,6 @@ export default function PersonRoute() {
           <PersonAbilities abilities={employeeAbilities} />
         </VStack>
       </Grid>
-    </Box>
+    </div>
   );
 }

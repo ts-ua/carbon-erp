@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,8 +8,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "@remix-run/react";
 import { useState } from "react";
@@ -61,7 +60,7 @@ const ContractorForm = ({ initialValues }: ContractorFormProps) => {
           <DrawerCloseButton />
           <DrawerHeader>{isEditing ? "Edit" : "New"} Contractor</DrawerHeader>
           <DrawerBody pb={8}>
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Supplier
                 name="supplierId"
                 label="Supplier"
@@ -84,7 +83,7 @@ const ContractorForm = ({ initialValues }: ContractorFormProps) => {
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
               <Button
                 size="md"

@@ -1,5 +1,4 @@
-import { useColor } from "@carbon/react";
-import { VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -55,12 +54,9 @@ export async function action({ request }: ActionFunctionArgs) {
   if (validation.error) {
     return validationError(validation.error);
   }
-  const { startMonth, taxStartMonth } = validation.data;
 
   const update = await updateFiscalYearSettings(client, {
-    startMonth,
-    // @ts-expect-error
-    taxStartMonth: taxStartMonth === "same" ? startMonth : taxStartMonth,
+    ...validation.data,
     updatedBy: userId,
   });
   if (update.error) {
@@ -84,22 +80,16 @@ export default function FiscalYearSettingsRoute() {
 
   const initialValues = {
     startMonth: settings?.startMonth || "January",
-    taxStartMonth:
-      settings?.startMonth === settings.taxStartMonth
-        ? "same"
-        : settings?.taxStartMonth || "January",
+    taxStartMonth: settings?.taxStartMonth || "January",
   };
 
   return (
-    <VStack w="full" h="full" spacing={0} p={8} bg={useColor("white")}>
+    <VStack spacing={0} className="h-full bg-background p-8">
       <PageTitle
         title="Fiscal Year Settings"
         subtitle="Define the month when your fiscal year starts"
       />
-      <FiscalYearSettingsForm
-        // @ts-expect-error
-        initialValues={initialValues}
-      />
+      <FiscalYearSettingsForm initialValues={initialValues} />
     </VStack>
   );
 }

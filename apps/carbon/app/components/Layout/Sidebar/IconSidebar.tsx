@@ -1,5 +1,5 @@
-import { useColor } from "@carbon/react";
-import { Box, IconButton, Tooltip, VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
+import { IconButton, Tooltip } from "@chakra-ui/react";
 import { Link, useMatches } from "@remix-run/react";
 import { BsFillHexagonFill } from "react-icons/bs";
 import { z } from "zod";
@@ -23,14 +23,7 @@ const IconSidebar = () => {
   }, new Set<string>());
 
   return (
-    <Box
-      h="full"
-      borderRight={1}
-      borderRightColor={useColor("gray.200")}
-      borderRightStyle="solid"
-      background={useColor("white")}
-      zIndex={1}
-    >
+    <div className="h-full border-r bg-background z-10">
       <IconButton
         aria-label="Home"
         as={Link}
@@ -43,7 +36,7 @@ const IconSidebar = () => {
         mb={4}
       />
 
-      <VStack spacing={0} top={50} position="sticky">
+      <VStack spacing={0} className="top-[50px] sticky">
         {links.map((link) => {
           const module = link.to.split("/")[2]; // link.to is "/x/parts" -- this returns "parts"
 
@@ -67,7 +60,7 @@ const IconSidebar = () => {
           );
         })}
       </VStack>
-    </Box>
+    </div>
   );
 };
 

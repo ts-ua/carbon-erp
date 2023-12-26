@@ -1,4 +1,4 @@
-import { VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
@@ -81,7 +81,7 @@ export default function ResourcesPeopleRoute() {
   const permissions = usePermissions();
 
   return (
-    <VStack w="full" h="full" spacing={0}>
+    <VStack spacing={0} className="h-full">
       <PeopleTableFilters employeeTypes={employeeTypes ?? []} />
       <PeopleTable
         attributeCategories={attributeCategories}

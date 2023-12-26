@@ -1,4 +1,5 @@
-import { Box, Grid, VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Hidden, Input, Submit, TextArea } from "~/components/Form";
@@ -16,7 +17,7 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
   const isSelf = !personId;
 
   return (
-    <Box w="full">
+    <div className="w-full">
       <SectionTitle>Basic Information</SectionTitle>
       <ValidatedForm
         method="post"
@@ -24,7 +25,7 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
         validator={accountProfileValidator}
         defaultValues={user}
       >
-        <VStack spacing={4} my={4} w="full" alignItems="start">
+        <VStack spacing={4} className="my-4">
           <Grid gridTemplateColumns="1fr 1fr" gridColumnGap={4} w="full">
             <Input name="firstName" label="First Name" />
             <Input name="lastName" label="Last Name" />
@@ -34,7 +35,7 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
           <Submit size="sm">Save</Submit>
         </VStack>
       </ValidatedForm>
-    </Box>
+    </div>
   );
 };
 

@@ -1,5 +1,5 @@
+import { HStack, VStack } from "@carbon/react";
 import {
-  Box,
   Button,
   Drawer,
   DrawerBody,
@@ -9,8 +9,6 @@ import {
   DrawerHeader,
   DrawerOverlay,
   FormLabel,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
@@ -66,7 +64,7 @@ const EmployeePermissionsForm = ({
           <DrawerCloseButton />
           <DrawerHeader>{name}</DrawerHeader>
           <DrawerBody pb={8}>
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Select
                 name="employeeType"
                 label="Employee Type"
@@ -77,20 +75,20 @@ const EmployeePermissionsForm = ({
               {Object.entries(permissions)
                 .sort((a, b) => a[0].localeCompare(b[0]))
                 .map(([module, data], index) => (
-                  <Box key={index}>
+                  <div key={index}>
                     <PermissionCheckboxes
                       module={module}
                       permissions={data}
                       updatePermissions={updatePermissions}
                     />
-                  </Box>
+                  </div>
                 ))}
               <Hidden name="id" />
               <Hidden name="data" value={JSON.stringify(permissions)} />
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit>Save</Submit>
               <Button
                 size="md"

@@ -1,4 +1,4 @@
-import { Heading } from "@carbon/react";
+import { Heading, VStack } from "@carbon/react";
 import {
   Card,
   CardBody,
@@ -6,7 +6,6 @@ import {
   CardHeader,
   Grid,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -137,7 +136,7 @@ const PartForm = ({ initialValues }: PartFormProps) => {
             gridRowGap={2}
             w="full"
           >
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               {isEditing ? (
                 <Input name="id" label="Part ID" isReadOnly />
               ) : (
@@ -154,7 +153,7 @@ const PartForm = ({ initialValues }: PartFormProps) => {
               <Input name="name" label="Name" />
               <TextArea name="description" label="Description" />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Select
                 name="replenishmentSystem"
                 label="Replenishment System"
@@ -171,7 +170,7 @@ const PartForm = ({ initialValues }: PartFormProps) => {
                 options={unitOfMeasureOptions}
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Select
                 name="partGroupId"
                 label="Part Group"

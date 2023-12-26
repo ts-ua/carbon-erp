@@ -1,4 +1,4 @@
-import { Box, VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Select, Submit } from "~/components/Form";
 import { usePermissions } from "~/hooks";
@@ -16,14 +16,14 @@ const FiscalYearSettingsForm = ({
 }: FiscalYearSettingsFormProps) => {
   const permissions = usePermissions();
   return (
-    <Box w="full">
+    <div className="w-full">
       <ValidatedForm
         method="post"
         action={path.to.fiscalYears}
         defaultValues={initialValues}
         validator={fiscalYearSettingsValidator}
       >
-        <VStack spacing={4} my={4} w="full" alignItems="start" maxW={440}>
+        <VStack spacing={4} className="my-4 w-full max-w-[440px]">
           <Select
             name="startMonth"
             label="Start of Fiscal Year"
@@ -46,7 +46,7 @@ const FiscalYearSettingsForm = ({
           </Submit>
         </VStack>
       </ValidatedForm>
-    </Box>
+    </div>
   );
 };
 

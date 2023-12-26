@@ -1,10 +1,9 @@
 import { useColor } from "@carbon/react";
-import { Box, IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
+import { IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import type { PropsWithChildren } from "react";
 import { TbArrowBarLeft, TbArrowBarRight } from "react-icons/tb";
 
-const MotionBox = motion(Box);
 const variants = {
   visible: {
     width: 180,
@@ -12,7 +11,6 @@ const variants = {
   hidden: {
     width: 15,
   },
-  transition: { duration: 0.5 },
 };
 
 export const CollapsibleSidebar = ({ children }: PropsWithChildren<{}>) => {
@@ -21,18 +19,12 @@ export const CollapsibleSidebar = ({ children }: PropsWithChildren<{}>) => {
   });
 
   return (
-    <MotionBox
+    <motion.div
       animate={sidebar.isOpen ? "visible" : "hidden"}
       initial={variants.visible}
+      transition={{ duration: 0.5 }}
       variants={variants}
-      bg={useColor("white")}
-      borderRight={1}
-      borderRightColor={useColor("gray.300")}
-      borderRightStyle="solid"
-      h="calc(100vh - 50px)"
-      position="sticky"
-      top={50}
-      zIndex={3}
+      className="bg-background border-r h-full min-h-[calc(100vh-50px)] sticky top-50 z-3"
     >
       <Tooltip label={sidebar.isOpen ? "Collapse" : "Expand"} placement="right">
         <IconButton
@@ -58,6 +50,6 @@ export const CollapsibleSidebar = ({ children }: PropsWithChildren<{}>) => {
         />
       </Tooltip>
       {sidebar.isOpen ? children : null}
-    </MotionBox>
+    </motion.div>
   );
 };

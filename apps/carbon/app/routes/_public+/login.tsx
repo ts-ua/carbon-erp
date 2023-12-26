@@ -1,12 +1,10 @@
-import { useColor } from "@carbon/react";
+import { VStack, useColor } from "@carbon/react";
 import {
   Alert,
   AlertIcon,
   AlertTitle,
-  Box,
   Image,
   useColorModeValue,
-  VStack,
 } from "@chakra-ui/react";
 import type {
   ActionFunctionArgs,
@@ -86,13 +84,13 @@ export default function LoginRoute() {
         marginBottom={3}
       />
 
-      <Box rounded="lg" bg={useColor("white")} boxShadow="lg" w={380} p={8}>
+      <div className="rounded-lg bg-background shadow-lg p-8 w-[380px]">
         <ValidatedForm
           validator={loginValidator}
           defaultValues={{ redirectTo }}
           method="post"
         >
-          <VStack spacing={4} alignItems="start">
+          <VStack spacing={4}>
             {result && result?.message && (
               <Alert status="error">
                 <AlertIcon />
@@ -108,7 +106,7 @@ export default function LoginRoute() {
             </Link>
           </VStack>
         </ValidatedForm>
-      </Box>
+      </div>
     </>
   );
 }

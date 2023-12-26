@@ -59,7 +59,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],
-        // mono: ["var(--font-mono)", ...fontFamily.mono],
+        mono: ["var(--font-mono)", ...fontFamily.mono],
       },
       keyframes: {
         "accordion-down": {

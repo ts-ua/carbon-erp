@@ -1,4 +1,4 @@
-import { Heading } from "@carbon/react";
+import { Heading, VStack } from "@carbon/react";
 import {
   Card,
   CardBody,
@@ -6,7 +6,6 @@ import {
   CardHeader,
   Grid,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -74,7 +73,7 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
         </CardHeader>
         <CardBody>
           <Hidden name="purchaseOrderId" />
-          <VStack spacing={2} w="full" alignItems="start">
+          <VStack>
             <Grid
               gridTemplateColumns={
                 isEditing ? ["1fr", "1fr", "1fr 1fr 1fr"] : "1fr"
@@ -83,7 +82,7 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
               gridRowGap={2}
               w="full"
             >
-              <VStack alignItems="start" spacing={2} w="full">
+              <VStack>
                 <Supplier
                   name="supplierId"
                   label="Supplier"
@@ -106,7 +105,7 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
                   </>
                 )}
               </VStack>
-              <VStack alignItems="start" spacing={2} w="full">
+              <VStack>
                 <Input name="supplierReference" label="Supplier Order Number" />
                 <DatePicker
                   name="orderDate"
@@ -120,7 +119,7 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
                   isReadOnly={isSupplier}
                 />
               </VStack>
-              <VStack alignItems="start" spacing={2} w="full">
+              <VStack>
                 {isEditing && (
                   <>
                     {permissions.can("delete", "purchasing") && (

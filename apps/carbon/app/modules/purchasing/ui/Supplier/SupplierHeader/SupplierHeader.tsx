@@ -1,13 +1,11 @@
-import { Heading } from "@carbon/react";
+import { Heading, HStack, VStack } from "@carbon/react";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
-  HStack,
   Stack,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
@@ -34,10 +32,10 @@ const SupplierHeader = () => {
   }>(path.to.supplierRoot);
 
   return (
-    <VStack w="full" alignItems="start" spacing={2}>
+    <VStack>
       <Card w="full">
         <CardHeader>
-          <HStack justifyContent="space-between" alignItems="start">
+          <HStack className="justify-between items-center">
             <Stack direction="column" spacing={2}>
               <Heading size="h3">{routeData?.supplier?.name}</Heading>
             </Stack>
@@ -80,6 +78,7 @@ const SupplierHeader = () => {
             >
               <Text color="gray.500">Payment Terms</Text>
               <Text fontWeight="bold">
+                {/* // TODO: defaultPaymentTermId */}
                 {sharedSupplierData?.paymentTerms?.find(
                   (term) =>
                     term.id === routeData?.supplier?.defaultPaymentTermId

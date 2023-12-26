@@ -1,4 +1,4 @@
-import { Heading } from "@carbon/react";
+import { Heading, VStack } from "@carbon/react";
 import {
   Card,
   CardBody,
@@ -6,7 +6,6 @@ import {
   CardHeader,
   Grid,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -122,7 +121,7 @@ const ServiceForm = ({ initialValues }: ServiceFormProps) => {
             gridRowGap={2}
             w="full"
           >
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               {isEditing ? (
                 <Input name="id" label="Service ID" isReadOnly />
               ) : (
@@ -138,7 +137,7 @@ const ServiceForm = ({ initialValues }: ServiceFormProps) => {
               <Input name="name" label="Name" />
               <TextArea name="description" label="Description" />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Select
                 name="serviceType"
                 label="Service Type"
@@ -150,7 +149,7 @@ const ServiceForm = ({ initialValues }: ServiceFormProps) => {
                 options={partGroupOptions}
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Boolean name="blocked" label="Blocked" />
               {isEditing && <Boolean name="active" label="Active" />}
             </VStack>

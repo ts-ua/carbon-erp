@@ -1,5 +1,5 @@
-import { ActionMenu, Dot } from "@carbon/react";
-import { Avatar, Grid, HStack, MenuItem, Text, VStack } from "@chakra-ui/react";
+import { ActionMenu, Dot, HStack, VStack } from "@carbon/react";
+import { Avatar, Grid, MenuItem, Text } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import type { Action } from "~/types";
 
@@ -34,7 +34,7 @@ const Contact = ({ contact, url, user, actions }: ContactProps) => {
   return (
     <Grid w="full" gridColumnGap={4} gridTemplateColumns="auto 1fr auto">
       <Avatar size="sm" name={`${name}`} />
-      <VStack spacing={0} alignItems="start">
+      <VStack spacing={0}>
         <HStack spacing={2}>
           {url ? (
             <Link to={url}>

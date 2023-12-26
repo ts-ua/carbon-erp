@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Modal,
@@ -6,7 +7,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  VStack,
 } from "@chakra-ui/react";
 import { redirect, type ActionFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -113,7 +113,7 @@ export default function OnboardingUser() {
 
           <ModalBody>
             <Hidden name="next" value={next} />
-            <VStack w="full" spacing={4}>
+            <VStack spacing={4}>
               <Input name="firstName" label="First Name" />
               <Input name="lastName" label="Last Name" />
               <Input autoComplete="off" name="email" label="Email" />
@@ -121,16 +121,18 @@ export default function OnboardingUser() {
             </VStack>
           </ModalBody>
 
-          <ModalFooter justifyContent="space-between">
-            <Button
-              isDisabled={!previous}
-              size="md"
-              disabled
-              onClick={onPrevious}
-            >
-              Previous
-            </Button>
-            <Submit>Next</Submit>
+          <ModalFooter>
+            <HStack>
+              <Button
+                isDisabled={!previous}
+                size="md"
+                disabled
+                onClick={onPrevious}
+              >
+                Previous
+              </Button>
+              <Submit>Next</Submit>
+            </HStack>
           </ModalFooter>
         </ValidatedForm>
       </ModalContent>

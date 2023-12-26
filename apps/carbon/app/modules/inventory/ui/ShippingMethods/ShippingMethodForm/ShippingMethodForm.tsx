@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,8 +8,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
@@ -59,14 +58,18 @@ const ShippingMethodForm = ({ initialValues }: ShippingMethodFormProps) => {
           </DrawerHeader>
           <DrawerBody pb={8}>
             <Hidden name="id" />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Input name="name" label="Name" />
               <Select
                 name="carrier"
                 label="Carrier"
                 options={shippingCarrierOptions}
               />
-              <Account name="carrierAccountId" label="Carrier Account" />
+              <Account
+                classes={["Expense"]}
+                name="carrierAccountId"
+                label="Carrier Account"
+              />
               <Input
                 name="trackingUrl"
                 label="Tracking URL"

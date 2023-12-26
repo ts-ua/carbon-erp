@@ -1,12 +1,5 @@
-import { Heading } from "@carbon/react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Grid,
-  VStack,
-} from "@chakra-ui/react";
+import { Heading, VStack } from "@carbon/react";
+import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Boolean, Hidden, Number, Select, Submit } from "~/components/Form";
 import { usePermissions } from "~/hooks";
@@ -49,7 +42,7 @@ const PartManufacturingForm = ({
             gridRowGap={2}
             w="full"
           >
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Select
                 name="manufacturingPolicy"
                 label="Manufacturing Policy"
@@ -61,12 +54,12 @@ const PartManufacturingForm = ({
                 options={[{ label: "", value: "" }]}
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Number name="manufacturingLeadTime" label="Lead Time (Days)" />
               <Number name="scrapPercentage" label="Scrap Percentage" />
               <Number name="lotSize" label="Lot Size" />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Boolean
                 name="manufacturingBlocked"
                 label="Manufacturing Blocked"

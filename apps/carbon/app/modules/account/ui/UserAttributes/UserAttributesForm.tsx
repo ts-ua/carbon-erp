@@ -1,14 +1,5 @@
-import { useColor } from "@carbon/react";
-import {
-  Box,
-  Button,
-  Grid,
-  HStack,
-  Switch,
-  Text,
-  useDisclosure,
-  VStack,
-} from "@chakra-ui/react";
+import { VStack, useColor, useDisclosure } from "@carbon/react";
+import { Button, Grid, HStack, Switch, Text } from "@chakra-ui/react";
 import { parseDate } from "@internationalized/date";
 import { useFetcher, useParams } from "@remix-run/react";
 import { useState } from "react";
@@ -64,11 +55,11 @@ const UserAttributesForm = ({ attributeCategory }: UserAttributesFormProps) => {
     return null;
 
   return (
-    <Box w="full">
-      <VStack alignItems="start" w="full" spacing={4}>
+    <div className="w-full">
+      <VStack spacing={4}>
         {attributeCategory.userAttribute.map((attribute) => {
           const genericProps = getGenericProps(
-            attribute,
+            attribute as PublicAttributes["userAttribute"],
             optimisticUpdates[attribute.id]
           );
 
@@ -93,7 +84,7 @@ const UserAttributesForm = ({ attributeCategory }: UserAttributesFormProps) => {
           );
         })}
       </VStack>
-    </Box>
+    </div>
   );
 };
 
@@ -123,11 +114,11 @@ const GenericAttributeRow = (props: GenericAttributeRowProps) => {
   };
 
   return (
-    <Box key={props.attribute.id} w="full">
+    <div key={props.attribute.id} className="w-full">
       {editing.isOpen
         ? TypedForm({ ...props, onSubmit, onClose: editing.onClose })
         : TypedDisplay({ ...props, onOpen: editing.onOpen })}
-    </Box>
+    </div>
   );
 };
 
@@ -174,12 +165,12 @@ function renderTypedForm({
             <Text color="gray.500" alignSelf="center">
               {attribute.name}
             </Text>
-            <Box>
+            <div>
               <Hidden name="type" value="boolean" />
               <Hidden name="userAttributeId" />
               <Hidden name="userAttributeValueId" />
               <BooleanInput name="value" />
-            </Box>
+            </div>
             <HStack justifyContent="end" w="full" alignSelf="center">
               <Submit size="sm" type="submit">
                 Save
@@ -216,12 +207,12 @@ function renderTypedForm({
             <Text color="gray.500" alignSelf="center">
               {attribute.name}
             </Text>
-            <Box>
+            <div>
               <Hidden name="type" value="date" />
               <Hidden name="userAttributeId" />
               <Hidden name="userAttributeValueId" />
               <DatePicker name="value" />
-            </Box>
+            </div>
             <HStack justifyContent="end" w="full" alignSelf="center">
               <Submit size="sm" type="submit">
                 Save
@@ -258,7 +249,7 @@ function renderTypedForm({
             <Text color="gray.500" alignSelf="center">
               {attribute.name}
             </Text>
-            <Box>
+            <div>
               <Hidden name="type" value="list" />
               <Hidden name="userAttributeId" />
               <Hidden name="userAttributeValueId" />
@@ -271,7 +262,7 @@ function renderTypedForm({
                   })) ?? []
                 }
               />
-            </Box>
+            </div>
             <HStack justifyContent="end" w="full" alignSelf="center">
               <Submit size="sm" type="submit">
                 Save
@@ -308,12 +299,12 @@ function renderTypedForm({
             <Text color="gray.500" alignSelf="center">
               {attribute.name}
             </Text>
-            <Box>
+            <div>
               <Hidden name="type" value="numeric" />
               <Hidden name="userAttributeId" />
               <Hidden name="userAttributeValueId" />
               <NumberInput name="value" />
-            </Box>
+            </div>
             <HStack justifyContent="end" w="full" alignSelf="center">
               <Submit size="sm" type="submit">
                 Save
@@ -350,12 +341,12 @@ function renderTypedForm({
             <Text color="gray.500" alignSelf="center">
               {attribute.name}
             </Text>
-            <Box>
+            <div>
               <Hidden name="type" value="text" />
               <Hidden name="userAttributeId" />
               <Hidden name="userAttributeValueId" />
               <Input name="value" />
-            </Box>
+            </div>
             <HStack justifyContent="end" w="full" alignSelf="center">
               <Submit size="sm" type="submit">
                 Save
@@ -392,12 +383,12 @@ function renderTypedForm({
             <Text color="gray.500" alignSelf="center">
               {attribute.name}
             </Text>
-            <Box>
+            <div>
               <Hidden name="type" value="user" />
               <Hidden name="userAttributeId" />
               <Hidden name="userAttributeValueId" />
               <Employee name="value" />
-            </Box>
+            </div>
             <HStack justifyContent="end" w="full" alignSelf="center">
               <Submit size="sm" type="submit">
                 Save
@@ -411,9 +402,9 @@ function renderTypedForm({
       );
     default:
       return (
-        <Box bg="red.100" color="red.800" p={4} w="full">
+        <div className="text-destructive bg-destructive-foreground p-4 w-full">
           Unknown data type
-        </Box>
+        </div>
       );
   }
 }

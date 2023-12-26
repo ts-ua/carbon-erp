@@ -1,21 +1,25 @@
-import { Heading, Menubar, MenubarItem } from "@carbon/react";
+import {
+  HStack,
+  Heading,
+  Menubar,
+  MenubarItem,
+  VStack,
+  useDisclosure,
+} from "@carbon/react";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
-  HStack,
   Stack,
   Text,
-  VStack,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { useMemo, useState } from "react";
 import { FaHistory } from "react-icons/fa";
 import { usePermissions, useRouteData } from "~/hooks";
 import { useSupabase } from "~/lib/supabase";
-import type { PurchaseInvoice, PurchaseInvoiceLine } from "~/modules/invoicing";
+import type { PurchaseInvoice } from "~/modules/invoicing";
 import {
   PurchaseInvoicingStatus,
   usePurchaseInvoiceTotals,
@@ -30,7 +34,7 @@ const PurchaseInvoiceHeader = () => {
 
   const { supabase } = useSupabase();
   const [linesNotAssociatedWithPO, setLinesNotAssociatedWithPO] = useState<
-    PurchaseInvoiceLine[]
+    { partId: string | null; quantity: number }[]
   >([]);
 
   if (!invoiceId) throw new Error("invoiceId not found");
@@ -67,13 +71,13 @@ const PurchaseInvoiceHeader = () => {
     if (!data) return;
 
     // so that we can ask the user if they want to receive those lines
-    setLinesNotAssociatedWithPO(data);
+    setLinesNotAssociatedWithPO(data ?? []);
     postingModal.onOpen();
   };
 
   return (
     <>
-      <VStack w="full" alignItems="start" spacing={2}>
+      <VStack>
         {permissions.is("employee") && (
           <Menubar>
             <MenubarItem
@@ -87,13 +91,13 @@ const PurchaseInvoiceHeader = () => {
 
         <Card w="full">
           <CardHeader>
-            <HStack justifyContent="space-between" alignItems="start">
-              <Stack direction="column" spacing={2}>
+            <HStack className="items-start justify-between">
+              <VStack>
                 <Heading size="h3">{purchaseInvoice.invoiceId}</Heading>
                 <Text color="gray.500" fontWeight="normal">
                   {purchaseInvoice.supplierName}
                 </Text>
-              </Stack>
+              </VStack>
               <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
                 Supplier Details
               </Button>

@@ -1,3 +1,4 @@
+import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
@@ -7,8 +8,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  HStack,
-  VStack,
 } from "@chakra-ui/react";
 import { useNavigate, useParams } from "@remix-run/react";
 import { useMemo } from "react";
@@ -80,7 +79,7 @@ const PartSupplierForm = ({ initialValues }: PartSupplierFormProps) => {
             <Hidden name="id" />
             <Hidden name="partId" />
 
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Supplier name="supplierId" label="Supplier" />
               <Input name="supplierPartId" label="Supplier Part ID" />
               <Select

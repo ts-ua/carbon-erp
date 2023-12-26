@@ -1,14 +1,12 @@
-import { useMount } from "@carbon/react";
+import { HStack, VStack, useMount } from "@carbon/react";
 import {
   Grid,
-  HStack,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  VStack,
 } from "@chakra-ui/react";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
@@ -54,7 +52,7 @@ const CreateEmployeeModal = () => {
             // @ts-ignore
             fetcher={formFetcher}
           >
-            <VStack spacing={4} alignItems="start" w="full">
+            <VStack spacing={4}>
               <Input ref={initialFocusRef} name="email" label="Email" />
               <Grid templateColumns="1fr 1fr" gap={4}>
                 <Input name="firstName" label="First Name" />
@@ -67,7 +65,7 @@ const CreateEmployeeModal = () => {
                 options={employeeTypeOptions}
                 placeholder="Select Employee Type"
               />
-              <HStack spacing={4}>
+              <HStack>
                 <Submit>Create User</Submit>
               </HStack>
             </VStack>
