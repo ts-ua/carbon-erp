@@ -1,5 +1,5 @@
 import { HStack, VStack, useColor, useDisclosure } from "@carbon/react";
-import { Button, Grid, Switch, Text } from "@chakra-ui/react";
+import { Button, Grid, Switch } from "@chakra-ui/react";
 import { parseDate } from "@internationalized/date";
 import { useFetcher, useParams } from "@remix-run/react";
 import { useState } from "react";
@@ -162,9 +162,9 @@ function renderTypedForm({
             pt={3}
             w="full"
           >
-            <Text color="gray.500" alignSelf="center">
+            <p className="text-muted-foreground self-center">
               {attribute.name}
-            </Text>
+            </p>
             <div>
               <Hidden name="type" value="boolean" />
               <Hidden name="userAttributeId" />
@@ -204,9 +204,9 @@ function renderTypedForm({
             pt={3}
             w="full"
           >
-            <Text color="gray.500" alignSelf="center">
+            <p className="text-muted-foreground self-center">
               {attribute.name}
-            </Text>
+            </p>
             <div>
               <Hidden name="type" value="date" />
               <Hidden name="userAttributeId" />
@@ -246,9 +246,9 @@ function renderTypedForm({
             pt={3}
             w="full"
           >
-            <Text color="gray.500" alignSelf="center">
+            <p className="text-muted-foreground self-center">
               {attribute.name}
-            </Text>
+            </p>
             <div>
               <Hidden name="type" value="list" />
               <Hidden name="userAttributeId" />
@@ -296,9 +296,9 @@ function renderTypedForm({
             pt={3}
             w="full"
           >
-            <Text color="gray.500" alignSelf="center">
+            <p className="text-muted-foreground self-center">
               {attribute.name}
-            </Text>
+            </p>
             <div>
               <Hidden name="type" value="numeric" />
               <Hidden name="userAttributeId" />
@@ -338,9 +338,9 @@ function renderTypedForm({
             pt={3}
             w="full"
           >
-            <Text color="gray.500" alignSelf="center">
+            <p className="text-muted-foreground self-center">
               {attribute.name}
-            </Text>
+            </p>
             <div>
               <Hidden name="type" value="text" />
               <Hidden name="userAttributeId" />
@@ -380,9 +380,9 @@ function renderTypedForm({
             pt={3}
             w="full"
           >
-            <Text color="gray.500" alignSelf="center">
+            <p className="text-muted-foreground self-center">
               {attribute.name}
-            </Text>
+            </p>
             <div>
               <Hidden name="type" value="user" />
               <Hidden name="userAttributeId" />
@@ -444,11 +444,9 @@ function renderTypedDisplay({
           pt={3}
           w="full"
         >
-          <Text color="gray.500" alignSelf="center">
-            {attribute.name}
-          </Text>
+          <p className="text-muted-foreground self-center">{attribute.name}</p>
           {displayValue === "N/A" ? (
-            <Text alignSelf="center">{displayValue}</Text>
+            <p className="self-center">{displayValue}</p>
           ) : (
             <Switch isReadOnly isChecked={displayValue === true} />
           )}
@@ -475,10 +473,8 @@ function renderTypedDisplay({
           pt={3}
           w="full"
         >
-          <Text color="gray.500" alignSelf="center">
-            {attribute.name}
-          </Text>
-          <Text alignSelf="center">{displayValue}</Text>
+          <p className="text-muted-foreground self-center">{attribute.name}</p>
+          <p className="self-center">{displayValue}</p>
           <UpdateRemoveButtons
             canRemove={
               !isAuthorized ||
@@ -502,10 +498,8 @@ function renderTypedDisplay({
           pt={3}
           w="full"
         >
-          <Text color="gray.500" alignSelf="center">
-            {attribute.name}
-          </Text>
-          <Text alignSelf="center">{displayValue.toLocaleString("en-US")}</Text>
+          <p className="text-muted-foreground self-center">{attribute.name}</p>
+          <p className="self-center">{displayValue.toLocaleString("en-US")}</p>
           <UpdateRemoveButtons
             canRemove={
               !isAuthorized || (attribute.canSelfManage === true && !!value)
@@ -526,13 +520,11 @@ function renderTypedDisplay({
           pt={3}
           w="full"
         >
-          <Text color="gray.500" alignSelf="center">
-            {attribute.name}
-          </Text>
+          <p className="text-muted-foreground self-center">{attribute.name}</p>
           {value ? (
             <UserSelect disabled value={value.toString()} />
           ) : (
-            <Text alignSelf="center">{displayValue}</Text>
+            <p className="self-center">{displayValue}</p>
           )}
 
           <UpdateRemoveButtons

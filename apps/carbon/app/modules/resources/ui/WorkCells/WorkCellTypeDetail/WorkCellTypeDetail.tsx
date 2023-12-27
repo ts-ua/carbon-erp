@@ -9,7 +9,6 @@ import {
   DrawerHeader,
   DrawerOverlay,
   MenuItem,
-  Text,
 } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
@@ -54,7 +53,7 @@ const WorkCellTypeDetail = ({
     if (!workCell || Array.isArray(workCell)) return null;
     return (
       <>
-        <MenuItem as={Link} to={workCell.id} icon={<BsPencilSquare />}>
+        <MenuItem as={Link} to={workCell.id!} icon={<BsPencilSquare />}>
           Edit Cell
         </MenuItem>
         <MenuItem onClick={() => onDelete(workCell)} icon={<IoMdTrash />}>
@@ -85,11 +84,11 @@ const WorkCellTypeDetail = ({
                   return (
                     <HStack key={workCell.id} className="w-full">
                       <VStack spacing={0} className="flex-grow">
-                        <Text fontWeight="bold">{workCell.name}</Text>
-                        <Text fontSize="sm" color="gray.500">
+                        <p className="font-bold">{workCell.name}</p>
+                        <p className="text-muted-foreground text-sm">
                           {workCell.location?.name} /{" "}
                           {workCell.department?.name}
-                        </Text>
+                        </p>
                       </VStack>
                       <ActionMenu>{renderContextMenu(workCell)}</ActionMenu>
                     </HStack>

@@ -1,5 +1,5 @@
 import { ActionMenu, Dot, HStack, VStack } from "@carbon/react";
-import { Avatar, Grid, MenuItem, Text } from "@chakra-ui/react";
+import { Avatar, Grid, MenuItem } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import type { Action } from "~/types";
 
@@ -38,14 +38,10 @@ const Contact = ({ contact, url, user, actions }: ContactProps) => {
         <HStack>
           {url ? (
             <Link to={url}>
-              <Text fontSize="sm" fontWeight="bold">
-                {name}
-              </Text>
+              <p className="text-sm font-bold">{name}</p>
             </Link>
           ) : (
-            <Text fontSize="sm" fontWeight="bold">
-              {name}
-            </Text>
+            <p className="text-sm font-bold">{name}</p>
           )}
 
           {userStatus === UserStatus.Active && (
@@ -56,9 +52,9 @@ const Contact = ({ contact, url, user, actions }: ContactProps) => {
           )}
         </HStack>
 
-        <Text fontSize="sm" color="gray.500" noOfLines={1}>
+        <p className="text-sm text-muted-foreground line-clamp-1">
           {contact.email ?? ""}
-        </Text>
+        </p>
       </VStack>
       {actions.length > 0 && (
         <ActionMenu>

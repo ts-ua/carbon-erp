@@ -1,12 +1,5 @@
 import { HStack, Heading, VStack } from "@carbon/react";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Button, Card, CardBody, CardHeader, Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -27,7 +20,9 @@ const PartPreview = () => {
         <HStack className="justify-between align-start">
           <VStack spacing={0}>
             <Heading size="h3">{routeData?.partSummary?.id}</Heading>
-            <Text color="gray.500">{routeData?.partSummary?.name}</Text>
+            <span className="text-muted-foreground">
+              {routeData?.partSummary?.name}
+            </span>
           </VStack>
           <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
             View History
@@ -41,28 +36,30 @@ const PartPreview = () => {
             alignItems="start"
             justifyContent="space-between"
           >
-            <Text color="gray.500">Replenishment System</Text>
-            <Text fontWeight="bold">
+            <span className="text-muted-foreground">Replenishment System</span>
+            <span className="font-bold">
               {routeData?.partSummary?.replenishmentSystem}
-            </Text>
+            </span>
           </Stack>
           <Stack
             direction={["row", "row", "column"]}
             alignItems="start"
             justifyContent="space-between"
           >
-            <Text color="gray.500">Part Type</Text>
-            <Text fontWeight="bold">{routeData?.partSummary?.partType}</Text>
+            <span className="text-muted-foreground">Part Type</span>
+            <span className="font-bold">
+              {routeData?.partSummary?.partType}
+            </span>
           </Stack>
           <Stack
             direction={["row", "row", "column"]}
             alignItems="start"
             justifyContent="space-between"
           >
-            <Text color="gray.500">Unit of Measure</Text>
-            <Text fontWeight="bold">
+            <span className="text-muted-foreground">Unit of Measure</span>
+            <span className="font-bold">
               {routeData?.partSummary?.unitOfMeasureCode}
-            </Text>
+            </span>
           </Stack>
         </Stack>
       </CardBody>

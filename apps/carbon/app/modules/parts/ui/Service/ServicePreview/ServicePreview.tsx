@@ -1,12 +1,5 @@
 import { HStack, Heading } from "@carbon/react";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Button, Card, CardBody, CardHeader, Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -27,9 +20,9 @@ const ServicePreview = () => {
         <HStack className="justify-between items-start">
           <Stack direction="column" spacing={2}>
             <Heading size="h3">{routeData?.service?.name}</Heading>
-            <Text color="gray.500" noOfLines={1}>
+            <p className="text-muted-foreground line-clamp-1">
               {routeData?.service?.description}
-            </Text>
+            </p>
           </Stack>
           <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
             View History
@@ -43,16 +36,16 @@ const ServicePreview = () => {
             alignItems="start"
             justifyContent="space-between"
           >
-            <Text color="gray.500">Type</Text>
-            <Text fontWeight="bold">{routeData?.service?.serviceType}</Text>
+            <span className="text-muted-foreground">Type</span>
+            <span className="font-bold">{routeData?.service?.serviceType}</span>
           </Stack>
           <Stack
             direction={["row", "row", "column"]}
             alignItems="start"
             justifyContent="space-between"
           >
-            <Text color="gray.500">Part Group</Text>
-            <Text fontWeight="bold">{routeData?.service?.partGroup}</Text>
+            <span className="text-muted-foreground">Part Group</span>
+            <span className="font-bold">{routeData?.service?.partGroup}</span>
           </Stack>
         </Stack>
       </CardBody>

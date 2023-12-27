@@ -7,7 +7,6 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  Text,
 } from "@chakra-ui/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
@@ -209,7 +208,7 @@ export default function AbilitiesRoute() {
           )}
 
           <HStack>
-            <Text fontSize="sm">Weeks Shadowing:</Text>
+            <span className="text-sm">Weeks Shadowing:</span>
             <NumberInput
               maxW="100px"
               size="sm"
@@ -224,7 +223,7 @@ export default function AbilitiesRoute() {
                 <NumberDecrementStepper />
               </NumberInputStepper>
             </NumberInput>
-            <Text fontSize="sm">Weeks to Learn:</Text>
+            <span className="text-sm">Weeks to Learn:</span>
             <NumberInput
               maxW="100px"
               size="sm"

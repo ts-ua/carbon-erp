@@ -1,5 +1,5 @@
 import { ActionMenu, VStack } from "@carbon/react";
-import { Grid, Icon, MenuItem, Text } from "@chakra-ui/react";
+import { Grid, Icon, MenuItem } from "@chakra-ui/react";
 import { BsPinMapFill } from "react-icons/bs";
 import type { Action } from "~/types";
 
@@ -22,12 +22,10 @@ const Address = ({ address, actions }: AddressProps) => {
     <Grid w="full" gridColumnGap={4} gridTemplateColumns="auto 1fr auto">
       <Icon as={BsPinMapFill} w={8} h={8} />
       <VStack spacing={0}>
-        <Text fontWeight="bold" noOfLines={1}>
-          {location}
-        </Text>
-        <Text fontSize="sm" color="gray.500" noOfLines={1}>
+        <p className="font-bold line-clamp-1">{location}</p>
+        <p className="text-sm text-muted-foreground line-clamp-1">
           {addressZip}
-        </Text>
+        </p>
       </VStack>
       {actions.length > 0 && (
         <ActionMenu>

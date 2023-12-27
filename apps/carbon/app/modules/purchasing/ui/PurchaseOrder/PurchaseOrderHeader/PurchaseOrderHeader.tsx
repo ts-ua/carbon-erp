@@ -1,12 +1,5 @@
 import { Heading, HStack, Menubar, MenubarItem, VStack } from "@carbon/react";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Button, Card, CardBody, CardHeader, Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { useMemo } from "react";
 import { FaHistory } from "react-icons/fa";
@@ -90,9 +83,9 @@ const PurchaseOrderHeader = () => {
               <Heading size="h3">
                 {routeData?.purchaseOrder?.purchaseOrderId}
               </Heading>
-              <Text color="gray.500" fontWeight="normal">
+              <span className="text-muted-foreground">
                 {routeData?.purchaseOrder?.supplierName}
-              </Text>
+              </span>
             </Stack>
             <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
               Supplier Details
@@ -106,20 +99,20 @@ const PurchaseOrderHeader = () => {
               alignItems="start"
               justifyContent="space-between"
             >
-              <Text color="gray.500">Total</Text>
-              <Text fontWeight="bold">
+              <span className="text-muted-foreground">Total</span>
+              <span className="font-bold">
                 {formatter.format(purchaseOrderTotals?.total ?? 0)}
-              </Text>
+              </span>
             </Stack>
             <Stack
               direction={["row", "row", "column"]}
               alignItems="start"
               justifyContent="space-between"
             >
-              <Text color="gray.500">Order Date</Text>
-              <Text fontWeight="bold">
+              <span className="text-muted-foreground">Order Date</span>
+              <span className="font-bold">
                 {routeData?.purchaseOrder?.orderDate}
-              </Text>
+              </span>
             </Stack>
 
             <Stack
@@ -127,18 +120,20 @@ const PurchaseOrderHeader = () => {
               alignItems="start"
               justifyContent="space-between"
             >
-              <Text color="gray.500">Promised Date</Text>
-              <Text fontWeight="bold">
+              <span className="text-muted-foreground">Promised Date</span>
+              <span className="font-bold">
                 {routeData?.purchaseOrder?.receiptPromisedDate}
-              </Text>
+              </span>
             </Stack>
             <Stack
               direction={["row", "row", "column"]}
               alignItems="start"
               justifyContent="space-between"
             >
-              <Text color="gray.500">Type</Text>
-              <Text fontWeight="bold">{routeData?.purchaseOrder?.type}</Text>
+              <span className="text-muted-foreground">Type</span>
+              <span className="font-bold">
+                {routeData?.purchaseOrder?.type}
+              </span>
             </Stack>
             {/* 
             <Stack
@@ -146,13 +141,13 @@ const PurchaseOrderHeader = () => {
               alignItems="start"
               justifyContent="space-between"
             >
-              <Text color="gray.500">Subtotal</Text>
-              <Text fontWeight="bold">
+              <span className="text-muted-foreground">Subtotal</span>
+              <span className="font-bold">
                 // TODO: this doesn't update when client-side lines are updated
                 {currencyFormatter.format(
                   routeData?.purchaseOrder?.subtotal ?? 0
                 )}
-              </Text>
+              </span>
             </Stack> 
             */}
             <Stack
@@ -160,7 +155,7 @@ const PurchaseOrderHeader = () => {
               alignItems="start"
               justifyContent="space-between"
             >
-              <Text color="gray.500">Status</Text>
+              <span className="text-muted-foreground">Status</span>
               <PurchasingStatus status={routeData?.purchaseOrder?.status} />
             </Stack>
           </Stack>

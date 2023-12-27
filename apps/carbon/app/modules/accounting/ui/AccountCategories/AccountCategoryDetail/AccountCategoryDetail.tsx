@@ -9,11 +9,8 @@ import {
   DrawerHeader,
   DrawerOverlay,
   IconButton,
-  List,
-  ListItem,
   Tag,
   TagLabel,
-  Text,
 } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
@@ -75,38 +72,36 @@ const AccountCategoryDetail = ({
                   <TagLabel>{accountCategory.incomeBalance}</TagLabel>
                 </Tag>
               </HStack>
-              <Text fontSize="sm" fontWeight="normal" color="gray.500">
+              <p className="text-sm font-normal text-muted-foreground">
                 A list of subcategories in the {accountCategory.category}{" "}
                 category.
-              </Text>
+              </p>
             </VStack>
           </DrawerHeader>
           <DrawerBody>
-            <List spacing={2}>
+            <VStack>
               {accountSubcategories.map((subcategory) => {
                 return (
-                  <ListItem key={subcategory.id} rounded="lg">
-                    <HStack>
-                      <Text flexGrow={1}>{subcategory.name}</Text>
+                  <HStack key={subcategory.id} className="w-full">
+                    <p className="flex-grow">{subcategory.name}</p>
 
-                      <IconButton
-                        as={Link}
-                        to={subcategory.id}
-                        aria-label="Edit"
-                        icon={<BsPencilSquare />}
-                        variant="outline"
-                      />
-                      <IconButton
-                        aria-label="Delete"
-                        icon={<IoMdTrash />}
-                        variant="outline"
-                        onClick={() => onDelete(subcategory)}
-                      />
-                    </HStack>
-                  </ListItem>
+                    <IconButton
+                      as={Link}
+                      to={subcategory.id}
+                      aria-label="Edit"
+                      icon={<BsPencilSquare />}
+                      variant="outline"
+                    />
+                    <IconButton
+                      aria-label="Delete"
+                      icon={<IoMdTrash />}
+                      variant="outline"
+                      onClick={() => onDelete(subcategory)}
+                    />
+                  </HStack>
                 );
               })}
-            </List>
+            </VStack>
           </DrawerBody>
           <DrawerFooter>
             <Button

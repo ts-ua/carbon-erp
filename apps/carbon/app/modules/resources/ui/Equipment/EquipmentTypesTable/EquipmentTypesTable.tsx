@@ -6,7 +6,6 @@ import {
   IconButton,
   Link,
   MenuItem,
-  Text,
 } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -74,9 +73,9 @@ const EquipmentTypesTable = memo(
           accessorKey: "description",
           header: "Description",
           cell: ({ row }) => (
-            <Text maxW={300} overflow="hidden" textOverflow="ellipsis">
+            <span className="max-w-[300px] line-clamp-1">
               {row.original.description}
-            </Text>
+            </span>
           ),
         },
         {

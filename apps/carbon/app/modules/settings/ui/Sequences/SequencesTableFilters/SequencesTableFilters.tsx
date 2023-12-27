@@ -3,7 +3,7 @@ import { DebouncedInput } from "~/components/Search";
 
 const SequencesTableFilters = () => {
   return (
-    <HStack className="px-4 py-3 justify-between border-b w-full">
+    <HStack className="px-4 py-3 justify-between border-b border-border w-full">
       <HStack>
         <DebouncedInput
           param="name"

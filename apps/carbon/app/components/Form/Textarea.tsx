@@ -1,11 +1,10 @@
 import { useColor } from "@carbon/react";
 import type { TextareaProps } from "@chakra-ui/react";
 import {
+  Textarea as ChakraTextArea,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Text,
-  Textarea as ChakraTextArea,
 } from "@chakra-ui/react";
 import type { ChangeEvent } from "react";
 import { forwardRef, useState } from "react";
@@ -43,9 +42,9 @@ const TextArea = forwardRef<HTMLTextAreaElement, FormTextArea>(
           onChange={onChange}
         />
         {characterLimit && (
-          <Text fontSize="sm" color="gray.500">
+          <p className="text-sm text-muted-foreground">
             {characterCount} of {characterLimit}
-          </Text>
+          </p>
         )}
         {error && <FormErrorMessage>{error}</FormErrorMessage>}
       </FormControl>

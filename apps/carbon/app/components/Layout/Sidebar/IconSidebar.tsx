@@ -23,7 +23,7 @@ const IconSidebar = () => {
   }, new Set<string>());
 
   return (
-    <div className="h-full border-r bg-background z-10">
+    <div className="h-full border-r border-border bg-background z-10">
       <IconButton
         aria-label="Home"
         as={Link}

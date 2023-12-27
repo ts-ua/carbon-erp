@@ -1,6 +1,6 @@
 import { HStack, HTML, VStack } from "@carbon/react";
 import { formatTimeAgo } from "@carbon/utils";
-import { Button, Grid, Text } from "@chakra-ui/react";
+import { Button, Grid } from "@chakra-ui/react";
 import { Form } from "@remix-run/react";
 import { Fragment } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -44,12 +44,12 @@ const Notes = ({ documentId, notes }: NotesProps) => {
                 <Avatar path={note.user.avatarUrl} />
                 <VStack spacing={1}>
                   {/* @ts-ignore */}
-                  <Text fontWeight="bold">{note.user?.fullName!}</Text>
+                  <p className="font-bold">{note.user?.fullName!}</p>
                   <HTML text={note.note} />
                   <HStack spacing={4}>
-                    <Text color="gray.500">
+                    <span className="text-muted-foreground">
                       {formatTimeAgo(note.createdAt)}
-                    </Text>
+                    </span>
                     {/* @ts-ignore */}
                     {user.id === note.user.id && (
                       <Form method="post" action={path.to.deleteNote(note.id)}>
@@ -84,7 +84,7 @@ const Notes = ({ documentId, notes }: NotesProps) => {
         >
           <Hidden name="documentId" value={documentId} />
           <VStack spacing={3}>
-            <div className="w-full border rounded-md">
+            <div className="w-full border border-border rounded-md">
               <RichText name="note" minH={160} />
             </div>
             <div className="flex justify-end w-full">

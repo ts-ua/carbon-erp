@@ -21,7 +21,6 @@ import {
   ModalBody,
   ModalContent,
   ModalOverlay,
-  Text,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "@remix-run/react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -320,10 +319,8 @@ function Result({
       >
         <ResultIcon entity={result.entity} />
         <VStack spacing={0} className="flex-1">
-          <Text fontSize="sm" color="gray.500">
-            {result.entity}
-          </Text>
-          <Text fontWeight="bold">{result.name}</Text>
+          <p className="text-sm text-muted-foreground">{result.entity}</p>
+          <p className="font-bold">{result.name}</p>
         </VStack>
         <EnterIcon />
       </HStack>
@@ -361,10 +358,8 @@ function Module({
           <Icon as={item.icon} {...resultIconProps} />
         )} */}
         <VStack spacing={0} className="flex-1">
-          <Text fontSize="sm" color="gray.500">
-            Module
-          </Text>
-          <Text fontWeight="bold">{item.name}</Text>
+          <p className="text-sm text-muted-foreground">Module</p>
+          <p className="font-bold">{item.name}</p>
         </VStack>
         <EnterIcon />
       </HStack>

@@ -2,8 +2,6 @@ import { HStack } from "@carbon/react";
 import {
   Button,
   IconButton,
-  List,
-  ListItem,
   Menu,
   MenuButton,
   MenuItem,
@@ -16,7 +14,6 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Switch,
-  Text,
 } from "@chakra-ui/react";
 import { Reorder } from "framer-motion";
 import { BsChevronDown, BsListUl } from "react-icons/bs";
@@ -52,47 +49,41 @@ const Sort = ({ columnAccessors }: SortProps) => {
       <PopoverContent w={420} boxShadow="xl">
         {hasNoSorts && (
           <PopoverHeader>
-            <Text fontSize="sm">No sorts applied to this view</Text>
-            <Text fontSize="xs" color="gray.500">
+            <p className="text-sm">No sorts applied to this view</p>
+            <p className="text-xs text-muted-foreground">
               Add a column below to sort the view
-            </Text>
+            </p>
           </PopoverHeader>
         )}
         <PopoverArrow />
         {!hasNoSorts && (
           <PopoverBody>
-            <List
-              as={Reorder.Group}
+            <Reorder.Group
               axis="y"
               values={sorts}
               onReorder={reorderSorts}
-              spacing={2}
+              className="space-y-2"
             >
               {sorts.map((sort) => {
                 const [column, direction] = sort.split(":");
                 return (
-                  <ListItem
-                    key={sort}
-                    as={Reorder.Item}
-                    value={sort}
-                    rounded="lg"
-                  >
+                  <Reorder.Item key={sort} value={sort} className="rounded-lg">
                     <HStack>
                       <IconButton
                         aria-label="Drag handle"
                         icon={<MdOutlineDragIndicator />}
                         variant="ghost"
                       />
-                      <Text fontSize="small" flexGrow={1}>
+                      <span className="text-sm flex-grow">
                         <>{columnAccessors[column] ?? ""}</>
-                      </Text>
+                      </span>
                       <Switch
                         isChecked={direction === "asc"}
                         onChange={() => toggleSortByDirection(column)}
                       />
-                      <Text fontSize="xs" color="gray.500">
+                      <span className="text-sm text-muted-foreground">
                         Ascending
-                      </Text>
+                      </span>
                       <IconButton
                         aria-label="Remove sort by column"
                         icon={<IoMdClose />}
@@ -100,10 +91,10 @@ const Sort = ({ columnAccessors }: SortProps) => {
                         variant="ghost"
                       />
                     </HStack>
-                  </ListItem>
+                  </Reorder.Item>
                 );
               })}
-            </List>
+            </Reorder.Group>
           </PopoverBody>
         )}
 

@@ -81,7 +81,7 @@ const BulkEditPermissions = ({
             defaultValues={{ userIds }}
           >
             <VStack spacing={4}>
-              <div className="border p-4 w-full rounded-lg">
+              <div className="border border-border p-4 w-full rounded-lg">
                 <Radios
                   name="editType"
                   label="Type of Permission Update"

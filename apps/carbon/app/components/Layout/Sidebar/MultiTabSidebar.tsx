@@ -92,7 +92,7 @@ const MultiTabSidebar = ({
           duration: 0.5,
         }}
         ref={ref}
-        className="h-full w-[20rem] bg-background border-r"
+        className="h-full w-[20rem] bg-background border-r border-border "
       >
         <VStack className="h-full">
           <div className="p-2 pb-8 overflow-y-auto w-full h-full">
@@ -102,7 +102,7 @@ const MultiTabSidebar = ({
         </VStack>
       </motion.div>
 
-      <div className="absolute h-full bg-background border-r">
+      <div className="absolute h-full bg-background border-r border-border ">
         <VStack spacing={0}>
           {nodes.map((node) => (
             <Tooltip key={node.id} label={node.label} placement="right">

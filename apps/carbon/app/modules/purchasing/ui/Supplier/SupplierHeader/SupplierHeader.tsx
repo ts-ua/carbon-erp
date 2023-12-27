@@ -1,12 +1,5 @@
 import { Heading, HStack, VStack } from "@carbon/react";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Button, Card, CardBody, CardHeader, Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -51,39 +44,39 @@ const SupplierHeader = () => {
               alignItems="start"
               justifyContent="space-between"
             >
-              <Text color="gray.500">Type</Text>
-              <Text fontWeight="bold">
+              <span className="text-muted-foreground">Type</span>
+              <span className="font-bold">
                 {sharedSupplierData?.supplierTypes?.find(
                   (type) => type.id === routeData?.supplier?.supplierTypeId
                 )?.name ?? "--"}
-              </Text>
+              </span>
             </Stack>
             <Stack
               direction={["row", "row", "column"]}
               alignItems="start"
               justifyContent="space-between"
             >
-              <Text color="gray.500">Status</Text>
-              <Text fontWeight="bold">
+              <span className="text-muted-foreground">Status</span>
+              <span className="font-bold">
                 {sharedSupplierData?.supplierStatuses?.find(
                   (status) =>
                     status.id === routeData?.supplier?.supplierStatusId
                 )?.name ?? "--"}
-              </Text>
+              </span>
             </Stack>
             <Stack
               direction={["row", "row", "column"]}
               alignItems="start"
               justifyContent="space-between"
             >
-              <Text color="gray.500">Payment Terms</Text>
-              <Text fontWeight="bold">
+              <span className="text-muted-foreground">Payment Terms</span>
+              <span className="font-bold">
                 {/* // TODO: defaultPaymentTermId */}
                 {sharedSupplierData?.paymentTerms?.find(
                   (term) =>
                     term.id === routeData?.supplier?.defaultPaymentTermId
                 )?.name ?? "--"}
-              </Text>
+              </span>
             </Stack>
           </Stack>
         </CardBody>

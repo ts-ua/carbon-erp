@@ -1,12 +1,5 @@
 import { Heading, HStack, VStack } from "@carbon/react";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Button, Card, CardBody, CardHeader, Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -50,38 +43,38 @@ const CustomerHeader = () => {
               alignItems="start"
               justifyContent="space-between"
             >
-              <Text color="gray.500">Type</Text>
-              <Text fontWeight="bold">
+              <span className="text-muted-foreground">Type</span>
+              <span className="font-bold">
                 {sharedCustomerData?.customerTypes?.find(
                   (type) => type.id === routeData?.customer?.customerTypeId
                 )?.name ?? "--"}
-              </Text>
+              </span>
             </Stack>
             <Stack
               direction={["row", "row", "column"]}
               alignItems="start"
               justifyContent="space-between"
             >
-              <Text color="gray.500">Status</Text>
-              <Text fontWeight="bold">
+              <span className="text-muted-foreground">Status</span>
+              <span className="font-bold">
                 {sharedCustomerData?.customerStatuses?.find(
                   (status) =>
                     status.id === routeData?.customer?.customerStatusId
                 )?.name ?? "--"}
-              </Text>
+              </span>
             </Stack>
             <Stack
               direction={["row", "row", "column"]}
               alignItems="start"
               justifyContent="space-between"
             >
-              <Text color="gray.500">Payment Terms</Text>
-              <Text fontWeight="bold">
+              <span className="text-muted-foreground">Payment Terms</span>
+              <span className="font-bold">
                 {sharedCustomerData?.paymentTerms?.find(
                   (term) =>
                     term.id === routeData?.customer?.defaultPaymentTermId
                 )?.name ?? "--"}
-              </Text>
+              </span>
             </Stack>
           </Stack>
         </CardBody>
