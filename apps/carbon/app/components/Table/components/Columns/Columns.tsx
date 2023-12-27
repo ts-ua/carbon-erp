@@ -2,15 +2,12 @@ import { HStack } from "@carbon/react";
 import {
   Button,
   IconButton,
-  List,
-  ListItem,
   Popover,
   PopoverArrow,
   PopoverBody,
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  Text,
 } from "@chakra-ui/react";
 import type { Column, ColumnOrderState } from "@tanstack/react-table";
 import { Reorder } from "framer-motion";
@@ -45,31 +42,29 @@ const Columns = <T extends object>({
       </PopoverTrigger>
       <PopoverContent w={360} boxShadow="xl">
         <PopoverHeader>
-          <Text fontSize="sm">Edit column view</Text>
-          <Text fontSize="xs" color="gray.500">
+          <p className="text-sm">Edit column view</p>
+          <p className="text-xs text-muted-foreground">
             Manage and reorder columns
-          </Text>
+          </p>
         </PopoverHeader>
         <PopoverArrow />
         <PopoverBody maxH="50vh" overflow="auto">
-          <List
-            as={Reorder.Group}
+          <Reorder.Group
             axis="y"
             values={columnOrder}
             onReorder={(newOrder: ColumnOrderState) => {
               if (withSelectableRows) newOrder.unshift("select");
               setColumnOrder(newOrder);
             }}
-            spacing={2}
+            className="space-y-2"
           >
             {columns.reduce<JSX.Element[]>((acc, column) => {
               if (isColumnToggable(column))
                 acc.push(
-                  <ListItem
+                  <Reorder.Item
                     key={column.id}
-                    as={Reorder.Item}
                     value={column.id}
-                    rounded="lg"
+                    className="rounded-lg"
                   >
                     <HStack>
                       <IconButton
@@ -77,9 +72,9 @@ const Columns = <T extends object>({
                         icon={<MdOutlineDragIndicator />}
                         variant="ghost"
                       />
-                      <Text fontSize="small" flexGrow={1}>
+                      <span className="text-sm flex-grow">
                         <>{column.columnDef.header}</>
-                      </Text>
+                      </span>
                       <IconButton
                         aria-label="Toggle column"
                         icon={column.getIsPinned() ? <BsPinFill /> : <BsPin />}
@@ -105,11 +100,11 @@ const Columns = <T extends object>({
                         variant="ghost"
                       />
                     </HStack>
-                  </ListItem>
+                  </Reorder.Item>
                 );
               return acc;
             }, [])}
-          </List>
+          </Reorder.Group>
         </PopoverBody>
       </PopoverContent>
     </Popover>

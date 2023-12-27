@@ -9,7 +9,6 @@ import {
   DrawerHeader,
   DrawerOverlay,
   MenuItem,
-  Text,
 } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
@@ -78,11 +77,11 @@ const EquipmentTypeDetail = ({
                   return (
                     <HStack key={equipment.id} className="w-full">
                       <VStack spacing={0} className="flex-grow">
-                        <Text fontWeight="bold">{equipment.name}</Text>
-                        <Text fontSize="sm" color="gray.500">
+                        <span className="font-bold">{equipment.name}</span>
+                        <span className="text-sm text-muted-foreground">
                           {/* @ts-ignore */}
                           {equipment.location?.name}
-                        </Text>
+                        </span>
                       </VStack>
                       <ActionMenu>{renderContextMenu(equipment)}</ActionMenu>
                     </HStack>

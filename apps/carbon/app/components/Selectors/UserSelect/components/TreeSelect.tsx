@@ -1,6 +1,6 @@
 import { HStack, Loading } from "@carbon/react";
 import type { IconProps } from "@chakra-ui/react";
-import { Box, Icon, List, ListItem, Text } from "@chakra-ui/react";
+import { Box, Icon, List, ListItem } from "@chakra-ui/react";
 import { FaCheck, FaChevronRight } from "react-icons/fa";
 import useUserSelectContext from "../provider";
 import type { IndividualOrGroup, OptionGroup } from "../types";
@@ -33,7 +33,7 @@ const UserTreeSelect = () => {
       ) : groups.length > 0 ? (
         groups.map((group) => <Group key={group.uid} group={group} />)
       ) : (
-        <Text>No options found</Text>
+        <p className="text-center">No options found</p>
       )}
     </List>
   );
@@ -81,7 +81,7 @@ const Group = ({ group }: { group: OptionGroup }) => {
         }
         sx={sx}
       >
-        <Text noOfLines={1}>{group.name}</Text>
+        <span className="line-clamp-1">{group.name}</span>
         <MoreIcon isExpanded={isExpanded} />
       </Box>
       {isExpanded && (
@@ -155,7 +155,7 @@ const Option = ({
           h={4}
           opacity={isSelected ? 1 : 0}
         />
-        <Text noOfLines={1}>{name}</Text>
+        <span className="line-clamp-1">{name}</span>
       </HStack>
     </ListItem>
   );

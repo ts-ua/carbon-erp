@@ -5,7 +5,6 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  Text,
   VisuallyHidden,
   chakra,
   omitThemingProps,
@@ -98,7 +97,7 @@ const Boolean = forwardRef<HTMLInputElement, FormBooleanProps>(
                   data-checked={value ? "" : undefined}
                 />
               </chakra.span>
-              {description && <Text {...getLabelProps()}>{description}</Text>}
+              {description && <p {...getLabelProps()}>{description}</p>}
             </HStack>
           </chakra.label>
         </HStack>

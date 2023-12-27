@@ -1,6 +1,6 @@
+import { VStack } from "@carbon/react";
 import {
   Button,
-  List,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -8,7 +8,6 @@ import {
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
-  Text,
 } from "@chakra-ui/react";
 import { BsFilter, BsPlus } from "react-icons/bs";
 import { useUrlParams } from "~/hooks";
@@ -55,17 +54,17 @@ const Filter = ({ columnAccessors }: FilterProps) => {
       <PopoverContent w={480} boxShadow="xl">
         {filters.length === 0 && (
           <PopoverHeader>
-            <Text fontSize="sm">No filters applied to this view</Text>
-            <Text fontSize="xs" color="gray.500">
+            <p className="text-sm">No filters applied to this view</p>
+            <p className="text-xs text-muted-foreground">
               Add a column below to sort the view
-            </Text>
+            </p>
           </PopoverHeader>
         )}
         <PopoverArrow />
 
         {filters.length > 0 && (
           <PopoverBody>
-            <List spacing={2}>
+            <VStack>
               {filters.reduce<JSX.Element[]>((acc, filter, index) => {
                 const [column, operator, searchValue] = filter.split(":");
                 if (!column || !operator) return acc;
@@ -82,7 +81,7 @@ const Filter = ({ columnAccessors }: FilterProps) => {
                 );
                 return acc;
               }, [])}
-            </List>
+            </VStack>
           </PopoverBody>
         )}
         <PopoverFooter>

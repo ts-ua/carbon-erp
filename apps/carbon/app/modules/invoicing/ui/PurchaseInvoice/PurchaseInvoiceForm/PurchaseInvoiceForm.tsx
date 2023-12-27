@@ -1,12 +1,5 @@
 import { Heading, VStack } from "@carbon/react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Grid,
-  Text,
-} from "@chakra-ui/react";
+import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -71,10 +64,10 @@ const PurchaseInvoiceForm = ({
             {isEditing ? "Purchase Invoice" : "New Purchase Invoice"}
           </Heading>
           {!isEditing && (
-            <Text color="gray.500" fontWeight="normal">
+            <p className="text-muted-foreground font-normal">
               A purchase invoice is a document that specifies the products or
               services purchased by a customer and the corresponding cost.
-            </Text>
+            </p>
           )}
         </CardHeader>
         <CardBody>

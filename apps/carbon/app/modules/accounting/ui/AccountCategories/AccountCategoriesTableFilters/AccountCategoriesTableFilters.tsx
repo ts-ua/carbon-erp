@@ -11,7 +11,10 @@ const AttributeCategoriesTableFilters = () => {
   const [params, setParams] = useUrlParams();
 
   return (
-    <HStack spacing={4} className="px-4 py-3 justify-between border-b w-full">
+    <HStack
+      spacing={4}
+      className="px-4 py-3 justify-between border-b border-border w-full"
+    >
       <HStack>
         <DebouncedInput
           param="name"

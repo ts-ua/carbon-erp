@@ -1,12 +1,5 @@
 import { Heading, VStack } from "@carbon/react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Grid,
-  Text,
-} from "@chakra-ui/react";
+import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -65,10 +58,10 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
             {isEditing ? "Purchase Order" : "New Purchase Order"}
           </Heading>
           {!isEditing && (
-            <Text color="gray.500" fontWeight="normal">
+            <p className="text-muted-foreground font-normal">
               A purchase order contains information about the agreement between
               the company and a specific supplier for parts and services.
-            </Text>
+            </p>
           )}
         </CardHeader>
         <CardBody>

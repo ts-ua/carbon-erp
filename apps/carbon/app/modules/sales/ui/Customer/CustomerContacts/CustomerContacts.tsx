@@ -7,7 +7,6 @@ import {
   CardHeader,
   List,
   ListItem,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
@@ -93,9 +92,9 @@ const CustomerContacts = ({ contacts }: CustomerContactsProps) => {
         <CardBody>
           {isEmpty ? (
             <Box w="full" my={8} textAlign="center">
-              <Text color="gray.500" fontSize="sm">
+              <p className="text-muted-foreground text-sm">
                 You haven’t created any contacts yet.
-              </Text>
+              </p>
             </Box>
           ) : (
             <List w="full" spacing={4}>

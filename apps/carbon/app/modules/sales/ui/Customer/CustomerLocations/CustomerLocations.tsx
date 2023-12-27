@@ -1,14 +1,11 @@
-import { Heading } from "@carbon/react";
+import { Heading, useDisclosure } from "@carbon/react";
 import {
-  Box,
   Button,
   Card,
   CardBody,
   CardHeader,
   List,
   ListItem,
-  Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
 import { useCallback, useState } from "react";
@@ -78,11 +75,11 @@ const CustomerLocations = ({ locations }: CustomerLocationsProps) => {
         </CardHeader>
         <CardBody>
           {isEmpty ? (
-            <Box w="full" my={8} textAlign="center">
-              <Text color="gray.500" fontSize="sm">
+            <div className="my-8 text-center w-full">
+              <p className="text-muted-foreground text-sm">
                 You haven’t created any locations yet.
-              </Text>
-            </Box>
+              </p>
+            </div>
           ) : (
             <List w="full" spacing={4}>
               {locations?.map((location) => (

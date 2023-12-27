@@ -31,7 +31,10 @@ const CustomersTableFilters = ({
     })) ?? [];
 
   return (
-    <HStack className="px-4 py-3 justify-between border-b w-full" spacing={4}>
+    <HStack
+      className="px-4 py-3 justify-between border-b border-border w-full"
+      spacing={4}
+    >
       <HStack>
         <DebouncedInput
           param="name"

@@ -1,7 +1,6 @@
 import { Heading } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
 import {
-  Box,
   Card,
   CardBody,
   CardHeader,
@@ -11,7 +10,6 @@ import {
   Icon,
   List,
   ListItem,
-  Text,
 } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import type { IconType } from "react-icons";
@@ -96,27 +94,26 @@ const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
                       <Icon as={icon} w={5} h={5} />
                     </Center>
                     <Flex h="full" alignItems="center">
-                      <Text>
+                      <p>
                         {description}{" "}
-                        <Text
-                          as={Link}
-                          fontWeight="bold"
+                        <Link
+                          className="font-bold"
                           to={path.to.employeeAbility(
                             employeeAbility.ability.id,
                             employeeAbility.id
                           )}
                         >
                           {employeeAbility.ability.name}
-                        </Text>
-                      </Text>
+                        </Link>
+                      </p>
                     </Flex>
                     <Flex h="full" alignItems="center">
-                      <Text color="gray.500" fontSize="sm">
+                      <p className="text-sm text-muted-foreground">
                         {formatDate(employeeAbility.lastTrainingDate, {
                           month: "short",
                           year: "numeric",
                         })}
-                      </Text>
+                      </p>
                     </Flex>
                   </Grid>
                 </ListItem>
@@ -124,9 +121,9 @@ const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
             })}
           </List>
         ) : (
-          <Box color="gray.500" p={4} w="full" textAlign="center">
+          <div className="text-muted-foreground text-center p-4 w-full">
             No abilities added
-          </Box>
+          </div>
         )}
       </CardBody>
     </Card>

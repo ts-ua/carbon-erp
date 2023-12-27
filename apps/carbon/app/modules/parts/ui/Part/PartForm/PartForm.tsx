@@ -1,12 +1,5 @@
 import { Heading, VStack } from "@carbon/react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Grid,
-  Text,
-} from "@chakra-ui/react";
+import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -121,10 +114,10 @@ const PartForm = ({ initialValues }: PartFormProps) => {
         <CardHeader>
           <Heading size="h3">{isEditing ? "Part Details" : "New Part"}</Heading>
           {!isEditing && (
-            <Text color="gray.500" fontWeight="normal">
+            <p className="text-muted-foreground font-normal">
               A part contains the information about a specific item that can be
               purchased or manufactured.
-            </Text>
+            </p>
           )}
         </CardHeader>
         <CardBody>

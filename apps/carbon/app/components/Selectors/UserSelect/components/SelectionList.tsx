@@ -6,7 +6,6 @@ import {
   IconButton,
   List,
   ListItem,
-  Text,
   Tooltip,
 } from "@chakra-ui/react";
 import { useMemo } from "react";
@@ -71,9 +70,7 @@ const SelectionList = () => {
                     size="lg"
                     flexGrow={2}
                   >
-                    <Text fontSize={14} noOfLines={1}>
-                      {item.label}
-                    </Text>
+                    <p className="text-sm line-clamp-1">{item.label}</p>
                   </Checkbox>
                 </>
               ) : (
@@ -89,9 +86,7 @@ const SelectionList = () => {
                   )}
 
                   <Box display="flex" alignItems="center" flexGrow={2}>
-                    <Text fontSize={14} noOfLines={1}>
-                      {item.label}
-                    </Text>
+                    <p className="text-sm line-clamp-1">{item.label}</p>
                   </Box>
                 </>
               )}

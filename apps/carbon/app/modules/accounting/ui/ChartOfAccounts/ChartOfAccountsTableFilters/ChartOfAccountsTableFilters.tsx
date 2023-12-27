@@ -8,7 +8,6 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  Text,
 } from "@chakra-ui/react";
 import { parseDate } from "@internationalized/date";
 import { Link } from "@remix-run/react";
@@ -30,7 +29,10 @@ const ChartOfAccountsTableFilters = () => {
   }));
 
   return (
-    <HStack spacing={4} className="px-4 py-3 justify-between border-b w-full">
+    <HStack
+      spacing={4}
+      className="px-4 py-3 justify-between border-b border-border w-full"
+    >
       <HStack>
         <Select
           // @ts-ignore
@@ -49,10 +51,10 @@ const ChartOfAccountsTableFilters = () => {
           </PopoverTrigger>
           <PopoverContent w={360} boxShadow="xl">
             <PopoverHeader>
-              <Text fontSize="sm">Edit date range</Text>
-              <Text fontSize="xs" color="gray.500">
+              <p className="text-sm">Edit date range</p>
+              <p className="text-xs text-muted-foreground">
                 Select date range to filter net change and balance at date
-              </Text>
+              </p>
             </PopoverHeader>
             <PopoverArrow />
             <PopoverBody maxH="50vh">
@@ -61,21 +63,15 @@ const ChartOfAccountsTableFilters = () => {
                 gridRowGap={2}
                 alignItems="center"
               >
-                <Text fontSize="sm" color="gray.500">
-                  Start Date
-                </Text>
+                <p className="text-sm text-muted-foreground">Start Date</p>
                 <DatePicker
-                  // @ts-ignore
                   value={startDate ? parseDate(startDate) : null}
                   onChange={(value) =>
                     setParams({ startDate: value.toString() })
                   }
                 />
-                <Text fontSize="sm" color="gray.500">
-                  End Date
-                </Text>
+                <p className="text-sm text-muted-foreground">End Date</p>
                 <DatePicker
-                  // @ts-ignore
                   value={endDate ? parseDate(endDate) : null}
                   onChange={(value) => setParams({ endDate: value.toString() })}
                 />

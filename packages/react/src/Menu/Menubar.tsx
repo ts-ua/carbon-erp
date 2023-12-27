@@ -1,21 +1,18 @@
 import type { ButtonProps, MenuButtonProps } from "@chakra-ui/react";
 import { Button, MenuButton } from "@chakra-ui/react";
+import type { ComponentProps } from "react";
 import { forwardRef } from "react";
 import { MdExpandMore } from "react-icons/md";
-import type { HStackProps } from "~/HStack";
-import { HStack } from "~/HStack";
 
-const Menubar = forwardRef<HTMLDivElement, HStackProps>(
+const Menubar = forwardRef<HTMLDivElement, ComponentProps<"div">>(
   ({ children, ...props }, ref) => {
     return (
-      <HStack
-        ref={ref}
+      <div
         {...props}
-        className="items-center bg-background border rounded-md shadow-sm justify-start p-1 w-full"
-        spacing={1}
+        className="flex items-center bg-background border border-border rounded-md shadow-sm justify-start p-1 w-full space-x-1"
       >
         {children}
-      </HStack>
+      </div>
     );
   }
 );

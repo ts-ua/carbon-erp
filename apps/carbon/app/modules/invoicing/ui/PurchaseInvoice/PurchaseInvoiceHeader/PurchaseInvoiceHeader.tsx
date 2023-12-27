@@ -6,14 +6,7 @@ import {
   VStack,
   useDisclosure,
 } from "@carbon/react";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Button, Card, CardBody, CardHeader, Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { useMemo, useState } from "react";
 import { FaHistory } from "react-icons/fa";
@@ -94,9 +87,9 @@ const PurchaseInvoiceHeader = () => {
             <HStack className="items-start justify-between">
               <VStack>
                 <Heading size="h3">{purchaseInvoice.invoiceId}</Heading>
-                <Text color="gray.500" fontWeight="normal">
+                <span className="text-muted-foreground font-normal">
                   {purchaseInvoice.supplierName}
-                </Text>
+                </span>
               </VStack>
               <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
                 Supplier Details
@@ -110,18 +103,18 @@ const PurchaseInvoiceHeader = () => {
                 alignItems="start"
                 justifyContent="space-between"
               >
-                <Text color="gray.500">Total</Text>
-                <Text fontWeight="bold">
+                <span className="text-muted-foreground">Total</span>
+                <span className="font-bold">
                   {formatter.format(purchaseInvoiceTotals?.total ?? 0)}
-                </Text>
+                </span>
               </Stack>
               <Stack
                 direction={["row", "row", "column"]}
                 alignItems="start"
                 justifyContent="space-between"
               >
-                <Text color="gray.500">Date Issued</Text>
-                <Text fontWeight="bold">{purchaseInvoice.dateIssued}</Text>
+                <span className="text-muted-foreground">Date Issued</span>
+                <span className="font-bold">{purchaseInvoice.dateIssued}</span>
               </Stack>
 
               <Stack
@@ -129,7 +122,7 @@ const PurchaseInvoiceHeader = () => {
                 alignItems="start"
                 justifyContent="space-between"
               >
-                <Text color="gray.500">Status</Text>
+                <span className="text-muted-foreground">Status</span>
                 <PurchaseInvoicingStatus status={purchaseInvoice.status} />
               </Stack>
             </Stack>

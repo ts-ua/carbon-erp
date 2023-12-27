@@ -8,7 +8,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
 } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import { UserSelect } from "~/components/Selectors";
@@ -39,10 +38,10 @@ const DeactivateUsersModal = ({
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text mb={2}>
+          <p className="mb-2">
             Are you sure you want to deactive
             {isSingleUser ? " this user" : " these users"}?
-          </Text>
+          </p>
           <UserSelect value={userIds} readOnly isMulti />
         </ModalBody>
         <ModalFooter>

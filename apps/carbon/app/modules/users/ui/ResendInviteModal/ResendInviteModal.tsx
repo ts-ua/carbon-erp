@@ -8,7 +8,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
 } from "@chakra-ui/react";
 import { useFetcher } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
@@ -39,10 +38,10 @@ const ResendInviteModal = ({
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text mb={2}>
+          <p className="mb-2">
             Are you sure you want to resend an invite to
             {isSingleUser ? " this user" : " these users"}?
-          </Text>
+          </p>
           <UserSelect value={userIds} readOnly isMulti />
         </ModalBody>
         <ModalFooter>

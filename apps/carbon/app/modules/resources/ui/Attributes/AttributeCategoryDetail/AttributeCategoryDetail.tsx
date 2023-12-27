@@ -9,11 +9,8 @@ import {
   DrawerHeader,
   DrawerOverlay,
   IconButton,
-  List,
-  ListItem,
   Tag,
   TagLabel,
-  Text,
 } from "@chakra-ui/react";
 import { Link, useFetcher } from "@remix-run/react";
 import { Reorder } from "framer-motion";
@@ -123,20 +120,19 @@ const AttributeCategoryDetail = ({
           </DrawerHeader>
           <DrawerBody>
             {Array.isArray(attributeCategory?.userAttribute) && (
-              <List
-                as={Reorder.Group}
+              <Reorder.Group
                 axis="y"
                 values={sortOrder}
                 onReorder={onReorder}
-                spacing={2}
+                className="space-y-2"
               >
                 {sortOrder.map((sortId) => {
                   return (
-                    <ListItem
+                    <Reorder.Item
                       key={sortId}
                       as={Reorder.Item}
                       value={sortId}
-                      rounded="lg"
+                      className="rounded-lg"
                     >
                       <HStack>
                         <IconButton
@@ -144,12 +140,12 @@ const AttributeCategoryDetail = ({
                           icon={<MdOutlineDragIndicator />}
                           variant="ghost"
                         />
-                        <Text flexGrow={1}>
+                        <p className="flex-grow">
                           {
                             // @ts-ignore
                             attributeMap[sortId]?.name
                           }
-                        </Text>
+                        </p>
                         <Button
                           isDisabled
                           leftIcon={getIcon(
@@ -183,10 +179,10 @@ const AttributeCategoryDetail = ({
                           }
                         />
                       </HStack>
-                    </ListItem>
+                    </Reorder.Item>
                   );
                 })}
-              </List>
+              </Reorder.Group>
             )}
           </DrawerBody>
           <DrawerFooter>

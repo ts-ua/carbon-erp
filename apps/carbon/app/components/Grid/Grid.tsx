@@ -1,6 +1,6 @@
 import { HStack, VStack, useColor, useEscape, useMount } from "@carbon/react";
 import { clip } from "@carbon/utils";
-import { Icon, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import { Icon, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import type { ColumnDef, ColumnOrderState } from "@tanstack/react-table";
 import {
   flexRender,
@@ -434,9 +434,9 @@ const Grid = <T extends object>({
                 }}
               >
                 <Td colSpan={24}>
-                  <Text color="gray.500" w="full" textAlign="center">
+                  <p className="text-muted-foreground text-center w-full">
                     No Data
-                  </Text>
+                  </p>
                 </Td>
               </Tr>
             )}
@@ -452,7 +452,9 @@ const Grid = <T extends object>({
                 <Td colSpan={24}>
                   <HStack>
                     <Icon color="gray.500" as={BsPlus} w={6} h={6} />
-                    <Text color="gray.500">New</Text>
+                    <p className="text-muted-foreground text-center w-full">
+                      New
+                    </p>
                   </HStack>
                 </Td>
               </Tr>

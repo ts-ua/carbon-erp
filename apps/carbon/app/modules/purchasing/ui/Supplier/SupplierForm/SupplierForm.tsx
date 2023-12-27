@@ -1,12 +1,5 @@
 import { Heading, HStack, VStack } from "@carbon/react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Grid,
-  Text,
-} from "@chakra-ui/react";
+import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Employee, Hidden, Input, Select, Submit } from "~/components/Form";
 import { usePermissions, useRouteData } from "~/hooks";
@@ -56,10 +49,10 @@ const SupplierForm = ({ initialValues }: SupplierFormProps) => {
             {isEditing ? "Supplier Overview" : "New Supplier"}
           </Heading>
           {!isEditing && (
-            <Text color="gray.500" fontWeight="normal">
+            <p className="text-muted-foreground font-normal">
               A supplier is a business or person who sells you parts or
               services.
-            </Text>
+            </p>
           )}
         </CardHeader>
         <CardBody>
