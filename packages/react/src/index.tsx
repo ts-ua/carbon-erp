@@ -1,5 +1,5 @@
 import Button from "./Button";
-import Count from "./Count";
+import { Count } from "./Count";
 import DataTable, { DataTableColumnHeader } from "./DataTable";
 import Dot from "./Dot";
 import { HStack } from "./HStack";
@@ -31,6 +31,12 @@ import { ActionMenu, ContextMenu } from "./Overlay";
 import { ClientOnly } from "./SSR";
 import Status from "./Status";
 import ThemeProvider, { theme } from "./Theme";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./Tooltip";
 import { VStack } from "./VStack";
 import {
   useColor,
@@ -71,6 +77,10 @@ export {
   Status,
   ThemeProvider,
   TimePicker,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
   VStack,
   cn,
   createFilter,

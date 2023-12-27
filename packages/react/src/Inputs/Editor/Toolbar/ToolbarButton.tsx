@@ -1,6 +1,6 @@
 import type { IconButtonProps } from "@chakra-ui/react";
-import { IconButton, Tooltip } from "@chakra-ui/react";
-import * as React from "react";
+import { IconButton } from "@chakra-ui/react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/Tooltip";
 
 type ToolbarButtonProps = Omit<IconButtonProps, "aria-label"> & {
   label: string;
@@ -8,14 +8,17 @@ type ToolbarButtonProps = Omit<IconButtonProps, "aria-label"> & {
 
 const ToolbarButton = ({ label, ...rest }: ToolbarButtonProps) => {
   return (
-    <Tooltip label={label}>
-      <IconButton
-        size="sm"
-        variant="ghost"
-        colorScheme="gray"
-        aria-label={label}
-        {...rest}
-      />
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <IconButton
+          size="sm"
+          variant="ghost"
+          colorScheme="gray"
+          aria-label={label}
+          {...rest}
+        />
+      </TooltipTrigger>
+      <TooltipContent>{label}</TooltipContent>
     </Tooltip>
   );
 };
