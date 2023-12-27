@@ -1,11 +1,4 @@
-import {
-  Button,
-  Flex,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/react";
+import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import type { Table } from "@tanstack/react-table";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { HStack } from "~/HStack";
@@ -47,10 +40,10 @@ export function DataTablePagination<TData>({
         </MenuList>
       </Menu>
       <HStack>
-        <Flex fontSize="sm" h={8} fontWeight="medium" alignItems="center">
+        <div className="flex text-sm font-md h-8 items-center">
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
-        </Flex>
+        </div>
         <Button
           isDisabled={!table.getCanPreviousPage()}
           onClick={() => {

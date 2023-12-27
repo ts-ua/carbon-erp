@@ -43,6 +43,7 @@ import {
   useMount,
   useOutsideClick,
 } from "./hooks";
+import { cn } from "./utils/cn";
 
 export {
   ActionMenu,
@@ -71,6 +72,7 @@ export {
   ThemeProvider,
   TimePicker,
   VStack,
+  cn,
   createFilter,
   theme,
   useColor,

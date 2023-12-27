@@ -4,14 +4,13 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Center,
-  Flex,
   Grid,
   Icon,
   List,
   ListItem,
 } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
+import clsx from "clsx";
 import type { IconType } from "react-icons";
 
 import { BsBarChartFill, BsCheckLg } from "react-icons/bs";
@@ -27,27 +26,19 @@ type PersonAbilitiesProps = {
 const AbilityIcons: Record<
   AbilityEmployeeStatus,
   {
-    color: string;
-    bg: string;
     icon: IconType;
     description: string;
   }
 > = {
   [AbilityEmployeeStatus.Complete]: {
-    color: "white",
-    bg: "green.500",
     icon: BsCheckLg,
     description: "Fully trained for",
   },
   [AbilityEmployeeStatus.InProgress]: {
-    color: "white",
-    bg: "blue.400",
     icon: BsBarChartFill,
     description: "Currently training for",
   },
   [AbilityEmployeeStatus.NotStarted]: {
-    color: "gray.700",
-    bg: "gray.200",
     icon: FaThumbsUp,
     description: "Not started training for",
   },
@@ -67,8 +58,7 @@ const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
                 getTrainingStatus(employeeAbility) ??
                 AbilityEmployeeStatus.NotStarted;
 
-              const { color, bg, icon, description } =
-                AbilityIcons[abilityStatus];
+              const { description, icon } = AbilityIcons[abilityStatus];
 
               if (
                 !employeeAbility.ability ||
@@ -84,16 +74,22 @@ const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
                     gridTemplateColumns="auto 1fr auto"
                     gridColumnGap={4}
                   >
-                    <Center
-                      bg={bg}
-                      borderRadius="full"
-                      color={color}
-                      h={10}
-                      w={10}
+                    <div
+                      className={clsx(
+                        "flex h-10 w-10 rounded-full items-center justify-center",
+                        {
+                          "bg-green-500 text-white":
+                            abilityStatus === AbilityEmployeeStatus.Complete,
+                          "bg-blue-400 text-white dark:bg-blue-500 dark:text-white":
+                            abilityStatus === AbilityEmployeeStatus.InProgress,
+                          "bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200":
+                            abilityStatus === AbilityEmployeeStatus.NotStarted,
+                        }
+                      )}
                     >
                       <Icon as={icon} w={5} h={5} />
-                    </Center>
-                    <Flex h="full" alignItems="center">
+                    </div>
+                    <div className="flex h-full items-center">
                       <p>
                         {description}{" "}
                         <Link
@@ -106,15 +102,15 @@ const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
                           {employeeAbility.ability.name}
                         </Link>
                       </p>
-                    </Flex>
-                    <Flex h="full" alignItems="center">
+                    </div>
+                    <div className="flex h-full items-center">
                       <p className="text-sm text-muted-foreground">
                         {formatDate(employeeAbility.lastTrainingDate, {
                           month: "short",
                           year: "numeric",
                         })}
                       </p>
-                    </Flex>
+                    </div>
                   </Grid>
                 </ListItem>
               );
