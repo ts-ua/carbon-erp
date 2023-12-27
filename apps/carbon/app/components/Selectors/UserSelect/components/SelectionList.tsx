@@ -1,8 +1,6 @@
 import { useColor } from "@carbon/react";
 import {
-  Box,
   Checkbox,
-  Flex,
   IconButton,
   List,
   ListItem,
@@ -59,7 +57,7 @@ const SelectionList = () => {
             borderRadius="md"
             _hover={{ background }}
           >
-            <Flex direction="row" gap={2} data-testid={`${id}`}>
+            <div className="flex space-x-2">
               {checkedSelections ? (
                 <>
                   <Checkbox
@@ -85,9 +83,9 @@ const SelectionList = () => {
                     <Avatar name={item.name} path={null} size="sm" />
                   )}
 
-                  <Box display="flex" alignItems="center" flexGrow={2}>
+                  <div className="flex items-center flex-grow">
                     <p className="text-sm line-clamp-1">{item.label}</p>
-                  </Box>
+                  </div>
                 </>
               )}
 
@@ -114,7 +112,7 @@ const SelectionList = () => {
                   />
                 </Tooltip>
               )}
-            </Flex>
+            </div>
           </ListItem>
         );
       })}

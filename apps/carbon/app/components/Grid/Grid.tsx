@@ -450,11 +450,8 @@ const Grid = <T extends object>({
                 }}
               >
                 <Td colSpan={24}>
-                  <HStack>
+                  <HStack className="items-start h-6">
                     <Icon color="gray.500" as={BsPlus} w={6} h={6} />
-                    <p className="text-muted-foreground text-center w-full">
-                      New
-                    </p>
                   </HStack>
                 </Td>
               </Tr>

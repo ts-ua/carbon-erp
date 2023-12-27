@@ -4,7 +4,6 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Flex,
   IconButton,
   Link,
   Menu,
@@ -91,7 +90,7 @@ const PurchaseOrderDocuments = ({
                       </HStack>
                     </Td> */}
                     <Td>
-                      <Flex w="full" justifyContent="flex-end">
+                      <div className="flex justify-end w-full">
                         <Menu>
                           <MenuButton
                             aria-label="More"
@@ -111,7 +110,7 @@ const PurchaseOrderDocuments = ({
                             </MenuItem>
                           </MenuList>
                         </Menu>
-                      </Flex>
+                      </div>
                     </Td>
                   </Tr>
                 ))

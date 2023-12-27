@@ -51,6 +51,7 @@
     "@visx/scale": "3.3.0",
     "@visx/shape": "3.3.0",
     "bullmq": "^4.6.2",
+    "clsx": "^2.0.0",
     "d3-array": "^3.2.4",
     "framer-motion": "^10.13.1",
     "isbot": "3.6.13",

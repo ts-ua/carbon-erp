@@ -1,18 +1,10 @@
-import {
-  Flex,
-  HStack,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  chakra,
-} from "@chakra-ui/react";
+import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import type { Column } from "@tanstack/react-table";
-import { FaSortDown, FaSortUp, FaSort } from "react-icons/fa";
+import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import {
   MdDisabledVisible,
-  MdKeyboardArrowUp,
   MdKeyboardArrowDown,
+  MdKeyboardArrowUp,
 } from "react-icons/md";
 
 interface DataTableColumnHeaderProps<TData, TValue>
@@ -31,15 +23,10 @@ export function DataTableColumnHeader<TData, TValue>({
 
   return (
     <Menu>
-      <MenuButton as={HStack} cursor="pointer" justifyContent="space-between">
-        <Flex
-          justify="flex-start"
-          align="center"
-          fontSize="xs"
-          color="gray.500"
-        >
+      <MenuButton className="flex items-center justify-between cursor-pointer">
+        <div className="flex flex-start items-center text-xs text-muted-foreground">
           {title}
-          <chakra.span pl="4">
+          <span className="pl-4">
             {column.getIsSorted() === "desc" ? (
               <FaSortDown aria-label="sorted descending" />
             ) : column.getIsSorted() === "asc" ? (
@@ -47,8 +34,8 @@ export function DataTableColumnHeader<TData, TValue>({
             ) : (
               <FaSort aria-label="sort" />
             )}
-          </chakra.span>
-        </Flex>
+          </span>
+        </div>
       </MenuButton>
       <MenuList>
         <MenuItem
