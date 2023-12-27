@@ -1,5 +1,11 @@
-import { VStack } from "@carbon/react";
-import { IconButton, Tooltip } from "@chakra-ui/react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+  VStack,
+} from "@carbon/react";
+import { IconButton } from "@chakra-ui/react";
 import { Link, useMatches } from "@remix-run/react";
 import { BsFillHexagonFill } from "react-icons/bs";
 import { z } from "zod";
@@ -35,31 +41,35 @@ const IconSidebar = () => {
         top={0}
         mb={4}
       />
+      <TooltipProvider>
+        <VStack spacing={0} className="top-[50px] sticky">
+          {links.map((link) => {
+            const module = link.to.split("/")[2]; // link.to is "/x/parts" -- this returns "parts"
 
-      <VStack spacing={0} className="top-[50px] sticky">
-        {links.map((link) => {
-          const module = link.to.split("/")[2]; // link.to is "/x/parts" -- this returns "parts"
-
-          const isActive = matchedModules.has(module);
-          return (
-            <Tooltip key={link.to} label={link.name} placement="right">
-              <IconButton
-                as={Link}
-                to={link.to}
-                prefetch="intent"
-                colorScheme={isActive ? link.color ?? "brand" : undefined}
-                variant={isActive ? "solid" : "outline"}
-                size="lg"
-                borderRadius={0}
-                borderWidth={1}
-                borderColor={isActive ? "gray.200" : "transparent"}
-                aria-label={link.name}
-                icon={link.icon}
-              />
-            </Tooltip>
-          );
-        })}
-      </VStack>
+            const isActive = matchedModules.has(module);
+            return (
+              <Tooltip key={link.to}>
+                <TooltipTrigger asChild>
+                  <IconButton
+                    as={Link}
+                    to={link.to}
+                    prefetch="intent"
+                    colorScheme={isActive ? link.color ?? "brand" : undefined}
+                    variant={isActive ? "solid" : "outline"}
+                    size="lg"
+                    borderRadius={0}
+                    borderWidth={1}
+                    borderColor={isActive ? "gray.200" : "transparent"}
+                    aria-label={link.name}
+                    icon={link.icon}
+                  />
+                </TooltipTrigger>
+                <TooltipContent side="right">{link.name}</TooltipContent>
+              </Tooltip>
+            );
+          })}
+        </VStack>
+      </TooltipProvider>
     </div>
   );
 };

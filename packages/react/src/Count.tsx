@@ -13,4 +13,4 @@ const Count = ({ count, ...props }: CountProps) => {
   );
 };
 
-export default Count;
+export { Count };
