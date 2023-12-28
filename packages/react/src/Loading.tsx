@@ -4,7 +4,7 @@ type LoadingProps = {
   size?: "sm" | "md" | "lg" | "xl";
 };
 
-export default function Loading({ size = "lg" }: LoadingProps) {
+export function Loading({ size = "lg" }: LoadingProps) {
   const { colorMode } = useColorMode();
   const emptyColor = colorMode !== "dark" ? "gray.200" : "whiteAlpha.300";
 

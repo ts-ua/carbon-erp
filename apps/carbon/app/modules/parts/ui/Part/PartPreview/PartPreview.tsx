@@ -1,5 +1,13 @@
-import { HStack, Heading, VStack } from "@carbon/react";
-import { Button, Card, CardBody, CardHeader, Stack } from "@chakra-ui/react";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  HStack,
+} from "@carbon/react";
+import { Button, Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -15,28 +23,28 @@ const PartPreview = () => {
   );
 
   return (
-    <Card w="full">
-      <CardHeader>
-        <HStack className="justify-between align-start">
-          <VStack spacing={0}>
-            <Heading size="h3">{routeData?.partSummary?.id}</Heading>
-            <span className="text-muted-foreground">
-              {routeData?.partSummary?.name}
-            </span>
-          </VStack>
+    <Card className="w-full">
+      <HStack className="justify-between items-start">
+        <CardHeader>
+          <CardTitle>{routeData?.partSummary?.id}</CardTitle>
+          <CardDescription>{routeData?.partSummary?.name}</CardDescription>
+        </CardHeader>
+        <CardAction>
           <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
             View History
           </Button>
-        </HStack>
-      </CardHeader>
-      <CardBody>
+        </CardAction>
+      </HStack>
+      <CardContent>
         <Stack direction={["column", "column", "row"]} spacing={8}>
           <Stack
             direction={["row", "row", "column"]}
             alignItems="start"
             justifyContent="space-between"
           >
-            <span className="text-muted-foreground">Replenishment System</span>
+            <span className="text-sm text-muted-foreground">
+              Replenishment System
+            </span>
             <span className="font-bold">
               {routeData?.partSummary?.replenishmentSystem}
             </span>
@@ -46,7 +54,7 @@ const PartPreview = () => {
             alignItems="start"
             justifyContent="space-between"
           >
-            <span className="text-muted-foreground">Part Type</span>
+            <span className="text-sm text-muted-foreground">Part Type</span>
             <span className="font-bold">
               {routeData?.partSummary?.partType}
             </span>
@@ -56,13 +64,15 @@ const PartPreview = () => {
             alignItems="start"
             justifyContent="space-between"
           >
-            <span className="text-muted-foreground">Unit of Measure</span>
+            <span className="text-sm text-muted-foreground">
+              Unit of Measure
+            </span>
             <span className="font-bold">
               {routeData?.partSummary?.unitOfMeasureCode}
             </span>
           </Stack>
         </Stack>
-      </CardBody>
+      </CardContent>
     </Card>
   );
 };

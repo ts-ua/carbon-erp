@@ -1,5 +1,13 @@
-import { Heading, HStack, VStack } from "@carbon/react";
-import { Button, Card, CardBody, CardHeader, Stack } from "@chakra-ui/react";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
+import { Button, Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -25,25 +33,25 @@ const CustomerHeader = () => {
 
   return (
     <VStack>
-      <Card w="full">
-        <CardHeader>
-          <HStack className="justify-between items-start">
-            <VStack>
-              <Heading size="h3">{routeData?.customer?.name}</Heading>
-            </VStack>
+      <Card className="w-full">
+        <HStack className="justify-between items-start">
+          <CardHeader>
+            <CardTitle>{routeData?.customer?.name}</CardTitle>
+          </CardHeader>
+          <CardAction>
             <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
               Customer Details
             </Button>
-          </HStack>
-        </CardHeader>
-        <CardBody>
+          </CardAction>
+        </HStack>
+        <CardContent>
           <Stack direction={["column", "column", "row"]} spacing={8}>
             <Stack
               direction={["row", "row", "column"]}
               alignItems="start"
               justifyContent="space-between"
             >
-              <span className="text-muted-foreground">Type</span>
+              <span className="text-sm text-muted-foreground">Type</span>
               <span className="font-bold">
                 {sharedCustomerData?.customerTypes?.find(
                   (type) => type.id === routeData?.customer?.customerTypeId
@@ -55,7 +63,7 @@ const CustomerHeader = () => {
               alignItems="start"
               justifyContent="space-between"
             >
-              <span className="text-muted-foreground">Status</span>
+              <span className="text-sm text-muted-foreground">Status</span>
               <span className="font-bold">
                 {sharedCustomerData?.customerStatuses?.find(
                   (status) =>
@@ -68,7 +76,9 @@ const CustomerHeader = () => {
               alignItems="start"
               justifyContent="space-between"
             >
-              <span className="text-muted-foreground">Payment Terms</span>
+              <span className="text-sm text-muted-foreground">
+                Payment Terms
+              </span>
               <span className="font-bold">
                 {sharedCustomerData?.paymentTerms?.find(
                   (term) =>
@@ -77,7 +87,7 @@ const CustomerHeader = () => {
               </span>
             </Stack>
           </Stack>
-        </CardBody>
+        </CardContent>
       </Card>
     </VStack>
   );

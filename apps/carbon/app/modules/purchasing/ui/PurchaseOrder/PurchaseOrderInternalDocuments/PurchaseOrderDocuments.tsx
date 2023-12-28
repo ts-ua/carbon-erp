@@ -1,9 +1,13 @@
-import { HStack, Heading } from "@carbon/react";
-import { convertKbToString } from "@carbon/utils";
 import {
   Card,
-  CardBody,
+  CardAction,
+  CardContent,
   CardHeader,
+  CardTitle,
+  HStack,
+} from "@carbon/react";
+import { convertKbToString } from "@carbon/utils";
+import {
   IconButton,
   Link,
   Menu,
@@ -43,17 +47,21 @@ const PurchaseOrderDocuments = ({
 
   return (
     <>
-      <Card w="full">
-        <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="h3" className="inline-flex">
-            {isExternal ? "External" : "Internal"} Attachments
-          </Heading>
-          <PurchaseOrderDocumentForm
-            isExternal={isExternal}
-            orderId={orderId}
-          />
-        </CardHeader>
-        <CardBody>
+      <Card className="w-full">
+        <HStack className="justify-between items-start">
+          <CardHeader>
+            <CardTitle>
+              {isExternal ? "External" : "Internal"} Attachments
+            </CardTitle>
+          </CardHeader>
+          <CardAction>
+            <PurchaseOrderDocumentForm
+              isExternal={isExternal}
+              orderId={orderId}
+            />
+          </CardAction>
+        </HStack>
+        <CardContent>
           <Table>
             <Thead>
               <Tr>
@@ -123,7 +131,7 @@ const PurchaseOrderDocuments = ({
               )}
             </Tbody>
           </Table>
-        </CardBody>
+        </CardContent>
       </Card>
       <Outlet />
     </>

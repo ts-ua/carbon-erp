@@ -1,5 +1,13 @@
-import { Heading, VStack } from "@carbon/react";
-import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  VStack,
+} from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -93,19 +101,17 @@ const ServiceForm = ({ initialValues }: ServiceFormProps) => {
       validator={serviceValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card className="w-full">
         <CardHeader>
-          <Heading size="h3">
-            {isEditing ? "Service Details" : "New Service"}
-          </Heading>
+          <CardTitle>{isEditing ? "Service Details" : "New Service"}</CardTitle>
           {!isEditing && (
-            <p className="text-muted-foreground font-normal">
+            <CardDescription>
               A service is an intangible activity that can be purchased or sold.
               When a service is purchased, it is accounted for as overhead.
-            </p>
+            </CardDescription>
           )}
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Grid
             gridTemplateColumns={
               isEditing ? ["1fr", "1fr", "1fr 1fr 1fr"] : "1fr"
@@ -147,7 +153,7 @@ const ServiceForm = ({ initialValues }: ServiceFormProps) => {
               {isEditing && <Boolean name="active" label="Active" />}
             </VStack>
           </Grid>
-        </CardBody>
+        </CardContent>
         <CardFooter>
           <Submit
             isDisabled={

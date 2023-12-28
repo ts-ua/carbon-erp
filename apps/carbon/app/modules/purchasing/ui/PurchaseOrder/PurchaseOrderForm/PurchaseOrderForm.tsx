@@ -1,5 +1,13 @@
-import { Heading, VStack } from "@carbon/react";
-import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  VStack,
+} from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -52,19 +60,19 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
       validator={purchaseOrderValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card className="w-full">
         <CardHeader>
-          <Heading size="h3">
+          <CardTitle>
             {isEditing ? "Purchase Order" : "New Purchase Order"}
-          </Heading>
+          </CardTitle>
           {!isEditing && (
-            <p className="text-muted-foreground font-normal">
+            <CardDescription>
               A purchase order contains information about the agreement between
               the company and a specific supplier for parts and services.
-            </p>
+            </CardDescription>
           )}
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="purchaseOrderId" />
           <VStack>
             <Grid
@@ -134,7 +142,7 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
               </VStack>
             </Grid>
           </VStack>
-        </CardBody>
+        </CardContent>
         <CardFooter>
           <Submit
             isDisabled={

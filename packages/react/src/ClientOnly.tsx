@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useHydrated } from "../hooks";
+import { useHydrated } from "./hooks";
 
 type Props = {
   /**
@@ -30,4 +30,4 @@ const ClientOnly = ({ children, fallback = null }: Props) => {
   return useHydrated() ? <>{children()}</> : <>{fallback}</>;
 };
 
-export default ClientOnly;
+export { ClientOnly };

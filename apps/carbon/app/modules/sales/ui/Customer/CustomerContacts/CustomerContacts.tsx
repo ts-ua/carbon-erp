@@ -1,14 +1,12 @@
-import { Heading } from "@carbon/react";
 import {
-  Box,
-  Button,
   Card,
-  CardBody,
+  CardAction,
+  CardContent,
   CardHeader,
-  List,
-  ListItem,
-  useDisclosure,
-} from "@chakra-ui/react";
+  CardTitle,
+  HStack,
+} from "@carbon/react";
+import { Button, List, ListItem, useDisclosure } from "@chakra-ui/react";
 import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
 import { useCallback, useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
@@ -78,24 +76,26 @@ const CustomerContacts = ({ contacts }: CustomerContactsProps) => {
 
   return (
     <>
-      <Card w="full">
-        <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="h3" className="inline-flex">
-            Contacts
-          </Heading>
-          {canEdit && (
-            <Button colorScheme="brand" as={Link} to="new">
-              New
-            </Button>
-          )}
-        </CardHeader>
-        <CardBody>
+      <Card className="w-full">
+        <HStack className="justify-between items-start">
+          <CardHeader>
+            <CardTitle>Contacts</CardTitle>
+          </CardHeader>
+          <CardAction>
+            {canEdit && (
+              <Button colorScheme="brand" as={Link} to="new">
+                New
+              </Button>
+            )}
+          </CardAction>
+        </HStack>
+        <CardContent>
           {isEmpty ? (
-            <Box w="full" my={8} textAlign="center">
+            <div className="w-full my-8 text-center">
               <p className="text-muted-foreground text-sm">
                 You haven’t created any contacts yet.
               </p>
-            </Box>
+            </div>
           ) : (
             <List w="full" spacing={4}>
               {contacts?.map((contact) => (
@@ -114,7 +114,7 @@ const CustomerContacts = ({ contacts }: CustomerContactsProps) => {
               ))}
             </List>
           )}
-        </CardBody>
+        </CardContent>
       </Card>
 
       {contact && contact.id && (

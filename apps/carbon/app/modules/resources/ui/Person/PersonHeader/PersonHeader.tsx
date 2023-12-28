@@ -1,4 +1,4 @@
-import { Heading, HStack, VStack } from "@carbon/react";
+import { CardTitle, HStack, VStack } from "@carbon/react";
 import { Button } from "@chakra-ui/react";
 import { BsEnvelopeFill } from "react-icons/bs";
 import { Avatar } from "~/components";
@@ -12,7 +12,7 @@ const PersonHeader = ({ user }: { user: Account }) => {
       <HStack spacing={4}>
         <Avatar size="lg" path={user.avatarUrl} />
         <VStack spacing={1}>
-          <Heading size="h3">{user.fullName}</Heading>
+          <CardTitle>{user.fullName}</CardTitle>
           <p className="text-muted-foreground text-sm">{user.about}</p>
         </VStack>
       </HStack>

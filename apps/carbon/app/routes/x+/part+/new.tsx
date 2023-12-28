@@ -1,4 +1,3 @@
-import { Box } from "@chakra-ui/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
@@ -40,16 +39,19 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function PartsNewRoute() {
   const initialValues = {
+    id: "",
     name: "",
     description: "",
     partType: "Inventory" as "Inventory",
     replenishmentSystem: "Buy" as "Buy",
     unitOfMeasureCode: "EA",
+    blocked: false,
+    active: false,
   };
 
   return (
-    <Box w="50%" maxW={720} minW={420}>
+    <div className="w-1/2 max-w-[720px] min-w-[420px] mx-auto">
       <PartForm initialValues={initialValues} />
-    </Box>
+    </div>
   );
 }

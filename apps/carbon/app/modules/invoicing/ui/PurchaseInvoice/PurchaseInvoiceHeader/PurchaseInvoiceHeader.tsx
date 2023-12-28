@@ -1,15 +1,17 @@
 import {
-  HStack,
-  Heading,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
   Menubar,
   MenubarItem,
   VStack,
   useDisclosure,
 } from "@carbon/react";
-import { Button, Card, CardBody, CardHeader, Stack } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { useMemo, useState } from "react";
-import { FaHistory } from "react-icons/fa";
 import { usePermissions, useRouteData } from "~/hooks";
 import { useSupabase } from "~/lib/supabase";
 import type { PurchaseInvoice } from "~/modules/invoicing";
@@ -82,28 +84,20 @@ const PurchaseInvoiceHeader = () => {
           </Menubar>
         )}
 
-        <Card w="full">
+        <Card className="w-full">
           <CardHeader>
-            <HStack className="items-start justify-between">
-              <VStack>
-                <Heading size="h3">{purchaseInvoice.invoiceId}</Heading>
-                <span className="text-muted-foreground font-normal">
-                  {purchaseInvoice.supplierName}
-                </span>
-              </VStack>
-              <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
-                Supplier Details
-              </Button>
-            </HStack>
+            <CardTitle>{purchaseInvoice.invoiceId}</CardTitle>
+            <CardDescription>{purchaseInvoice.supplierName}</CardDescription>
           </CardHeader>
-          <CardBody>
+
+          <CardContent>
             <Stack direction={["column", "column", "row"]} spacing={8}>
               <Stack
                 direction={["row", "row", "column"]}
                 alignItems="start"
                 justifyContent="space-between"
               >
-                <span className="text-muted-foreground">Total</span>
+                <span className="text-sm text-muted-foreground">Total</span>
                 <span className="font-bold">
                   {formatter.format(purchaseInvoiceTotals?.total ?? 0)}
                 </span>
@@ -113,7 +107,9 @@ const PurchaseInvoiceHeader = () => {
                 alignItems="start"
                 justifyContent="space-between"
               >
-                <span className="text-muted-foreground">Date Issued</span>
+                <span className="text-sm text-muted-foreground">
+                  Date Issued
+                </span>
                 <span className="font-bold">{purchaseInvoice.dateIssued}</span>
               </Stack>
 
@@ -122,11 +118,11 @@ const PurchaseInvoiceHeader = () => {
                 alignItems="start"
                 justifyContent="space-between"
               >
-                <span className="text-muted-foreground">Status</span>
+                <span className="text-sm text-muted-foreground">Status</span>
                 <PurchaseInvoicingStatus status={purchaseInvoice.status} />
               </Stack>
             </Stack>
-          </CardBody>
+          </CardContent>
         </Card>
       </VStack>
       <PurchaseInvoicePostModal

@@ -1,5 +1,14 @@
-import { Heading, HStack, VStack } from "@carbon/react";
-import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Employee, Hidden, Input, Select, Submit } from "~/components/Form";
 import { usePermissions, useRouteData } from "~/hooks";
@@ -43,19 +52,19 @@ const SupplierForm = ({ initialValues }: SupplierFormProps) => {
       validator={supplierValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card className="w-full">
         <CardHeader>
-          <Heading size="h3">
+          <CardTitle>
             {isEditing ? "Supplier Overview" : "New Supplier"}
-          </Heading>
+          </CardTitle>
           {!isEditing && (
-            <p className="text-muted-foreground font-normal">
+            <CardDescription>
               A supplier is a business or person who sells you parts or
               services.
-            </p>
+            </CardDescription>
           )}
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="id" />
           <Grid
             gridTemplateColumns={
@@ -91,7 +100,7 @@ const SupplierForm = ({ initialValues }: SupplierFormProps) => {
               </>
             )}
           </Grid>
-        </CardBody>
+        </CardContent>
         <CardFooter>
           <HStack>
             <Submit isDisabled={isDisabled}>Save</Submit>

@@ -1,7 +1,5 @@
+import { Card, CardContent } from "@carbon/react";
 import {
-  Box,
-  Card,
-  CardBody,
   Icon,
   Tab,
   TabList,
@@ -39,8 +37,8 @@ const PersonsTabs = ({
   if (!personId) throw new Error("Missing personId");
 
   return (
-    <Card w="full">
-      <CardBody>
+    <Card className="w-full">
+      <CardContent>
         <Tabs colorScheme="gray">
           <TabList>
             <Tab>Profile</Tab>
@@ -64,29 +62,29 @@ const PersonsTabs = ({
             <TabPanel>
               {publicAttributes.length ? (
                 publicAttributes.map((category: PublicAttributes) => (
-                  <Box key={category.id} mb={8} w="full">
+                  <div key={category.id} className="mb-8 w-full">
                     <SectionTitle>{category.name}</SectionTitle>
                     <UserAttributesForm attributeCategory={category} />
-                  </Box>
+                  </div>
                 ))
               ) : (
-                <Box color="gray.500" p={4} w="full" textAlign="center">
+                <div className="text-muted-foreground p-4 w-full text-center">
                   No public attributes
-                </Box>
+                </div>
               )}
             </TabPanel>
             <TabPanel>
               {privateAttributes.length ? (
                 privateAttributes.map((category: PrivateAttributes) => (
-                  <Box key={category.id} mb={8} w="full">
+                  <div key={category.id} className="mb-8 w-full">
                     <SectionTitle>{category.name}</SectionTitle>
                     <UserAttributesForm attributeCategory={category} />
-                  </Box>
+                  </div>
                 ))
               ) : (
-                <Box color="gray.500" p={4} w="full" textAlign="center">
+                <div className="text-muted-foreground p-4 w-full text-center">
                   No private attributes
-                </Box>
+                </div>
               )}
             </TabPanel>
             <TabPanel>
@@ -94,7 +92,7 @@ const PersonsTabs = ({
             </TabPanel>
           </TabPanels>
         </Tabs>
-      </CardBody>
+      </CardContent>
     </Card>
   );
 };

@@ -1,4 +1,3 @@
-import { Box } from "@chakra-ui/react";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
@@ -81,11 +80,11 @@ export default function PurchaseOrderNewRoute() {
   };
 
   return (
-    <Box w="50%" maxW={720} minW={420}>
+    <div className="w-1/2 max-w-[720px] min-w-[420px] mx-auto">
       <PurchaseOrderForm
         // @ts-expect-error
         initialValues={initialValues}
       />
-    </Box>
+    </div>
   );
 }

@@ -19,4 +19,4 @@ const Status = forwardRef<
 
 Status.displayName = "Status";
 
-export default Status;
+export { Status };

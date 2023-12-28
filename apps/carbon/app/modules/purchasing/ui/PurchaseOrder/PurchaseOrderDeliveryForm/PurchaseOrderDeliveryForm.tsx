@@ -1,5 +1,12 @@
-import { Heading, VStack } from "@carbon/react";
-import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  VStack,
+} from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -55,11 +62,11 @@ const PurchaseOrderDeliveryForm = ({
       validator={purchaseOrderDeliveryValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card className="w-full">
         <CardHeader>
-          <Heading size="h3">Delivery</Heading>
+          <CardTitle>Delivery</CardTitle>
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="id" />
           <Grid
             gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
@@ -115,7 +122,7 @@ const PurchaseOrderDeliveryForm = ({
               )}
             </VStack>
           </Grid>
-        </CardBody>
+        </CardContent>
         <CardFooter>
           <Submit isDisabled={!permissions.can("update", "purchasing")}>
             Save

@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { sanitize } from "dompurify";
 import { useMemo } from "react";
-import { reset } from "../Theme";
+import { reset } from "./Theme";
 
 type HTMLProps = {
   text: string;
@@ -25,4 +25,4 @@ const HTML = ({ text }: HTMLProps) => {
   );
 };
 
-export default HTML;
+export { HTML };

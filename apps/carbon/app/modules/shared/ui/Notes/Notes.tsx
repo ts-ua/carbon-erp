@@ -47,7 +47,7 @@ const Notes = ({ documentId, notes }: NotesProps) => {
                   <p className="font-bold">{note.user?.fullName!}</p>
                   <HTML text={note.note} />
                   <HStack spacing={4}>
-                    <span className="text-muted-foreground">
+                    <span className="text-sm text-muted-foreground">
                       {formatTimeAgo(note.createdAt)}
                     </span>
                     {/* @ts-ignore */}

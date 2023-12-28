@@ -3,7 +3,7 @@ import { Grid } from "@chakra-ui/react";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
-import { GroupedContentSidebar } from "~/components/Layout/Sidebar";
+import { GroupedContentSidebar } from "~/components/Layout";
 import {
   getAccountsList,
   getBaseCurrency,

@@ -5,7 +5,7 @@ import type {
   useDateFieldState,
 } from "@react-stately/datepicker";
 import { useId, useRef } from "react";
-import { useColor } from "../../../hooks";
+import { useColor } from "../../hooks";
 
 export const DateSegment = ({
   segment,

@@ -1,4 +1,3 @@
-import { Box } from "@chakra-ui/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import type { FunctionsResponse } from "@supabase/functions-js";
@@ -141,12 +140,12 @@ export default function PurchaseInvoiceNewRoute() {
   };
 
   return (
-    <Box w="50%" maxW={720} minW={420}>
+    <div className="w-1/2 max-w-[720px] min-w-[420px] mx-auto">
       <PurchaseInvoiceForm
         // @ts-expect-error
         initialValues={initialValues}
         paymentTerms={sharedData?.paymentTerms ?? []}
       />
-    </Box>
+    </div>
   );
 }

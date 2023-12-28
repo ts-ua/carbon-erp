@@ -1,5 +1,13 @@
-import { HStack, Heading } from "@carbon/react";
-import { Button, Card, CardBody, CardHeader, Stack } from "@chakra-ui/react";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  HStack,
+} from "@carbon/react";
+import { Button, Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -15,28 +23,26 @@ const ServicePreview = () => {
   );
 
   return (
-    <Card w="full">
-      <CardHeader>
-        <HStack className="justify-between items-start">
-          <Stack direction="column" spacing={2}>
-            <Heading size="h3">{routeData?.service?.name}</Heading>
-            <p className="text-muted-foreground line-clamp-1">
-              {routeData?.service?.description}
-            </p>
-          </Stack>
+    <Card className="w-full">
+      <HStack className="justify-between items-start">
+        <CardHeader>
+          <CardTitle>{routeData?.service?.name}</CardTitle>
+          <CardDescription>{routeData?.service?.description}</CardDescription>
+        </CardHeader>
+        <CardAction>
           <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
             View History
           </Button>
-        </HStack>
-      </CardHeader>
-      <CardBody>
+        </CardAction>
+      </HStack>
+      <CardContent>
         <Stack direction={["column", "column", "row"]} spacing={8}>
           <Stack
             direction={["row", "row", "column"]}
             alignItems="start"
             justifyContent="space-between"
           >
-            <span className="text-muted-foreground">Type</span>
+            <span className="text-sm text-muted-foreground">Type</span>
             <span className="font-bold">{routeData?.service?.serviceType}</span>
           </Stack>
           <Stack
@@ -44,11 +50,11 @@ const ServicePreview = () => {
             alignItems="start"
             justifyContent="space-between"
           >
-            <span className="text-muted-foreground">Part Group</span>
+            <span className="text-sm text-muted-foreground">Part Group</span>
             <span className="font-bold">{routeData?.service?.partGroup}</span>
           </Stack>
         </Stack>
-      </CardBody>
+      </CardContent>
     </Card>
   );
 };

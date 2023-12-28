@@ -2,7 +2,7 @@ import { VStack } from "@carbon/react";
 import { Grid } from "@chakra-ui/react";
 import type { MetaFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
-import { GroupedContentSidebar } from "~/components/Layout/Sidebar";
+import { GroupedContentSidebar } from "~/components/Layout";
 import { usePartsSidebar } from "~/modules/parts";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";

@@ -1,5 +1,13 @@
-import { Heading, VStack } from "@carbon/react";
-import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  VStack,
+} from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -78,7 +86,7 @@ const PartForm = ({ initialValues }: PartFormProps) => {
 
   const { partId, onPartIdChange, loading } = useNextPartIdShortcut();
   const permissions = usePermissions();
-  const isEditing = initialValues.id !== undefined;
+  const isEditing = !!initialValues.id;
 
   const partGroupOptions =
     sharedPartsData?.partGroups.map((partGroup) => ({
@@ -110,17 +118,17 @@ const PartForm = ({ initialValues }: PartFormProps) => {
       validator={partValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card className="w-full">
         <CardHeader>
-          <Heading size="h3">{isEditing ? "Part Details" : "New Part"}</Heading>
+          <CardTitle>{isEditing ? "Part Details" : "New Part"}</CardTitle>
           {!isEditing && (
-            <p className="text-muted-foreground font-normal">
+            <CardDescription>
               A part contains the information about a specific item that can be
               purchased or manufactured.
-            </p>
+            </CardDescription>
           )}
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Grid
             gridTemplateColumns={
               isEditing ? ["1fr", "1fr", "1fr 1fr 1fr"] : "1fr"
@@ -173,7 +181,7 @@ const PartForm = ({ initialValues }: PartFormProps) => {
               {isEditing && <Boolean name="active" label="Active" />}
             </VStack>
           </Grid>
-        </CardBody>
+        </CardContent>
         <CardFooter>
           <Submit
             isDisabled={

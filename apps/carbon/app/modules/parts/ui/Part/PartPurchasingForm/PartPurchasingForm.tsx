@@ -1,5 +1,12 @@
-import { Heading, VStack } from "@carbon/react";
-import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  VStack,
+} from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Boolean,
@@ -36,11 +43,11 @@ const PartPurchasingForm = ({
       validator={partPurchasingValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card className="w-full">
         <CardHeader>
-          <Heading size="h3">Purchasing</Heading>
+          <CardTitle>Purchasing</CardTitle>
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="partId" />
           <Grid
             gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
@@ -68,7 +75,7 @@ const PartPurchasingForm = ({
               <Boolean name="purchasingBlocked" label="Purchasing Blocked" />
             </VStack>
           </Grid>
-        </CardBody>
+        </CardContent>
         <CardFooter>
           <Submit isDisabled={!permissions.can("update", "parts")}>Save</Submit>
         </CardFooter>
