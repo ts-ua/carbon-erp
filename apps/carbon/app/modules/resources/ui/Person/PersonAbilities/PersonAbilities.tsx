@@ -1,14 +1,6 @@
-import { Heading } from "@carbon/react";
+import { Card, CardContent, CardHeader, CardTitle } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Grid,
-  Icon,
-  List,
-  ListItem,
-} from "@chakra-ui/react";
+import { Grid, Icon, List, ListItem } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import clsx from "clsx";
 import type { IconType } from "react-icons";
@@ -46,11 +38,11 @@ const AbilityIcons: Record<
 
 const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
   return (
-    <Card w="full">
+    <Card className="w-full">
       <CardHeader>
-        <Heading size="h3">Abilities</Heading>
+        <CardTitle>Abilities</CardTitle>
       </CardHeader>
-      <CardBody>
+      <CardContent>
         {abilities?.length > 0 ? (
           <List spacing={4}>
             {abilities.map((employeeAbility) => {
@@ -121,7 +113,7 @@ const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
             No abilities added
           </div>
         )}
-      </CardBody>
+      </CardContent>
     </Card>
   );
 };

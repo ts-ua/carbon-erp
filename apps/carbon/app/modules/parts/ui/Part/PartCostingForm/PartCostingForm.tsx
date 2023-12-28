@@ -1,5 +1,12 @@
-import { Heading, VStack } from "@carbon/react";
-import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  VStack,
+} from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Boolean, Hidden, Number, Select, Submit } from "~/components/Form";
 import { usePermissions } from "~/hooks";
@@ -26,11 +33,11 @@ const PartCostingForm = ({ initialValues }: PartCostingFormProps) => {
       validator={partCostValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card className="w-full">
         <CardHeader>
-          <Heading size="h3">Costing & Posting</Heading>
+          <CardTitle>Costing & Posting</CardTitle>
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="partId" />
           <Grid
             gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
@@ -63,7 +70,7 @@ const PartCostingForm = ({ initialValues }: PartCostingFormProps) => {
               <Boolean name="costIsAdjusted" label="Cost Is Adjusted" />
             </VStack>
           </Grid>
-        </CardBody>
+        </CardContent>
         <CardFooter>
           <Submit isDisabled={!permissions.can("update", "parts")}>Save</Submit>
         </CardFooter>

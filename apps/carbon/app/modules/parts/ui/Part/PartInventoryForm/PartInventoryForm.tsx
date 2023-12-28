@@ -1,5 +1,15 @@
-import { HStack, Heading, Select, VStack } from "@carbon/react";
-import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  HStack,
+  Select,
+  VStack,
+} from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import { CreatableSelect, Hidden, Number, Submit } from "~/components/Form";
@@ -40,29 +50,31 @@ const PartInventoryForm = ({
       validator={partInventoryValidator}
       defaultValues={{ ...quantities, ...initialValues }}
     >
-      <Card w="full">
-        <CardHeader>
-          <HStack className="w-full justify-between">
-            <Heading size="h3">Inventory</Heading>
-            <div className="w-[180px]">
-              <Select
-                // @ts-ignore
-                size="sm"
-                value={locationOptions.find(
-                  (location) => location.value === initialValues.locationId
-                )}
-                options={locationOptions}
-                onChange={(selected) => {
-                  // hard refresh because initialValues update has no effect otherwise
-                  window.location.href = `${path.to.partInventory(
-                    initialValues.partId
-                  )}?location=${selected?.value}`;
-                }}
-              />
-            </div>
-          </HStack>
-        </CardHeader>
-        <CardBody>
+      <Card className="w-full">
+        <HStack className="w-full justify-between items-start">
+          <CardHeader>
+            <CardTitle>Inventory</CardTitle>
+          </CardHeader>
+
+          <CardAction>
+            <Select
+              // @ts-ignore
+              size="sm"
+              value={locationOptions.find(
+                (location) => location.value === initialValues.locationId
+              )}
+              options={locationOptions}
+              onChange={(selected) => {
+                // hard refresh because initialValues update has no effect otherwise
+                window.location.href = `${path.to.partInventory(
+                  initialValues.partId
+                )}?location=${selected?.value}`;
+              }}
+            />
+          </CardAction>
+        </HStack>
+
+        <CardContent>
           <Hidden name="partId" />
           <Hidden name="locationId" />
           <Hidden name="hasNewShelf" value={hasNewShelf.toString()} />
@@ -112,7 +124,7 @@ const PartInventoryForm = ({
               />
             </VStack>
           </Grid>
-        </CardBody>
+        </CardContent>
         <CardFooter>
           <Submit isDisabled={!permissions.can("update", "parts")}>Save</Submit>
         </CardFooter>

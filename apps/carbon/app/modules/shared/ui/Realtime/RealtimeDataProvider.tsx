@@ -1,4 +1,4 @@
-import { Image, useColorModeValue } from "@chakra-ui/react";
+import { useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useSupabase } from "~/lib/supabase";
 import { useCustomers, useParts, useSuppliers } from "~/stores";
@@ -205,14 +205,13 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
 function Loading() {
   return (
     <div className="flex flex-col h-screen w-screen items-center justify-center">
-      <Image
+      <img
         src={useColorModeValue(
           "/carbon-logo-dark.png",
           "/carbon-logo-light.png"
         )}
         alt="Carbon Logo"
-        maxW={100}
-        marginBottom={3}
+        className="max-w-[100px]"
       />
     </div>
   );

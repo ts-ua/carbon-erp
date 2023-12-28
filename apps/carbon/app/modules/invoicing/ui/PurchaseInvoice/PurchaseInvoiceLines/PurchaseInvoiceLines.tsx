@@ -1,10 +1,13 @@
-import { Heading, HStack } from "@carbon/react";
 import {
-  Box,
-  Button,
   Card,
-  CardBody,
+  CardAction,
+  CardContent,
   CardHeader,
+  CardTitle,
+  HStack,
+} from "@carbon/react";
+import {
+  Button,
   IconButton,
   Menu,
   MenuButton,
@@ -67,7 +70,7 @@ const PurchaseInvoiceLines = () => {
         cell: ({ row }) => (
           <HStack className="justify-between min-w-[100px]">
             <span>{row.original.invoiceLineType}</span>
-            <Box position="relative" w={6} h={5}>
+            <div className="relative w-6 h-5">
               <Menu>
                 <MenuButton
                   as={IconButton}
@@ -97,7 +100,7 @@ const PurchaseInvoiceLines = () => {
                   </MenuItem>
                 </MenuList>
               </Menu>
-            </Box>
+            </div>
           </HStack>
         ),
       },
@@ -192,18 +195,20 @@ const PurchaseInvoiceLines = () => {
 
   return (
     <>
-      <Card w="full" h="full">
-        <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="h3" className="inline-flex">
-            Purchase Invoice Lines
-          </Heading>
-          {canEdit && isEditable && (
-            <Button colorScheme="brand" as={Link} to="new">
-              New
-            </Button>
-          )}
-        </CardHeader>
-        <CardBody>
+      <Card className="w-full h-full">
+        <HStack className="justify-between items-start">
+          <CardHeader>
+            <CardTitle>Purchase Invoice Lines</CardTitle>
+          </CardHeader>
+          <CardAction>
+            {canEdit && isEditable && (
+              <Button colorScheme="brand" as={Link} to="new">
+                New
+              </Button>
+            )}
+          </CardAction>
+        </HStack>
+        <CardContent>
           <Grid<PurchaseInvoiceLine>
             data={routeData?.purchaseInvoiceLines ?? []}
             columns={columns}
@@ -222,7 +227,7 @@ const PurchaseInvoiceLines = () => {
             }}
             onNewRow={canEdit && isEditable ? () => navigate("new") : undefined}
           />
-        </CardBody>
+        </CardContent>
       </Card>
       <Outlet />
     </>

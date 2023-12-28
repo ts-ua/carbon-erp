@@ -27,4 +27,4 @@ const ActionMenu = ({ children, disabled, icon }: ActionMenuProps) => {
   );
 };
 
-export default ActionMenu;
+export { ActionMenu };

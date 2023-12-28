@@ -1,19 +1,18 @@
-import { Heading } from "@carbon/react";
-import { Box, Card, CardBody, CardHeader } from "@chakra-ui/react";
+import { Card, CardContent, CardHeader, CardTitle } from "@carbon/react";
 
 type PersonDaysOffProps = {};
 
 const PersonDaysOff = (props: PersonDaysOffProps) => {
   return (
-    <Card w="full">
+    <Card className="w-full">
       <CardHeader>
-        <Heading size="h3">Days Off</Heading>
+        <CardTitle>Days Off</CardTitle>
       </CardHeader>
-      <CardBody>
-        <Box color="gray.500" p={4} w="full" textAlign="center">
+      <CardContent>
+        <div className="text-muted-foreground p-4 w-full text-center">
           No days off scheduled
-        </Box>
-      </CardBody>
+        </div>
+      </CardContent>
     </Card>
   );
 };

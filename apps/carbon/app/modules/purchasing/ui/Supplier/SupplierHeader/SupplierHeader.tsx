@@ -1,5 +1,13 @@
-import { Heading, HStack, VStack } from "@carbon/react";
-import { Button, Card, CardBody, CardHeader, Stack } from "@chakra-ui/react";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
+import { Button, Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -26,25 +34,25 @@ const SupplierHeader = () => {
 
   return (
     <VStack>
-      <Card w="full">
-        <CardHeader>
-          <HStack className="justify-between items-center">
-            <Stack direction="column" spacing={2}>
-              <Heading size="h3">{routeData?.supplier?.name}</Heading>
-            </Stack>
+      <Card className="w-full">
+        <HStack className="justify-between items-start">
+          <CardHeader>
+            <CardTitle>{routeData?.supplier?.name}</CardTitle>
+          </CardHeader>
+          <CardAction>
             <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
               Supplier Details
             </Button>
-          </HStack>
-        </CardHeader>
-        <CardBody>
+          </CardAction>
+        </HStack>
+        <CardContent>
           <Stack direction={["column", "column", "row"]} spacing={8}>
             <Stack
               direction={["row", "row", "column"]}
               alignItems="start"
               justifyContent="space-between"
             >
-              <span className="text-muted-foreground">Type</span>
+              <span className="text-sm text-muted-foreground">Type</span>
               <span className="font-bold">
                 {sharedSupplierData?.supplierTypes?.find(
                   (type) => type.id === routeData?.supplier?.supplierTypeId
@@ -56,7 +64,7 @@ const SupplierHeader = () => {
               alignItems="start"
               justifyContent="space-between"
             >
-              <span className="text-muted-foreground">Status</span>
+              <span className="text-sm text-muted-foreground">Status</span>
               <span className="font-bold">
                 {sharedSupplierData?.supplierStatuses?.find(
                   (status) =>
@@ -69,7 +77,9 @@ const SupplierHeader = () => {
               alignItems="start"
               justifyContent="space-between"
             >
-              <span className="text-muted-foreground">Payment Terms</span>
+              <span className="text-sm text-muted-foreground">
+                Payment Terms
+              </span>
               <span className="font-bold">
                 {/* // TODO: defaultPaymentTermId */}
                 {sharedSupplierData?.paymentTerms?.find(
@@ -79,7 +89,7 @@ const SupplierHeader = () => {
               </span>
             </Stack>
           </Stack>
-        </CardBody>
+        </CardContent>
       </Card>
     </VStack>
   );

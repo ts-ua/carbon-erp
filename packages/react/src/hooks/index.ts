@@ -7,6 +7,7 @@ import useInterval from "./useInterval";
 import useKeyboardShortcuts from "./useKeyboardShortcuts";
 import useLocalStorage from "./useLocalStorage";
 import useMount from "./useMount";
+import useNotification from "./useNotification";
 import useOutsideClick from "./useOutsideClick";
 
 export {
@@ -19,5 +20,6 @@ export {
   useKeyboardShortcuts,
   useLocalStorage,
   useMount,
+  useNotification,
   useOutsideClick,
 };

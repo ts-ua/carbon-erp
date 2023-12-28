@@ -1,12 +1,13 @@
-import { Heading, useDisclosure } from "@carbon/react";
 import {
-  Button,
   Card,
-  CardBody,
+  CardAction,
+  CardContent,
   CardHeader,
-  List,
-  ListItem,
-} from "@chakra-ui/react";
+  CardTitle,
+  HStack,
+  useDisclosure,
+} from "@carbon/react";
+import { Button, List, ListItem } from "@chakra-ui/react";
 import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
 import { useCallback, useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
@@ -62,18 +63,20 @@ const CustomerLocations = ({ locations }: CustomerLocationsProps) => {
 
   return (
     <>
-      <Card w="full">
-        <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="h3" className="inline-flex">
-            Locations
-          </Heading>
-          {canEdit && (
-            <Button colorScheme="brand" as={Link} to="new">
-              New
-            </Button>
-          )}
-        </CardHeader>
-        <CardBody>
+      <Card className="w-full">
+        <HStack className="justify-between items-start">
+          <CardHeader>
+            <CardTitle>Locations</CardTitle>
+          </CardHeader>
+          <CardAction>
+            {canEdit && (
+              <Button colorScheme="brand" as={Link} to="new">
+                New
+              </Button>
+            )}
+          </CardAction>
+        </HStack>
+        <CardContent>
           {isEmpty ? (
             <div className="my-8 text-center w-full">
               <p className="text-muted-foreground text-sm">
@@ -94,7 +97,7 @@ const CustomerLocations = ({ locations }: CustomerLocationsProps) => {
               ))}
             </List>
           )}
-        </CardBody>
+        </CardContent>
       </Card>
 
       {deleteLocationModal.isOpen && location?.id && (

@@ -1,5 +1,13 @@
-import { Heading, VStack } from "@carbon/react";
-import { Card, CardBody, CardFooter, CardHeader, Grid } from "@chakra-ui/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  VStack,
+} from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -58,19 +66,19 @@ const PurchaseInvoiceForm = ({
       validator={purchaseInvoiceValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card className="w-full">
         <CardHeader>
-          <Heading size="h3">
+          <CardTitle>
             {isEditing ? "Purchase Invoice" : "New Purchase Invoice"}
-          </Heading>
+          </CardTitle>
           {!isEditing && (
-            <p className="text-muted-foreground font-normal">
+            <CardDescription>
               A purchase invoice is a document that specifies the products or
               services purchased by a customer and the corresponding cost.
-            </p>
+            </CardDescription>
           )}
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="id" />
           <Hidden name="invoiceId" />
           <VStack>
@@ -141,7 +149,7 @@ const PurchaseInvoiceForm = ({
               </VStack>
             </Grid>
           </VStack>
-        </CardBody>
+        </CardContent>
         <CardFooter>
           <Submit
             isDisabled={

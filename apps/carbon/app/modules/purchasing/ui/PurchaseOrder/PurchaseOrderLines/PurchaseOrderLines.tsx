@@ -1,9 +1,14 @@
-import { HStack, Heading } from "@carbon/react";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  HStack,
+} from "@carbon/react";
 import {
   Button,
-  Card,
-  CardBody,
-  CardHeader,
   Checkbox,
   IconButton,
   Menu,
@@ -278,18 +283,24 @@ const PurchaseOrderLines = () => {
 
   return (
     <>
-      <Card w="full" h="full">
-        <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="h3" className="inline-flex">
-            Purchase Order Lines
-          </Heading>
-          {canEdit && isEditable && (
-            <Button colorScheme="brand" as={Link} to="new">
-              New
-            </Button>
-          )}
-        </CardHeader>
-        <CardBody>
+      <Card className="w-full h-full">
+        <HStack className="justify-between items-start">
+          <CardHeader>
+            <CardTitle>Purchase Order Lines</CardTitle>
+            <CardDescription>
+              {routeData?.purchaseOrder?.purchaseOrderNumber}
+            </CardDescription>
+          </CardHeader>
+          <CardAction>
+            {canEdit && isEditable && (
+              <Button colorScheme="brand" as={Link} to="new">
+                New
+              </Button>
+            )}
+          </CardAction>
+        </HStack>
+
+        <CardContent>
           <Grid<PurchaseOrderLine>
             data={routeData?.purchaseOrderLines ?? []}
             columns={columns}
@@ -309,7 +320,7 @@ const PurchaseOrderLines = () => {
             }}
             onNewRow={canEdit && isEditable ? () => navigate("new") : undefined}
           />
-        </CardBody>
+        </CardContent>
       </Card>
       <Outlet />
     </>

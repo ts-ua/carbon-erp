@@ -23,4 +23,4 @@ const Dot = ({ color, size = 3, title, ...props }: DotProps) => {
   );
 };
 
-export default Dot;
+export { Dot };

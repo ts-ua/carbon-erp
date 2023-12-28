@@ -20,9 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import type { PortalProps, MenuButtonProps, MenuProps } from "@chakra-ui/react";
-import { useEventListener, Portal, Menu, MenuButton } from "@chakra-ui/react";
-import type { ReactNode, MutableRefObject } from "react";
+import type { MenuButtonProps, MenuProps, PortalProps } from "@chakra-ui/react";
+import { Menu, MenuButton, Portal, useEventListener } from "@chakra-ui/react";
+import type { MutableRefObject, ReactNode } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 /* 
@@ -56,7 +56,7 @@ export interface ContextMenuProps<T extends HTMLElement> {
   menuButtonProps?: MenuButtonProps;
 }
 
-export default function ContextMenu<T extends HTMLElement = HTMLElement>({
+export function ContextMenu<T extends HTMLElement = HTMLElement>({
   renderMenu,
   children,
   menuProps,

@@ -1,5 +1,16 @@
-import { Heading, HStack, Menubar, MenubarItem, VStack } from "@carbon/react";
-import { Button, Card, CardBody, CardHeader, Stack } from "@chakra-ui/react";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  HStack,
+  Menubar,
+  MenubarItem,
+  VStack,
+} from "@carbon/react";
+import { Button, Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { useMemo } from "react";
 import { FaHistory } from "react-icons/fa";
@@ -76,30 +87,28 @@ const PurchaseOrderHeader = () => {
         </Menubar>
       )}
 
-      <Card w="full">
-        <CardHeader>
-          <HStack className="justify-between items-start">
-            <Stack direction="column" spacing={2}>
-              <Heading size="h3">
-                {routeData?.purchaseOrder?.purchaseOrderId}
-              </Heading>
-              <span className="text-muted-foreground">
-                {routeData?.purchaseOrder?.supplierName}
-              </span>
-            </Stack>
+      <Card className="w-full">
+        <HStack className="justify-between items-start">
+          <CardHeader>
+            <CardTitle>{routeData?.purchaseOrder?.purchaseOrderId}</CardTitle>
+            <CardDescription>
+              {routeData?.purchaseOrder?.supplierName}
+            </CardDescription>
+          </CardHeader>
+          <CardAction>
             <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
               Supplier Details
             </Button>
-          </HStack>
-        </CardHeader>
-        <CardBody>
+          </CardAction>
+        </HStack>
+        <CardContent>
           <Stack direction={["column", "column", "row"]} spacing={8}>
             <Stack
               direction={["row", "row", "column"]}
               alignItems="start"
               justifyContent="space-between"
             >
-              <span className="text-muted-foreground">Total</span>
+              <span className="text-sm text-muted-foreground">Total</span>
               <span className="font-bold">
                 {formatter.format(purchaseOrderTotals?.total ?? 0)}
               </span>
@@ -109,7 +118,7 @@ const PurchaseOrderHeader = () => {
               alignItems="start"
               justifyContent="space-between"
             >
-              <span className="text-muted-foreground">Order Date</span>
+              <span className="text-sm text-muted-foreground">Order Date</span>
               <span className="font-bold">
                 {routeData?.purchaseOrder?.orderDate}
               </span>
@@ -120,7 +129,9 @@ const PurchaseOrderHeader = () => {
               alignItems="start"
               justifyContent="space-between"
             >
-              <span className="text-muted-foreground">Promised Date</span>
+              <span className="text-sm text-muted-foreground">
+                Promised Date
+              </span>
               <span className="font-bold">
                 {routeData?.purchaseOrder?.receiptPromisedDate}
               </span>
@@ -130,7 +141,7 @@ const PurchaseOrderHeader = () => {
               alignItems="start"
               justifyContent="space-between"
             >
-              <span className="text-muted-foreground">Type</span>
+              <span className="text-sm text-muted-foreground">Type</span>
               <span className="font-bold">
                 {routeData?.purchaseOrder?.type}
               </span>
@@ -141,7 +152,7 @@ const PurchaseOrderHeader = () => {
               alignItems="start"
               justifyContent="space-between"
             >
-              <span className="text-muted-foreground">Subtotal</span>
+              <span className="text-sm text-muted-foreground">Subtotal</span>
               <span className="font-bold">
                 // TODO: this doesn't update when client-side lines are updated
                 {currencyFormatter.format(
@@ -155,11 +166,11 @@ const PurchaseOrderHeader = () => {
               alignItems="start"
               justifyContent="space-between"
             >
-              <span className="text-muted-foreground">Status</span>
+              <span className="text-sm text-muted-foreground">Status</span>
               <PurchasingStatus status={routeData?.purchaseOrder?.status} />
             </Stack>
           </Stack>
-        </CardBody>
+        </CardContent>
       </Card>
     </VStack>
   );

@@ -1,6 +1,5 @@
-import { Count, VStack, useColor } from "@carbon/react";
-import { Button } from "@chakra-ui/react";
-import { Link, useMatches, useParams } from "@remix-run/react";
+import { useParams } from "@remix-run/react";
+import { DetailSidebar } from "~/components/Layout";
 import { useRouteData } from "~/hooks";
 import type {
   PurchaseOrder,
@@ -12,7 +11,7 @@ import { usePurchaseOrderSidebar } from "./usePurchaseOrderSidebar";
 
 const PurchaseOrderSidebar = () => {
   const { orderId } = useParams();
-  const borderColor = useColor("gray.200");
+
   if (!orderId)
     throw new Error(
       "PurchaseOrderSidebar requires an orderId and could not find orderId in params"
@@ -30,45 +29,8 @@ const PurchaseOrderSidebar = () => {
     internalDocuments: routeData?.internalDocuments.length ?? 0,
     externalDocuments: routeData?.externalDocuments.length ?? 0,
   });
-  const matches = useMatches();
 
-  return (
-    <VStack className="h-full">
-      <div className="overflow-y-auto h-full w-full">
-        <VStack>
-          <VStack spacing={1}>
-            {links.map((route) => {
-              const isActive = matches.some(
-                (match) =>
-                  (match.pathname.includes(route.to) && route.to !== "") ||
-                  (match.id.includes(".index") && route.to === "")
-              );
-
-              return (
-                <Button
-                  key={route.name}
-                  as={Link}
-                  to={route.to}
-                  variant={isActive ? "solid" : "ghost"}
-                  border={isActive ? "1px solid" : "none"}
-                  borderColor={borderColor}
-                  fontWeight={isActive ? "bold" : "normal"}
-                  justifyContent={
-                    route.count === undefined ? "start" : "space-between"
-                  }
-                  size="md"
-                  w="full"
-                >
-                  <span>{route.name}</span>
-                  {route.count !== undefined && <Count count={route.count} />}
-                </Button>
-              );
-            })}
-          </VStack>
-        </VStack>
-      </div>
-    </VStack>
-  );
+  return <DetailSidebar links={links} />;
 };
 
 export default PurchaseOrderSidebar;

@@ -1,11 +1,12 @@
-import { HStack, Heading } from "@carbon/react";
 import {
-  Button,
   Card,
-  CardBody,
+  CardAction,
+  CardContent,
   CardHeader,
-  IconButton,
-} from "@chakra-ui/react";
+  CardTitle,
+  HStack,
+} from "@carbon/react";
+import { Button, IconButton } from "@chakra-ui/react";
 import { Link, Outlet, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
@@ -68,18 +69,20 @@ const ServiceSuppliers = ({ serviceSuppliers }: ServiceSuppliersProps) => {
 
   return (
     <>
-      <Card w="full">
-        <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="h3" className="inline-flex">
-            Suppliers
-          </Heading>
-          {canEdit && (
-            <Button colorScheme="brand" as={Link} to="new">
-              New
-            </Button>
-          )}
-        </CardHeader>
-        <CardBody>
+      <Card className="w-full">
+        <HStack className="justify-between items-start">
+          <CardHeader>
+            <CardTitle>Suppliers</CardTitle>
+          </CardHeader>
+          <CardAction>
+            {canEdit && (
+              <Button colorScheme="brand" as={Link} to="new">
+                New
+              </Button>
+            )}
+          </CardAction>
+        </HStack>
+        <CardContent>
           <Grid<ServiceSupplier>
             data={serviceSuppliers}
             columns={columns}
@@ -87,7 +90,7 @@ const ServiceSuppliers = ({ serviceSuppliers }: ServiceSuppliersProps) => {
             editableComponents={editableComponents}
             onNewRow={canEdit ? () => navigate("new") : undefined}
           />
-        </CardBody>
+        </CardContent>
       </Card>
       <Outlet />
     </>

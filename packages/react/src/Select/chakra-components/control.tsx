@@ -12,7 +12,7 @@ import type {
   IndicatorSeparatorProps,
   LoadingIndicatorProps,
 } from "react-select";
-import { useColor } from "../../../hooks";
+import { useColor } from "../../hooks";
 import type { SizeProps } from "../types";
 import { useSize } from "../utils";
 

@@ -1,3 +1,4 @@
+import type { UseToastOptions } from "@chakra-ui/react";
 import {
   Alert,
   AlertDescription,
@@ -8,9 +9,8 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import type { UseToastOptions } from "@chakra-ui/react";
 import { useMemo } from "react";
-import { ClientOnly } from "../SSR";
+import { ClientOnly } from "~/ClientOnly";
 
 const defaultOptions: UseToastOptions = {
   isClosable: true,

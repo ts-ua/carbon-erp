@@ -36,4 +36,4 @@ const File = ({ accept, children, onChange, ...props }: FileProps) => {
   );
 };
 
-export default File;
+export { File };

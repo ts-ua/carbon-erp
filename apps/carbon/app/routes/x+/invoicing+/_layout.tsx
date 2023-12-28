@@ -1,7 +1,7 @@
 import { VStack } from "@carbon/react";
 import { Grid } from "@chakra-ui/react";
 import { Outlet } from "@remix-run/react";
-import { GroupedContentSidebar } from "~/components/Layout/Sidebar";
+import { GroupedContentSidebar } from "~/components/Layout";
 import { useInvoicingSidebar } from "~/modules/invoicing";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";

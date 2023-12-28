@@ -1,4 +1,4 @@
-import { HStack, useColor } from "@carbon/react";
+import { HStack } from "@carbon/react";
 import { Button, GridItem } from "@chakra-ui/react";
 import { BiHelpCircle } from "react-icons/bi";
 import { BsChatSquare } from "react-icons/bs";
@@ -8,21 +8,10 @@ import Breadcrumbs from "./Breadcrumbs";
 import Create from "./Create";
 
 const Topbar = () => {
-  const borderColor = useColor("gray.200");
-
   return (
     <GridItem
-      bg={useColor("white")}
-      borderBottom={1}
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      display="grid"
-      gap={4}
+      className="grid bg-background text-foreground border-b border-border px-4 top-0 sticky z-10 space-x-4"
       gridTemplateColumns="1fr auto 1fr"
-      position="sticky"
-      px={4}
-      top={0}
-      zIndex={1}
     >
       <Breadcrumbs />
       <Search />

@@ -1,6 +1,6 @@
-import { useRef } from "react";
 import { Box, useColorModeValue, useOutsideClick } from "@chakra-ui/react";
-import { useEscape } from "../../../hooks";
+import { useRef } from "react";
+import { useEscape } from "../../hooks";
 
 export function Popover(props: any) {
   const ref = useRef();
