@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardAction,
   CardContent,
@@ -7,7 +8,7 @@ import {
   HStack,
   useDisclosure,
 } from "@carbon/react";
-import { Button, List, ListItem } from "@chakra-ui/react";
+import { List, ListItem } from "@chakra-ui/react";
 import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
 import { useCallback, useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
@@ -88,15 +89,15 @@ const SupplierContacts = ({ contacts }: SupplierContactsProps) => {
 
   return (
     <>
-      <Card className="w-full">
+      <Card>
         <HStack className="justify-between items-start">
           <CardHeader>
             <CardTitle>Contacts</CardTitle>
           </CardHeader>
           <CardAction>
             {canEdit && (
-              <Button colorScheme="brand" as={Link} to="new">
-                New
+              <Button asChild>
+                <Link to="new">New</Link>
               </Button>
             )}
           </CardAction>

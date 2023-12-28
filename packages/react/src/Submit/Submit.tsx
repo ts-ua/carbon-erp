@@ -1,8 +1,8 @@
 import type { ButtonProps as ChakraButtonProps } from "@chakra-ui/react";
 import { Box, Button as ChakraButton } from "@chakra-ui/react";
-import BorderMask from "./BorderMask";
-import BorderFollower from "./BorderFollower";
 import { AnimatePresence, motion } from "framer-motion";
+import BorderFollower from "./BorderFollower";
+import BorderMask from "./BorderMask";
 
 const MotionBox = motion(Box);
 

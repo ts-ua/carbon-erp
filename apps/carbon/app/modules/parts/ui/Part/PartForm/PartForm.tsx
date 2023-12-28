@@ -118,7 +118,7 @@ const PartForm = ({ initialValues }: PartFormProps) => {
       validator={partValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>{isEditing ? "Part Details" : "New Part"}</CardTitle>
           {!isEditing && (

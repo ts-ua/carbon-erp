@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardAction,
   CardContent,
@@ -7,7 +8,7 @@ import {
   CardTitle,
   HStack,
 } from "@carbon/react";
-import { Button, Stack } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -23,14 +24,18 @@ const ServicePreview = () => {
   );
 
   return (
-    <Card className="w-full">
+    <Card>
       <HStack className="justify-between items-start">
         <CardHeader>
           <CardTitle>{routeData?.service?.name}</CardTitle>
           <CardDescription>{routeData?.service?.description}</CardDescription>
         </CardHeader>
         <CardAction>
-          <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
+          <Button
+            variant="secondary"
+            onClick={() => alert("TODO")}
+            leftIcon={<FaHistory />}
+          >
             View History
           </Button>
         </CardAction>

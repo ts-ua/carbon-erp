@@ -84,7 +84,7 @@ const PurchaseInvoiceHeader = () => {
           </Menubar>
         )}
 
-        <Card className="w-full">
+        <Card>
           <CardHeader>
             <CardTitle>{purchaseInvoice.invoiceId}</CardTitle>
             <CardDescription>{purchaseInvoice.supplierName}</CardDescription>

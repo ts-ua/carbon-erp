@@ -52,7 +52,7 @@ const SupplierForm = ({ initialValues }: SupplierFormProps) => {
       validator={supplierValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>
             {isEditing ? "Supplier Overview" : "New Supplier"}

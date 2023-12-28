@@ -38,7 +38,7 @@ const AbilityIcons: Record<
 
 const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
   return (
-    <Card className="w-full">
+    <Card>
       <CardHeader>
         <CardTitle>Abilities</CardTitle>
       </CardHeader>

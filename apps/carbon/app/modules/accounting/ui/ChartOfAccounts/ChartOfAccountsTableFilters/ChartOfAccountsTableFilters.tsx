@@ -1,6 +1,5 @@
-import { DatePicker, HStack, Select } from "@carbon/react";
+import { Button, DatePicker, HStack, Select } from "@carbon/react";
 import {
-  Button,
   Grid,
   Popover,
   PopoverArrow,
@@ -81,7 +80,7 @@ const ChartOfAccountsTableFilters = () => {
         </Popover>
         {[...params.entries()].length > 0 && (
           <Button
-            size="sm"
+            variant="solid"
             rightIcon={<MdClose />}
             onClick={() =>
               setParams({
@@ -97,13 +96,8 @@ const ChartOfAccountsTableFilters = () => {
       </HStack>
       <HStack>
         {permissions.can("create", "accounting") && (
-          <Button
-            as={Link}
-            to={`new?${params.toString()}`}
-            colorScheme="brand"
-            leftIcon={<IoMdAdd />}
-          >
-            New Account
+          <Button asChild leftIcon={<IoMdAdd />}>
+            <Link to={`new?${params.toString()}`}>New Account</Link>
           </Button>
         )}
       </HStack>

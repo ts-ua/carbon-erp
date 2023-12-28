@@ -53,7 +53,7 @@ const SupplierPaymentForm = ({ initialValues }: SupplierPaymentFormProps) => {
       validator={supplierPaymentValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>Supplier Payment</CardTitle>
         </CardHeader>

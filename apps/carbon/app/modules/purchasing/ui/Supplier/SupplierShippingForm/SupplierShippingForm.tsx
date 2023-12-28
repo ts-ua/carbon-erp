@@ -59,7 +59,7 @@ const SupplierShippingForm = ({ initialValues }: SupplierShippingFormProps) => {
       validator={supplierShippingValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>Supplier Shipping</CardTitle>
         </CardHeader>

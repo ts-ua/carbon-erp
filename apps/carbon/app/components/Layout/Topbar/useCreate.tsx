@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { AiOutlinePartition } from "react-icons/ai";
 import { BsCartDash, BsShieldLock } from "react-icons/bs";
 import { IoMdPeople } from "react-icons/io";
-import { SiHandshake } from "react-icons/si";
+import { PiShareNetworkFill } from "react-icons/pi";
 import { usePermissions } from "~/hooks";
 
 import type { Route } from "~/types";
@@ -33,7 +33,7 @@ export default function useNewMenu(): Route[] {
       links.push({
         name: "Supplier",
         to: path.to.newSupplier,
-        icon: <SiHandshake />,
+        icon: <PiShareNetworkFill />,
       });
     }
 

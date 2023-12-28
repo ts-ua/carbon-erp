@@ -1,6 +1,5 @@
-import { HStack } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import {
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -28,13 +27,11 @@ const ReceiptPostModal = (props: ReceiptPostModalProps) => {
 
         <ModalFooter>
           <HStack>
-            <Button colorScheme="gray" onClick={onCancel}>
+            <Button variant="solid" onClick={onCancel}>
               Cancel
             </Button>
             <Form method="post">
-              <Button colorScheme="brand" type="submit">
-                Post Receipt
-              </Button>
+              <Button type="submit">Post Receipt</Button>
             </Form>
           </HStack>
         </ModalFooter>

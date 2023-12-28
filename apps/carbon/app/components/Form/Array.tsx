@@ -1,7 +1,6 @@
-import { HStack, VStack } from "@carbon/react";
+import { Button, HStack, VStack } from "@carbon/react";
 import type { InputProps } from "@chakra-ui/react";
 import {
-  Button,
   Input as ChakraInput,
   FormControl,
   FormErrorMessage,
@@ -36,7 +35,11 @@ const Array = forwardRef<HTMLInputElement, FormArrayProps>(
               {...rest}
             />
           ))}
-          <Button leftIcon={<IoMdAdd />} onClick={() => push("")}>
+          <Button
+            variant="secondary"
+            leftIcon={<IoMdAdd />}
+            onClick={() => push("")}
+          >
             New Option
           </Button>
         </VStack>

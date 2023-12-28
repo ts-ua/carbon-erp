@@ -50,7 +50,7 @@ const PartInventoryForm = ({
       validator={partInventoryValidator}
       defaultValues={{ ...quantities, ...initialValues }}
     >
-      <Card className="w-full">
+      <Card>
         <HStack className="w-full justify-between items-start">
           <CardHeader>
             <CardTitle>Inventory</CardTitle>

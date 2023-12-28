@@ -32,7 +32,7 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
           </Grid>
           <TextArea name="about" label="About" characterLimit={160} my={2} />
           <Hidden name="intent" value="about" />
-          <Submit size="sm">Save</Submit>
+          <Submit>Save</Submit>
         </VStack>
       </ValidatedForm>
     </div>

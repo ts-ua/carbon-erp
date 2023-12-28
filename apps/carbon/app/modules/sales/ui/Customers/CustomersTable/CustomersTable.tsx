@@ -40,22 +40,15 @@ const CustomersTable = memo(({ data, count }: CustomersTableProps) => {
       //   id: "orders",
       //   header: "Orders",
       //   cell: ({ row }) => (
-      //     <ButtonGroup size="sm" isAttached variant="outline">
+      //
       //       <Button
+      //         variant="secondary"
       //         onClick={() =>
       //           navigate(`${path.to.salesOrders}?customerId=${row.original.id}`)
       //         }
       //       >
       //         {row.original.orderCount ?? 0} Orders
       //       </Button>
-      //       <IconButton
-      //         aria-label="New Order"
-      //         icon={<BsPlus />}
-      //         onClick={() =>
-      //           navigate(`${path.to.newPurchaseOrder}?customerId=${row.original.id}`)
-      //         }
-      //       />
-      //     </ButtonGroup>
       //   ),
       // },
     ];

@@ -1,5 +1,4 @@
-import { CardTitle, HStack, VStack } from "@carbon/react";
-import { Button } from "@chakra-ui/react";
+import { Button, CardTitle, HStack, VStack } from "@carbon/react";
 import { BsEnvelopeFill } from "react-icons/bs";
 import { Avatar } from "~/components";
 import { usePermissions } from "~/hooks";
@@ -19,7 +18,7 @@ const PersonHeader = ({ user }: { user: Account }) => {
       <HStack>
         {permissions.can("create", "messaging") && (
           <Button
-            size="md"
+            variant="secondary"
             leftIcon={<BsEnvelopeFill />}
             onClick={() => alert("TODO")}
           >

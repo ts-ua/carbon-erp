@@ -60,7 +60,7 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
       validator={purchaseOrderValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>
             {isEditing ? "Purchase Order" : "New Purchase Order"}

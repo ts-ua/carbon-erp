@@ -4,7 +4,7 @@ type PersonOvertimeProps = {};
 
 const PersonOvertime = (props: PersonOvertimeProps) => {
   return (
-    <Card className="w-full">
+    <Card>
       <CardHeader>
         <CardTitle>Overtime</CardTitle>
       </CardHeader>

@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardAction,
   CardContent,
@@ -6,7 +7,7 @@ import {
   CardTitle,
   HStack,
 } from "@carbon/react";
-import { Button, IconButton } from "@chakra-ui/react";
+import { IconButton } from "@chakra-ui/react";
 import { Link, Outlet, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
@@ -105,15 +106,15 @@ const PartSuppliers = ({ partSuppliers }: PartSuppliersProps) => {
 
   return (
     <>
-      <Card className="w-full">
+      <Card>
         <HStack className="justify-between items-start">
           <CardHeader>
             <CardTitle>Suppliers</CardTitle>
           </CardHeader>
           <CardAction>
             {canEdit && (
-              <Button colorScheme="brand" as={Link} to="new">
-                New
+              <Button asChild>
+                <Link to="new">New</Link>
               </Button>
             )}
           </CardAction>

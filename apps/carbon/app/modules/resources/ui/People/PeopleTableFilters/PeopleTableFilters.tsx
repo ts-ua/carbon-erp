@@ -1,5 +1,4 @@
-import { HStack, Select } from "@carbon/react";
-import { Button } from "@chakra-ui/react";
+import { Button, HStack, Select } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
 import { DebouncedInput } from "~/components/Search";
@@ -70,13 +69,10 @@ const PeopleTableFilters = ({ employeeTypes }: PeopleTableFiltersProps) => {
       </HStack>
       <HStack>
         {permissions.can("create", "users") && (
-          <Button
-            as={Link}
-            to={`${path.to.newEmployee}?${params.toString()}`}
-            colorScheme="brand"
-            leftIcon={<IoMdAdd />}
-          >
-            New Employee
+          <Button asChild leftIcon={<IoMdAdd />}>
+            <Link to={`${path.to.newEmployee}?${params.toString()}`}>
+              New Employee
+            </Link>
           </Button>
         )}
       </HStack>

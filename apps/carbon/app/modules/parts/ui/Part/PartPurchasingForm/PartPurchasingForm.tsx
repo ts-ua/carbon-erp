@@ -43,7 +43,7 @@ const PartPurchasingForm = ({
       validator={partPurchasingValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>Purchasing</CardTitle>
         </CardHeader>

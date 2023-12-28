@@ -1,5 +1,6 @@
 import { ActionMenu } from "./ActionMenu";
-import Button from "./Button";
+import type { ButtonProps } from "./Button";
+import { Button } from "./Button";
 import {
   Card,
   CardAction,
@@ -36,6 +37,7 @@ import type {
 } from "./Select";
 import { CreatableSelect, Select, createFilter } from "./Select";
 import { Status } from "./Status";
+import Submit from "./Submit";
 import ThemeProvider, { theme } from "./Theme";
 import {
   Tooltip,
@@ -89,6 +91,7 @@ export {
   MenubarTrigger,
   Select,
   Status,
+  Submit,
   ThemeProvider,
   TimePicker,
   Tooltip,
@@ -111,4 +114,11 @@ export {
   useNotification,
   useOutsideClick,
 };
-export type { GroupBase, MultiValue, OptionBase, OptionProps, SingleValue };
+export type {
+  ButtonProps,
+  GroupBase,
+  MultiValue,
+  OptionBase,
+  OptionProps,
+  SingleValue,
+};

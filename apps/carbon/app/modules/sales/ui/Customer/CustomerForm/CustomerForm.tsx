@@ -52,7 +52,7 @@ const CustomerForm = ({ initialValues }: CustomerFormProps) => {
       validator={customerValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>
             {isEditing ? "Customer Overview" : "New Customer"}

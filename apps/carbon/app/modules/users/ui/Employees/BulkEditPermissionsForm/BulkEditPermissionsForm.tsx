@@ -1,6 +1,5 @@
-import { HStack, VStack, useMount } from "@carbon/react";
+import { Button, HStack, VStack, useMount } from "@carbon/react";
 import {
-  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -119,12 +118,7 @@ const BulkEditPermissions = ({
               <Hidden name="data" value={JSON.stringify(permissions)} />
               <HStack className="my-4">
                 <Submit>Save</Submit>
-                <Button
-                  size="md"
-                  colorScheme="gray"
-                  variant="solid"
-                  onClick={onClose}
-                >
+                <Button size="md" variant="solid" onClick={onClose}>
                   Cancel
                 </Button>
               </HStack>

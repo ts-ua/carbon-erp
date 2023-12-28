@@ -1,14 +1,13 @@
 import {
+  Button,
   Card,
   CardAction,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
   HStack,
 } from "@carbon/react";
 import {
-  Button,
   Checkbox,
   IconButton,
   Menu,
@@ -287,14 +286,11 @@ const PurchaseOrderLines = () => {
         <HStack className="justify-between items-start">
           <CardHeader>
             <CardTitle>Purchase Order Lines</CardTitle>
-            <CardDescription>
-              {routeData?.purchaseOrder?.purchaseOrderNumber}
-            </CardDescription>
           </CardHeader>
           <CardAction>
             {canEdit && isEditable && (
-              <Button colorScheme="brand" as={Link} to="new">
-                New
+              <Button asChild>
+                <Link to="new">New</Link>
               </Button>
             )}
           </CardAction>

@@ -100,7 +100,7 @@ export default function LoginRoute() {
             <Input name="email" label="Email" />
             <Password name="password" label="Password" type="password" />
             <Input name="redirectTo" value={redirectTo} type="hidden" />
-            <Submit w="full">Sign in</Submit>
+            <Submit className="w-full">Sign in</Submit>
             <Link to={path.to.forgotPassword} color={useColor("black")}>
               Forgot password?
             </Link>

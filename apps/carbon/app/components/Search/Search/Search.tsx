@@ -1,4 +1,5 @@
 import {
+  Button,
   VStack,
   useColor,
   useDebounce,
@@ -6,9 +7,7 @@ import {
   useKeyboardShortcuts,
 } from "@carbon/react";
 import { clip } from "@carbon/utils";
-import type { ButtonProps } from "@chakra-ui/react";
 import {
-  Button,
   HStack,
   Icon,
   Input,
@@ -30,7 +29,7 @@ import { BsArrowReturnLeft, BsCartDash, BsCartPlus } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { FaSearch } from "react-icons/fa";
 import { HiOutlineDocumentDuplicate } from "react-icons/hi";
-import { SiHandshake } from "react-icons/si";
+import { PiShareNetworkFill } from "react-icons/pi";
 import { useSidebar } from "~/components/Layout/Sidebar/useSidebar";
 import { useSupabase } from "~/lib/supabase";
 import type { NavItem } from "~/types";
@@ -265,7 +264,7 @@ const resultIconProps = {
 function ResultIcon({ entity }: { entity: SearchResult["entity"] | "Module" }) {
   switch (entity) {
     case "Customer":
-      return <Icon as={SiHandshake} {...resultIconProps} />;
+      return <Icon as={PiShareNetworkFill} {...resultIconProps} />;
     case "Document":
       return <Icon as={HiOutlineDocumentDuplicate} {...resultIconProps} />;
     case "Job":
@@ -281,7 +280,7 @@ function ResultIcon({ entity }: { entity: SearchResult["entity"] | "Module" }) {
     case "Sales Order":
       return <Icon as={BsCartPlus} {...resultIconProps} />;
     case "Supplier":
-      return <Icon as={SiHandshake} {...resultIconProps} />;
+      return <Icon as={PiShareNetworkFill} {...resultIconProps} />;
     default:
       return null;
   }
@@ -367,7 +366,7 @@ function Module({
   );
 }
 
-const SearchButton = (props: ButtonProps) => {
+const SearchButton = () => {
   const searchModal = useDisclosure();
   useKeyboardShortcuts({
     "/": searchModal.onOpen,
@@ -376,15 +375,10 @@ const SearchButton = (props: ButtonProps) => {
   return (
     <>
       <Button
-        colorScheme="gray"
         leftIcon={<FaSearch />}
-        variant="outline"
-        boxShadow="sm"
-        color="gray.500"
-        w={200}
-        mt={2}
+        variant="secondary"
+        className="text-muted-foreground w-[200px] mt-2"
         onClick={searchModal.onOpen}
-        {...props}
       >
         <HStack w="full">
           <div className="flex flex-grow">Search</div>

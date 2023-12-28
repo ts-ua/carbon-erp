@@ -1,6 +1,5 @@
-import { HStack } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import {
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -64,9 +63,7 @@ const ResendInviteModal = ({
                   value={id}
                 />
               ))}
-              <Button colorScheme="brand" type="submit">
-                Send
-              </Button>
+              <Button type="submit">Send</Button>
             </ValidatedForm>
           </HStack>
         </ModalFooter>

@@ -1,5 +1,4 @@
-import { HStack, Select } from "@carbon/react";
-import { Button } from "@chakra-ui/react";
+import { Button, HStack, Select } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
 import { DebouncedInput } from "~/components/Search";
@@ -68,13 +67,8 @@ const PurchaseInvoicesTableFilters = () => {
       </HStack>
       <HStack>
         {permissions.can("create", "invoicing") && (
-          <Button
-            as={Link}
-            to={path.to.newPurchaseInvoice}
-            colorScheme="brand"
-            leftIcon={<IoMdAdd />}
-          >
-            New Purchase Invoice
+          <Button asChild leftIcon={<IoMdAdd />}>
+            <Link to={path.to.newPurchaseInvoice}>New Purchase Invoice</Link>
           </Button>
         )}
       </HStack>

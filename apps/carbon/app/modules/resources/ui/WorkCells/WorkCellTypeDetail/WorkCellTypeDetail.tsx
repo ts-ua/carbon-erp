@@ -1,6 +1,11 @@
-import { ActionMenu, HStack, VStack, useDisclosure } from "@carbon/react";
 import {
+  ActionMenu,
   Button,
+  HStack,
+  VStack,
+  useDisclosure,
+} from "@carbon/react";
+import {
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -98,13 +103,8 @@ const WorkCellTypeDetail = ({
             )}
           </DrawerBody>
           <DrawerFooter>
-            <Button
-              as={Link}
-              to={`new?${params.toString()}`}
-              colorScheme="brand"
-              size="md"
-            >
-              New Work Cell
+            <Button asChild size="md">
+              <Link to={`new?${params.toString()}`}>New Work Cell</Link>
             </Button>
           </DrawerFooter>
         </DrawerContent>

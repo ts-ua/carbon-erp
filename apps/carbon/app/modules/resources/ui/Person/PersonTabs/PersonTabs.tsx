@@ -37,7 +37,7 @@ const PersonsTabs = ({
   if (!personId) throw new Error("Missing personId");
 
   return (
-    <Card className="w-full">
+    <Card>
       <CardContent>
         <Tabs colorScheme="gray">
           <TabList>

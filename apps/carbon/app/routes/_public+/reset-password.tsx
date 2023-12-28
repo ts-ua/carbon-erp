@@ -74,9 +74,10 @@ export default function ResetPasswordRoute() {
 
             <Password name="password" label="New Password" />
             <HStack spacing={4}>
-              <Submit w="full">Reset Password</Submit>
+              <Submit>Reset Password</Submit>
               <Button
                 size="md"
+                variant="solid"
                 onClick={() => navigate(path.to.authenticatedRoot)}
               >
                 Skip

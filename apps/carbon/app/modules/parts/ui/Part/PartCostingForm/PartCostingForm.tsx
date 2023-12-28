@@ -33,7 +33,7 @@ const PartCostingForm = ({ initialValues }: PartCostingFormProps) => {
       validator={partCostValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>Costing & Posting</CardTitle>
         </CardHeader>

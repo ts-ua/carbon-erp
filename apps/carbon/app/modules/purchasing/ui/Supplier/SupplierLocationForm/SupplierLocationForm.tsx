@@ -1,6 +1,5 @@
-import { HStack, VStack } from "@carbon/react";
+import { Button, HStack, VStack } from "@carbon/react";
 import {
-  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -67,12 +66,7 @@ const SupplierLocationForm = ({ initialValues }: SupplierLocationFormProps) => {
           <DrawerFooter>
             <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>

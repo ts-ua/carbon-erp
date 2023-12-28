@@ -66,7 +66,7 @@ const PurchaseInvoiceForm = ({
       validator={purchaseInvoiceValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>
             {isEditing ? "Purchase Invoice" : "New Purchase Invoice"}

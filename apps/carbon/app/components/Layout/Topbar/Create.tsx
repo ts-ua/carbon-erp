@@ -1,4 +1,5 @@
-import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { Button } from "@carbon/react";
+import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import useCreate from "./useCreate";
 
@@ -9,16 +10,7 @@ const Create = () => {
 
   return (
     <Menu>
-      <MenuButton
-        arial-label="User Menu"
-        as={Button}
-        variant="solid"
-        colorScheme="brand"
-        size="sm"
-        cursor="pointer"
-      >
-        Create
-      </MenuButton>
+      <MenuButton as={Button}>Create</MenuButton>
       <MenuList fontSize="sm" boxShadow="xl" minW={48}>
         {createLinks.map((link) => (
           <MenuItem key={link.to} as={Link} to={link.to} icon={link.icon}>

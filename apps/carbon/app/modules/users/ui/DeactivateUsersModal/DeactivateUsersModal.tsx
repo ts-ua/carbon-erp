@@ -1,6 +1,5 @@
-import { HStack } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import {
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -64,7 +63,7 @@ const DeactivateUsersModal = ({
                 />
               ))}
               <input type="hidden" name="redirectTo" value={redirectTo} />
-              <Button colorScheme="red" type="submit">
+              <Button variant="destructive" type="submit">
                 Deactivate
               </Button>
             </ValidatedForm>

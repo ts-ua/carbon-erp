@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardAction,
   CardContent,
@@ -7,7 +8,7 @@ import {
   HStack,
   VStack,
 } from "@carbon/react";
-import { Button, Stack } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -34,13 +35,17 @@ const SupplierHeader = () => {
 
   return (
     <VStack>
-      <Card className="w-full">
+      <Card>
         <HStack className="justify-between items-start">
           <CardHeader>
             <CardTitle>{routeData?.supplier?.name}</CardTitle>
           </CardHeader>
           <CardAction>
-            <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
+            <Button
+              variant="secondary"
+              onClick={() => alert("TODO")}
+              leftIcon={<FaHistory />}
+            >
               Supplier Details
             </Button>
           </CardAction>

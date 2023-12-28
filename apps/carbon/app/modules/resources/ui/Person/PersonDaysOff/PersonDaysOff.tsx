@@ -4,7 +4,7 @@ type PersonDaysOffProps = {};
 
 const PersonDaysOff = (props: PersonDaysOffProps) => {
   return (
-    <Card className="w-full">
+    <Card>
       <CardHeader>
         <CardTitle>Days Off</CardTitle>
       </CardHeader>

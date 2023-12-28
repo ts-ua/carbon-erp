@@ -1,3 +1,4 @@
+import { BsBank, BsCreditCard, BsListCheck } from "react-icons/bs";
 import { usePermissions } from "~/hooks";
 import type { Role } from "~/types";
 
@@ -11,16 +12,19 @@ export function usePurchaseInvoiceSidebar({ lines = 0 }: Props) {
     {
       name: "Summary",
       to: "details",
+      icon: BsBank,
     },
     {
       name: "Lines",
       to: "lines",
       count: lines,
+      icon: BsListCheck,
     },
     {
       name: "Payment",
       to: "payment",
       role: ["employee"],
+      icon: BsCreditCard,
     },
   ].filter(
     (item) =>

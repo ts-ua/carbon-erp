@@ -50,7 +50,7 @@ const PurchaseOrderPaymentForm = ({
       validator={purchaseOrderPaymentValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>Payment</CardTitle>
         </CardHeader>

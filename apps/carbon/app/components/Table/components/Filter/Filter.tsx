@@ -1,6 +1,5 @@
-import { VStack } from "@carbon/react";
+import { Button, VStack } from "@carbon/react";
 import {
-  Button,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -44,8 +43,7 @@ const Filter = ({ columnAccessors }: FilterProps) => {
     <Popover placement="bottom" closeOnBlur>
       <PopoverTrigger>
         <Button
-          colorScheme={filters.length === 0 ? undefined : "brand"}
-          variant={filters.length === 0 ? "ghost" : "solid"}
+          variant={filters.length === 0 ? "ghost" : "primary"}
           leftIcon={<BsFilter />}
         >
           {filters.length === 0 ? "Filter" : "Filtered"}
@@ -85,12 +83,7 @@ const Filter = ({ columnAccessors }: FilterProps) => {
           </PopoverBody>
         )}
         <PopoverFooter>
-          <Button
-            size="sm"
-            variant="outline"
-            leftIcon={<BsPlus />}
-            onClick={addFilter}
-          >
+          <Button variant="secondary" leftIcon={<BsPlus />} onClick={addFilter}>
             Add Filter
           </Button>
         </PopoverFooter>

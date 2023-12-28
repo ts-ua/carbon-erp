@@ -1,5 +1,5 @@
-import { HStack, useMount } from "@carbon/react";
-import { Button, Icon } from "@chakra-ui/react";
+import { Button, HStack, useMount } from "@carbon/react";
+import { Icon } from "@chakra-ui/react";
 import { useState } from "react";
 import { AiOutlineCodeSandbox } from "react-icons/ai";
 import { BsCaretDownFill } from "react-icons/bs";
@@ -67,8 +67,7 @@ const PartsTreeExplorer = () => {
             <Button
               variant="ghost"
               aria-label="Expand"
-              borderRadius={0}
-              size="sm"
+              className="rounded-none"
               onClick={() => toggleNode(node.id)}
               isDisabled={!node.children}
             >
@@ -85,12 +84,9 @@ const PartsTreeExplorer = () => {
               />
             </Button>
             <Button
-              size="sm"
               variant="ghost"
               leftIcon={<AiOutlineCodeSandbox />}
-              borderRadius={0}
-              justifyContent="start"
-              flex="1 1 0%"
+              className="rounded-none flex-1 justify-start"
             >
               {node.id}
             </Button>

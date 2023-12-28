@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardAction,
   CardContent,
@@ -7,7 +8,6 @@ import {
   HStack,
 } from "@carbon/react";
 import {
-  Button,
   IconButton,
   Menu,
   MenuButton,
@@ -202,8 +202,8 @@ const PurchaseInvoiceLines = () => {
           </CardHeader>
           <CardAction>
             {canEdit && isEditable && (
-              <Button colorScheme="brand" as={Link} to="new">
-                New
+              <Button asChild>
+                <Link to="new">New</Link>
               </Button>
             )}
           </CardAction>
