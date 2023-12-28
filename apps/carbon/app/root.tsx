@@ -66,7 +66,7 @@ function Document({
         <title>{title}</title>
         <Links />
       </head>
-      <body>
+      <body className="bg-background">
         {children}
         <ScrollRestoration />
         <Scripts />

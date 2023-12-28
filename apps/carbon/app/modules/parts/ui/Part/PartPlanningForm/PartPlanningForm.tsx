@@ -46,7 +46,7 @@ const PartPlanningForm = ({
       validator={partPlanningValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <HStack className="w-full justify-between items-start">
           <CardHeader>
             <CardTitle>Planning</CardTitle>

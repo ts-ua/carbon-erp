@@ -1,5 +1,4 @@
-import { File, VStack, useNotification } from "@carbon/react";
-import { Button } from "@chakra-ui/react";
+import { Button, File, VStack, useNotification } from "@carbon/react";
 import { useSubmit } from "@remix-run/react";
 import type { ChangeEvent } from "react";
 import { Avatar } from "~/components";
@@ -73,7 +72,7 @@ const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
       </File>
 
       {user.avatarUrl && (
-        <Button variant="outline" onClick={deleteImage}>
+        <Button variant="secondary" onClick={deleteImage}>
           Remove
         </Button>
       )}

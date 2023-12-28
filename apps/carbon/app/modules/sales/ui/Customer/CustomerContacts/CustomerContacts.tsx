@@ -76,7 +76,7 @@ const CustomerContacts = ({ contacts }: CustomerContactsProps) => {
 
   return (
     <>
-      <Card className="w-full">
+      <Card>
         <HStack className="justify-between items-start">
           <CardHeader>
             <CardTitle>Contacts</CardTitle>

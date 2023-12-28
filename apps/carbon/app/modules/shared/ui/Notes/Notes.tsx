@@ -1,6 +1,6 @@
-import { HStack, HTML, VStack } from "@carbon/react";
+import { Button, HStack, HTML, VStack } from "@carbon/react";
 import { formatTimeAgo } from "@carbon/utils";
-import { Button, Grid } from "@chakra-ui/react";
+import { Grid } from "@chakra-ui/react";
 import { Form } from "@remix-run/react";
 import { Fragment } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -53,12 +53,7 @@ const Notes = ({ documentId, notes }: NotesProps) => {
                     {/* @ts-ignore */}
                     {user.id === note.user.id && (
                       <Form method="post" action={path.to.deleteNote(note.id)}>
-                        <Button
-                          type="submit"
-                          variant="link"
-                          fontWeight="normal"
-                          size="md"
-                        >
+                        <Button type="submit" variant="link" size="md">
                           Delete
                         </Button>
                       </Form>

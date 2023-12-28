@@ -1,17 +1,10 @@
-import {
-  Badge,
-  Button,
-  ButtonGroup,
-  IconButton,
-  Link,
-  MenuItem,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Button, useDisclosure } from "@carbon/react";
+import { Badge, Link, MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-import { BsListUl, BsPencilSquare, BsPlus } from "react-icons/bs";
+import { BsListUl, BsPencilSquare } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -58,33 +51,21 @@ const AttributeCategoriesTable = memo(
         {
           header: "Attributes",
           cell: ({ row }) => (
-            <ButtonGroup size="sm" isAttached variant="outline">
-              <Button
-                onClick={() => {
-                  navigate(
-                    `${path.to.attributeCategoryList(
-                      row.original.id
-                    )}?${params?.toString()}`
-                  );
-                }}
-              >
-                {Array.isArray(row.original.userAttribute)
-                  ? row.original.userAttribute?.length ?? 0
-                  : 0}{" "}
-                Attributes
-              </Button>
-              <IconButton
-                aria-label="Add attribute"
-                icon={<BsPlus />}
-                onClick={() => {
-                  navigate(
-                    `${path.to.newAttributeForCategory(
-                      row.original.id
-                    )}?${params?.toString()}`
-                  );
-                }}
-              />
-            </ButtonGroup>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                navigate(
+                  `${path.to.attributeCategoryList(
+                    row.original.id
+                  )}?${params?.toString()}`
+                );
+              }}
+            >
+              {Array.isArray(row.original.userAttribute)
+                ? row.original.userAttribute?.length ?? 0
+                : 0}{" "}
+              Attributes
+            </Button>
           ),
         },
         {

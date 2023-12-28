@@ -1,5 +1,4 @@
-import { HStack } from "@carbon/react";
-import { Button } from "@chakra-ui/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
 import { DebouncedInput } from "~/components/Search";
@@ -23,13 +22,8 @@ const UnitOfMeasuresTableFilters = () => {
       </HStack>
       <HStack>
         {permissions.can("create", "parts") && (
-          <Button
-            as={Link}
-            to={`new?${params.toString()}`}
-            colorScheme="brand"
-            leftIcon={<IoMdAdd />}
-          >
-            New Unit of Measure
+          <Button asChild leftIcon={<IoMdAdd />}>
+            <Link to={`new?${params.toString()}`}>New Unit of Measure</Link>
           </Button>
         )}
       </HStack>

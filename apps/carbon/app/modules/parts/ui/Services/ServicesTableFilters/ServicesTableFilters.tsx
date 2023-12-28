@@ -1,5 +1,4 @@
-import { HStack, Select } from "@carbon/react";
-import { Button } from "@chakra-ui/react";
+import { Button, HStack, Select } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
 import { DebouncedInput } from "~/components/Search";
@@ -70,13 +69,8 @@ const ServicesTableFilters = ({ partGroups }: ServicesTableFiltersProps) => {
       </HStack>
       <HStack>
         {permissions.can("create", "parts") && (
-          <Button
-            as={Link}
-            to={path.to.newService}
-            colorScheme="brand"
-            leftIcon={<IoMdAdd />}
-          >
-            New Service
+          <Button asChild leftIcon={<IoMdAdd />}>
+            <Link to={path.to.newService}>New Service</Link>
           </Button>
         )}
       </HStack>

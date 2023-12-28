@@ -1,6 +1,11 @@
-import { ActionMenu, HStack, VStack, useDisclosure } from "@carbon/react";
 import {
+  ActionMenu,
   Button,
+  HStack,
+  VStack,
+  useDisclosure,
+} from "@carbon/react";
+import {
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -13,7 +18,7 @@ import {
 import { Link } from "@remix-run/react";
 import { useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
-import { IoMdTrash } from "react-icons/io";
+import { IoMdAdd, IoMdTrash } from "react-icons/io";
 import { ConfirmDelete } from "~/components/Modals";
 import { useUrlParams } from "~/hooks";
 import type { EquipmentTypeDetailType } from "~/modules/resources";
@@ -91,13 +96,8 @@ const EquipmentTypeDetail = ({
             )}
           </DrawerBody>
           <DrawerFooter>
-            <Button
-              as={Link}
-              to={`new?${params.toString()}`}
-              colorScheme="brand"
-              size="md"
-            >
-              New Equipment
+            <Button asChild leftIcon={<IoMdAdd />} size="md">
+              <Link to={`new?${params.toString()}`}>New Equipment</Link>
             </Button>
           </DrawerFooter>
         </DrawerContent>

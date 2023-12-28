@@ -59,7 +59,7 @@ const CustomerShippingForm = ({ initialValues }: CustomerShippingFormProps) => {
       validator={customerShippingValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>Customer Shipping</CardTitle>
         </CardHeader>

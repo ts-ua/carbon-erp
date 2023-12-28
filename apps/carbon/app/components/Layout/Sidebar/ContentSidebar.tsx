@@ -1,5 +1,4 @@
-import { VStack } from "@carbon/react";
-import { Button } from "@chakra-ui/react";
+import { Button, VStack } from "@carbon/react";
 import { Link, useMatches } from "@remix-run/react";
 import { useUrlParams } from "~/hooks";
 import type { Route } from "~/types";
@@ -23,16 +22,14 @@ const ContentSidebar = ({ links }: { links: Route[] }) => {
               return (
                 <Button
                   key={route.name}
-                  as={Link}
-                  to={route.to + (route.q ? `?q=${route.q}` : "")}
+                  asChild
                   leftIcon={route.icon}
                   variant={isActive ? "solid" : "ghost"}
-                  border="none"
-                  fontWeight={isActive ? "bold" : "normal"}
-                  justifyContent="start"
-                  w="full"
+                  className="w-full justify-start"
                 >
-                  {route.name}
+                  <Link to={route.to + (route.q ? `?q=${route.q}` : "")}>
+                    {route.name}
+                  </Link>
                 </Button>
               );
             })}

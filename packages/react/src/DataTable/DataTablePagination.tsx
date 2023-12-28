@@ -1,6 +1,7 @@
-import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import type { Table } from "@tanstack/react-table";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import { Button } from "~/Button";
 import { HStack } from "~/HStack";
 
 interface DataTablePaginationProps<TData> {
@@ -45,6 +46,7 @@ export function DataTablePagination<TData>({
           {table.getPageCount()}
         </div>
         <Button
+          variant="secondary"
           isDisabled={!table.getCanPreviousPage()}
           onClick={() => {
             table.previousPage();
@@ -55,6 +57,7 @@ export function DataTablePagination<TData>({
           Previous
         </Button>
         <Button
+          variant="secondary"
           isDisabled={!table.getCanNextPage()}
           onClick={() => {
             table.nextPage();

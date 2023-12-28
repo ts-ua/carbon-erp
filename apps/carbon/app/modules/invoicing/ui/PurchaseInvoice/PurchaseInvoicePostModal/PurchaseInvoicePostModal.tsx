@@ -1,6 +1,5 @@
-import { HStack } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import {
-  Button,
   ListItem,
   Modal,
   ModalBody,
@@ -57,11 +56,11 @@ const PurchaseInvoicePostModal = ({
 
         <ModalFooter>
           <HStack>
-            <Button colorScheme="gray" onClick={onClose}>
+            <Button variant="solid" onClick={onClose}>
               Cancel
             </Button>
             <Form method="post" action={path.to.purchaseInvoicePost(invoiceId)}>
-              <Button colorScheme="brand" type="submit">
+              <Button type="submit">
                 {hasLinesToReceive
                   ? "Post and Receive Invoice"
                   : "Post Invoice"}

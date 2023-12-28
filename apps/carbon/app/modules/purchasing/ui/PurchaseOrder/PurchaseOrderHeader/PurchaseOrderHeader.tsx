@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardAction,
   CardContent,
@@ -10,7 +11,7 @@ import {
   MenubarItem,
   VStack,
 } from "@carbon/react";
-import { Button, Stack } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { useMemo } from "react";
 import { FaHistory } from "react-icons/fa";
@@ -87,7 +88,7 @@ const PurchaseOrderHeader = () => {
         </Menubar>
       )}
 
-      <Card className="w-full">
+      <Card>
         <HStack className="justify-between items-start">
           <CardHeader>
             <CardTitle>{routeData?.purchaseOrder?.purchaseOrderId}</CardTitle>
@@ -96,7 +97,11 @@ const PurchaseOrderHeader = () => {
             </CardDescription>
           </CardHeader>
           <CardAction>
-            <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
+            <Button
+              variant="secondary"
+              onClick={() => alert("TODO")}
+              leftIcon={<FaHistory />}
+            >
               Supplier Details
             </Button>
           </CardAction>

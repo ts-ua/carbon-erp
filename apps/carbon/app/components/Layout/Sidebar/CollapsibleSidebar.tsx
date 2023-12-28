@@ -29,7 +29,7 @@ export const CollapsibleSidebar = ({ children }: PropsWithChildren<{}>) => {
       <motion.div
         animate={sidebar.isOpen ? "visible" : "hidden"}
         initial={variants.visible}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
         variants={variants}
         className="bg-popover text-popover-foreground border-r border-border h-full min-h-[calc(100vh-50px)] sticky top-50 z-[3]"
       >

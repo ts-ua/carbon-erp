@@ -1,6 +1,5 @@
-import { HStack } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import {
-  Button,
   IconButton,
   Menu,
   MenuButton,
@@ -39,8 +38,7 @@ const Sort = ({ columnAccessors }: SortProps) => {
     <Popover placement="bottom" closeOnBlur>
       <PopoverTrigger>
         <Button
-          colorScheme={hasNoSorts ? undefined : "brand"}
-          variant={hasNoSorts ? "ghost" : "solid"}
+          variant={hasNoSorts ? "ghost" : "primary"}
           leftIcon={<BsListUl />}
         >
           {hasNoSorts ? "Sort" : "Sorted"}
@@ -103,8 +101,7 @@ const Sort = ({ columnAccessors }: SortProps) => {
             <MenuButton
               as={Button}
               rightIcon={<BsChevronDown />}
-              colorScheme="gray"
-              variant="outline"
+              variant="secondary"
             >
               Pick a column to sort by
             </MenuButton>

@@ -62,7 +62,7 @@ const PurchaseOrderDeliveryForm = ({
       validator={purchaseOrderDeliveryValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>Delivery</CardTitle>
         </CardHeader>

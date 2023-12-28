@@ -1,5 +1,5 @@
+import { Button } from "@carbon/react";
 import {
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -36,11 +36,11 @@ const ConfirmDelete = ({
         <ModalBody>{text}</ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="gray" mr={3} onClick={onCancel}>
+          <Button variant="secondary" className="mr-3" onClick={onCancel}>
             Cancel
           </Button>
           <Form method="post" action={action} onSubmit={onSubmit}>
-            <Button colorScheme="red" type="submit">
+            <Button variant="destructive" type="submit">
               Delete
             </Button>
           </Form>

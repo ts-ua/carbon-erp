@@ -1,5 +1,5 @@
-import { HStack, VStack, useColor, useDisclosure } from "@carbon/react";
-import { Button, Grid, Switch } from "@chakra-ui/react";
+import { Button, HStack, VStack, useColor, useDisclosure } from "@carbon/react";
+import { Grid, Switch } from "@chakra-ui/react";
 import { parseDate } from "@internationalized/date";
 import { useFetcher, useParams } from "@remix-run/react";
 import { useState } from "react";
@@ -172,10 +172,8 @@ function renderTypedForm({
               <BooleanInput name="value" />
             </div>
             <HStack className="justify-end w-full self-center">
-              <Submit size="sm" type="submit">
-                Save
-              </Submit>
-              <Button size="md" variant="ghost" onClick={onClose}>
+              <Submit type="submit">Save</Submit>
+              <Button variant="ghost" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
@@ -214,9 +212,7 @@ function renderTypedForm({
               <DatePicker name="value" />
             </div>
             <HStack className="justify-end w-full self-center">
-              <Submit size="sm" type="submit">
-                Save
-              </Submit>
+              <Submit type="submit">Save</Submit>
               <Button variant="ghost" onClick={onClose}>
                 Cancel
               </Button>
@@ -264,9 +260,7 @@ function renderTypedForm({
               />
             </div>
             <HStack className="justify-between w-full self-center">
-              <Submit size="sm" type="submit">
-                Save
-              </Submit>
+              <Submit type="submit">Save</Submit>
               <Button variant="ghost" onClick={onClose}>
                 Cancel
               </Button>
@@ -306,9 +300,7 @@ function renderTypedForm({
               <NumberInput name="value" />
             </div>
             <HStack className="justify-between w-full self-center">
-              <Submit size="sm" type="submit">
-                Save
-              </Submit>
+              <Submit type="submit">Save</Submit>
               <Button variant="ghost" onClick={onClose}>
                 Cancel
               </Button>
@@ -348,9 +340,7 @@ function renderTypedForm({
               <Input name="value" />
             </div>
             <HStack className="justify-between w-full self-center">
-              <Submit size="sm" type="submit">
-                Save
-              </Submit>
+              <Submit type="submit">Save</Submit>
               <Button variant="ghost" onClick={onClose}>
                 Cancel
               </Button>
@@ -390,9 +380,7 @@ function renderTypedForm({
               <Employee name="value" />
             </div>
             <HStack className="justify-between w-full self-center">
-              <Submit size="sm" type="submit">
-                Save
-              </Submit>
+              <Submit type="submit">Save</Submit>
               <Button variant="ghost" onClick={onClose}>
                 Cancel
               </Button>

@@ -124,6 +124,7 @@ export default function OnboardingUser() {
           <ModalFooter>
             <HStack>
               <Button
+                variant="solid"
                 isDisabled={!previous}
                 size="md"
                 disabled

@@ -1,7 +1,6 @@
-import { HStack } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import type { ThemeTypings } from "@chakra-ui/react";
 import {
-  Button,
   IconButton,
   Menu,
   MenuButton,
@@ -98,6 +97,7 @@ export const PaginationButtons = ({
             of {count}
           </div>
           <Button
+            variant="secondary"
             isDisabled={!canPreviousPage}
             onClick={previousPage}
             leftIcon={<BsChevronLeft />}
@@ -105,6 +105,7 @@ export const PaginationButtons = ({
             Previous
           </Button>
           <Button
+            variant="secondary"
             isDisabled={!canNextPage}
             onClick={nextPage}
             rightIcon={<BsChevronRight />}

@@ -1,14 +1,9 @@
-import {
-  Button,
-  ButtonGroup,
-  IconButton,
-  Link,
-  MenuItem,
-} from "@chakra-ui/react";
+import { Button } from "@carbon/react";
+import { Link, MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo } from "react";
-import { BsPencilSquare, BsPlus } from "react-icons/bs";
+import { BsPencilSquare } from "react-icons/bs";
 import { Table } from "~/components";
 import type { Supplier } from "~/modules/purchasing";
 import { path } from "~/utils/path";
@@ -46,48 +41,30 @@ const SuppliersTable = memo(({ data, count }: SuppliersTableProps) => {
         id: "orders",
         header: "Orders",
         cell: ({ row }) => (
-          <ButtonGroup size="sm" isAttached variant="outline">
-            <Button
-              onClick={() =>
-                navigate(
-                  `${path.to.purchaseOrders}?supplierId=${row.original.id}`
-                )
-              }
-            >
-              {row.original.orderCount ?? 0} Orders
-            </Button>
-            <IconButton
-              aria-label="New Order"
-              icon={<BsPlus />}
-              onClick={() =>
-                navigate(
-                  `${path.to.newPurchaseOrder}?supplierId=${row.original.id}`
-                )
-              }
-            />
-          </ButtonGroup>
+          <Button
+            variant="secondary"
+            onClick={() =>
+              navigate(
+                `${path.to.purchaseOrders}?supplierId=${row.original.id}`
+              )
+            }
+          >
+            {row.original.orderCount ?? 0} Orders
+          </Button>
         ),
       },
       {
         id: "parts",
         header: "Parts",
         cell: ({ row }) => (
-          <ButtonGroup size="sm" isAttached variant="outline">
-            <Button
-              onClick={() =>
-                navigate(`${path.to.partsSearch}?supplierId=${row.original.id}`)
-              }
-            >
-              {row.original.partCount ?? 0} Parts
-            </Button>
-            <IconButton
-              aria-label="New Part"
-              icon={<BsPlus />}
-              onClick={() =>
-                navigate(`${path.to.newPart}?supplierId=${row.original.id}`)
-              }
-            />
-          </ButtonGroup>
+          <Button
+            variant="secondary"
+            onClick={() =>
+              navigate(`${path.to.partsSearch}?supplierId=${row.original.id}`)
+            }
+          >
+            {row.original.partCount ?? 0} Parts
+          </Button>
         ),
       },
     ];

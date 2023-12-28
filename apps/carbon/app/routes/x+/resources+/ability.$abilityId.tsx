@@ -1,6 +1,5 @@
-import { HStack, Heading, useDisclosure } from "@carbon/react";
+import { Button, HStack, Heading, useDisclosure } from "@carbon/react";
 import {
-  Button,
   IconButton,
   NumberDecrementStepper,
   NumberIncrementStepper,
@@ -180,7 +179,7 @@ export default function AbilitiesRoute() {
                   fontWeight="bold"
                   fontSize="xl"
                 />
-                <Submit size="sm">Save</Submit>
+                <Submit>Save</Submit>
                 <IconButton
                   aria-label="Cancel"
                   variant="ghost"
@@ -245,7 +244,7 @@ export default function AbilitiesRoute() {
               <Hidden name="intent" value="curve" />
               <Hidden name="data" value={JSON.stringify(data)} />
               <Hidden name="shadowWeeks" value={controlledShadowWeeks} />
-              <Submit size="sm">Save</Submit>
+              <Submit>Save</Submit>
             </ValidatedForm>
           </HStack>
         </HStack>
@@ -263,13 +262,8 @@ export default function AbilitiesRoute() {
           </ParentSize>
         </div>
         <div className="absolute bottom--4 right-4 z-[3]">
-          <Button
-            as={Link}
-            to="employee/new"
-            colorScheme="brand"
-            leftIcon={<IoMdAdd />}
-          >
-            New Employee
+          <Button asChild leftIcon={<IoMdAdd />}>
+            <Link to="employee/new">New Employee</Link>
           </Button>
         </div>
       </div>

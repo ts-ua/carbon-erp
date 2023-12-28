@@ -101,7 +101,7 @@ const ServiceForm = ({ initialValues }: ServiceFormProps) => {
       validator={serviceValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>{isEditing ? "Service Details" : "New Service"}</CardTitle>
           {!isEditing && (

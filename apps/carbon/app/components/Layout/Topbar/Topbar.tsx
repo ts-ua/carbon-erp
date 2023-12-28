@@ -1,5 +1,5 @@
-import { HStack } from "@carbon/react";
-import { Button, GridItem } from "@chakra-ui/react";
+import { Button, HStack } from "@carbon/react";
+import { GridItem } from "@chakra-ui/react";
 import { BiHelpCircle } from "react-icons/bi";
 import { BsChatSquare } from "react-icons/bs";
 import { Search } from "~/components/Search";
@@ -17,32 +17,24 @@ const Topbar = () => {
       <Search />
       <HStack spacing={1} className="justify-end py-2">
         <Create />
-        <a
-          target="_blank"
-          href="https://github.com/barbinbrad/carbon/issues/new/choose"
-          rel="noreferrer"
-        >
-          <Button
-            colorScheme="gray"
-            leftIcon={<BiHelpCircle />}
-            variant="outline"
+        <Button asChild leftIcon={<BiHelpCircle />} variant="secondary">
+          <a
+            target="_blank"
+            href="https://github.com/barbinbrad/carbon/issues/new/choose"
+            rel="noreferrer"
           >
             Help
-          </Button>
-        </a>
-        <a
-          target="_blank"
-          href="https://github.com/barbinbrad/carbon/discussions/new/choose"
-          rel="noreferrer"
-        >
-          <Button
-            colorScheme="gray"
-            leftIcon={<BsChatSquare />}
-            variant="outline"
+          </a>
+        </Button>
+        <Button asChild leftIcon={<BsChatSquare />} variant="secondary">
+          <a
+            target="_blank"
+            href="https://github.com/barbinbrad/carbon/discussions/new/choose"
+            rel="noreferrer"
           >
             Feedback
-          </Button>
-        </a>
+          </a>
+        </Button>
         <AvatarMenu />
       </HStack>
     </GridItem>

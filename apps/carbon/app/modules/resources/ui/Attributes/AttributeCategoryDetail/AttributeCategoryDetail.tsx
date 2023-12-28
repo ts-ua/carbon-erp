@@ -1,6 +1,5 @@
-import { HStack, useDisclosure } from "@carbon/react";
+import { Button, HStack, useDisclosure } from "@carbon/react";
 import {
-  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -186,13 +185,8 @@ const AttributeCategoryDetail = ({
             )}
           </DrawerBody>
           <DrawerFooter>
-            <Button
-              as={Link}
-              to={`new?${params.toString()}`}
-              colorScheme="brand"
-              size="md"
-            >
-              New Attribute
+            <Button asChild size="md">
+              <Link to={`new?${params.toString()}`}>New Attribute</Link>
             </Button>
           </DrawerFooter>
         </DrawerContent>

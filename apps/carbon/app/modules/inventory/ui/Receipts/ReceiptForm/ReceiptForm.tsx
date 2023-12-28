@@ -1,6 +1,5 @@
-import { HStack, Menubar, MenubarItem, VStack } from "@carbon/react";
+import { Button, HStack, Menubar, MenubarItem, VStack } from "@carbon/react";
 import {
-  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -78,7 +77,7 @@ const ReceiptForm = ({
           <DrawerHeader>{initialValues.receiptId}</DrawerHeader>
           <DrawerBody pb={8}>
             <VStack spacing={4}>
-              <Menubar mb={2} mt={-2}>
+              <Menubar className="mb-2 mt--2">
                 <MenubarItem isDisabled={!canPost || isPosted} onClick={onPost}>
                   Post
                 </MenubarItem>
@@ -182,12 +181,7 @@ const ReceiptForm = ({
               <Submit formId={formId} isDisabled={isDisabled}>
                 Save
               </Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>

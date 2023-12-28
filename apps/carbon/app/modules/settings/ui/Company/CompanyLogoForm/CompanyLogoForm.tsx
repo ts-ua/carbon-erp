@@ -1,5 +1,5 @@
-import { File, VStack, useNotification } from "@carbon/react";
-import { Avatar, Button } from "@chakra-ui/react";
+import { Button, File, VStack, useNotification } from "@carbon/react";
+import { Avatar } from "@chakra-ui/react";
 import { useSubmit } from "@remix-run/react";
 import type { ChangeEvent } from "react";
 import { useSupabase } from "~/lib/supabase";
@@ -77,7 +77,7 @@ const CompanyLogoForm = ({ company }: CompanyLogoFormProps) => {
       </File>
 
       {company.logo && (
-        <Button variant="outline" onClick={deleteImage}>
+        <Button variant="secondary" onClick={deleteImage}>
           Remove
         </Button>
       )}

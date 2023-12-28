@@ -1,6 +1,6 @@
 import { HStack, VStack, useColor, useEscape, useMount } from "@carbon/react";
 import { clip } from "@carbon/utils";
-import { Icon, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import type { ColumnDef, ColumnOrderState } from "@tanstack/react-table";
 import {
   flexRender,
@@ -451,7 +451,7 @@ const Grid = <T extends object>({
               >
                 <Td colSpan={24}>
                   <HStack className="items-start h-6">
-                    <Icon color="gray.500" as={BsPlus} w={6} h={6} />
+                    <BsPlus className="text-muted-foreground h-6 w-6" />
                   </HStack>
                 </Td>
               </Tr>

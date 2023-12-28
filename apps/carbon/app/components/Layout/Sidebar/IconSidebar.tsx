@@ -61,7 +61,7 @@ const IconSidebar = () => {
                     borderWidth={1}
                     borderColor={isActive ? "gray.200" : "transparent"}
                     aria-label={link.name}
-                    icon={link.icon}
+                    icon={<link.icon />}
                   />
                 </TooltipTrigger>
                 <TooltipContent side="right">{link.name}</TooltipContent>

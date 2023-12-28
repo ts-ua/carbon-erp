@@ -1,5 +1,4 @@
-import { Count, VStack } from "@carbon/react";
-import { Button } from "@chakra-ui/react";
+import { Button, Count, VStack } from "@carbon/react";
 import { Link, useMatches } from "@remix-run/react";
 import type { IconType } from "react-icons";
 
@@ -27,19 +26,17 @@ const DetailSidebar = ({ links }: DetailSidebarProps) => {
         return (
           <Button
             key={route.name}
-            className="border-border"
-            as={Link}
-            to={route.to}
-            colorScheme={isActive ? "brand" : "gray"}
-            variant={isActive ? "solid" : "ghost"}
-            border={isActive ? "1px solid" : "none"}
-            fontWeight={isActive ? "bold" : "normal"}
-            justifyContent="space-between"
-            size="md"
-            w="full"
+            asChild
+            variant={isActive ? "primary" : "ghost"}
+            className="w-full justify-start"
           >
-            <span>{route.name}</span>
-            {route.count !== undefined && <Count count={route.count} />}
+            <Link to={route.to}>
+              {route.icon && <route.icon className="mr-2" />}
+              <span>{route.name}</span>
+              {route.count !== undefined && (
+                <Count count={route.count} className="ml-auto" />
+              )}
+            </Link>
           </Button>
         );
       })}

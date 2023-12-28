@@ -1,8 +1,10 @@
-import type { ButtonProps, MenuButtonProps } from "@chakra-ui/react";
-import { Button, MenuButton } from "@chakra-ui/react";
+import type { MenuButtonProps } from "@chakra-ui/react";
+import { MenuButton } from "@chakra-ui/react";
 import type { ComponentProps } from "react";
 import { forwardRef } from "react";
 import { MdExpandMore } from "react-icons/md";
+import type { ButtonProps } from "~/Button";
+import { Button } from "~/Button";
 
 const Menubar = forwardRef<HTMLDivElement, ComponentProps<"div">>(
   ({ children, ...props }, ref) => {
@@ -24,7 +26,6 @@ const MenubarTrigger = forwardRef<HTMLButtonElement, MenuButtonProps>(
       <MenuButton
         ref={ref}
         as={Button}
-        size="sm"
         variant="ghost"
         rightIcon={<MdExpandMore />}
         {...props}
@@ -39,7 +40,7 @@ MenubarTrigger.displayName = "MenubarTrigger";
 const MenubarItem = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ children, ...props }, ref) => {
     return (
-      <Button ref={ref} size="sm" variant="ghost" {...props}>
+      <Button ref={ref} variant="ghost" {...props}>
         {children}
       </Button>
     );

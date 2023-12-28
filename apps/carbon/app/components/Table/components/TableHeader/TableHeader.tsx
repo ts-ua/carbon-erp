@@ -1,5 +1,4 @@
-import { HStack } from "@carbon/react";
-import { Button } from "@chakra-ui/react";
+import { Button, HStack } from "@carbon/react";
 import type { Column, ColumnOrderState } from "@tanstack/react-table";
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { MdOutlineEditNote } from "react-icons/md";
@@ -53,9 +52,7 @@ const TableHeader = <T extends object>({
         {withInlineEditing &&
           (editMode ? (
             <Button
-              colorScheme="brand"
               leftIcon={<BsFillCheckCircleFill />}
-              variant="solid"
               onClick={() => setEditMode(false)}
             >
               Finish Editing

@@ -1,12 +1,5 @@
-import { HStack, useDisclosure } from "@carbon/react";
-import {
-  Button,
-  ButtonGroup,
-  Icon,
-  IconButton,
-  Link,
-  MenuItem,
-} from "@chakra-ui/react";
+import { Button, HStack, useDisclosure } from "@carbon/react";
+import { Icon, Link, MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
@@ -15,7 +8,6 @@ import {
   BsFillCheckCircleFill,
   BsListUl,
   BsPencilSquare,
-  BsPlus,
 } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
@@ -81,33 +73,21 @@ const EquipmentTypesTable = memo(
         {
           header: "Equipment",
           cell: ({ row }) => (
-            <ButtonGroup size="sm" isAttached variant="outline">
-              <Button
-                onClick={() => {
-                  navigate(
-                    `${path.to.equipmentTypeList(
-                      row.original.id
-                    )}?${params?.toString()}`
-                  );
-                }}
-              >
-                {Array.isArray(row.original.equipment)
-                  ? row.original.equipment?.length ?? 0
-                  : 0}{" "}
-                Units
-              </Button>
-              <IconButton
-                aria-label="Add unit"
-                icon={<BsPlus />}
-                onClick={() => {
-                  navigate(
-                    `${path.to.newEquipment(
-                      row.original.id
-                    )}?${params?.toString()}`
-                  );
-                }}
-              />
-            </ButtonGroup>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                navigate(
+                  `${path.to.equipmentTypeList(
+                    row.original.id
+                  )}?${params?.toString()}`
+                );
+              }}
+            >
+              {Array.isArray(row.original.equipment)
+                ? row.original.equipment?.length ?? 0
+                : 0}{" "}
+              Units
+            </Button>
           ),
         },
         {

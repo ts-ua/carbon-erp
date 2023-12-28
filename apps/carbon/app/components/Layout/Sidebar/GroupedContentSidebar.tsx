@@ -1,5 +1,4 @@
-import { VStack } from "@carbon/react";
-import { Button } from "@chakra-ui/react";
+import { Button, VStack } from "@carbon/react";
 import { Link, useMatches } from "@remix-run/react";
 import type { RouteGroup } from "~/types";
 import { CollapsibleSidebar } from "./CollapsibleSidebar";
@@ -27,16 +26,14 @@ const GroupedContentSidebar = ({ groups }: { groups: RouteGroup[] }) => {
                 return (
                   <Button
                     key={route.name}
-                    as={Link}
-                    to={route.to}
-                    variant={isActive ? "solid" : "ghost"}
-                    border="none"
-                    fontWeight={isActive ? "bold" : "normal"}
+                    asChild
                     leftIcon={route.icon}
-                    justifyContent="start"
-                    w="full"
+                    variant={isActive ? "solid" : "ghost"}
+                    className="w-full justify-start"
                   >
-                    {route.name}
+                    <Link to={route.to + (route.q ? `?q=${route.q}` : "")}>
+                      {route.name}
+                    </Link>
                   </Button>
                 );
               })}

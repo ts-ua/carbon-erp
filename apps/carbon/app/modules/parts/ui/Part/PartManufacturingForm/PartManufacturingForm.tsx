@@ -37,7 +37,7 @@ const PartManufacturingForm = ({
       validator={partManufacturingValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>Manufacturing</CardTitle>
         </CardHeader>

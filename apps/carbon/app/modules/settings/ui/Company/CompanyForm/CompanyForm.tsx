@@ -38,7 +38,7 @@ const CompanyForm = ({ company }: CompanyFormProps) => {
           </Grid>
 
           <Hidden name="intent" value="about" />
-          <Submit size="sm">Save</Submit>
+          <Submit>Save</Submit>
         </VStack>
       </ValidatedForm>
     </div>

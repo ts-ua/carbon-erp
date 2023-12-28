@@ -43,7 +43,7 @@ const PartSalePriceForm = ({
       validator={partUnitSalePriceValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>Sale Price</CardTitle>
         </CardHeader>

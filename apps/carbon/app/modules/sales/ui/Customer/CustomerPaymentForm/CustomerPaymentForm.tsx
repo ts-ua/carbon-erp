@@ -53,7 +53,7 @@ const CustomerPaymentForm = ({ initialValues }: CustomerPaymentFormProps) => {
       validator={customerPaymentValidator}
       defaultValues={initialValues}
     >
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>Customer Payment</CardTitle>
         </CardHeader>

@@ -1,16 +1,10 @@
-import {
-  Button,
-  ButtonGroup,
-  IconButton,
-  Link,
-  MenuItem,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Button } from "@carbon/react";
+import { Link, MenuItem, useDisclosure } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-import { BsListUl, BsPencilSquare, BsPlus } from "react-icons/bs";
+import { BsListUl, BsPencilSquare } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -68,30 +62,18 @@ const AccountCategoriesTable = memo(
         {
           header: "Subcategories",
           cell: ({ row }) => (
-            <ButtonGroup size="sm" isAttached variant="outline">
-              <Button
-                onClick={() => {
-                  navigate(
-                    `${path.to.accountingCategoryList(
-                      row.original.id!
-                    )}?${params?.toString()}`
-                  );
-                }}
-              >
-                {row.original.subCategoriesCount ?? 0} Subcategories
-              </Button>
-              <IconButton
-                aria-label="Add subcategory"
-                icon={<BsPlus />}
-                onClick={() => {
-                  navigate(
-                    `${path.to.newAccountingSubcategory(
-                      row.original.id!
-                    )}?${params?.toString()}`
-                  );
-                }}
-              />
-            </ButtonGroup>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                navigate(
+                  `${path.to.accountingCategoryList(
+                    row.original.id!
+                  )}?${params?.toString()}`
+                );
+              }}
+            >
+              {row.original.subCategoriesCount ?? 0} Subcategories
+            </Button>
           ),
         },
       ];

@@ -1,6 +1,5 @@
-import { HStack, VStack, useDisclosure } from "@carbon/react";
+import { Button, HStack, VStack, useDisclosure } from "@carbon/react";
 import {
-  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -15,7 +14,7 @@ import {
 import { Link } from "@remix-run/react";
 import { useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
-import { IoMdTrash } from "react-icons/io";
+import { IoMdAdd, IoMdTrash } from "react-icons/io";
 import { ConfirmDelete } from "~/components/Modals";
 
 import { useUrlParams } from "~/hooks";
@@ -104,13 +103,8 @@ const AccountCategoryDetail = ({
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <Button
-              as={Link}
-              to={`new?${params.toString()}`}
-              colorScheme="brand"
-              size="md"
-            >
-              New Subcategory
+            <Button asChild leftIcon={<IoMdAdd />}>
+              <Link to={`new?${params.toString()}`}>New Subcategory</Link>
             </Button>
           </DrawerFooter>
         </DrawerContent>

@@ -1,5 +1,5 @@
+import type { ButtonProps } from "@carbon/react";
 import { Button } from "@carbon/react";
-import type { ButtonProps } from "@chakra-ui/react";
 import type { PropsWithChildren } from "react";
 import { useIsSubmitting } from "remix-validated-form";
 
@@ -14,9 +14,8 @@ export const Submit = ({
       form={formId}
       type="submit"
       size="md"
-      colorScheme="brand"
-      isLoading={isSubmitting || props.isLoading}
-      isDisabled={isSubmitting || props.isDisabled}
+      isLoading={isSubmitting}
+      isDisabled={isSubmitting}
       {...props}
     >
       {children}

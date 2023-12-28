@@ -1,16 +1,14 @@
-import type { ButtonProps } from "@chakra-ui/react";
-import { Button, Input, InputGroup } from "@chakra-ui/react";
-import type { ChangeEvent, PropsWithChildren } from "react";
+import { Button } from "@carbon/react";
+import { Input, InputGroup } from "@chakra-ui/react";
+import type { ChangeEvent, ComponentPropsWithoutRef } from "react";
 import { useRef } from "react";
 
-type FileProps = PropsWithChildren<
-  Omit<ButtonProps, "onChange"> & {
-    accept?: string;
-    onChange: (e: ChangeEvent<HTMLInputElement>) => Promise<void>;
-  }
->;
+type FileProps = ComponentPropsWithoutRef<"div"> & {
+  accept?: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => Promise<void>;
+};
 
-const File = ({ accept, children, onChange, ...props }: FileProps) => {
+const File = ({ accept, className, children, onChange }: FileProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -23,9 +21,7 @@ const File = ({ accept, children, onChange, ...props }: FileProps) => {
         onChange={onChange}
       />
       <Button
-        variant="solid"
-        colorScheme="brand"
-        {...props}
+        className={className}
         onClick={() => {
           if (fileInputRef.current) fileInputRef.current.click();
         }}

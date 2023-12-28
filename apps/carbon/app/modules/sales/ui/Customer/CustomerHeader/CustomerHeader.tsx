@@ -33,7 +33,7 @@ const CustomerHeader = () => {
 
   return (
     <VStack>
-      <Card className="w-full">
+      <Card>
         <HStack className="justify-between items-start">
           <CardHeader>
             <CardTitle>{routeData?.customer?.name}</CardTitle>
