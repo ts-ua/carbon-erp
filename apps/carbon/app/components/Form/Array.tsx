@@ -1,11 +1,10 @@
-import { Button, HStack, VStack } from "@carbon/react";
+import { Button, HStack, IconButton, VStack } from "@carbon/react";
 import type { InputProps } from "@chakra-ui/react";
 import {
   Input as ChakraInput,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  IconButton,
 } from "@chakra-ui/react";
 import { forwardRef } from "react";
 import { IoMdAdd, IoMdClose } from "react-icons/io";
@@ -71,10 +70,10 @@ const ArrayInput = forwardRef<HTMLInputElement, ArrayInputProps>(
             })}
           />
           <IconButton
+            variant="ghost"
             aria-label="Remove item"
             icon={<IoMdClose />}
             onClick={onRemove}
-            variant="ghost"
           />
         </HStack>
 

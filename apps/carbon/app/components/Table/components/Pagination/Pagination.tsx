@@ -1,12 +1,6 @@
-import { Button, HStack } from "@carbon/react";
+import { Button, HStack, IconButton } from "@carbon/react";
 import type { ThemeTypings } from "@chakra-ui/react";
-import {
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/react";
+import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
 export type PaginationProps = {
@@ -82,12 +76,14 @@ export const PaginationButtons = ({
             icon={<BsChevronLeft />}
             isDisabled={!canPreviousPage}
             onClick={previousPage}
+            variant="secondary"
           />
           <IconButton
             aria-label="Next"
             icon={<BsChevronRight />}
             isDisabled={!canNextPage}
             onClick={nextPage}
+            variant="secondary"
           />
         </>
       ) : (

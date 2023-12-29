@@ -1,4 +1,4 @@
-import { Button, HStack, useDisclosure } from "@carbon/react";
+import { Button, HStack, IconButton, useDisclosure } from "@carbon/react";
 import {
   Drawer,
   DrawerBody,
@@ -7,7 +7,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  IconButton,
   Tag,
   TagLabel,
 } from "@chakra-ui/react";
@@ -129,7 +128,6 @@ const AttributeCategoryDetail = ({
                   return (
                     <Reorder.Item
                       key={sortId}
-                      as={Reorder.Item}
                       value={sortId}
                       className="rounded-lg"
                     >
@@ -160,18 +158,20 @@ const AttributeCategoryDetail = ({
                           }
                         </Button>
 
-                        <IconButton
-                          as={Link}
-                          // @ts-ignore
-                          to={sortId.toString()}
+                        <Button
+                          asChild
+                          isIcon
                           aria-label="Edit"
-                          icon={<BsPencilSquare />}
-                          variant="outline"
-                        />
+                          variant="ghost"
+                        >
+                          <Link to={sortId.toString()}>
+                            <BsPencilSquare />
+                          </Link>
+                        </Button>
                         <IconButton
                           aria-label="Delete"
                           icon={<IoMdTrash />}
-                          variant="outline"
+                          variant="ghost"
                           onClick={() =>
                             // @ts-ignore
                             onDelete(attributeMap[sortId])

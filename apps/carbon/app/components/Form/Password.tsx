@@ -1,5 +1,5 @@
+import { IconButton } from "@carbon/react";
 import type { InputProps } from "@chakra-ui/react";
-import { IconButton } from "@chakra-ui/react";
 import {
   FormControl,
   FormErrorMessage,
@@ -39,9 +39,7 @@ const Password = forwardRef<HTMLInputElement, FormPasswordProps>(
             <IconButton
               aria-label={passwordVisible ? "Show password" : "Hide password"}
               icon={passwordVisible ? <BiShowAlt /> : <BiHide />}
-              h="1.75rem"
-              size="sm"
-              variant="outline"
+              variant="ghost"
               tabIndex={-1}
               onClick={() => setPasswordVisible(!passwordVisible)}
             />

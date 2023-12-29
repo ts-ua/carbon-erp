@@ -1,4 +1,3 @@
-import { useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useSupabase } from "~/lib/supabase";
 import { useCustomers, useParts, useSuppliers } from "~/stores";
@@ -206,12 +205,14 @@ function Loading() {
   return (
     <div className="flex flex-col h-screen w-screen items-center justify-center">
       <img
-        src={useColorModeValue(
-          "/carbon-logo-dark.png",
-          "/carbon-logo-light.png"
-        )}
+        src="/carbon-logo-dark.png"
         alt="Carbon Logo"
-        className="max-w-[100px]"
+        className="block dark:hidden max-w-[100px]"
+      />
+      <img
+        src="/carbon-logo-light.png"
+        alt="Carbon Logo"
+        className="hidden dark:block max-w-[100px]"
       />
     </div>
   );

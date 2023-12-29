@@ -1,4 +1,5 @@
-import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { Button } from "@carbon/react";
+import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { IoMdCheckboxOutline } from "react-icons/io";
 import type { TableAction } from "../../types";
 
@@ -17,7 +18,6 @@ const Actions = <T extends Object>({
       <MenuButton
         as={Button}
         leftIcon={<IoMdCheckboxOutline />}
-        colorScheme={disabled ? "gray" : "brand"}
         variant="ghost"
       >
         Actions

@@ -1,6 +1,5 @@
-import { Button, HStack } from "@carbon/react";
+import { Button, HStack, IconButton } from "@carbon/react";
 import {
-  IconButton,
   Popover,
   PopoverArrow,
   PopoverBody,

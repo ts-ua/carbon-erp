@@ -1,5 +1,5 @@
-import { HStack } from "@carbon/react";
-import { Checkbox, IconButton, Link, Text } from "@chakra-ui/react";
+import { Button, HStack } from "@carbon/react";
+import { Checkbox, Link, Text } from "@chakra-ui/react";
 import { Link as RemixLink, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo } from "react";
@@ -31,18 +31,18 @@ const ChartOfAccountsTable = memo(({ data }: ChartOfAccountsTableProps) => {
               </Link>
 
               <div className="relative w-6 h-6">
-                <IconButton
-                  aria-label="Edit account"
-                  as={RemixLink}
-                  icon={<MdMoreHoriz />}
-                  size="sm"
-                  position="absolute"
-                  right={-1}
-                  top={-1}
-                  to={`${row.original.id}`}
-                  onClick={(e) => e.stopPropagation()}
+                <Button
+                  asChild
+                  isIcon
                   variant="ghost"
-                />
+                  className="absolute right-[-3px] top-[-3px] outline-none border-none active:outline-none focus-visible:outline-none"
+                  aria-label="Edit account"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <RemixLink to={`${row.original.id}`}>
+                    <MdMoreHoriz />
+                  </RemixLink>
+                </Button>
               </div>
             </HStack>
           );

@@ -16,9 +16,9 @@ const GroupedContentSidebar = ({ groups }: { groups: RouteGroup[] }) => {
               spacing={1}
               className="border-b border-border p-2"
             >
-              <p className="text-xs text-muted-foreground font-bold pl-3 py-1 uppercase">
+              <h4 className="text-xs text-muted-foreground font-bold pl-3 py-1 uppercase">
                 {group.name}
-              </p>
+              </h4>
               {group.routes.map((route) => {
                 const isActive = matches.some((match) =>
                   match.pathname.includes(route.to)
