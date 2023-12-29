@@ -1,11 +1,12 @@
 import {
+  IconButton,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
   useColor,
 } from "@carbon/react";
-import { Checkbox, IconButton, List, ListItem } from "@chakra-ui/react";
+import { Checkbox, List, ListItem } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { MdOutlineClear, MdPlaylistAdd } from "react-icons/md";
 import { Avatar } from "~/components";
@@ -96,9 +97,8 @@ const SelectionList = () => {
                       <IconButton
                         aria-label={`Expand ${item.label}`}
                         icon={<MdPlaylistAdd />}
-                        size="sm"
                         onClick={() => onExplode(item)}
-                        variant="outline"
+                        variant="secondary"
                       />
                     </TooltipTrigger>
                     <TooltipContent side="top">
@@ -113,9 +113,8 @@ const SelectionList = () => {
                       <IconButton
                         aria-label={`Remove ${item.label}`}
                         icon={<MdOutlineClear />}
-                        size="sm"
                         onClick={() => onDeselect(item)}
-                        variant="outline"
+                        variant="secondary"
                       />
                     </TooltipTrigger>
                     <TooltipContent side="top">

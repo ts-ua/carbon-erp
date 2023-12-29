@@ -1,11 +1,11 @@
 import {
+  Button,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
   VStack,
 } from "@carbon/react";
-import { IconButton } from "@chakra-ui/react";
 import { Link, useMatches } from "@remix-run/react";
 import { BsFillHexagonFill } from "react-icons/bs";
 import { z } from "zod";
@@ -30,17 +30,11 @@ const IconSidebar = () => {
 
   return (
     <div className="h-full border-r border-border bg-background z-10">
-      <IconButton
-        aria-label="Home"
-        as={Link}
-        to="/"
-        variant="ghost"
-        size="lg"
-        icon={<BsFillHexagonFill />}
-        position="sticky"
-        top={0}
-        mb={4}
-      />
+      <Button isIcon asChild variant="ghost" size="lg" className="rounded-none">
+        <Link to="/">
+          <BsFillHexagonFill />
+        </Link>
+      </Button>
       <TooltipProvider>
         <VStack spacing={0} className="top-[50px] sticky">
           {links.map((link) => {
@@ -50,19 +44,18 @@ const IconSidebar = () => {
             return (
               <Tooltip key={link.to}>
                 <TooltipTrigger asChild>
-                  <IconButton
-                    as={Link}
-                    to={link.to}
-                    prefetch="intent"
-                    colorScheme={isActive ? link.color ?? "brand" : undefined}
-                    variant={isActive ? "solid" : "outline"}
-                    size="lg"
-                    borderRadius={0}
-                    borderWidth={1}
-                    borderColor={isActive ? "gray.200" : "transparent"}
+                  <Button
+                    asChild
+                    isIcon
                     aria-label={link.name}
-                    icon={<link.icon />}
-                  />
+                    variant={isActive ? "primary" : "ghost"}
+                    size="lg"
+                    className="rounded-none"
+                  >
+                    <Link to={link.to} prefetch="intent">
+                      <link.icon />
+                    </Link>
+                  </Button>
                 </TooltipTrigger>
                 <TooltipContent side="right">{link.name}</TooltipContent>
               </Tooltip>

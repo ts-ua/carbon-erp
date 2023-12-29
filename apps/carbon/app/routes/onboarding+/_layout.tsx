@@ -1,5 +1,5 @@
-import { HStack, useColor } from "@carbon/react";
-import { Avatar, Box, Grid, GridItem, IconButton } from "@chakra-ui/react";
+import { HStack, IconButton, useColor } from "@carbon/react";
+import { Avatar, Grid, GridItem } from "@chakra-ui/react";
 import { redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 import { BsFillHexagonFill } from "react-icons/bs";
@@ -85,23 +85,14 @@ function TopbarPlaceholder() {
 
 function SidebarPlaceholder() {
   return (
-    <Box
-      h="full"
-      borderRight={1}
-      borderRightColor={useColor("gray.200")}
-      borderRightStyle="solid"
-      background={useColor("white")}
-      zIndex={1}
-    >
+    <div className="h-full border-r border-border bg-background z-1">
       <IconButton
         aria-label="Home"
+        icon={<BsFillHexagonFill />}
         variant="ghost"
         size="lg"
-        icon={<BsFillHexagonFill />}
-        position="sticky"
-        top={0}
-        mb={4}
+        className="rounded-none"
       />
-    </Box>
+    </div>
   );
 }

@@ -83,14 +83,17 @@ const AccountCategoryDetail = ({
                 return (
                   <HStack key={subcategory.id} className="w-full">
                     <p className="flex-grow">{subcategory.name}</p>
-
-                    <IconButton
-                      as={Link}
-                      to={subcategory.id}
+                    <Button
+                      asChild
+                      isIcon
                       aria-label="Edit"
-                      icon={<BsPencilSquare />}
-                      variant="outline"
-                    />
+                      variant="secondary"
+                    >
+                      <Link to={subcategory.id}>
+                        <BsPencilSquare />
+                      </Link>
+                    </Button>
+
                     <IconButton
                       aria-label="Delete"
                       icon={<IoMdTrash />}

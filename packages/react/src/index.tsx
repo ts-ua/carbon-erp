@@ -26,6 +26,7 @@ import { File } from "./File";
 import { HStack } from "./HStack";
 import { HTML } from "./HTML";
 import { Heading } from "./Heading";
+import { IconButton } from "./IconButton";
 import { Loading } from "./Loading";
 import { Menubar, MenubarItem, MenubarTrigger } from "./Menubar";
 import type {
@@ -85,6 +86,7 @@ export {
   HStack,
   HTML,
   Heading,
+  IconButton,
   Loading,
   Menubar,
   MenubarItem,

@@ -1,7 +1,5 @@
-import { HStack, useColor } from "@carbon/react";
+import { HStack } from "@carbon/react";
 import {
-  Box,
-  Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -29,29 +27,16 @@ const ColorPicker = ({ name, label }: ColorFieldProps) => {
     handler: () => disclosure.onClose(),
   });
 
-  const borderColor = useColor("var(--chakra-colors-gray-200)");
-
   return (
     <FormControl>
       <FormLabel>{label}</FormLabel>
       <input type="hidden" name={name} value={value} />
       <div className="relative" ref={containerRef}>
         <HStack>
-          <Box
-            as={Button}
-            bg={value}
-            h={8}
-            w={8}
-            border="1px solid"
-            borderColor={borderColor}
-            borderRadius="md"
-            boxShadow="md"
-            cursor="pointer"
+          <button
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-8 w-8 border border-border"
+            style={{ background: value }}
             onClick={disclosure.onToggle}
-            tabIndex={0}
-            _hover={{
-              bg: value,
-            }}
           />
           <HexColorInput
             color={value}

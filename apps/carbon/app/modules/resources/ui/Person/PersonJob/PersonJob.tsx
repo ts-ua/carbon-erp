@@ -43,6 +43,7 @@ const PersonJob = ({ job }: PersonJobProps) => {
 
   return (
     <div className="w-full">
+      <SectionTitle>Job</SectionTitle>
       <ValidatedForm
         validator={employeeJobValidator}
         method="post"
@@ -53,7 +54,6 @@ const PersonJob = ({ job }: PersonJobProps) => {
           shiftId: job.shiftId ?? undefined,
         }}
       >
-        <SectionTitle>Job</SectionTitle>
         <VStack spacing={4}>
           <Input name="title" label="Title" />
           <DatePicker name="startDate" label="Start Date" />
@@ -68,7 +68,7 @@ const PersonJob = ({ job }: PersonJobProps) => {
           />
           <Employee name="managerId" label="Manager" />
           <Hidden name="intent" value="job" />
-          <Submit size="sm">Save</Submit>
+          <Submit>Save</Submit>
         </VStack>
       </ValidatedForm>
     </div>

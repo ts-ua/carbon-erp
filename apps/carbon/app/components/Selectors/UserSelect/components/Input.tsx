@@ -1,8 +1,7 @@
-import { HStack } from "@carbon/react";
+import { HStack, IconButton } from "@carbon/react";
 import {
   Avatar,
   AvatarGroup,
-  IconButton,
   Input,
   InputGroup,
   InputLeftElement,
@@ -67,11 +66,6 @@ const SelectInput = () => {
               aria-label="Clear search query"
               icon={<MdOutlineClear />}
               onClick={onClearInput}
-              colorScheme="gray"
-              h={8}
-              w={8}
-              borderRadius={4}
-              size="sm"
               variant="ghost"
             />
           )}

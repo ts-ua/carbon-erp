@@ -6,63 +6,70 @@ import { cloneElement, forwardRef } from "react";
 
 import { cn } from "~/utils/cn";
 
-const base = [
-  "inline-flex items-center justify-center whitespace-nowrap",
-  "rounded-md font-medium ring-offset-background transition-colors",
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-  "focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-].join(" ");
-
-const buttonVariants = cva(base, {
-  variants: {
-    variant: {
-      primary:
-        "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
-      secondary:
-        "border border-input text-primary bg-background hover:bg-foreground/[0.05] shadow-sm",
-      solid: "bg-accent text-accent-foreground hover:bg-accent/80",
-      destructive:
-        "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm",
-      ghost:
-        "bg-transparent hover:bg-accent text-accent-foreground hover:text-accent-foreground/90",
-      link: "text-primary hover:text-primary underline-offset-4 hover:underline",
+const buttonVariants = cva(
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        primary:
+          "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
+        secondary:
+          "border border-input text-primary bg-background hover:bg-foreground/[0.05] shadow-sm",
+        solid: "bg-accent text-accent-foreground hover:bg-accent/80",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm",
+        ghost:
+          "bg-transparent hover:bg-accent text-accent-foreground hover:text-accent-foreground/90",
+        link: "text-primary hover:text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        md: "h-8 rounded-md text-sm",
+        lg: "h-11 rounded-lg text-base",
+      },
+      isDisabled: {
+        true: "opacity-50 disabled:cursor-not-allowed",
+      },
+      isLoading: {
+        true: "opacity-50 pointer-events-none",
+      },
+      isIcon: {
+        true: "",
+        false: "",
+      },
+      isRound: {
+        true: "rounded-full",
+        false: "rounded-md",
+      },
     },
-    size: {
-      md: "h-8 px-4 rounded-md text-sm",
-      lg: "h-11 px-6 rounded-lg text-base",
-    },
-    isDisabled: {
-      true: "opacity-50 disabled:cursor-not-allowed",
-    },
-    isLoading: {
-      true: "opacity-50 pointer-events-none",
-    },
-    isIcon: {
-      false: "px-4",
-    },
-    isRound: {
-      true: "rounded-full",
-      false: "rounded-md",
-    },
-  },
-  compoundVariants: [
-    {
+    compoundVariants: [
+      {
+        size: "md",
+        isIcon: true,
+        class: "w-8 p-2",
+      },
+      {
+        size: "lg",
+        isIcon: true,
+        class: "w-11 p-2",
+      },
+      {
+        size: "md",
+        isIcon: false,
+        class: "px-4",
+      },
+      {
+        size: "lg",
+        isIcon: false,
+        class: "px-6",
+      },
+    ],
+    defaultVariants: {
+      variant: "primary",
       size: "md",
-      isIcon: true,
-      class: "w-8",
+      isRound: false,
     },
-    {
-      size: "lg",
-      isIcon: true,
-      class: "w-11",
-    },
-  ],
-  defaultVariants: {
-    variant: "primary",
-    size: "md",
-    isRound: false,
-  },
-});
+  }
+);
 
 export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,

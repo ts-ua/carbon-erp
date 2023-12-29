@@ -26,7 +26,7 @@ type PersonTabsProps = {
   privateAttributes: PrivateAttributes[];
 };
 
-const PersonsTabs = ({
+const PersonTabs = ({
   user,
   job,
   notes,
@@ -97,4 +97,4 @@ const PersonsTabs = ({
   );
 };
 
-export default PersonsTabs;
+export default PersonTabs;
