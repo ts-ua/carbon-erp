@@ -1,13 +1,14 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Ability,
@@ -38,24 +39,30 @@ const EquipmentTypeForm = ({
     : !permissions.can("create", "resources");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={equipmentTypeValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.equipmentType(initialValues.id!)
-            : path.to.newEquipmentType
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={equipmentTypeValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.equipmentType(initialValues.id!)
+              : path.to.newEquipmentType
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
           <DrawerHeader>
-            {isEditing ? "Edit" : "New"} Equipment Type
+            <DrawerTitle>
+              {isEditing ? "Edit" : "New"} Equipment Type
+            </DrawerTitle>
           </DrawerHeader>
-          <DrawerBody pb={8}>
+          <DrawerBody>
             <Hidden name="id" />
             <VStack spacing={4}>
               <Input name="name" label="Name" />
@@ -72,8 +79,8 @@ const EquipmentTypeForm = ({
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

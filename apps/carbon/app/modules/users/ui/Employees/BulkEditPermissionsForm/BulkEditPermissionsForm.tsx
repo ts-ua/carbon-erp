@@ -1,13 +1,16 @@
-import { Button, HStack, VStack, useMount } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-  FormLabel,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+  useMount,
+} from "@carbon/react";
+import { FormLabel } from "@chakra-ui/react";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -66,19 +69,25 @@ const BulkEditPermissions = ({
   }, [emptyPermissionsFetcher.data]);
 
   return (
-    <Drawer onClose={onClose} isOpen={isOpen} size="sm">
-      <DrawerOverlay />
+    <Drawer
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+      open={isOpen}
+    >
       <DrawerContent>
-        <DrawerCloseButton />
-        <DrawerHeader>Bulk Edit Permissions</DrawerHeader>
-        <DrawerBody pb={8}>
-          <ValidatedForm
-            validator={bulkPermissionsValidator}
-            method="post"
-            action={path.to.bulkEditPermissions}
-            onSubmit={onClose}
-            defaultValues={{ userIds }}
-          >
+        <ValidatedForm
+          validator={bulkPermissionsValidator}
+          method="post"
+          action={path.to.bulkEditPermissions}
+          onSubmit={onClose}
+          defaultValues={{ userIds }}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>Bulk Edit Permissions</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <VStack spacing={4}>
               <div className="border border-border p-4 w-full rounded-lg">
                 <Radios
@@ -116,15 +125,17 @@ const BulkEditPermissions = ({
                   </div>
                 ))}
               <Hidden name="data" value={JSON.stringify(permissions)} />
-              <HStack className="my-4">
-                <Submit>Save</Submit>
-                <Button size="md" variant="solid" onClick={onClose}>
-                  Cancel
-                </Button>
-              </HStack>
             </VStack>
-          </ValidatedForm>
-        </DrawerBody>
+          </DrawerBody>
+          <DrawerFooter>
+            <HStack>
+              <Submit>Save</Submit>
+              <Button size="md" variant="solid" onClick={onClose}>
+                Cancel
+              </Button>
+            </HStack>
+          </DrawerFooter>
+        </ValidatedForm>
       </DrawerContent>
     </Drawer>
   );

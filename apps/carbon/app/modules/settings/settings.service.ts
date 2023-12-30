@@ -97,7 +97,7 @@ export async function getSequences(
     query = query.ilike("name", `%${args.name}%`);
   }
 
-  query = setGenericQueryFilters(query, args);
+  query = setGenericQueryFilters(query, args, "table");
   return query;
 }
 

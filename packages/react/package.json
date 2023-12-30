@@ -21,10 +21,6 @@
     "preset": "@carbon/jest/node"
   },
   "dependencies": {
-    "@chakra-ui/react": "^2.8.0",
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "@internationalized/date": "^3.3.0",
     "@radix-ui/react-accessible-icon": "^1.0.3",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.4",
@@ -78,10 +74,8 @@
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
     "dompurify": "3.0.5",
-    "framer-motion": "^10.13.1",
     "is-hotkey": "^0.2.0",
     "react-colorful": "^5.6.1",
-    "react-icons": "^4.12.0",
     "react-select": "^5.5.1",
     "react-window": "^1.8.9",
     "tailwind-merge": "^2.2.0",
@@ -105,5 +99,14 @@
     "react": "^18.2.0",
     "tsup": "^6.2.3",
     "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "@chakra-ui/react": "^2.8.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@internationalized/date": "^3.3.0",
+    "framer-motion": "^10.13.1",
+    "react": "^18.0.0 || ^17.0.0",
+    "react-icons": "^4.12.0"
   }
 }

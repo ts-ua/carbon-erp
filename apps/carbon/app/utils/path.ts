@@ -106,7 +106,7 @@ export const path = {
     customerShipping: (id: string) =>
       generatePath(`${x}/customer/${id}/shipping`),
     customerType: (id: string) =>
-      generatePath(`${x}/sales/customer-types/delete/${id}`),
+      generatePath(`${x}/sales/customer-types/${id}`),
     customerTypes: `${x}/sales/customer-types`,
     deactivateUsers: `${x}/users/deactivate`,
     deleteAbility: (id: string) =>
@@ -281,7 +281,7 @@ export const path = {
     newWorkCellType: `${x}/resources/work-cells/new`,
     part: (id: string) => generatePath(`${x}/part/${id}`),
     partCosting: (id: string) => generatePath(`${x}/part/${id}/costing`),
-    partGroup: (id: string) => generatePath(`${x}/parts/groups/delete/${id}`),
+    partGroup: (id: string) => generatePath(`${x}/parts/groups/${id}`),
     partGroups: `${x}/parts/groups`,
     partInventory: (id: string) => generatePath(`${x}/part/${id}/inventory`),
     partInventoryLocation: (id: string, locationId: string) =>
@@ -379,7 +379,7 @@ export const path = {
       generatePath(`${x}/supplier/${id}/shipping`),
     supplierRoot: `${x}/supplier`,
     supplierType: (id: string) =>
-      generatePath(`${x}/purchasing/supplier-types/delete/${id}`),
+      generatePath(`${x}/purchasing/supplier-types/${id}`),
     supplierTypes: `${x}/purchasing/supplier-types`,
     tableSequence: (id: string) =>
       generatePath(`${x}/settings/sequences/${id}`),

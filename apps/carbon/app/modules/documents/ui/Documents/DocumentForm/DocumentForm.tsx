@@ -1,13 +1,14 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Hidden, Input, Submit, TextArea, Users } from "~/components/Form";
@@ -29,18 +30,24 @@ const DocumentForm = ({ initialValues, ownerId }: DocumentFormProps) => {
   const isDisabled = !permissions.can("update", "documents");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={documentValidator}
-        method="post"
-        action={path.to.document(initialValues.id)}
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{`Edit ${initialValues.name}.${initialValues.type}`}</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={documentValidator}
+          method="post"
+          action={path.to.document(initialValues.id)}
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{`Edit ${initialValues.name}.${initialValues.type}`}</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <Hidden name="id" />
             <Hidden name="type" />
             <Hidden name="size" />
@@ -71,8 +78,8 @@ const DocumentForm = ({ initialValues, ownerId }: DocumentFormProps) => {
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

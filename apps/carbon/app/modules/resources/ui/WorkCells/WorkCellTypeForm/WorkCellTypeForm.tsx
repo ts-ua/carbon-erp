@@ -1,13 +1,14 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Ability,
@@ -38,24 +39,30 @@ const WorkCellTypeForm = ({
     : !permissions.can("create", "resources");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={workCellTypeValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.workCellType(initialValues.id!)
-            : path.to.newWorkCellType
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={workCellTypeValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.workCellType(initialValues.id!)
+              : path.to.newWorkCellType
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
           <DrawerHeader>
-            {isEditing ? "Edit" : "New"} Work Cell Type
+            <DrawerTitle>
+              {isEditing ? "Edit" : "New"} Work Cell Type
+            </DrawerTitle>
           </DrawerHeader>
-          <DrawerBody pb={8}>
+          <DrawerBody>
             <Hidden name="id" />
             <VStack spacing={4}>
               <Input name="name" label="Name" />
@@ -72,8 +79,8 @@ const WorkCellTypeForm = ({
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

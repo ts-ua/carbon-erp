@@ -1,13 +1,14 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Boolean, Hidden, Input, Submit } from "~/components/Form";
 import { usePermissions } from "~/hooks";
@@ -31,24 +32,30 @@ const AttributeCategoryForm = ({
     : !permissions.can("create", "resources");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={attributeCategoryValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.attributeCategory(initialValues.id!)
-            : path.to.newAttributeCategory
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={attributeCategoryValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.attributeCategory(initialValues.id!)
+              : path.to.newAttributeCategory
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
           <DrawerHeader>
-            {isEditing ? "Edit" : "New"} Attribute Category
+            <DrawerTitle>
+              {isEditing ? "Edit" : "New"} Attribute Category
+            </DrawerTitle>
           </DrawerHeader>
-          <DrawerBody pb={8}>
+          <DrawerBody>
             <Hidden name="id" />
             <VStack spacing={4}>
               <Input name="name" label="Category Name" />
@@ -67,8 +74,8 @@ const AttributeCategoryForm = ({
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

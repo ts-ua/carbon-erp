@@ -1,16 +1,15 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
+import { FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
 import { ValidatedForm, useControlField, useField } from "remix-validated-form";
@@ -83,22 +82,28 @@ const EquipmentForm = ({
   );
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={equipmentValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.equipmentUnit(initialValues.id!)
-            : path.to.newEquipmentUnit
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{isEditing ? "Edit" : "New"} Equipment</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={equipmentValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.equipmentUnit(initialValues.id!)
+              : path.to.newEquipmentUnit
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{isEditing ? "Edit" : "New"} Equipment</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <Hidden name="id" />
             <VStack spacing={4}>
               <Input name="name" label="Name" />
@@ -139,8 +144,8 @@ const EquipmentForm = ({
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

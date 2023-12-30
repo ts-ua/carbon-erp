@@ -1,13 +1,15 @@
-import { Button, Heading, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  Heading,
+  HStack,
+  VStack,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -44,18 +46,24 @@ const SequenceForm = ({ initialValues }: SequenceFormProps) => {
   const isDisabled = !permissions.can("update", "settings");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={sequenceValidator}
-        method="post"
-        action={path.to.tableSequence(initialValues.table)}
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{`${initialValues.name}`} Sequence</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={sequenceValidator}
+          method="post"
+          action={path.to.tableSequence(initialValues.table)}
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{`${initialValues.name}`} Sequence</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <Hidden name="table" />
             <VStack spacing={4}>
               <Heading size="h2">{makePreview()}</Heading>
@@ -103,8 +111,8 @@ const SequenceForm = ({ initialValues }: SequenceFormProps) => {
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

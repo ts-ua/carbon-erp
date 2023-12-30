@@ -1,13 +1,14 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -44,22 +45,28 @@ const PaymentTermForm = ({ initialValues }: PaymentTermFormProps) => {
   );
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={paymentTermValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.paymentTerm(initialValues.id!)
-            : path.to.newPaymentTerm
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{isEditing ? "Edit" : "New"} Payment Term</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={paymentTermValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.paymentTerm(initialValues.id!)
+              : path.to.newPaymentTerm
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{isEditing ? "Edit" : "New"} Payment Term</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <Hidden name="id" />
             <VStack spacing={4}>
               <Input name="name" label="Name" />
@@ -102,8 +109,8 @@ const PaymentTermForm = ({ initialValues }: PaymentTermFormProps) => {
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

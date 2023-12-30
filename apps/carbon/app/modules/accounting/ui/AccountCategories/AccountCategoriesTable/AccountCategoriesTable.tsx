@@ -4,7 +4,7 @@ import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-import { BsListUl, BsPencilSquare } from "react-icons/bs";
+import { BsListUl, BsPencilFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -109,7 +109,7 @@ const AccountCategoriesTable = memo(
               View Subcategories
             </MenuItem>
             <MenuItem
-              icon={<BsPencilSquare />}
+              icon={<BsPencilFill />}
               onClick={() => {
                 navigate(path.to.accountingCategory(row.id!));
               }}

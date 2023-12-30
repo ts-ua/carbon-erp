@@ -1,13 +1,15 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
+
 import { useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Hidden, Input, Submit } from "~/components/Form";
@@ -31,20 +33,26 @@ const UnitOfMeasureForm = ({ initialValues }: UnitOfMeasureFormProps) => {
     : !permissions.can("create", "parts");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={unitOfMeasureValidator}
-        method="post"
-        action={isEditing ? path.to.uom(initialValues.id!) : path.to.newUom}
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={unitOfMeasureValidator}
+          method="post"
+          action={isEditing ? path.to.uom(initialValues.id!) : path.to.newUom}
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
           <DrawerHeader>
-            {isEditing ? "Edit" : "New"} Unit of Measure
+            <DrawerTitle>
+              {isEditing ? "Edit" : "New"} Unit of Measure
+            </DrawerTitle>
           </DrawerHeader>
-          <DrawerBody pb={8}>
+          <DrawerBody>
             <Hidden name="id" />
             <VStack spacing={4}>
               <Input name="name" label="Unit of Measure" />
@@ -63,8 +71,8 @@ const UnitOfMeasureForm = ({ initialValues }: UnitOfMeasureFormProps) => {
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

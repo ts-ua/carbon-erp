@@ -1,13 +1,15 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
+
 import { useParams } from "@remix-run/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -58,22 +60,28 @@ const EmployeeAbilityForm = ({
   if (!ability) return null;
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={employeeAbilityValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.employeeAbility(ability.id, id!)
-            : path.to.newEmployeeAbility(ability.id)
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{isEditing ? "Edit" : "New"} Employee</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={employeeAbilityValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.employeeAbility(ability.id, id!)
+              : path.to.newEmployeeAbility(ability.id)
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{isEditing ? "Edit" : "New"} Employee</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <VStack spacing={4}>
               <Employee
                 name="employeeId"
@@ -125,8 +133,8 @@ const EmployeeAbilityForm = ({
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

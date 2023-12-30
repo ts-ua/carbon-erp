@@ -1,16 +1,16 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
-
 import { ValidatedForm } from "remix-validated-form";
 import { Boolean, Hidden, Input, Number, Submit } from "~/components/Form";
 import { usePermissions, useRouteData } from "~/hooks";
@@ -43,20 +43,28 @@ const CurrencyForm = ({ initialValues }: CurrencyFormProps) => {
     ? !permissions.can("update", "accounting")
     : !permissions.can("create", "accounting");
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={currencyValidator}
-        method="post"
-        action={
-          isEditing ? path.to.currency(initialValues.id!) : path.to.newCurrency
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{isEditing ? "Edit" : "New"} Currency</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={currencyValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.currency(initialValues.id!)
+              : path.to.newCurrency
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{isEditing ? "Edit" : "New"} Currency</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <Hidden name="id" />
             <VStack spacing={4}>
               <Input
@@ -69,8 +77,8 @@ const CurrencyForm = ({ initialValues }: CurrencyFormProps) => {
               <Number
                 name="exchangeRate"
                 label="Exchange Rate"
-                isDisabled={isBaseCurrency}
-                min={0}
+                min={isBaseCurrency ? 1 : 0}
+                max={isBaseCurrency ? 1 : undefined}
                 helperText={exchnageRateHelperText}
               />
               <Boolean name="isBaseCurrency" label="Base Currency" />
@@ -84,8 +92,8 @@ const CurrencyForm = ({ initialValues }: CurrencyFormProps) => {
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

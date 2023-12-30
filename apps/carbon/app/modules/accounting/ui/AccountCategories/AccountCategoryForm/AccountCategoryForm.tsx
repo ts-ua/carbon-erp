@@ -1,13 +1,14 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Hidden, Input, Select, Submit } from "~/components/Form";
 import { usePermissions } from "~/hooks";
@@ -36,24 +37,30 @@ const AccountCategoryForm = ({
     : !permissions.can("create", "accounting");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={accountCategoryValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.accountingCategory(initialValues.id!)
-            : path.to.newAccountingCategory
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={accountCategoryValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.accountingCategory(initialValues.id!)
+              : path.to.newAccountingCategory
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
           <DrawerHeader>
-            {isEditing ? "Edit" : "New"} Account Category
+            <DrawerTitle>
+              {isEditing ? "Edit" : "New"} Account Category
+            </DrawerTitle>
           </DrawerHeader>
-          <DrawerBody pb={8}>
+          <DrawerBody>
             <Hidden name="id" />
             <VStack>
               <Input name="category" label="Category" />
@@ -83,8 +90,8 @@ const AccountCategoryForm = ({
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

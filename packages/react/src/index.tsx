@@ -21,6 +21,17 @@ import {
   TimePicker,
 } from "./Date";
 import { Dot } from "./Dot";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "./Drawer";
 import { Editor, useEditor } from "./Editor";
 import { File } from "./File";
 import { HStack } from "./HStack";
@@ -81,6 +92,15 @@ export {
   DateRangePicker,
   DateTimePicker,
   Dot,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
   Editor,
   File,
   HStack,

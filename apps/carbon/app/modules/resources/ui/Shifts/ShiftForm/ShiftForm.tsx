@@ -1,15 +1,15 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-  FormControl,
-  FormLabel,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
+import { FormControl, FormLabel } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -40,18 +40,26 @@ const ShiftForm = ({ initialValues }: ShiftFormProps) => {
     : !permissions.can("create", "resources");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={shiftValidator}
-        method="post"
-        action={isEditing ? path.to.shift(initialValues.id!) : path.to.newShift}
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{isEditing ? "Edit" : "New"} Shift</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={shiftValidator}
+          method="post"
+          action={
+            isEditing ? path.to.shift(initialValues.id!) : path.to.newShift
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{isEditing ? "Edit" : "New"} Shift</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <Hidden name="id" />
             <VStack spacing={4}>
               <Input name="name" label="Shift Name" />
@@ -81,8 +89,8 @@ const ShiftForm = ({ initialValues }: ShiftFormProps) => {
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

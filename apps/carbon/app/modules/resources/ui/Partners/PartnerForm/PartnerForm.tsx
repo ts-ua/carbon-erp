@@ -1,16 +1,17 @@
-import { Button, HStack, Select, VStack, useMount } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  Select,
+  VStack,
+  useMount,
+} from "@carbon/react";
+import { FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect, useMemo } from "react";
 import { ValidatedForm, useControlField, useField } from "remix-validated-form";
@@ -60,20 +61,26 @@ const PartnerForm = ({ initialValues }: PartnerFormProps) => {
   );
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={partnerValidator}
-        method="post"
-        action={
-          isEditing ? path.to.partner(initialValues.id) : path.to.newPartner
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{isEditing ? "Edit" : "New"} Partner</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={partnerValidator}
+          method="post"
+          action={
+            isEditing ? path.to.partner(initialValues.id) : path.to.newPartner
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{isEditing ? "Edit" : "New"} Partner</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <VStack spacing={4}>
               <Supplier
                 name="supplierId"
@@ -104,8 +111,8 @@ const PartnerForm = ({ initialValues }: PartnerFormProps) => {
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

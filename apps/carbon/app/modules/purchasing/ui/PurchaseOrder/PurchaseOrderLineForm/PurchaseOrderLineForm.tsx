@@ -1,12 +1,15 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
+import {
   FormControl,
   FormLabel,
   Input,
@@ -203,24 +206,30 @@ const PurchaseOrderLineForm = ({
   };
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        defaultValues={initialValues}
-        validator={purchaseOrderLineValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.purchaseOrderLine(orderId, initialValues.id!)
-            : path.to.newPurchaseOrderLine(orderId)
-        }
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          defaultValues={initialValues}
+          validator={purchaseOrderLineValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.purchaseOrderLine(orderId, initialValues.id!)
+              : path.to.newPurchaseOrderLine(orderId)
+          }
+          className="flex flex-col h-full"
+        >
           <DrawerHeader>
-            {isEditing ? "Edit" : "New"} Purchase Order Line
+            <DrawerTitle>
+              {isEditing ? "Edit" : "New"} Purchase Order Line
+            </DrawerTitle>
           </DrawerHeader>
-          <DrawerBody pb={8}>
+          <DrawerBody>
             <Hidden name="id" />
             <Hidden name="purchaseOrderId" />
             <Hidden name="description" value={partData.description} />
@@ -344,8 +353,8 @@ const PurchaseOrderLineForm = ({
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };
