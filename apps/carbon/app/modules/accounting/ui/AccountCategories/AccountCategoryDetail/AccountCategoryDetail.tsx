@@ -1,16 +1,18 @@
-import { Button, HStack, VStack, useDisclosure } from "@carbon/react";
 import {
+  ActionMenu,
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-  IconButton,
-  Tag,
-  TagLabel,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+  useDisclosure,
+} from "@carbon/react";
+import { MenuItem } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
@@ -49,57 +51,41 @@ const AccountCategoryDetail = ({
     deleteModal.onClose();
   };
 
+  const renderContextMenu = (subcategory: AccountSubcategory) => {
+    return (
+      <>
+        <MenuItem as={Link} to={subcategory.id} icon={<BsPencilSquare />}>
+          Edit Subcategory
+        </MenuItem>
+        <MenuItem onClick={() => onDelete(subcategory)} icon={<IoMdTrash />}>
+          Delete Subcategory
+        </MenuItem>
+      </>
+    );
+  };
+
   return (
     <>
-      <Drawer onClose={onClose} isOpen={true} size="sm">
-        <DrawerOverlay />
+      <Drawer
+        open
+        onOpenChange={(open) => {
+          if (!open) onClose();
+        }}
+      >
         <DrawerContent>
-          <DrawerCloseButton />
           <DrawerHeader>
-            <VStack>
-              <HStack className="content-between pr-8 w-full">
-                <span>{accountCategory.category}</span>
-                <Tag
-                  borderRadius="full"
-                  variant="outline"
-                  colorScheme={
-                    accountCategory.incomeBalance === "Income Statement"
-                      ? "green"
-                      : "gray"
-                  }
-                >
-                  <TagLabel>{accountCategory.incomeBalance}</TagLabel>
-                </Tag>
-              </HStack>
-              <p className="text-sm font-normal text-muted-foreground">
-                A list of subcategories in the {accountCategory.category}{" "}
-                category.
-              </p>
-            </VStack>
+            <DrawerTitle>{accountCategory.category}</DrawerTitle>
+            <DrawerDescription>
+              {accountCategory.incomeBalance}
+            </DrawerDescription>
           </DrawerHeader>
           <DrawerBody>
             <VStack>
               {accountSubcategories.map((subcategory) => {
                 return (
-                  <HStack key={subcategory.id} className="w-full">
+                  <HStack spacing={1} key={subcategory.id} className="w-full">
                     <p className="flex-grow">{subcategory.name}</p>
-                    <Button
-                      asChild
-                      isIcon
-                      aria-label="Edit"
-                      variant="secondary"
-                    >
-                      <Link to={subcategory.id}>
-                        <BsPencilSquare />
-                      </Link>
-                    </Button>
-
-                    <IconButton
-                      aria-label="Delete"
-                      icon={<IoMdTrash />}
-                      variant="outline"
-                      onClick={() => onDelete(subcategory)}
-                    />
+                    <ActionMenu>{renderContextMenu(subcategory)}</ActionMenu>
                   </HStack>
                 );
               })}

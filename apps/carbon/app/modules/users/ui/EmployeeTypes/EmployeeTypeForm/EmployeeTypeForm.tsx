@@ -1,14 +1,15 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-  FormLabel,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
+import { FormLabel } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -54,24 +55,30 @@ const EmployeeTypeForm = ({ initialValues }: EmployeeTypeFormProps) => {
     : !userPermissions.can("create", "users");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={employeeTypeValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.employeeType(initialValues.id!)
-            : path.to.newEmployeeType
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={employeeTypeValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.employeeType(initialValues.id!)
+              : path.to.newEmployeeType
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
           <DrawerHeader>
-            {isEditing ? "Edit" : "New"} Employee Type
+            <DrawerTitle>
+              {isEditing ? "Edit" : "New"} Employee Type
+            </DrawerTitle>
           </DrawerHeader>
-          <DrawerBody pb={8}>
+          <DrawerBody>
             <Hidden name="id" />
             <VStack spacing={4}>
               <Input name="name" label="Employee Type" />
@@ -104,8 +111,8 @@ const EmployeeTypeForm = ({ initialValues }: EmployeeTypeFormProps) => {
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

@@ -1,4 +1,3 @@
-import { VStack } from "@carbon/react";
 import { Grid, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import type {
   ColumnDef,
@@ -17,6 +16,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
+import { VStack } from "~/VStack";
 
 import { DataTablePagination } from "./DataTablePagination";
 

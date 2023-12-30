@@ -1,15 +1,18 @@
-import { Button, HStack, IconButton, useDisclosure } from "@carbon/react";
 import {
+  ActionMenu,
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-  Tag,
-  TagLabel,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  IconButton,
+  useDisclosure,
+} from "@carbon/react";
+import { MenuItem } from "@chakra-ui/react";
 import { Link, useFetcher } from "@remix-run/react";
 import { Reorder } from "framer-motion";
 import { useMemo, useState } from "react";
@@ -39,18 +42,20 @@ const AttributeCategoryDetail = ({
   const [params] = useUrlParams();
   const sortOrderFetcher = useFetcher();
 
-  const attributeMap = useMemo(
+  const attributeMap: Record<string, Attribute> = useMemo(
     () =>
       Array.isArray(attributeCategory.userAttribute)
-        ? attributeCategory.userAttribute.reduce<
-            Record<string, AttributeCategoryDetailType["userAttribute"]>
-          >((acc, attribute) => {
-            if (!attribute) return acc;
-            return {
-              ...acc,
-              [attribute.id]: attribute,
-            };
-          }, {})
+        ? attributeCategory.userAttribute.reduce<Record<string, Attribute>>(
+            // @ts-ignore
+            (acc, attribute) => {
+              if (!attribute) return acc;
+              return {
+                ...acc,
+                [attribute.id]: attribute,
+              };
+            },
+            {}
+          )
         : {},
     [attributeCategory]
   );
@@ -95,26 +100,36 @@ const AttributeCategoryDetail = ({
     deleteModal.onClose();
   };
 
+  const renderContextMenu = (attributeId: string) => {
+    return (
+      <>
+        <MenuItem as={Link} to={attributeId} icon={<BsPencilSquare />}>
+          Edit Attribute
+        </MenuItem>
+        <MenuItem
+          onClick={() => onDelete(attributeMap[attributeId])}
+          icon={<IoMdTrash />}
+        >
+          Delete Attribute
+        </MenuItem>
+      </>
+    );
+  };
+
   return (
     <>
-      <Drawer onClose={onClose} isOpen={true} size="sm">
-        <DrawerOverlay />
+      <Drawer
+        open
+        onOpenChange={(open) => {
+          if (!open) onClose();
+        }}
+      >
         <DrawerContent>
-          <DrawerCloseButton />
           <DrawerHeader>
-            <HStack className="justify-between w-full pr-8">
-              <span>{attributeCategory.name}</span>
-              <Tag
-                size="lg"
-                borderRadius="full"
-                variant={attributeCategory.public ? "solid" : "outline"}
-                colorScheme={attributeCategory.public ? "green" : "gray"}
-              >
-                <TagLabel>
-                  {attributeCategory.public ? "Public" : "Private"}
-                </TagLabel>
-              </Tag>
-            </HStack>
+            <DrawerTitle>{attributeCategory.name}</DrawerTitle>
+            <DrawerDescription>
+              {attributeCategory.public ? "Public" : "Private"}
+            </DrawerDescription>
           </DrawerHeader>
           <DrawerBody>
             {Array.isArray(attributeCategory?.userAttribute) && (
@@ -122,14 +137,14 @@ const AttributeCategoryDetail = ({
                 axis="y"
                 values={sortOrder}
                 onReorder={onReorder}
-                className="space-y-2"
+                className="space-y-2 w-full"
               >
                 {sortOrder.map((sortId) => {
                   return (
                     <Reorder.Item
                       key={sortId}
                       value={sortId}
-                      className="rounded-lg"
+                      className="rounded-lg w-full"
                     >
                       <HStack>
                         <IconButton
@@ -137,7 +152,7 @@ const AttributeCategoryDetail = ({
                           icon={<MdOutlineDragIndicator />}
                           variant="ghost"
                         />
-                        <p className="flex-grow">
+                        <p className="flex-grow text-foreground">
                           {
                             // @ts-ignore
                             attributeMap[sortId]?.name
@@ -157,26 +172,7 @@ const AttributeCategoryDetail = ({
                               "Unknown"
                           }
                         </Button>
-
-                        <Button
-                          asChild
-                          isIcon
-                          aria-label="Edit"
-                          variant="ghost"
-                        >
-                          <Link to={sortId.toString()}>
-                            <BsPencilSquare />
-                          </Link>
-                        </Button>
-                        <IconButton
-                          aria-label="Delete"
-                          icon={<IoMdTrash />}
-                          variant="ghost"
-                          onClick={() =>
-                            // @ts-ignore
-                            onDelete(attributeMap[sortId])
-                          }
-                        />
+                        <ActionMenu>{renderContextMenu(sortId)}</ActionMenu>
                       </HStack>
                     </Reorder.Item>
                   );

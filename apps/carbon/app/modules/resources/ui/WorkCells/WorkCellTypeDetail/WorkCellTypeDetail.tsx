@@ -1,20 +1,17 @@
 import {
   ActionMenu,
   Button,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
   HStack,
   VStack,
   useDisclosure,
 } from "@carbon/react";
-import {
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  MenuItem,
-} from "@chakra-ui/react";
+import { MenuItem } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
@@ -70,11 +67,16 @@ const WorkCellTypeDetail = ({
 
   return (
     <>
-      <Drawer onClose={onClose} isOpen={true} size="sm">
-        <DrawerOverlay />
+      <Drawer
+        open
+        onOpenChange={(open) => {
+          if (!open) onClose();
+        }}
+      >
         <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{workCellType.name}</DrawerHeader>
+          <DrawerHeader>
+            <DrawerTitle>{workCellType.name}</DrawerTitle>
+          </DrawerHeader>
           <DrawerBody>
             {Array.isArray(workCellType?.workCell) && (
               <VStack spacing={4}>

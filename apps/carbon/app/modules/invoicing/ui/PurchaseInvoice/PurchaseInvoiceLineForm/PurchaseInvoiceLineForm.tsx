@@ -1,12 +1,15 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
+import {
   FormControl,
   FormLabel,
   Input,
@@ -205,24 +208,30 @@ const PurchaseInvoiceLineForm = ({
   };
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        defaultValues={initialValues}
-        validator={purchaseInvoiceLineValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.purchaseInvoiceLine(invoiceId, initialValues.id!)
-            : path.to.newPurchaseInvoiceLine(invoiceId)
-        }
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          defaultValues={initialValues}
+          validator={purchaseInvoiceLineValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.purchaseInvoiceLine(invoiceId, initialValues.id!)
+              : path.to.newPurchaseInvoiceLine(invoiceId)
+          }
+          className="flex flex-col h-full"
+        >
           <DrawerHeader>
-            {isEditing ? "Edit" : "New"} Purchase Invoice Line
+            <DrawerTitle>
+              {isEditing ? "Edit" : "New"} Purchase Invoice Line
+            </DrawerTitle>
           </DrawerHeader>
-          <DrawerBody pb={8}>
+          <DrawerBody>
             <Hidden name="id" />
             <Hidden name="invoiceId" />
             <Hidden name="description" value={partData.description} />
@@ -346,8 +355,8 @@ const PurchaseInvoiceLineForm = ({
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

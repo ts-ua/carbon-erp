@@ -308,7 +308,7 @@ CREATE TABLE "equipment" (
   "locationId" TEXT NOT NULL,
   "workCellId" TEXT,
   "active" BOOLEAN NOT NULL DEFAULT true,
-  "activeDate" DATE,
+  "activeDate" DATE DEFAULT CURRENT_DATE,
   "createdBy" TEXT NOT NULL,
   "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
   "updatedBy" TEXT,
@@ -357,7 +357,7 @@ RETURNS TRIGGER AS $$
 DECLARE
   equipment_type TEXT;
 BEGIN
-  equipment_type := (SELECT u."name" FROM public."equipmentType" et WHERE et.id = new."equipmentTypeId");
+  equipment_type := (SELECT et."name" FROM public."equipmentType" et WHERE et.id = new."equipmentTypeId");
   INSERT INTO public.search(name, description, entity, uuid, link)
   VALUES (new.name, COALESCE(new.description, '') || ' ' || equipment_type, 'Resource', new.id, '/x/resources/equipment/list/' || new."equipmentTypeId" || '/' || new.id);
   RETURN new;
@@ -374,7 +374,7 @@ DECLARE
   equipment_type TEXT;
 BEGIN
   IF (old.name <> new.name OR old.description <> new.description OR old."equipmentTypeId" <> new."equipmentTypeId") THEN
-    equipment_type := (SELECT u."name" FROM public."equipmentType" et WHERE et.id = new."equipmentTypeId");
+    equipment_type := (SELECT et."name" FROM public."equipmentType" et WHERE et.id = new."equipmentTypeId");
     UPDATE public.search SET name = new.name, description = COALESCE(new.description, '') || ' ' || equipment_type
     WHERE entity = 'Resource' AND uuid = new.id;
   END IF;

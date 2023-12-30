@@ -1,7 +1,7 @@
-import { Button } from "@carbon/react";
 import { Input, InputGroup } from "@chakra-ui/react";
 import type { ChangeEvent, ComponentPropsWithoutRef } from "react";
 import { useRef } from "react";
+import { Button } from "~/Button";
 
 type FileProps = ComponentPropsWithoutRef<"div"> & {
   accept?: string;

@@ -1,14 +1,15 @@
-import { HStack, VStack } from "@carbon/react";
 import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
+
 import { useNavigate, useParams } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Hidden, Input, Submit } from "~/components/Form";
@@ -36,23 +37,29 @@ const CustomerLocationForm = ({ initialValues }: CustomerLocationFormProps) => {
   const onClose = () => navigate(path.to.customerLocations(customerId));
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={customerLocationValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.customerLocation(customerId, initialValues.id!)
-            : path.to.newCustomerLocation(customerId)
-        }
-        defaultValues={initialValues}
-        onSubmit={onClose}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{isEditing ? "Edit" : "New"} Location</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={customerLocationValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.customerLocation(customerId, initialValues.id!)
+              : path.to.newCustomerLocation(customerId)
+          }
+          defaultValues={initialValues}
+          onSubmit={onClose}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{isEditing ? "Edit" : "New"} Location</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <Hidden name="id" />
             <Hidden name="addressId" />
             <VStack spacing={4}>
@@ -67,18 +74,13 @@ const CustomerLocationForm = ({ initialValues }: CustomerLocationFormProps) => {
           <DrawerFooter>
             <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

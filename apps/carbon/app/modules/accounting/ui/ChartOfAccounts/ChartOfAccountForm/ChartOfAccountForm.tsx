@@ -1,14 +1,16 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-  Grid,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
 
@@ -72,26 +74,33 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
   };
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="full">
-      <ValidatedForm
-        validator={accountValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.chartOfAccount(initialValues.id!)
-            : path.to.newChartOfAccount
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent size="full">
+        <ValidatedForm
+          validator={accountValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.chartOfAccount(initialValues.id!)
+              : path.to.newChartOfAccount
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
           <DrawerHeader>
-            {isEditing
-              ? `${initialValues.number} - ${initialValues.name}`
-              : "New Account"}
+            <DrawerTitle>
+              {isEditing ? `${initialValues.number}` : "New Account"}
+            </DrawerTitle>
+            {isEditing && (
+              <DrawerDescription>{initialValues.name}</DrawerDescription>
+            )}
           </DrawerHeader>
-          <DrawerBody pb={8}>
+          <DrawerBody>
             <Hidden name="id" />
 
             <Grid
@@ -170,8 +179,8 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

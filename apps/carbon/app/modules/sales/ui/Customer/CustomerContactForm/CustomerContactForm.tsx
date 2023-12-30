@@ -1,13 +1,14 @@
-import { Button, HStack, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  VStack,
+} from "@carbon/react";
 import { useNavigate, useParams } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -42,23 +43,29 @@ const CustomerContactForm = ({ initialValues }: CustomerContactFormProps) => {
   const onClose = () => navigate(path.to.customerContacts(customerId));
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={customerContactValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.customerContact(customerId, initialValues.id!)
-            : path.to.newCustomerContact(customerId)
-        }
-        defaultValues={initialValues}
-        onSubmit={onClose}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{isEditing ? "Edit" : "New"} Contact</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={customerContactValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.customerContact(customerId, initialValues.id!)
+              : path.to.newCustomerContact(customerId)
+          }
+          defaultValues={initialValues}
+          onSubmit={onClose}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{isEditing ? "Edit" : "New"} Contact</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <Hidden name="id" />
             <Hidden name="contactId" />
             <VStack spacing={4}>
@@ -88,8 +95,8 @@ const CustomerContactForm = ({ initialValues }: CustomerContactFormProps) => {
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

@@ -30,7 +30,7 @@ const Pagination = (props: PaginationProps) => {
 
   return (
     <HStack
-      className="text-center bg-background border-t justify-between px-4 py-2 w-full z-[1]"
+      className="text-center bg-background border-t border-border justify-between px-4 py-2 w-full z-[1]"
       spacing={6}
     >
       <Menu>
@@ -88,7 +88,7 @@ export const PaginationButtons = ({
         </>
       ) : (
         <>
-          <div className="flex font-sm font-medium align-center">
+          <div className="flex text-sm font-medium align-center">
             {count > 0 ? offset + 1 : 0} - {Math.min(offset + pageSize, count)}{" "}
             of {count}
           </div>

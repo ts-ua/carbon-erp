@@ -6,7 +6,7 @@ import type { TypeOfValidator } from "~/types/validators";
 import type { GenericQueryFilters } from "~/utils/query";
 import { setGenericQueryFilters } from "~/utils/query";
 import { sanitize } from "~/utils/supabase";
-import type { locationValidator } from "./resources.models";
+import type { equipmentValidator, locationValidator } from "./resources.models";
 
 export async function deleteAbility(
   client: SupabaseClient<Database>,
@@ -1043,31 +1043,19 @@ export async function upsertEmployeeJob(
 export async function upsertEquipment(
   client: SupabaseClient<Database>,
   equipment:
-    | {
-        name: string;
-        description: string;
-        equipmentTypeId: string;
-        locationId: string;
-        operatorsRequired?: number;
-        setupHours?: number;
-        workCellId?: string;
+    | (Omit<TypeOfValidator<typeof equipmentValidator>, "id"> & {
         createdBy: string;
-      }
-    | {
+      })
+    | (Omit<TypeOfValidator<typeof equipmentValidator>, "id"> & {
         id: string;
-        name: string;
-        description: string;
-        equipmentTypeId: string;
-        locationId: string;
-        operatorsRequired?: number;
-        workCellId?: string;
         updatedBy: string;
-      }
+      })
 ) {
   if ("id" in equipment) {
     const { id, ...update } = equipment;
     return client.from("equipment").update(sanitize(update)).eq("id", id);
   }
+
   return client.from("equipment").insert([equipment]).select("id").single();
 }
 

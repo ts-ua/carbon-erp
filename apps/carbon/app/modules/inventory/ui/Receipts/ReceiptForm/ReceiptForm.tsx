@@ -1,14 +1,17 @@
-import { Button, HStack, Menubar, MenubarItem, VStack } from "@carbon/react";
 import {
+  Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-  Grid,
-} from "@chakra-ui/react";
+  DrawerTitle,
+  HStack,
+  Menubar,
+  MenubarItem,
+  VStack,
+} from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import { Outlet } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -70,12 +73,17 @@ const ReceiptForm = ({
 
   return (
     <>
-      <Drawer onClose={onClose} isOpen={true} size="full">
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{initialValues.receiptId}</DrawerHeader>
-          <DrawerBody pb={8}>
+      <Drawer
+        open
+        onOpenChange={(open) => {
+          if (!open) onClose();
+        }}
+      >
+        <DrawerContent size="full">
+          <DrawerHeader>
+            <DrawerTitle>{initialValues.receiptId}</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <VStack spacing={4}>
               <Menubar className="mb-2 mt--2">
                 <MenubarItem isDisabled={!canPost || isPosted} onClick={onPost}>

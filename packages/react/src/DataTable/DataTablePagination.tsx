@@ -20,7 +20,7 @@ export function DataTablePagination<TData>({
 
   return (
     <HStack
-      className="text-center bg-background border-t justify-between px-4 py-2 w-full z-[1]"
+      className="text-center bg-background border-t border-border justify-between px-4 py-2 w-full z-[1]"
       spacing={6}
     >
       <Menu>
