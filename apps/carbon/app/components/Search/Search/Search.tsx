@@ -1,27 +1,25 @@
 import {
   Button,
+  HStack,
+  Modal,
+  ModalBody,
+  ModalContent,
   VStack,
-  useColor,
   useDebounce,
   useDisclosure,
   useKeyboardShortcuts,
 } from "@carbon/react";
 import { clip } from "@carbon/utils";
 import {
-  HStack,
   Icon,
   Input,
   InputGroup,
   InputLeftElement,
   Kbd,
   List,
-  ListItem,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalOverlay,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "@remix-run/react";
+import clsx from "clsx";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AiOutlinePartition } from "react-icons/ai";
 import { BiListCheck } from "react-icons/bi";
@@ -191,20 +189,18 @@ const SearchModal = ({
 
   return (
     <Modal
-      isOpen={isOpen}
-      onClose={() => {
-        onClose();
+      open={isOpen}
+      onOpenChange={(open) => {
         setQuery("");
+        if (!open) onClose();
       }}
     >
-      <ModalOverlay />
-      <ModalContent borderRadius="lg">
-        <ModalBody p={0}>
+      <ModalContent className="rounded-lg top-[10vh] translate-y-0 p-0">
+        <ModalBody className="max-h-[66vh]">
           <InputGroup size="lg">
-            <InputLeftElement
-              pointerEvents="none"
-              children={<Icon as={FaSearch} color="gray.500" />}
-            />
+            <InputLeftElement pointerEvents="none">
+              <FaSearch className="text-muted-foreground" />
+            </InputLeftElement>
             <Input
               placeholder="Search..."
               value={query}
@@ -221,7 +217,7 @@ const SearchModal = ({
             />
           </InputGroup>
 
-          <div className="bg-background rounded-lg shadow-lg max-h-[66vh] overflow-y-scroll p-4 pt-0">
+          <div className="h-[calc(100%-3rem)] overflow-y-scroll p-4 pt-0">
             <List role="listbox" ref={listboxRef}>
               {moduleResults.map((item, itemIndex) => (
                 <Module
@@ -301,28 +297,34 @@ function Result({
   onClick: () => void;
   onHover: () => void;
 }) {
-  const bgColor = useColor("gray.100");
   return (
     <Link to={result.link} onClick={onClick}>
-      <HStack
-        as={ListItem}
+      <li
+        className={clsx(
+          "flex w-full items-center bg-card rounded-lg  min-h-[4rem] mt-2 p-2",
+          {
+            "bg-primary text-primary-foreground": selected,
+            "bg-muted text-foreground": !selected,
+          }
+        )}
         role="option"
-        bg={selected ? "gray.900" : bgColor}
-        borderRadius="lg"
-        color={selected ? "white" : undefined}
-        minH={16}
-        mt={2}
-        px={4}
-        py={2}
+        aria-selected={selected}
         onMouseEnter={onHover}
       >
         <ResultIcon entity={result.entity} />
         <VStack spacing={0} className="flex-1">
-          <p className="text-sm text-muted-foreground">{result.entity}</p>
+          <p
+            className={clsx("text-sm", {
+              "text-primary-foreground/60": selected,
+              "text-muted-foreground": !selected,
+            })}
+          >
+            {result.entity}
+          </p>
           <p className="font-bold">{result.name}</p>
         </VStack>
         <EnterIcon />
-      </HStack>
+      </li>
     </Link>
   );
 }
@@ -338,30 +340,33 @@ function Module({
   onClick: () => void;
   onHover: () => void;
 }) {
-  const bgColor = useColor("gray.100");
   return (
     <Link to={item.to} onClick={onClick}>
-      <HStack
-        as={ListItem}
+      <li
+        className={clsx(
+          "flex w-full items-center bg-card rounded-lg  min-h-[4rem] mt-2 p-2",
+          {
+            "bg-primary text-primary-foreground": selected,
+            "bg-muted text-foreground": !selected,
+          }
+        )}
         role="option"
-        bg={selected ? "gray.900" : bgColor}
-        borderRadius="lg"
-        color={selected ? "white" : undefined}
-        minH={16}
-        mt={2}
-        px={4}
-        py={2}
+        aria-selected={selected}
         onMouseEnter={onHover}
       >
-        {/* {item.icon && ( // @ts-expect-error
-          <Icon as={item.icon} {...resultIconProps} />
-        )} */}
         <VStack spacing={0} className="flex-1">
-          <p className="text-sm text-muted-foreground">Module</p>
+          <p
+            className={clsx("text-sm", {
+              "text-primary-foreground/60": selected,
+              "text-muted-foreground": !selected,
+            })}
+          >
+            Module
+          </p>
           <p className="font-bold">{item.name}</p>
         </VStack>
         <EnterIcon />
-      </HStack>
+      </li>
     </Link>
   );
 }
@@ -380,7 +385,7 @@ const SearchButton = () => {
         className="text-muted-foreground w-[200px] mt-2"
         onClick={searchModal.onOpen}
       >
-        <HStack w="full">
+        <HStack className="w-full">
           <div className="flex flex-grow">Search</div>
           <Kbd size="lg">/</Kbd>
         </HStack>

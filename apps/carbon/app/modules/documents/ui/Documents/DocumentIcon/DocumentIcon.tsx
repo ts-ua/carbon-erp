@@ -1,6 +1,7 @@
 import { Icon } from "@chakra-ui/react";
 import {
   BsFileEarmarkFill,
+  BsFileEarmarkPlayFill,
   BsFileExcelFill,
   BsFileImageFill,
   BsFilePdfFill,
@@ -8,7 +9,6 @@ import {
   BsFileTextFill,
   BsFileWordFill,
   BsFileZipFill,
-  BsFileEarmarkPlayFill,
 } from "react-icons/bs";
 
 type DocumentIconProps = {
@@ -46,6 +46,7 @@ const DocumentIcon = ({ fileName }: DocumentIconProps) => {
     case "gif":
     case "svg":
     case "avif":
+    case "webp":
       return <Icon color="yellow.400" {...iconSize} as={BsFileImageFill} />;
     case "mp4":
     case "avi":

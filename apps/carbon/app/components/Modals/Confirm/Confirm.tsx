@@ -1,17 +1,17 @@
-import { Button } from "@carbon/react";
 import {
+  Button,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
-} from "@chakra-ui/react";
+  ModalTitle,
+} from "@carbon/react";
+
 import { Form } from "@remix-run/react";
 
 type ConfirmProps = {
-  action: string;
+  action?: string;
   isOpen?: boolean;
   name: string;
   text: string;
@@ -28,13 +28,17 @@ const Confirm = ({
   onSubmit,
 }: ConfirmProps) => {
   return (
-    <Modal isOpen={isOpen} onClose={onCancel}>
-      <ModalOverlay />
+    <Modal
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onCancel();
+      }}
+    >
       <ModalContent>
-        <ModalHeader>{name}</ModalHeader>
-        <ModalCloseButton />
+        <ModalHeader>
+          <ModalTitle>{name}</ModalTitle>
+        </ModalHeader>
         <ModalBody>{text}</ModalBody>
-
         <ModalFooter>
           <Button variant="secondary" className="mr-3" onClick={onCancel}>
             Cancel

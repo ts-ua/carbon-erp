@@ -44,7 +44,7 @@ export async function action({ request }: ActionFunctionArgs) {
       await userAdminQueue.addBulk(jobs);
       return json(
         {},
-        await flash(request, success("Successfully added invites to queue."))
+        await flash(request, success("Successfully added invites to queue"))
       );
     } catch (e) {
       return json(

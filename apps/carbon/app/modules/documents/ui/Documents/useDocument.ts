@@ -3,7 +3,10 @@ import { useNavigate } from "@remix-run/react";
 import { useCallback } from "react";
 import { usePermissions, useUrlParams, useUser } from "~/hooks";
 import { useSupabase } from "~/lib/supabase";
-import type { Document, DocumentTransactionType } from "~/modules/documents";
+import type {
+  DocumentTransactionType,
+  Document as DocumentType,
+} from "~/modules/documents";
 import { path } from "~/utils/path";
 
 export const useDocument = () => {
@@ -15,17 +18,17 @@ export const useDocument = () => {
   const user = useUser();
 
   const canDelete = useCallback(
-    (document: Document) => {
+    (doc: DocumentType) => {
       return (
         !permissions.can("delete", "documents") ||
-        !document.writeGroups?.some((group) => user?.groups.includes(group))
+        !doc.writeGroups?.some((group) => user?.groups.includes(group))
       );
     },
     [permissions, user]
   );
 
   const canUpdate = useCallback(
-    (document: Document) => {
+    (document: DocumentType) => {
       return (
         !permissions.can("update", "documents") ||
         !document.writeGroups?.some((group) => user?.groups.includes(group))
@@ -35,7 +38,7 @@ export const useDocument = () => {
   );
 
   const insertTransaction = useCallback(
-    (document: Document, type: DocumentTransactionType) => {
+    (document: DocumentType, type: DocumentTransactionType) => {
       if (user?.id === undefined) throw new Error("User is undefined");
       return supabase?.from("documentTransaction").insert({
         documentId: document.id,
@@ -47,7 +50,7 @@ export const useDocument = () => {
   );
 
   const deleteLabel = useCallback(
-    async (document: Document, label: string) => {
+    async (document: DocumentType, label: string) => {
       return supabase
         ?.from("documentLabel")
         .delete()
@@ -59,7 +62,7 @@ export const useDocument = () => {
   );
 
   const download = useCallback(
-    async (doc: Document) => {
+    async (doc: DocumentType) => {
       const result = await supabase?.storage.from("private").download(doc.path);
 
       if (!result || result.error) {
@@ -85,13 +88,13 @@ export const useDocument = () => {
   );
 
   const edit = useCallback(
-    (document: Document) =>
+    (document: DocumentType) =>
       navigate(`${path.to.document(document.id)}?${params}`),
     [navigate, params]
   );
 
   const favorite = useCallback(
-    async (document: Document) => {
+    async (document: DocumentType) => {
       if (document.favorite) {
         await supabase
           ?.from("documentFavorite")
@@ -110,11 +113,17 @@ export const useDocument = () => {
   );
 
   const isImage = useCallback((fileType: string) => {
-    return ["png", "jpg", "jpeg", "gif", "svg", "avif"].includes(fileType);
+    return ["png", "jpg", "jpeg", "gif", "svg", "avif", "webp"].includes(
+      fileType
+    );
+  }, []);
+
+  const isPdf = useCallback((fileType: string) => {
+    return fileType === "pdf";
   }, []);
 
   const label = useCallback(
-    async (document: Document, labels: string[]) => {
+    async (document: DocumentType, labels: string[]) => {
       if (user?.id === undefined) throw new Error("User is undefined");
       await supabase
         ?.from("documentLabel")
@@ -137,7 +146,7 @@ export const useDocument = () => {
   );
 
   const makePreview = useCallback(
-    async (doc: Document) => {
+    async (doc: DocumentType) => {
       const result = await supabase?.storage.from("private").download(doc.path);
 
       if (!result || result.error) {
@@ -151,7 +160,7 @@ export const useDocument = () => {
   );
 
   const removeLabel = useCallback(
-    (document: Document, label: string) => {
+    (document: DocumentType, label: string) => {
       return supabase
         ?.from("documentLabel")
         .delete()
@@ -177,6 +186,7 @@ export const useDocument = () => {
     edit,
     favorite,
     isImage,
+    isPdf,
     label,
     makePreview,
     removeLabel,

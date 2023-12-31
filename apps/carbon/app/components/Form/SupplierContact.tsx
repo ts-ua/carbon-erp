@@ -17,7 +17,7 @@ import type { SelectProps } from "./Select";
 
 type SupplierContactSelectProps = Omit<SelectProps, "options" | "onChange"> & {
   supplier?: string;
-  onChange?: (supplierContact: SupplierContactType | null) => void;
+  onChange?: (supplierContact: SupplierContactType["contact"] | null) => void;
 };
 
 const SupplierContact = ({
@@ -80,7 +80,7 @@ const SupplierContact = ({
         (c) => c.id === newValue
       );
 
-      onChange(contact ?? null);
+      onChange(contact?.contact ?? null);
     }
   };
 

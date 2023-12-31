@@ -1,21 +1,23 @@
-import { CreatableSelect, HStack } from "@carbon/react";
+import {
+  CreatableSelect,
+  HStack,
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  useDisclosure,
+} from "@carbon/react";
 import { convertKbToString } from "@carbon/utils";
 import {
   Icon,
-  Image,
   Link,
   MenuItem,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
   Tag,
   TagCloseButton,
   TagLabel,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
@@ -55,24 +57,25 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
     edit,
     favorite,
     isImage,
+    isPdf,
     label,
-    makePreview,
     setLabel,
   } = useDocument();
 
-  const documentLabelModal = useDisclosure();
   const deleteDocumentModal = useDisclosure();
 
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(
     null
   );
 
-  const labelOptions =
-    labels.map(({ label }) => ({
-      value: label as string,
-      label: label as string,
-    })) ?? [];
+  const labelOptions = useMemo(
+    () =>
+      labels.map(({ label }) => ({
+        value: label as string,
+        label: label as string,
+      })) ?? [],
+    [labels]
+  );
 
   const onDeleteLabel = useCallback(
     async (
@@ -152,7 +155,40 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
             />
             <DocumentIcon fileName={row.original.name} />
             <Link onClick={() => download(row.original)}>
-              {row.original.name}
+              {row.original.type &&
+              (isImage(row.original.type) || isPdf(row.original.type)) ? (
+                <HoverCard>
+                  <HoverCardTrigger>{row.original.name}</HoverCardTrigger>
+                  {isPdf(row.original.type) ? (
+                    <HoverCardContent className="w-[425px] h-[550px] overflow-hidden p-0">
+                      <iframe
+                        seamless
+                        title={row.original.path}
+                        width="425"
+                        height="550"
+                        src={path.to.file.previewFile(
+                          `private/${row.original.path}`
+                        )}
+                      />
+                    </HoverCardContent>
+                  ) : (
+                    <HoverCardContent className="w-[400px] h-[400px] overflow-hidden p-0">
+                      <iframe
+                        seamless
+                        title={row.original.path}
+                        width="400"
+                        height="400"
+                        src={path.to.file.previewImage(
+                          "private",
+                          row.original.path
+                        )}
+                      />
+                    </HoverCardContent>
+                  )}
+                </HoverCard>
+              ) : (
+                <>{row.original.name}</>
+              )}
             </Link>
           </HStack>
         ),
@@ -170,18 +206,34 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
                 />
               </Tag>
             ))}
-
-            <Tag
-              cursor="pointer"
-              onClick={() => {
-                setSelectedDocument(row.original);
-                documentLabelModal.onOpen();
-              }}
-            >
-              <TagLabel>
-                <IoMdAdd />
-              </TagLabel>
-            </Tag>
+            <Popover>
+              <PopoverTrigger>
+                <Tag cursor="pointer">
+                  <TagLabel>
+                    <IoMdAdd />
+                  </TagLabel>
+                </Tag>
+              </PopoverTrigger>
+              <PopoverContent className="w-[300px] p-0">
+                <CreatableSelect
+                  defaultValue={
+                    row.original.labels.map((label) => ({
+                      value: label,
+                      label: label,
+                    })) ?? []
+                  }
+                  isClearable
+                  isMulti
+                  options={labelOptions}
+                  onChange={(newValues) =>
+                    onLabel(
+                      row.original,
+                      newValues.map((v) => v.value)
+                    )
+                  }
+                />
+              </PopoverContent>
+            </Popover>
           </HStack>
         ),
       },
@@ -228,7 +280,16 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
         cell: (item) => item.getValue(),
       },
     ];
-  }, [documentLabelModal, download, onDeleteLabel, onFavorite, setLabel]);
+  }, [
+    download,
+    isImage,
+    isPdf,
+    labelOptions,
+    onDeleteLabel,
+    onFavorite,
+    onLabel,
+    setLabel,
+  ]);
 
   const actions = useMemo(() => {
     return [
@@ -281,14 +342,6 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
     return (row: Document) => (
       <>
         <MenuItem
-          icon={<VscOpenPreview />}
-          isDisabled={!row.type || !isImage(row.type)}
-          onClick={async () => setPreviewImage(await makePreview(row))}
-        >
-          Preview
-        </MenuItem>
-
-        <MenuItem
           icon={<BsPencilSquare />}
           isDisabled={canUpdate(row)}
           onClick={() => edit(row)}
@@ -325,8 +378,6 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
     download,
     edit,
     filter,
-    isImage,
-    makePreview,
     onFavorite,
   ]);
 
@@ -345,54 +396,6 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
         withSelectableRows
         renderContextMenu={renderContextMenu}
       />
-
-      {previewImage && (
-        <Modal isOpen onClose={() => setPreviewImage(null)} size="full">
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader />
-            <ModalCloseButton />
-            <ModalBody>
-              <Image src={previewImage ?? ""} />
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      )}
-
-      {selectedDocument && (
-        <Modal
-          isOpen={documentLabelModal.isOpen}
-          onClose={() => {
-            setSelectedDocument(null);
-            documentLabelModal.onClose();
-          }}
-        >
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>{selectedDocument.name}</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody pb={6}>
-              <CreatableSelect
-                defaultValue={
-                  selectedDocument.labels.map((label) => ({
-                    value: label,
-                    label: label,
-                  })) ?? []
-                }
-                isClearable
-                isMulti
-                options={labelOptions}
-                onChange={(newValues) =>
-                  onLabel(
-                    selectedDocument,
-                    newValues.map((v) => v.value)
-                  )
-                }
-              />
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      )}
 
       {selectedDocument &&
         selectedDocument.id &&

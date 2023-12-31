@@ -116,7 +116,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             className,
           })
         )}
-        type={undefined}
+        type={asChild ? undefined : props.type ?? "button"}
         disabled={isDisabled || props.disabled}
         role={asChild ? undefined : "button"}
         ref={ref}

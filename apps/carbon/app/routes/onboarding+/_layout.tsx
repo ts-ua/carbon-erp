@@ -1,4 +1,4 @@
-import { HStack, IconButton, useColor } from "@carbon/react";
+import { ClientOnly, HStack, IconButton, useColor } from "@carbon/react";
 import { Avatar, Grid, GridItem } from "@chakra-ui/react";
 import { redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
@@ -46,18 +46,21 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function OnboardingLayout() {
-  // const { currentIndex, onboardingSteps } = useOnboarding();
-
   return (
-    <Grid h="100vh" w="100vw" templateColumns="auto 1fr">
-      <SidebarPlaceholder />
-      <Grid templateRows="auto 1fr" h="full" w="full">
-        <TopbarPlaceholder />
-        <div>
-          <Outlet />
-        </div>
-      </Grid>
-    </Grid>
+    // not sure why we need this ClientOnly, but things break without it
+    <ClientOnly fallback={null}>
+      {() => (
+        <Grid h="100vh" w="100vw" templateColumns="auto 1fr">
+          <SidebarPlaceholder />
+          <Grid templateRows="auto 1fr" h="full" w="full">
+            <TopbarPlaceholder />
+            <div>
+              <Outlet />
+            </div>
+          </Grid>
+        </Grid>
+      )}
+    </ClientOnly>
   );
 }
 

@@ -159,6 +159,7 @@ function renderTypedForm({
             borderTopColor={borderColor}
             borderTopStyle="solid"
             borderTopWidth={1}
+            columnGap={2}
             pt={3}
             w="full"
           >
@@ -199,6 +200,7 @@ function renderTypedForm({
             borderTopColor={borderColor}
             borderTopStyle="solid"
             borderTopWidth={1}
+            columnGap={2}
             pt={3}
             w="full"
           >
@@ -239,6 +241,7 @@ function renderTypedForm({
             borderTopColor={borderColor}
             borderTopStyle="solid"
             borderTopWidth={1}
+            columnGap={2}
             pt={3}
             w="full"
           >
@@ -287,6 +290,7 @@ function renderTypedForm({
             borderTopColor={borderColor}
             borderTopStyle="solid"
             borderTopWidth={1}
+            columnGap={2}
             pt={3}
             w="full"
           >
@@ -327,6 +331,7 @@ function renderTypedForm({
             borderTopColor={borderColor}
             borderTopStyle="solid"
             borderTopWidth={1}
+            columnGap={2}
             pt={3}
             w="full"
           >
@@ -367,6 +372,7 @@ function renderTypedForm({
             borderTopColor={borderColor}
             borderTopStyle="solid"
             borderTopWidth={1}
+            columnGap={2}
             pt={3}
             w="full"
           >
@@ -629,7 +635,7 @@ function UpdateRemoveButtons({
   onSubmit: (value: string | boolean | number | undefined) => void;
 }) {
   return (
-    <HStack className="justify-between w-full self-center">
+    <HStack className="justify-end w-full self-center">
       {userAttributeValueId && (
         <ValidatedForm
           method="post"

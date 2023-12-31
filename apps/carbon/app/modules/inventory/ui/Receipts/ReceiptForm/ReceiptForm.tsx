@@ -3,6 +3,7 @@ import {
   Drawer,
   DrawerBody,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -23,8 +24,13 @@ import {
 } from "~/components/Form";
 import DataGrid from "~/components/Grid";
 import { SectionTitle } from "~/components/Layout";
-import type { ReceiptLine, ReceiptSourceDocument } from "~/modules/inventory";
+import type {
+  ReceiptLine,
+  ReceiptSourceDocument,
+  receiptStatusType,
+} from "~/modules/inventory";
 import {
+  ReceiptStatus,
   receiptSourceDocumentType,
   receiptValidator,
 } from "~/modules/inventory";
@@ -36,7 +42,7 @@ import useReceiptForm from "./useReceiptForm";
 
 type ReceiptFormProps = {
   initialValues: TypeOfValidator<typeof receiptValidator>;
-  isPosted: boolean;
+  status: (typeof receiptStatusType)[number];
   notes: Note[];
   receiptLines?: ReceiptLine[];
 };
@@ -45,7 +51,7 @@ const formId = "receipt-form";
 
 const ReceiptForm = ({
   initialValues,
-  isPosted,
+  status,
   notes,
   receiptLines,
 }: ReceiptFormProps) => {
@@ -71,6 +77,8 @@ const ReceiptForm = ({
     receiptLines: receiptLines ?? [],
   });
 
+  const isPosted = status === "Posted";
+
   return (
     <>
       <Drawer
@@ -82,6 +90,9 @@ const ReceiptForm = ({
         <DrawerContent size="full">
           <DrawerHeader>
             <DrawerTitle>{initialValues.receiptId}</DrawerTitle>
+            <DrawerDescription>
+              <ReceiptStatus status={status} />
+            </DrawerDescription>
           </DrawerHeader>
           <DrawerBody>
             <VStack spacing={4}>
