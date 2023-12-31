@@ -1,13 +1,13 @@
-import { Button, HStack } from "@carbon/react";
 import {
+  Button,
+  HStack,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
-} from "@chakra-ui/react";
+  ModalTitle,
+} from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import { UserSelect } from "~/components/Selectors";
@@ -29,13 +29,19 @@ const ResendInviteModal = ({
   const isSingleUser = userIds.length === 1;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
+    <Modal
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
       <ModalContent>
         <ModalHeader>
-          {isSingleUser ? "Resend Invite" : "Resend Invites"}
+          <ModalTitle>
+            {isSingleUser ? "Resend Invite" : "Resend Invites"}
+          </ModalTitle>
         </ModalHeader>
-        <ModalCloseButton />
+
         <ModalBody>
           <p className="mb-2">
             Are you sure you want to resend an invite to

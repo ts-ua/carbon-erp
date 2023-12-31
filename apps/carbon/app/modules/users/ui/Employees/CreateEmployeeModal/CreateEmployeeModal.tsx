@@ -1,13 +1,16 @@
-import { HStack, VStack, useMount } from "@carbon/react";
 import {
-  Grid,
+  HStack,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
-} from "@chakra-ui/react";
+  ModalTitle,
+  VStack,
+  useMount,
+} from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import type { PostgrestResponse } from "@supabase/supabase-js";
 import { useRef } from "react";
@@ -36,22 +39,26 @@ const CreateEmployeeModal = () => {
 
   return (
     <Modal
-      initialFocusRef={initialFocusRef}
-      isOpen={true}
-      onClose={() => navigate(-1)}
+      open
+      onOpenChange={(open) => {
+        if (!open) navigate(path.to.employeeAccounts);
+      }}
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create an account</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody pb={6}>
-          <ValidatedForm
-            method="post"
-            action={path.to.newEmployee}
-            validator={createEmployeeValidator}
-            // @ts-ignore
-            fetcher={formFetcher}
-          >
+        <ValidatedForm
+          method="post"
+          action={path.to.newEmployee}
+          validator={createEmployeeValidator}
+          // @ts-ignore
+          fetcher={formFetcher}
+          className="flex flex-col h-full"
+        >
+          <ModalHeader>
+            <ModalTitle>Create an account</ModalTitle>
+          </ModalHeader>
+
+          <ModalBody>
             <VStack spacing={4}>
               <Input ref={initialFocusRef} name="email" label="Email" />
               <Grid templateColumns="1fr 1fr" gap={4}>
@@ -65,12 +72,14 @@ const CreateEmployeeModal = () => {
                 options={employeeTypeOptions}
                 placeholder="Select Employee Type"
               />
+            </VStack>
+            <ModalFooter>
               <HStack>
                 <Submit>Create User</Submit>
               </HStack>
-            </VStack>
-          </ValidatedForm>
-        </ModalBody>
+            </ModalFooter>
+          </ModalBody>
+        </ValidatedForm>
       </ModalContent>
     </Modal>
   );

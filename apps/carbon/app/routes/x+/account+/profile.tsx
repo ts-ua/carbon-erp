@@ -141,13 +141,15 @@ export default function AccountProfile() {
         <ProfileForm user={user} />
         <ProfilePhotoForm user={user} />
       </Grid>
-      {attributes.map((category: PublicAttributes) => (
-        <Box key={category.id} mb={8} w="full">
-          <SectionTitle title={category.name} />
-
-          <UserAttributesForm attributeCategory={category} />
-        </Box>
-      ))}
+      {attributes.map((category: PublicAttributes) => {
+        console.log(category);
+        return (
+          <Box key={category.id} mb={8} w="full">
+            <SectionTitle>{category.name}</SectionTitle>
+            <UserAttributesForm attributeCategory={category} />
+          </Box>
+        );
+      })}
     </>
   );
 }

@@ -17,7 +17,7 @@ import type { SelectProps } from "./Select";
 
 type CustomerContactSelectProps = Omit<SelectProps, "options" | "onChange"> & {
   customer?: string;
-  onChange?: (customerContact: CustomerContactType | undefined) => void;
+  onChange?: (customerContact: CustomerContactType["contact"] | null) => void;
 };
 
 const CustomerContact = ({
@@ -33,7 +33,7 @@ const CustomerContact = ({
 }: CustomerContactSelectProps) => {
   const initialLoad = useRef(true);
   const { error } = useField(name);
-  const [value, setValue] = useControlField<string | undefined>(name);
+  const [value, setValue] = useControlField<string | null>(name);
 
   const customerContactFetcher =
     useFetcher<Awaited<ReturnType<typeof getCustomerContacts>>>();
@@ -46,9 +46,9 @@ const CustomerContact = ({
     if (initialLoad.current) {
       initialLoad.current = false;
     } else {
-      setValue(undefined);
+      setValue(null);
       if (onChange) {
-        onChange(undefined);
+        onChange(null);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,7 +70,7 @@ const CustomerContact = ({
     value: string | number;
     label: string;
   }) => {
-    const newValue = (selection.value as string) || undefined;
+    const newValue = selection === null ? null : (selection.value as string);
     setValue(newValue);
     if (onChange && typeof onChange === "function") {
       if (newValue === undefined) onChange(newValue);
@@ -78,7 +78,7 @@ const CustomerContact = ({
         (c) => c.id === newValue
       );
 
-      onChange(contact);
+      onChange(contact?.contact ?? null);
     }
   };
 
@@ -91,7 +91,7 @@ const CustomerContact = ({
   return (
     <FormControl isInvalid={!!error}>
       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-      <input type="hidden" name={name} id={name} value={value} />
+      <input type="hidden" name={name} id={name} value={value ?? ""} />
       <Select
         {...props}
         value={controlledValue}

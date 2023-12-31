@@ -16,6 +16,7 @@ import {
 import { Analytics } from "@vercel/analytics/react";
 import React from "react";
 import { getBrowserEnv } from "~/config/env";
+
 import Background from "~/styles/background.css";
 import NProgress from "~/styles/nprogress.css";
 import Tailwind from "~/styles/tailwind.css";

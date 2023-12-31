@@ -1,4 +1,5 @@
 import { generatePath } from "@remix-run/react";
+import { SUPABASE_API_URL } from "~/config/env";
 
 const x = "/x"; // from ~/routes/x+ folder
 const api = "/api"; // from ~/routes/api+ folder
@@ -42,6 +43,9 @@ export const path = {
         generatePath(`${api}/resources/work-cells?location=${id}`),
     },
     file: {
+      previewImage: (bucket: string, path: string) =>
+        generatePath(`${file}/preview/image?file=${bucket}/${path}`),
+      previewFile: (path: string) => generatePath(`${file}/preview/${path}`),
       purchaseOrder: (id: string) =>
         generatePath(`${file}/pdf/purchase-order/${id}`),
     },
@@ -402,3 +406,7 @@ export const onboardingSequence = [
   path.to.onboarding.user,
   path.to.onboarding.company,
 ] as const;
+
+export const getStoragePath = (bucket: string, path: string) => {
+  return `${SUPABASE_API_URL}/storage/v1/object/public/${bucket}/${path}`;
+};

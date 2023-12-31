@@ -1,15 +1,14 @@
-import { Button, HStack } from "@carbon/react";
 import {
-  ListItem,
+  Button,
+  HStack,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
-  UnorderedList,
-} from "@chakra-ui/react";
+  ModalTitle,
+} from "@carbon/react";
+import { ListItem, UnorderedList } from "@chakra-ui/react";
 import { Form } from "@remix-run/react";
 import { path } from "~/utils/path";
 
@@ -29,11 +28,16 @@ const PurchaseInvoicePostModal = ({
   const hasLinesToReceive = linesToReceive.length > 0;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
+    <Modal
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
       <ModalContent>
-        <ModalHeader>Post Invoice</ModalHeader>
-        <ModalCloseButton />
+        <ModalHeader>
+          <ModalTitle>Post Invoice</ModalTitle>
+        </ModalHeader>
         <ModalBody>
           {hasLinesToReceive ? (
             <>
@@ -53,7 +57,6 @@ const PurchaseInvoicePostModal = ({
             <p>Are you sure you want to post this invoice?</p>
           )}
         </ModalBody>
-
         <ModalFooter>
           <HStack>
             <Button variant="solid" onClick={onClose}>

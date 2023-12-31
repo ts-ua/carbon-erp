@@ -1,6 +1,6 @@
 import type { AvatarProps as AvatarBaseProps } from "@chakra-ui/react";
 import { Avatar as AvatarBase, forwardRef } from "@chakra-ui/react";
-import { SUPABASE_API_URL } from "~/config/env";
+import { getStoragePath } from "~/utils/path";
 
 type AvatarProps = AvatarBaseProps & {
   path: string | null;
@@ -9,9 +9,7 @@ type AvatarProps = AvatarBaseProps & {
 
 export const Avatar = forwardRef(
   ({ path, bucket = "avatars", ...props }: AvatarProps, ref) => {
-    const imagePath = path
-      ? `${SUPABASE_API_URL}/storage/v1/object/public/${bucket}/${path}`
-      : undefined;
+    const imagePath = path ? getStoragePath(bucket, path) : undefined;
 
     return <AvatarBase ref={ref} src={imagePath} {...props} />;
   }

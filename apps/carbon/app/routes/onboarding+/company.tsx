@@ -1,13 +1,15 @@
-import { HStack, VStack } from "@carbon/react";
 import {
   Button,
+  HStack,
   Modal,
   ModalBody,
   ModalContent,
+  ModalDescription,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
-} from "@chakra-ui/react";
+  ModalTitle,
+  VStack,
+} from "@carbon/react";
 import { getLocalTimeZone } from "@internationalized/date";
 import { json, redirect, type ActionFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -130,17 +132,19 @@ export default function OnboardingUser() {
   };
 
   return (
-    <Modal size="lg" isOpen onClose={() => 0}>
-      <ModalOverlay />
+    <Modal open>
       <ModalContent>
         <ValidatedForm
-          autoComplete="off"
           validator={onboardingCompanyValidator}
           defaultValues={initialValues}
           method="post"
         >
-          <ModalHeader>Now let's setup your company</ModalHeader>
-
+          <ModalHeader>
+            <ModalTitle>Now let's setup your company</ModalTitle>
+            <ModalDescription>
+              You can always change this later
+            </ModalDescription>
+          </ModalHeader>
           <ModalBody>
             <Hidden name="next" value={next} />
             <VStack spacing={4}>
@@ -158,8 +162,10 @@ export default function OnboardingUser() {
                 variant="solid"
                 isDisabled={!previous}
                 size="md"
-                disabled
-                onClick={onPrevious}
+                onClick={() => {
+                  onPrevious?.();
+                }}
+                tabIndex={-1}
               >
                 Previous
               </Button>

@@ -37,9 +37,24 @@ import { File } from "./File";
 import { HStack } from "./HStack";
 import { HTML } from "./HTML";
 import { Heading } from "./Heading";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "./HoverCard";
 import { IconButton } from "./IconButton";
 import { Loading } from "./Loading";
 import { Menubar, MenubarItem, MenubarTrigger } from "./Menubar";
+import {
+  Modal,
+  ModalBody,
+  ModalClose,
+  ModalContent,
+  ModalDescription,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  ModalPortal,
+  ModalTitle,
+  ModalTrigger,
+} from "./Modal";
+import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
 import type {
   GroupBase,
   MultiValue,
@@ -106,11 +121,28 @@ export {
   HStack,
   HTML,
   Heading,
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
   IconButton,
   Loading,
   Menubar,
   MenubarItem,
   MenubarTrigger,
+  Modal,
+  ModalBody,
+  ModalClose,
+  ModalContent,
+  ModalDescription,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  ModalPortal,
+  ModalTitle,
+  ModalTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Select,
   Status,
   Submit,
