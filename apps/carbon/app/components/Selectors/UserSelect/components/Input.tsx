@@ -1,17 +1,16 @@
-import { HStack, IconButton } from "@carbon/react";
 import {
-  Avatar,
-  AvatarGroup,
-  Input,
+  HStack,
+  IconButton,
+  Input as InputBase,
   InputGroup,
   InputLeftElement,
   InputRightElement,
-  Spinner,
-} from "@chakra-ui/react";
+} from "@carbon/react";
+import { Avatar, AvatarGroup, Spinner } from "@chakra-ui/react";
 import { MdOutlineClear } from "react-icons/md";
 import useUserSelectContext from "../provider";
 
-const SelectInput = () => {
+const Input = () => {
   const {
     aria: { inputProps },
     innerProps: { disabled, isMulti, placeholder, readOnly, testID },
@@ -28,7 +27,7 @@ const SelectInput = () => {
   return (
     <InputGroup>
       {isMulti ? (
-        <InputLeftElement left={2}>
+        <InputLeftElement>
           <AvatarGroup size="xs" max={2}>
             <Avatar />
             <Avatar />
@@ -40,7 +39,7 @@ const SelectInput = () => {
         </InputLeftElement>
       )}
 
-      <Input
+      <InputBase
         {...inputProps}
         id={`${instanceId}:UserSelectionInput:searchInput:${testID}`}
         data-testid={`UserSelectionInput:searchInput:${testID}`}
@@ -54,11 +53,12 @@ const SelectInput = () => {
         ref={inputRef}
         type="text"
         value={inputValue}
-        pl={isMulti ? "3.175rem" : undefined}
-        pr="2.5rem"
+
+        // pl={isMulti ? "3.175rem" : undefined}
+        // pr="2.5rem"
       />
 
-      <InputRightElement w="auto">
+      <InputRightElement>
         <HStack spacing={1} className="mr-2">
           {loading && <Spinner size="sm" />}
           {!loading && !disabled && inputValue.length > 0 && (
@@ -75,4 +75,4 @@ const SelectInput = () => {
   );
 };
 
-export default SelectInput;
+export default Input;

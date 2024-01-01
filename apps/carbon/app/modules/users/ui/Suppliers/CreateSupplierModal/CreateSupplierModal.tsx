@@ -1,5 +1,6 @@
 import {
   HStack,
+  Input,
   Modal,
   ModalBody,
   ModalContent,
@@ -14,7 +15,6 @@ import {
   FormErrorMessage,
   FormLabel,
   Grid,
-  Input,
 } from "@chakra-ui/react";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -84,28 +84,16 @@ const CreateSupplierModal = () => {
                 <>
                   <FormControl>
                     <FormLabel>Email</FormLabel>
-                    <Input
-                      isReadOnly
-                      value={contact?.email ?? ""}
-                      variant="filled"
-                    />
+                    <Input isReadOnly value={contact?.email ?? ""} />
                   </FormControl>
                   <Grid templateColumns="1fr 1fr" gap={4}>
                     <FormControl>
                       <FormLabel>First Name</FormLabel>
-                      <Input
-                        isReadOnly
-                        value={contact?.firstName ?? ""}
-                        variant="filled"
-                      />
+                      <Input isReadOnly value={contact?.firstName ?? ""} />
                     </FormControl>
                     <FormControl>
                       <FormLabel>Last Name</FormLabel>
-                      <Input
-                        isReadOnly
-                        value={contact?.lastName ?? ""}
-                        variant="filled"
-                      />
+                      <Input isReadOnly value={contact?.lastName ?? ""} />
                     </FormControl>
                   </Grid>
                 </>

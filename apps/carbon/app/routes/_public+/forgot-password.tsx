@@ -114,7 +114,9 @@ export default function ForgotPasswordRoute() {
                 </Alert>
               )}
               <Input name="email" label="Email" />
-              <Submit className="w-full">Search</Submit>
+              <Submit size="lg" className="w-full">
+                Search
+              </Submit>
             </VStack>
           </ValidatedForm>
         </div>

@@ -1,15 +1,14 @@
-import { useRef } from "react";
-import { useDateRangePickerState } from "@react-stately/datepicker";
+import { InputGroup, InputRightElement } from "@carbon/react";
 import { useDateRangePicker } from "@react-aria/datepicker";
-import { InputGroup, Box, Icon, InputRightElement } from "@chakra-ui/react";
+import { useDateRangePickerState } from "@react-stately/datepicker";
 import type { DateRangePickerProps, DateValue } from "@react-types/datepicker";
-import { MdDoNotDisturbAlt, MdCalendarToday } from "react-icons/md";
-import { FieldButton } from "./components/Button";
-import { RangeCalendar } from "./components/RangeCalendar";
-import { Popover } from "./components/Popover";
-import { StyledField } from "./components/StyledField";
-import DateField from "./components/DateField";
+import { useRef } from "react";
+import { MdCalendarToday, MdOutlineDoNotDisturb } from "react-icons/md";
 import TimeField from "./TimePicker";
+import { FieldButton } from "./components/Button";
+import DateField from "./components/DateField";
+import { Popover } from "./components/Popover";
+import { RangeCalendar } from "./components/RangeCalendar";
 
 const DateRangePicker = (props: DateRangePickerProps<DateValue>) => {
   const state = useDateRangePickerState({
@@ -27,26 +26,21 @@ const DateRangePicker = (props: DateRangePickerProps<DateValue>) => {
   } = useDateRangePicker(props, state, ref);
 
   return (
-    <Box position="relative" display="inline-flex" flexDirection="column">
-      <InputGroup {...groupProps} ref={ref} width="auto" display="inline-flex">
-        <StyledField pr="5.5rem">
+    <div className="relative inline-flex flex-col w-full">
+      <InputGroup {...groupProps} ref={ref} className="w-full inline-flex">
+        <div className="flex w-auto px-4 py-2">
           <DateField {...startFieldProps} />
-          <Box as="span" aria-hidden="true" paddingX="2">
+          <span aria-hidden="true" className="px-2">
             –
-          </Box>
+          </span>
           <DateField {...endFieldProps} />
-          {state.validationState === "invalid" && (
-            <Icon
-              as={MdDoNotDisturbAlt}
-              color="red.600"
-              position="absolute"
-              right="12"
-            />
+          {state.isInvalid && (
+            <MdOutlineDoNotDisturb className="text-destructive-foreground aboslute right-[12px]" />
           )}
-        </StyledField>
+        </div>
         <InputRightElement>
           <FieldButton {...buttonProps} isPressed={state.isOpen}>
-            <Icon as={MdCalendarToday} />
+            <MdCalendarToday />
           </FieldButton>
         </InputRightElement>
       </InputGroup>
@@ -57,7 +51,7 @@ const DateRangePicker = (props: DateRangePickerProps<DateValue>) => {
           onClose={() => state.setOpen(false)}
         >
           <RangeCalendar {...calendarProps} />
-          <Box display="flex" gap="2">
+          <div className="flex gap-2">
             <TimeField
               label="Start time"
               value={state.timeRange?.start || null}
@@ -68,10 +62,10 @@ const DateRangePicker = (props: DateRangePickerProps<DateValue>) => {
               value={state.timeRange?.end || null}
               onChange={(v) => state.setTime("end", v)}
             />
-          </Box>
+          </div>
         </Popover>
       )}
-    </Box>
+    </div>
   );
 };
 

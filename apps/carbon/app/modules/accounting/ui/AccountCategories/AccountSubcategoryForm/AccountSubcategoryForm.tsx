@@ -7,9 +7,10 @@ import {
   DrawerHeader,
   DrawerTitle,
   HStack,
+  Input as InputBase,
   VStack,
 } from "@carbon/react";
-import { FormControl, FormLabel, Input as InputBase } from "@chakra-ui/react";
+import { FormControl, FormLabel } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Hidden, Input, Submit } from "~/components/Form";

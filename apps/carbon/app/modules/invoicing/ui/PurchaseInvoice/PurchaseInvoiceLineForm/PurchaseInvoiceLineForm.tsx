@@ -7,12 +7,12 @@ import {
   DrawerHeader,
   DrawerTitle,
   HStack,
+  Input,
   VStack,
 } from "@carbon/react";
 import {
   FormControl,
   FormLabel,
-  Input,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,

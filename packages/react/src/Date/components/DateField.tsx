@@ -1,4 +1,3 @@
-import { Box } from "@chakra-ui/react";
 import type { DateValue } from "@internationalized/date";
 import { createCalendar } from "@internationalized/date";
 import type { AriaDateFieldProps } from "@react-aria/datepicker";
@@ -20,11 +19,11 @@ const DateField = (props: AriaDateFieldProps<DateValue>) => {
   const { fieldProps } = useDateField(props, state, ref);
 
   return (
-    <Box {...fieldProps} ref={ref} display="flex">
+    <div className="flex" {...fieldProps} ref={ref}>
       {state.segments.map((segment, i) => (
         <DateSegment key={i} segment={segment} state={state} />
       ))}
-    </Box>
+    </div>
   );
 };
 
