@@ -13,7 +13,6 @@ export const Submit = ({
     <Button
       form={formId}
       type="submit"
-      size="md"
       isLoading={isSubmitting}
       isDisabled={isSubmitting}
       {...props}

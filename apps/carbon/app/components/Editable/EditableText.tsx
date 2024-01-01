@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import { Input } from "@chakra-ui/react";
+import { Input } from "@carbon/react";
 import type { PostgrestSingleResponse } from "@supabase/supabase-js";
 import type { FocusEvent, KeyboardEvent } from "react";
 import type { EditableTableCellComponentProps } from "~/components/Editable";
@@ -58,9 +58,8 @@ const EditableText =
       <Input
         autoFocus
         defaultValue={value as string}
-        borderRadius="none"
+        className="border-0 rounded-none w-full"
         size="sm"
-        w="full"
         onBlur={onBlur}
         onKeyDown={onKeyDown}
       />

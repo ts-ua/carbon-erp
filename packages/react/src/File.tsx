@@ -1,4 +1,3 @@
-import { Input, InputGroup } from "@chakra-ui/react";
 import type { ChangeEvent, ComponentPropsWithoutRef } from "react";
 import { useRef } from "react";
 import { Button } from "~/Button";
@@ -12,8 +11,8 @@ const File = ({ accept, className, children, onChange }: FileProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <InputGroup w="auto">
-      <Input
+    <div className="flex w-auto">
+      <input
         ref={fileInputRef}
         type="file"
         hidden
@@ -28,7 +27,7 @@ const File = ({ accept, className, children, onChange }: FileProps) => {
       >
         {children}
       </Button>
-    </InputGroup>
+    </div>
   );
 };
 

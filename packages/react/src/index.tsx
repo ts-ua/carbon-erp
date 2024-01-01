@@ -39,6 +39,15 @@ import { HTML } from "./HTML";
 import { Heading } from "./Heading";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./HoverCard";
 import { IconButton } from "./IconButton";
+import type { InputProps } from "./Input";
+import {
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  InputLeftElement,
+  InputRightAddon,
+  InputRightElement,
+} from "./Input";
 import { Loading } from "./Loading";
 import { Menubar, MenubarItem, MenubarTrigger } from "./Menubar";
 import {
@@ -125,6 +134,12 @@ export {
   HoverCardContent,
   HoverCardTrigger,
   IconButton,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  InputLeftElement,
+  InputRightAddon,
+  InputRightElement,
   Loading,
   Menubar,
   MenubarItem,
@@ -171,6 +186,7 @@ export {
 export type {
   ButtonProps,
   GroupBase,
+  InputProps,
   MultiValue,
   OptionBase,
   OptionProps,

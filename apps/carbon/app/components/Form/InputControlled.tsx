@@ -1,13 +1,15 @@
-import type { InputProps } from "@chakra-ui/react";
+import type { InputProps } from "@carbon/react";
+import {
+  Input as InputBase,
+  InputGroup,
+  InputLeftAddon,
+  InputRightAddon,
+} from "@carbon/react";
 import {
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  Input as ChakraInput,
-  InputGroup,
-  InputLeftAddon,
-  InputRightAddon,
 } from "@chakra-ui/react";
 import type { ChangeEvent } from "react";
 import { forwardRef, useEffect } from "react";
@@ -58,7 +60,7 @@ const InputControlled = forwardRef<HTMLInputElement, FormInputControlledProps>(
         {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
         <InputGroup>
           {prefix && <InputLeftAddon children={prefix} />}
-          <ChakraInput
+          <InputBase
             ref={ref}
             {...getInputProps({
               id: name,

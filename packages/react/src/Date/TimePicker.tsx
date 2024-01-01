@@ -1,11 +1,10 @@
-import { useRef } from "react";
-import { useLocale } from "@react-aria/i18n";
-import { useTimeFieldState } from "@react-stately/datepicker";
-import type { TimeFieldStateOptions } from "@react-stately/datepicker";
 import { useTimeField } from "@react-aria/datepicker";
-import { Box } from "@chakra-ui/react";
+import { useLocale } from "@react-aria/i18n";
+import type { TimeFieldStateOptions } from "@react-stately/datepicker";
+import { useTimeFieldState } from "@react-stately/datepicker";
+import { useRef } from "react";
+import { InputGroup } from "~/Input";
 import { DateSegment } from "./components/DateSegment";
-import { StyledField } from "./components/StyledField";
 
 const TimePicker = (
   props: Omit<TimeFieldStateOptions, "locale" | "createCalendar">
@@ -20,13 +19,11 @@ const TimePicker = (
   const { fieldProps } = useTimeField(props, state, ref);
 
   return (
-    <Box mt={2}>
-      <StyledField {...fieldProps} ref={ref} pr={2}>
-        {state.segments.map((segment, i) => (
-          <DateSegment key={i} segment={segment} state={state} />
-        ))}
-      </StyledField>
-    </Box>
+    <InputGroup {...fieldProps} ref={ref} className="px-4 py-2">
+      {state.segments.map((segment, i) => (
+        <DateSegment key={i} segment={segment} state={state} />
+      ))}
+    </InputGroup>
   );
 };
 

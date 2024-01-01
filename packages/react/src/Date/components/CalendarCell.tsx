@@ -1,4 +1,4 @@
-import { Button, Td } from "@chakra-ui/react";
+import { Td } from "@chakra-ui/react";
 import type { CalendarDate } from "@internationalized/date";
 import { isSameMonth } from "@internationalized/date";
 import { useCalendarCell } from "@react-aria/calendar";
@@ -6,7 +6,9 @@ import type {
   CalendarState,
   RangeCalendarState,
 } from "@react-stately/calendar";
+import clsx from "clsx";
 import { useRef } from "react";
+import { Button } from "~/Button";
 
 export const CalendarCell = ({
   state,
@@ -36,22 +38,22 @@ export const CalendarCell = ({
       <Button
         {...buttonProps}
         ref={ref}
-        size="sm"
-        colorScheme={isInvalid ? "red" : "brand"}
-        variant={isSelected || isFocused ? "solid" : "ghost"}
-        w={8}
-        h={8}
-        p={0}
-        rounded="full"
-        opacity={
-          isOutsideMonth
+        className={clsx("w-8 h-8 rounded-full hover:bg-muted", {
+          "opacity-50 disabled:cursor-not-allowed": isDisabled,
+          "bg-destructive text-destructive-foreground": isInvalid,
+          "bg-muted": isFocused,
+          "bg-primary text-primary-foreground hover:bg-primary": isSelected,
+          "opacity-50 hover:bg-white focus:bg-white":
+            isInvalid || isDisabled || isUnavailable,
+          hidden: isOutsideMonth,
+        })}
+        variant={isSelected ? "primary" : "ghost"}
+        style={{
+          opacity: isOutsideMonth
             ? 0.25
             : isInvalid || isDisabled || isUnavailable
             ? 0.5
-            : 1
-        }
-        _hover={{
-          bg: isSelected || isFocused ? undefined : "gray.200",
+            : 1,
         }}
       >
         {formattedDate}

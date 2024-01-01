@@ -12,20 +12,18 @@ import {
 } from "@carbon/react";
 import { Grid } from "@chakra-ui/react";
 import { useFetcher, useNavigate } from "@remix-run/react";
-import type { PostgrestResponse } from "@supabase/supabase-js";
-import { useRef } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import { Input, Select, Submit } from "~/components/Form";
-import type { EmployeeType } from "~/modules/users";
+import type { getEmployeeTypes } from "~/modules/users";
 import { createEmployeeValidator } from "~/modules/users";
 import type { Result } from "~/types";
 import { path } from "~/utils/path";
 
 const CreateEmployeeModal = () => {
-  const initialFocusRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const formFetcher = useFetcher<Result>();
-  const employeeTypeFetcher = useFetcher<PostgrestResponse<EmployeeType>>();
+  const employeeTypeFetcher =
+    useFetcher<Awaited<ReturnType<typeof getEmployeeTypes>>>();
 
   useMount(() => {
     employeeTypeFetcher.load(path.to.api.employeeTypes);
@@ -60,7 +58,7 @@ const CreateEmployeeModal = () => {
 
           <ModalBody>
             <VStack spacing={4}>
-              <Input ref={initialFocusRef} name="email" label="Email" />
+              <Input name="email" label="Email" />
               <Grid templateColumns="1fr 1fr" gap={4}>
                 <Input name="firstName" label="First Name" />
                 <Input name="lastName" label="Last Name" />

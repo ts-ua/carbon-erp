@@ -1,22 +1,16 @@
-import {
-  Box,
-  Icon,
-  InputGroup,
-  InputRightElement,
-  useOutsideClick,
-} from "@chakra-ui/react";
 import type { CalendarDate } from "@internationalized/date";
 import { useDatePicker } from "@react-aria/datepicker";
 import { useDatePickerState } from "@react-stately/datepicker";
 import type { DatePickerProps } from "@react-types/datepicker";
 import { useRef } from "react";
 import { MdOutlineCalendarToday, MdOutlineDoNotDisturb } from "react-icons/md";
+import { InputGroup, InputRightElement } from "~/Input";
+import { useOutsideClick } from "~/hooks";
 
 import { FieldButton } from "./components/Button";
 import { Calendar } from "./components/Calendar";
 import DateField from "./components/DateField";
 import { Popover } from "./components/Popover";
-import { StyledField } from "./components/StyledField";
 
 const DatePicker = (props: DatePickerProps<CalendarDate>) => {
   const state = useDatePickerState({
@@ -33,33 +27,17 @@ const DatePicker = (props: DatePickerProps<CalendarDate>) => {
   });
 
   return (
-    <Box
-      position="relative"
-      display="inline-flex"
-      flexDirection="column"
-      w="full"
-    >
-      <InputGroup
-        {...groupProps}
-        ref={ref}
-        width="auto"
-        display="inline-flex"
-        w="full"
-      >
-        <StyledField pr="4.5rem">
+    <div className="relative inline-flex flex-col w-full">
+      <InputGroup {...groupProps} ref={ref} className="w-full inline-flex">
+        <div className="flex w-full px-4 py-2">
           <DateField {...fieldProps} />
-          {state.validationState === "invalid" && (
-            <Icon
-              as={MdOutlineDoNotDisturb}
-              color="red.600"
-              position="absolute"
-              right="12"
-            />
+          {state.isInvalid && (
+            <MdOutlineDoNotDisturb className="text-destructive-foreground aboslute right-[12px]" />
           )}
-        </StyledField>
+        </div>
         <InputRightElement>
           <FieldButton {...buttonProps} isPressed={state.isOpen}>
-            <Icon as={MdOutlineCalendarToday} />
+            <MdOutlineCalendarToday />
           </FieldButton>
         </InputRightElement>
       </InputGroup>
@@ -68,7 +46,7 @@ const DatePicker = (props: DatePickerProps<CalendarDate>) => {
           <Calendar {...calendarProps} />
         </Popover>
       )}
-    </Box>
+    </div>
   );
 };
 

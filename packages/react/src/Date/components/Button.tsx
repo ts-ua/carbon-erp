@@ -1,8 +1,9 @@
-import type { IconButtonProps } from "@chakra-ui/react";
-import { Button, IconButton } from "@chakra-ui/react";
 import { useButton } from "@react-aria/button";
 import type { AriaButtonProps } from "@react-types/button";
 import { useRef } from "react";
+import { Button } from "~/Button";
+import type { IconButtonProps } from "~/IconButton";
+import { IconButton } from "~/IconButton";
 
 export const CalendarButton = (props: AriaButtonProps & IconButtonProps) => {
   const ref = useRef<HTMLButtonElement>(null);
@@ -11,9 +12,8 @@ export const CalendarButton = (props: AriaButtonProps & IconButtonProps) => {
     <IconButton
       {...buttonProps}
       ref={ref}
-      size="sm"
-      rounded="full"
       variant="solid"
+      className="rounded-full"
       {...props}
     />
   );
@@ -27,14 +27,7 @@ export const FieldButton = (props: FieldButtonProps) => {
   const ref = useRef<HTMLButtonElement>(null);
   const { buttonProps } = useButton(props, ref);
   return (
-    <Button
-      {...buttonProps}
-      ref={ref}
-      size="sm"
-      h="1.75rem"
-      mr="2"
-      variant="solid"
-    >
+    <Button {...buttonProps} ref={ref} isIcon variant="solid">
       {props.children}
     </Button>
   );

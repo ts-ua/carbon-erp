@@ -27,8 +27,14 @@ import {
 } from "~/modules/resources";
 import { requirePermissions } from "~/services/auth";
 import { flash } from "~/services/session";
+import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 import { error, success } from "~/utils/result";
+
+export const handle: Handle = {
+  breadcrumb: "Abilities",
+  to: path.to.abilities,
+};
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client } = await requirePermissions(request, {
@@ -175,9 +181,7 @@ export default function AbilitiesRoute() {
                 <Input
                   autoFocus
                   name="name"
-                  variant="unstyled"
-                  fontWeight="bold"
-                  fontSize="xl"
+                  className="text-xl font-bold border-none shadow-none"
                 />
                 <Submit>Save</Submit>
                 <IconButton

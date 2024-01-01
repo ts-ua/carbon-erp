@@ -1,11 +1,4 @@
-import { VStack, useColor } from "@carbon/react";
-import {
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  Image,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Alert, AlertIcon, AlertTitle, VStack } from "@chakra-ui/react";
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -15,7 +8,7 @@ import { json, redirect } from "@remix-run/node";
 import { Link, useActionData, useSearchParams } from "@remix-run/react";
 import { ValidatedForm, validationError } from "remix-validated-form";
 
-import { Input, Password, Submit } from "~/components/Form";
+import { Hidden, Input, Password, Submit } from "~/components/Form";
 import {
   loginValidator,
   signInWithEmail,
@@ -74,17 +67,18 @@ export default function LoginRoute() {
 
   return (
     <>
-      <Image
-        src={useColorModeValue(
-          "/carbon-logo-dark.png",
-          "/carbon-logo-light.png"
-        )}
+      <img
+        src="/carbon-logo-dark.png"
         alt="Carbon Logo"
-        maxW={100}
-        marginBottom={3}
+        className="block dark:hidden max-w-[100px] mb-3"
+      />
+      <img
+        src="/carbon-logo-light.png"
+        alt="Carbon Logo"
+        className="hidden dark:block max-w-[100px] mb-3"
       />
 
-      <div className="rounded-lg bg-background shadow-lg p-8 w-[380px]">
+      <div className="rounded-lg bg-card shadow-lg p-8 w-[380px]">
         <ValidatedForm
           validator={loginValidator}
           defaultValues={{ redirectTo }}
@@ -97,11 +91,14 @@ export default function LoginRoute() {
                 <AlertTitle>{result?.message}</AlertTitle>
               </Alert>
             )}
+
             <Input name="email" label="Email" />
             <Password name="password" label="Password" type="password" />
-            <Input name="redirectTo" value={redirectTo} type="hidden" />
-            <Submit className="w-full">Sign in</Submit>
-            <Link to={path.to.forgotPassword} color={useColor("black")}>
+            <Hidden name="redirectTo" value={redirectTo} type="hidden" />
+            <Submit size="lg" className="w-full">
+              Sign in
+            </Submit>
+            <Link to={path.to.forgotPassword} className="text-foreground">
               Forgot password?
             </Link>
           </VStack>

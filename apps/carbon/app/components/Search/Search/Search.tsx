@@ -1,6 +1,9 @@
 import {
   Button,
   HStack,
+  Input,
+  InputGroup,
+  InputLeftElement,
   Modal,
   ModalBody,
   ModalContent,
@@ -10,14 +13,7 @@ import {
   useKeyboardShortcuts,
 } from "@carbon/react";
 import { clip } from "@carbon/utils";
-import {
-  Icon,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Kbd,
-  List,
-} from "@chakra-ui/react";
+import { Icon, Kbd, List } from "@chakra-ui/react";
 import { Link, useNavigate } from "@remix-run/react";
 import clsx from "clsx";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -197,23 +193,18 @@ const SearchModal = ({
     >
       <ModalContent className="rounded-lg top-[10vh] translate-y-0 p-0">
         <ModalBody className="max-h-[66vh]">
-          <InputGroup size="lg">
-            <InputLeftElement pointerEvents="none">
+          <InputGroup
+            size="lg"
+            className="ring-0 focus-within:ring-0 shadow-none"
+          >
+            <InputLeftElement className="pointer-events-none">
               <FaSearch className="text-muted-foreground" />
             </InputLeftElement>
             <Input
               placeholder="Search..."
               value={query}
-              variant="flushed"
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={onKeyDown}
-              borderTopLeftRadius="lg"
-              borderTopRightRadius="lg"
-              _focus={{
-                borderBottomColor: "transparent",
-                boxShadow: "none",
-                outline: "none",
-              }}
             />
           </InputGroup>
 
