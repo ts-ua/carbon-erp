@@ -1,5 +1,11 @@
-import { Select, VStack, useMount } from "@carbon/react";
-import { FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Select,
+  VStack,
+  useMount,
+} from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useMemo } from "react";
 import { ValidatedForm, useControlField, useField } from "remix-validated-form";

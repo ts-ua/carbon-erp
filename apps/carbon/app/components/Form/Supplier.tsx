@@ -1,10 +1,10 @@
-import { Select } from "@carbon/react";
 import {
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-} from "@chakra-ui/react";
+  Select,
+} from "@carbon/react";
 import { useMemo } from "react";
 import { useControlField, useField } from "remix-validated-form";
 import { useSuppliers } from "~/stores";

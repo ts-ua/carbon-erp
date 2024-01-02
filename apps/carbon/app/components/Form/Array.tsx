@@ -1,11 +1,14 @@
-import { Button, HStack, IconButton, VStack } from "@carbon/react";
-import type { InputProps } from "@chakra-ui/react";
+import type { InputProps } from "@carbon/react";
 import {
-  Input as ChakraInput,
+  Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
-} from "@chakra-ui/react";
+  HStack,
+  IconButton,
+  Input as InputBase,
+  VStack,
+} from "@carbon/react";
 import { forwardRef } from "react";
 import { IoMdAdd, IoMdClose } from "react-icons/io";
 import { useField, useFieldArray } from "remix-validated-form";
@@ -62,7 +65,7 @@ const ArrayInput = forwardRef<HTMLInputElement, ArrayInputProps>(
     return (
       <FormControl isInvalid={!!error} isRequired>
         <HStack className="w-full content-between">
-          <ChakraInput
+          <InputBase
             ref={ref}
             {...getInputProps({
               id: name,

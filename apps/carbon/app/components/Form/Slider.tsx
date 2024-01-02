@@ -1,21 +1,21 @@
-import type { SliderProps as ChakraSliderProps } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  FormLabel,
+} from "@carbon/react";
+import type { SliderProps as SliderBaseProps } from "@chakra-ui/react";
 import {
   Box,
+  Slider as SliderBase,
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
 } from "@chakra-ui/react";
-import { FormHelperText } from "@chakra-ui/react";
-import {
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Slider as ChakraSlider,
-} from "@chakra-ui/react";
 import { forwardRef } from "react";
 import { useField } from "remix-validated-form";
 
-type SliderProps = ChakraSliderProps & {
+type SliderProps = SliderBaseProps & {
   name: string;
   label?: string;
   isRequired?: boolean;
@@ -30,7 +30,7 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
       <FormControl isInvalid={!!error} isRequired={isRequired}>
         {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
 
-        <ChakraSlider
+        <SliderBase
           {...getInputProps({
             id: name,
             ...rest,
@@ -41,7 +41,7 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
             <SliderFilledTrack bg="green.500" />
           </SliderTrack>
           <SliderThumb boxSize={6} />
-        </ChakraSlider>
+        </SliderBase>
         {helperText && <FormHelperText>{helperText}</FormHelperText>}
         {error && <FormErrorMessage>{error}</FormErrorMessage>}
       </FormControl>

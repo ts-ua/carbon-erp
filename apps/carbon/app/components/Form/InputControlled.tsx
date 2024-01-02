@@ -1,16 +1,14 @@
 import type { InputProps } from "@carbon/react";
 import {
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  FormLabel,
   Input as InputBase,
   InputGroup,
   InputLeftAddon,
   InputRightAddon,
 } from "@carbon/react";
-import {
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
-} from "@chakra-ui/react";
 import type { ChangeEvent } from "react";
 import { forwardRef, useEffect } from "react";
 import { useControlField, useField } from "remix-validated-form";

@@ -34,6 +34,12 @@ import {
 } from "./Drawer";
 import { Editor, useEditor } from "./Editor";
 import { File } from "./File";
+import {
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  FormLabel,
+} from "./Form";
 import { HStack } from "./HStack";
 import { HTML } from "./HTML";
 import { Heading } from "./Heading";
@@ -127,6 +133,10 @@ export {
   DrawerTrigger,
   Editor,
   File,
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  FormLabel,
   HStack,
   HTML,
   Heading,

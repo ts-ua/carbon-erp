@@ -1,11 +1,12 @@
 import type { MultiValue } from "@carbon/react";
-import { Select, useMount } from "@carbon/react";
 import {
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-} from "@chakra-ui/react";
+  Select,
+  useMount,
+} from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
 import { useMemo } from "react";
 import { useControlField, useField } from "remix-validated-form";

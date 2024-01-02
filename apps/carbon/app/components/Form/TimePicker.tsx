@@ -1,5 +1,9 @@
-import { TimePicker as CarbonTimePicker } from "@carbon/react";
-import { FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  TimePicker as TimePickerBase,
+} from "@carbon/react";
 import type {
   CalendarDateTime,
   Time,
@@ -34,7 +38,7 @@ const TimePicker = ({ name, label, onChange }: TimePickerProps) => {
     <FormControl isInvalid={!!error}>
       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
       <input type="hidden" name={name} value={date?.toString()} />
-      <CarbonTimePicker
+      <TimePickerBase
         value={date ?? undefined}
         //@ts-ignore
         onChange={handleChange}
