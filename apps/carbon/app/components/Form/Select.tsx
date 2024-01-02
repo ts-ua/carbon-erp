@@ -1,10 +1,10 @@
-import { Select as CarbonSelect } from "@carbon/react";
 import {
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-} from "@chakra-ui/react";
+  Select as SelectBase,
+} from "@carbon/react";
 import { useMemo } from "react";
 import { useField } from "remix-validated-form";
 
@@ -40,7 +40,7 @@ const Select = ({
     <FormControl isInvalid={!!error}>
       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
       {options?.length > 0 ? (
-        <CarbonSelect
+        <SelectBase
           {...getInputProps({
             // @ts-ignore
             id: name,
@@ -51,18 +51,12 @@ const Select = ({
           isLoading={isLoading}
           options={options}
           placeholder={placeholder}
-          // @ts-ignore
           w="full"
           // @ts-ignore
           onChange={onChange ?? undefined}
         />
       ) : (
-        <CarbonSelect
-          isLoading={isLoading}
-          options={[]}
-          // @ts-ignore
-          w="full"
-        />
+        <SelectBase isLoading={isLoading} options={[]} w="full" />
       )}
 
       {error ? (

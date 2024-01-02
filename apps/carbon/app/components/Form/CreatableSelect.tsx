@@ -1,10 +1,10 @@
-import { CreatableSelect } from "@carbon/react";
 import {
+  CreatableSelect,
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useControlField, useField } from "remix-validated-form";
 
 import type { SelectProps } from "./Select";

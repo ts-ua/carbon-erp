@@ -3,7 +3,7 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useState } from "react";
 import { useField } from "remix-validated-form";
 import { UserSelect } from "../Selectors";

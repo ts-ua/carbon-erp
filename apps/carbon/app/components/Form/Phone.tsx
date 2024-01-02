@@ -1,10 +1,10 @@
-import type { InputProps } from "@chakra-ui/react";
+import type { InputProps } from "@carbon/react";
 import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Input as ChakraInput,
-} from "@chakra-ui/react";
+  Input as InputBase,
+} from "@carbon/react";
 import { forwardRef } from "react";
 import { useField } from "remix-validated-form";
 
@@ -21,7 +21,7 @@ const Phone = forwardRef<HTMLInputElement, FormPhoneProps>(
     return (
       <FormControl isInvalid={!!error} isRequired={isRequired}>
         {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-        <ChakraInput
+        <InputBase
           ref={ref}
           {...getInputProps({
             id: name,

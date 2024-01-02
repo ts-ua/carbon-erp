@@ -1,9 +1,11 @@
-import type { NumberInputProps } from "@chakra-ui/react";
-import { FormHelperText } from "@chakra-ui/react";
 import {
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
+} from "@carbon/react";
+import type { NumberInputProps } from "@chakra-ui/react";
+import {
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,

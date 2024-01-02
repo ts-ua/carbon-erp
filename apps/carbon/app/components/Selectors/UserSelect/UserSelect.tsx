@@ -10,8 +10,7 @@
  * @see WAI-ARIA Tree View https://www.w3.org/WAI/ARIA/apg/patterns/treeview/
  */
 
-import { Select } from "@carbon/react";
-import { FormLabel } from "@chakra-ui/react";
+import { FormLabel, Select } from "@carbon/react";
 import { usePermissions } from "~/hooks";
 import Combobox from "./components/Combobox";
 import Container from "./components/Container";

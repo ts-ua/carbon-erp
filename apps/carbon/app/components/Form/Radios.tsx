@@ -1,19 +1,18 @@
-import type { StackDirection } from "@chakra-ui/react";
 import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Radio,
-  RadioGroup,
-  Stack,
-} from "@chakra-ui/react";
+  HStack,
+  VStack,
+} from "@carbon/react";
+import { Radio, RadioGroup } from "@chakra-ui/react";
 import { useField } from "remix-validated-form";
 
 type RadiosProps = {
   name: string;
   label?: string;
   options: { label: string; value: string }[];
-  direction?: StackDirection;
+  direction?: "column" | "row";
 };
 
 const Radios = ({
@@ -23,6 +22,7 @@ const Radios = ({
   direction = "column",
 }: RadiosProps) => {
   const { getInputProps, error } = useField(name);
+  const Stack = direction === "column" ? VStack : HStack;
 
   return (
     <FormControl isInvalid={!!error}>
@@ -34,7 +34,7 @@ const Radios = ({
         })}
         name={name}
       >
-        <Stack alignItems="start" direction={direction}>
+        <Stack className="items-start">
           {options.map(({ label, value }) => (
             <Radio key={value} value={value}>
               {label}

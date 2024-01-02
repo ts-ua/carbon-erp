@@ -10,7 +10,6 @@ import {
   VStack,
   useMount,
 } from "@carbon/react";
-import { FormLabel } from "@chakra-ui/react";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -112,7 +111,9 @@ const BulkEditPermissions = ({
                 label="Users to Update"
               />
 
-              <FormLabel>Permissions</FormLabel>
+              <label className="block text-sm font-medium leading-none">
+                Permissions
+              </label>
               {Object.entries(permissions)
                 .sort((a, b) => a[0].localeCompare(b[0]))
                 .map(([module, data], index) => (

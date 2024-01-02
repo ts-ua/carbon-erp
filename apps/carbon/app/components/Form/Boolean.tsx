@@ -1,10 +1,12 @@
-import { HStack } from "@carbon/react";
-import type { SwitchProps, SystemStyleObject } from "@chakra-ui/react";
 import {
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
+  HStack,
+} from "@carbon/react";
+import type { SwitchProps, SystemStyleObject } from "@chakra-ui/react";
+import {
   VisuallyHidden,
   chakra,
   omitThemingProps,
@@ -62,7 +64,7 @@ const Boolean = forwardRef<HTMLInputElement, FormBooleanProps>(
     );
 
     return (
-      <FormControl isInvalid={!!error} pt={2}>
+      <FormControl isInvalid={!!error} className="pt-2">
         {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
         <HStack className="w-full">
           <chakra.label

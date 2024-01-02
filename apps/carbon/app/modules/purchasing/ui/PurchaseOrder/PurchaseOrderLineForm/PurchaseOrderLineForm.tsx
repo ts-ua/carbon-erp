@@ -6,13 +6,13 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
+  FormControl,
+  FormLabel,
   HStack,
   Input,
   VStack,
 } from "@carbon/react";
 import {
-  FormControl,
-  FormLabel,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,

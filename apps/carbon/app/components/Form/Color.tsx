@@ -1,12 +1,11 @@
-import { HStack } from "@carbon/react";
 import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  HStack,
   useDisclosure,
   useOutsideClick,
-} from "@chakra-ui/react";
-
+} from "@carbon/react";
 import { useRef } from "react";
 import { HexColorInput, HexColorPicker } from "react-colorful";
 import { useControlField, useField } from "remix-validated-form";

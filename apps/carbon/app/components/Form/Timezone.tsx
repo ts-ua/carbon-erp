@@ -1,10 +1,11 @@
-import { createFilter, Select as CarbonSelect } from "@carbon/react";
 import {
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-} from "@chakra-ui/react";
+  Select as SelectBase,
+  createFilter,
+} from "@carbon/react";
 import { useMemo } from "react";
 import { useField } from "remix-validated-form";
 import { timezonesGroupedByCountry } from "~/config/timezones";
@@ -43,7 +44,7 @@ const Timezone = ({
   return (
     <FormControl isInvalid={!!error}>
       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-      <CarbonSelect
+      <SelectBase
         {...getInputProps({
           // @ts-ignore
           id: name,

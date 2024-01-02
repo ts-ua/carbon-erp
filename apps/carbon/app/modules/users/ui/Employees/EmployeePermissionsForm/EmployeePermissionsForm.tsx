@@ -9,7 +9,6 @@ import {
   HStack,
   VStack,
 } from "@carbon/react";
-import { FormLabel } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -77,7 +76,9 @@ const EmployeePermissionsForm = ({
                 options={employeeTypeOptions}
                 placeholder="Select Employee Type"
               />
-              <FormLabel>Permissions</FormLabel>
+              <label className="block text-sm font-medium leading-none">
+                Permissions
+              </label>
               {Object.entries(permissions)
                 .sort((a, b) => a[0].localeCompare(b[0]))
                 .map(([module, data], index) => (

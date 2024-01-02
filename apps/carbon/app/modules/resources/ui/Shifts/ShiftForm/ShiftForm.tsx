@@ -6,10 +6,11 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
+  FormControl,
+  FormLabel,
   HStack,
   VStack,
 } from "@carbon/react";
-import { FormControl, FormLabel } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
