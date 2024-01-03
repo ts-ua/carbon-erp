@@ -9,14 +9,7 @@ const SingleValue = <
 >(
   props: SingleValueProps<Option, IsMulti, Group>
 ) => {
-  const {
-    children,
-    className,
-    cx,
-    isDisabled,
-    innerProps,
-    selectProps: { chakraStyles },
-  } = props;
+  const { children, className, cx, isDisabled, innerProps } = props;
 
   const initialSx: SystemStyleObject = {
     label: "singleValue",
@@ -30,9 +23,7 @@ const SingleValue = <
     transform: "translateY(-50%)",
   };
 
-  const sx = chakraStyles?.singleValue
-    ? chakraStyles.singleValue(initialSx, props)
-    : initialSx;
+  const sx = initialSx;
 
   return (
     <Box

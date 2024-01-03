@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import type { GroupBase, SelectInstance } from "react-select";
 import type { AsyncProps } from "react-select/async";
 import AsyncReactSelect from "react-select/async";
-import useChakraSelectProps from "../use-chakra-select-props";
+import useSelectProps from "../useSelectProps";
 
 export type AsyncSelectComponent = <
   Option = unknown,
@@ -23,7 +23,7 @@ const AsyncSelect = forwardRef(
       | MutableRefObject<SelectInstance<Option, IsMulti, Group> | null>
       | null
   ) => {
-    const chakraSelectProps = useChakraSelectProps(props);
+    const chakraSelectProps = useSelectProps(props);
 
     return <AsyncReactSelect ref={ref} {...chakraSelectProps} />;
   }

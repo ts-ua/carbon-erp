@@ -32,12 +32,7 @@ const PurchaseInvoicesTableFilters = () => {
       spacing={4}
     >
       <HStack>
-        <DebouncedInput
-          param="search"
-          size="sm"
-          minW={180}
-          placeholder="Search"
-        />
+        <DebouncedInput param="search" size="sm" placeholder="Search" />
         <Select
           size="sm"
           value={purchaseInvoiceStatusOptions.find(

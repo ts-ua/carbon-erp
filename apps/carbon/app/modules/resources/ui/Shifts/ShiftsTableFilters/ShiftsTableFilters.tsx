@@ -25,12 +25,7 @@ const ShiftsTableFilters = ({ locations }: ShiftsTableFiltersProps) => {
       spacing={4}
     >
       <HStack>
-        <DebouncedInput
-          param="name"
-          size="sm"
-          minW={180}
-          placeholder="Search"
-        />
+        <DebouncedInput param="name" size="sm" placeholder="Search" />
         <Select
           size="sm"
           value={locationOptions.find(

@@ -25,15 +25,7 @@ const alignToControl = (placement: CoercedMenuPlacement) => {
 const Menu = <Option, IsMulti extends boolean, Group extends GroupBase<Option>>(
   props: MenuProps<Option, IsMulti, Group>
 ) => {
-  const {
-    className,
-    cx,
-    children,
-    innerProps,
-    innerRef,
-    placement,
-    selectProps: { chakraStyles },
-  } = props;
+  const { className, cx, children, innerProps, innerRef, placement } = props;
 
   const initialSx: SystemStyleObject = {
     position: "absolute",
@@ -43,9 +35,7 @@ const Menu = <Option, IsMulti extends boolean, Group extends GroupBase<Option>>(
     zIndex: 1,
   };
 
-  const sx = chakraStyles?.menu
-    ? chakraStyles.menu(initialSx, props)
-    : initialSx;
+  const sx = initialSx;
 
   return (
     <ChakraMenu>
@@ -87,13 +77,7 @@ export const MenuList = <
     maxHeight,
     isMulti,
     innerProps,
-    selectProps: {
-      chakraStyles,
-      size: sizeProp,
-      variant,
-      focusBorderColor,
-      errorBorderColor,
-    },
+    selectProps: { size: sizeProp, focusBorderColor, errorBorderColor },
   } = props;
 
   const list = React.useRef<List>(null);
@@ -105,7 +89,6 @@ export const MenuList = <
   const size = useSize(sizeProp);
   const inputStyles = useMultiStyleConfig("Input", {
     size,
-    variant,
     focusBorderColor,
     errorBorderColor,
   });
@@ -123,9 +106,7 @@ export const MenuList = <
     WebkitOverflowScrolling: "touch",
   };
 
-  const sx = chakraStyles?.menuList
-    ? chakraStyles.menuList(initialSx, props)
-    : initialSx;
+  const sx = initialSx;
 
   const children = React.useMemo<React.ReactElement[]>(() => {
     const _children = React.Children.toArray(
@@ -207,7 +188,7 @@ export const LoadingMessage = <
     className,
     cx,
     innerProps,
-    selectProps: { chakraStyles, size: sizeProp },
+    selectProps: { size: sizeProp },
   } = props;
 
   const size = useSize(sizeProp);
@@ -225,9 +206,7 @@ export const LoadingMessage = <
     fontSize: size,
   };
 
-  const sx = chakraStyles?.loadingMessage
-    ? chakraStyles.loadingMessage(initialSx, props)
-    : initialSx;
+  const sx = initialSx;
 
   return (
     <Box
@@ -258,7 +237,7 @@ export const NoOptionsMessage = <
     className,
     cx,
     innerProps,
-    selectProps: { chakraStyles, size: sizeProp },
+    selectProps: { size: sizeProp },
   } = props;
 
   const size = useSize(sizeProp);
@@ -276,9 +255,7 @@ export const NoOptionsMessage = <
     fontSize: size,
   };
 
-  const sx = chakraStyles?.noOptionsMessage
-    ? chakraStyles.noOptionsMessage(initialSx, props)
-    : initialSx;
+  const sx = initialSx;
 
   return (
     <Box
@@ -318,9 +295,7 @@ export const Group = <
     getClassNames,
   } = props;
 
-  const { chakraStyles } = selectProps;
-
-  const sx = chakraStyles?.group ? chakraStyles.group({}, props) : {};
+  const sx = {};
 
   return (
     <Box {...innerProps} className={cx({ group: true }, className)} sx={sx}>
@@ -350,7 +325,7 @@ export const GroupHeading = <
     cx,
     className,
     children,
-    selectProps: { chakraStyles, size: sizeProp, hasStickyGroupHeaders },
+    selectProps: { size: sizeProp, hasStickyGroupHeaders },
   } = props;
 
   const menuStyles = useMultiStyleConfig("Menu");
@@ -380,9 +355,7 @@ export const GroupHeading = <
     zIndex: 1,
   };
 
-  const sx = chakraStyles?.groupHeading
-    ? chakraStyles.groupHeading(initialSx, props)
-    : initialSx;
+  const sx = initialSx;
 
   return (
     <Box className={cx({ "group-heading": true }, className)} sx={sx}>
@@ -422,7 +395,6 @@ export const Option = <
     isDisabled,
     isSelected,
     selectProps: {
-      chakraStyles,
       size: sizeProp,
       isMulti,
       hideSelectedOptions,
@@ -441,11 +413,6 @@ export const Option = <
     lg: "0.5rem 1rem",
   };
 
-  /**
-   * Use the same selected color as the border of the select component
-   *
-   * @see {@link https://github.com/chakra-ui/chakra-ui/blob/13c6d2e08b61e179773be4722bb81173dd599306/packages/theme/src/components/input.ts#L73}
-   */
   const selectedBg = useColorModeValue(
     `${selectedOptionColorScheme}.500`,
     `${selectedOptionColorScheme}.300`
@@ -479,9 +446,7 @@ export const Option = <
     ...(isDisabled && { _active: {} }),
   };
 
-  const sx = chakraStyles?.option
-    ? chakraStyles.option(initialSx, props)
-    : initialSx;
+  const sx = initialSx;
 
   return (
     <Box
