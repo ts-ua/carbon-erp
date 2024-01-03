@@ -33,7 +33,6 @@ const ServicesTableFilters = ({ partGroups }: ServicesTableFiltersProps) => {
         <DebouncedInput
           param="search"
           size="sm"
-          minW={180}
           placeholder="Search Services"
         />
         {partGroupsOptions.length > 0 && (

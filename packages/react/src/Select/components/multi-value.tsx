@@ -1,5 +1,5 @@
 import type { IconProps, SystemStyleObject } from "@chakra-ui/react";
-import { Box, chakra, Icon, useMultiStyleConfig } from "@chakra-ui/react";
+import { Box, Icon, chakra, useMultiStyleConfig } from "@chakra-ui/react";
 
 import type {
   GroupBase,
@@ -39,7 +39,7 @@ const MultiValue = <
 
   const { Container, Label, Remove } = components;
 
-  const { chakraStyles, colorScheme, tagVariant, size } = selectProps;
+  const { size } = selectProps;
 
   let optionColorScheme = "";
   let optionVariant = "";
@@ -59,9 +59,8 @@ const MultiValue = <
 
   const tagStyles = useMultiStyleConfig("Tag", {
     size,
-    colorScheme: optionColorScheme || colorScheme,
-    variant:
-      optionVariant || tagVariant || (optionIsFixed ? "solid" : "subtle"),
+    colorScheme: optionColorScheme,
+    variant: optionVariant || (optionIsFixed ? "solid" : "subtle"),
   });
 
   const containerInitialSx: SystemStyleObject = {
@@ -72,14 +71,10 @@ const MultiValue = <
     maxWidth: "100%",
     margin: "0.125rem",
   };
-  const containerSx: SystemStyleObject = chakraStyles?.multiValue
-    ? chakraStyles.multiValue(containerInitialSx, props)
-    : containerInitialSx;
+  const containerSx: SystemStyleObject = containerInitialSx;
 
   const labelInitialSx: SystemStyleObject = tagStyles.label;
-  const labelSx = chakraStyles?.multiValueLabel
-    ? chakraStyles.multiValueLabel(labelInitialSx, props)
-    : labelInitialSx;
+  const labelSx = labelInitialSx;
 
   const removeInitialSx: SystemStyleObject = {
     display: "flex",
@@ -87,9 +82,7 @@ const MultiValue = <
     justifyContent: "center",
     ...tagStyles.closeButton,
   };
-  const removeSx = chakraStyles?.multiValueRemove
-    ? chakraStyles.multiValueRemove(removeInitialSx, props)
-    : removeInitialSx;
+  const removeSx = removeInitialSx;
 
   return (
     <Container

@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import type { GroupBase, SelectInstance } from "react-select";
 import type { CreatableProps } from "react-select/creatable";
 import CreatableReactSelect from "react-select/creatable";
-import useChakraSelectProps from "../use-chakra-select-props";
+import useSelectProps from "../useSelectProps";
 
 export type CreatableSelectComponent = <
   Option = unknown,
@@ -23,7 +23,7 @@ const CreatableSelect = forwardRef(
       | MutableRefObject<SelectInstance<Option, IsMulti, Group> | null>
       | null
   ) => {
-    const chakraSelectProps = useChakraSelectProps(props);
+    const chakraSelectProps = useSelectProps(props);
 
     return <CreatableReactSelect ref={ref} {...chakraSelectProps} />;
   }

@@ -2,7 +2,7 @@ import type { MutableRefObject, ReactElement, RefAttributes } from "react";
 import { forwardRef } from "react";
 import type { GroupBase, Props, SelectInstance } from "react-select";
 import ReactSelect from "react-select";
-import useChakraSelectProps from "../use-chakra-select-props";
+import useSelectProps from "../useSelectProps";
 
 export type SelectComponent = <
   Option = unknown,
@@ -22,7 +22,7 @@ const Select = forwardRef(
       | MutableRefObject<SelectInstance<Option, IsMulti, Group> | null>
       | null
   ) => {
-    const chakraSelectProps = useChakraSelectProps(props);
+    const chakraSelectProps = useSelectProps(props);
 
     return <ReactSelect ref={ref} {...chakraSelectProps} />;
   }

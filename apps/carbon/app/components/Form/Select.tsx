@@ -13,8 +13,9 @@ export type SelectProps = {
   label?: string;
   options: { value: string | number; label: string }[];
   helperText?: string;
-  isReadOnly?: boolean;
+  isClearable?: boolean;
   isLoading?: boolean;
+  isReadOnly?: boolean;
   placeholder?: string;
   onChange?: (newValue: { value: string | number; label: string }) => void;
 };
@@ -24,6 +25,7 @@ const Select = ({
   label,
   options,
   helperText,
+  isClearable,
   isLoading,
   isReadOnly,
   placeholder,
@@ -47,8 +49,9 @@ const Select = ({
           })}
           {...props}
           defaultValue={initialValue}
-          isReadOnly={isReadOnly}
+          isClearable={isClearable}
           isLoading={isLoading}
+          isReadOnly={isReadOnly}
           options={options}
           placeholder={placeholder}
           w="full"
@@ -56,7 +59,12 @@ const Select = ({
           onChange={onChange ?? undefined}
         />
       ) : (
-        <SelectBase isLoading={isLoading} options={[]} w="full" />
+        <SelectBase
+          isLoading={isLoading}
+          isReadOnly={isReadOnly}
+          options={[]}
+          w="full"
+        />
       )}
 
       {error ? (
