@@ -141,7 +141,7 @@ function OpenSource() {
         <div className="mx-auto w-full lg:max-w-7xl px-2.5">
           <div className="mx-auto text-center">
             <h2 className="text-gray-800 dark:text-white font-display text-4xl font-extrabold leading-tight  sm:text-5xl sm:leading-tight tracking-tighter">
-              Join the movement
+              Proudly Open Source
             </h2>
             <p className="mt-5 text-gray-600 dark:text-gray-300 sm:text-lg font-medium">
               Our source code is available on GitHub - feel free to use, modify,

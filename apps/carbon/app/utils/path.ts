@@ -310,7 +310,8 @@ export const path = {
       generatePath(`${x}/accounting/payment-terms/${id}`),
     paymentTerms: `${x}/accounting/payment-terms`,
     people: `${x}/resources/people`,
-    person: (id: string) => generatePath(`${x}/resources/person/${id}`),
+    person: (id: string) => generatePath(`${x}/person/${id}`),
+    personJob: (id: string) => generatePath(`${x}/person/${id}/job`),
     profile: `${x}/account/profile`,
     purchaseInvoice: (id: string) =>
       generatePath(`${x}/purchase-invoice/${id}`),

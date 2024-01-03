@@ -6,7 +6,11 @@ import type { TypeOfValidator } from "~/types/validators";
 import type { GenericQueryFilters } from "~/utils/query";
 import { setGenericQueryFilters } from "~/utils/query";
 import { sanitize } from "~/utils/supabase";
-import type { equipmentValidator, locationValidator } from "./resources.models";
+import type {
+  employeeJobValidator,
+  equipmentValidator,
+  locationValidator,
+} from "./resources.models";
 
 export async function deleteAbility(
   client: SupabaseClient<Database>,
@@ -369,6 +373,17 @@ export async function getEmployeeJob(
     .single();
 }
 
+export async function getEmployeeSummary(
+  client: SupabaseClient<Database>,
+  employeeId: string
+) {
+  return client
+    .from("employeeSummary")
+    .select("*")
+    .eq("id", employeeId)
+    .single();
+}
+
 export async function getEquipment(
   client: SupabaseClient<Database>,
   equipmentId: string
@@ -614,6 +629,7 @@ export async function getPeople(
   const userIds = employees.data.map((employee) => {
     if (!employee.user || Array.isArray(employee.user))
       throw new Error("employee.user is an array");
+    // @ts-ignore
     return employee.user?.id;
   });
 
@@ -623,7 +639,7 @@ export async function getPeople(
   const people: Person[] = employees.data.map((employee) => {
     if (!employee.user || Array.isArray(employee.user))
       throw new Error("employee.user is an array");
-
+    // @ts-ignore
     const userId = employee.user?.id;
 
     const employeeAttributes =
@@ -651,6 +667,7 @@ export async function getPeople(
             if (value && userAttributeValue?.id) {
               acc[userAttributeId] = {
                 userAttributeValueId: userAttributeValue.id,
+                // @ts-ignore
                 dataType: attribute.attributeDataType?.id as DataType,
                 value,
                 user: !Array.isArray(userAttributeValue.user)
@@ -1027,17 +1044,11 @@ export async function upsertEmployeeAbility(
 export async function upsertEmployeeJob(
   client: SupabaseClient<Database>,
   employeeId: string,
-  employeeJob: {
-    title: string | null;
-    startDate: string | null;
-    locationId: string | null;
-    shiftId: string | null;
-    managerId: string | null;
-  }
+  employeeJob: TypeOfValidator<typeof employeeJobValidator>
 ) {
   return client
     .from("employeeJob")
-    .upsert([{ id: employeeId, ...employeeJob }]);
+    .upsert([{ id: employeeId, ...sanitize(employeeJob) }]);
 }
 
 export async function upsertEquipment(

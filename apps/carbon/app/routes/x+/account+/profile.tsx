@@ -1,9 +1,16 @@
-import { Box, Grid } from "@chakra-ui/react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  VStack,
+} from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
-import { PageTitle, SectionTitle } from "~/components/Layout";
+import { PageTitle } from "~/components/Layout";
 import type { PublicAttributes } from "~/modules/account";
 import {
   ProfileForm,
@@ -138,18 +145,29 @@ export default function AccountProfile() {
         w="full"
         gridColumnGap={8}
       >
-        <ProfileForm user={user} />
+        <VStack spacing={8}>
+          <ProfileForm user={user} />
+          {attributes.length ? (
+            attributes.map((category: PublicAttributes) => (
+              <Card key={category.id}>
+                <CardHeader>
+                  <CardTitle>{category.name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <UserAttributesForm attributeCategory={category} />
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <Card>
+              <CardContent className="text-muted-foreground w-full text-center py-8">
+                No public attributes
+              </CardContent>
+            </Card>
+          )}
+        </VStack>
         <ProfilePhotoForm user={user} />
       </Grid>
-      {attributes.map((category: PublicAttributes) => {
-        console.log(category);
-        return (
-          <Box key={category.id} mb={8} w="full">
-            <SectionTitle>{category.name}</SectionTitle>
-            <UserAttributesForm attributeCategory={category} />
-          </Box>
-        );
-      })}
     </>
   );
 }
