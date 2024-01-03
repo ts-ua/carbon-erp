@@ -80,6 +80,7 @@ import type {
 import { CreatableSelect, Select, createFilter } from "./Select";
 import { Status } from "./Status";
 import Submit from "./Submit";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./Tabs";
 import ThemeProvider, { theme } from "./Theme";
 import {
   Tooltip,
@@ -171,6 +172,10 @@ export {
   Select,
   Status,
   Submit,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
   ThemeProvider,
   TimePicker,
   Tooltip,

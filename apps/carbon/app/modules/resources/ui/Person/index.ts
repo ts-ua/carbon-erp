@@ -3,7 +3,8 @@ import PersonDaysOff from "./PersonDaysOff";
 import PersonHeader from "./PersonHeader";
 import PersonJob from "./PersonJob";
 import PersonOvertime from "./PersonOvertime";
-import PersonTabs from "./PersonTabs";
+import PersonPreview from "./PersonPreview";
+import PersonSidebar from "./PersonSidebar";
 
 export {
   PersonAbilities,
@@ -11,5 +12,6 @@ export {
   PersonHeader,
   PersonJob,
   PersonOvertime,
-  PersonTabs,
+  PersonPreview,
+  PersonSidebar,
 };

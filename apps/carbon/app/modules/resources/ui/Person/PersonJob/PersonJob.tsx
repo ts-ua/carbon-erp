@@ -1,4 +1,9 @@
 import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -17,7 +22,6 @@ import {
   Location,
   Submit,
 } from "~/components/Form";
-import { SectionTitle } from "~/components/Layout";
 import type { EmployeeJob, getShiftsList } from "~/modules/resources";
 import { employeeJobValidator } from "~/modules/resources";
 import { path } from "~/utils/path";
@@ -48,36 +52,43 @@ const PersonJob = ({ job }: PersonJobProps) => {
   );
 
   return (
-    <div className="w-full">
-      <SectionTitle>Job</SectionTitle>
-      <ValidatedForm
-        validator={employeeJobValidator}
-        method="post"
-        defaultValues={{
-          locationId: job.locationId ?? undefined,
-          title: job.title ?? undefined,
-          managerId: job.managerId ?? undefined,
-          shiftId: job.shiftId ?? undefined,
-        }}
-      >
-        <VStack spacing={4}>
-          <Input name="title" label="Title" />
-          <DatePicker name="startDate" label="Start Date" />
-          <Location
-            name="locationId"
-            label="Location"
-            onChange={onLocationChange}
-          />
-          <ShiftByLocation
-            shifts={shifts}
-            initialShift={job.shiftId ?? undefined}
-          />
-          <Employee name="managerId" label="Manager" />
-          <Hidden name="intent" value="job" />
+    <ValidatedForm
+      validator={employeeJobValidator}
+      method="post"
+      defaultValues={{
+        locationId: job.locationId ?? undefined,
+        title: job.title ?? undefined,
+        startDate: job.startDate ?? undefined,
+        managerId: job.managerId ?? undefined,
+        shiftId: job.shiftId ?? undefined,
+      }}
+    >
+      <Card>
+        <CardHeader>
+          <CardTitle>Job</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <VStack spacing={4}>
+            <Input name="title" label="Title" />
+            <DatePicker name="startDate" label="Start Date" />
+            <Location
+              name="locationId"
+              label="Location"
+              onChange={onLocationChange}
+            />
+            <ShiftByLocation
+              shifts={shifts}
+              initialShift={job.shiftId ?? undefined}
+            />
+            <Employee name="managerId" label="Manager" />
+            <Hidden name="intent" value="job" />
+          </VStack>
+        </CardContent>
+        <CardFooter>
           <Submit>Save</Submit>
-        </VStack>
-      </ValidatedForm>
-    </div>
+        </CardFooter>
+      </Card>
+    </ValidatedForm>
   );
 };
 

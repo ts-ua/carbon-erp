@@ -32,7 +32,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, FormTextArea>(
             id: name,
             ...rest,
           })}
-          className="bg-transparent"
+          className="bg-input border-input-border"
           maxLength={characterLimit}
           onChange={onChange}
         />

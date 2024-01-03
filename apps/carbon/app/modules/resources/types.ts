@@ -8,6 +8,7 @@ import type {
   getDepartments,
   getEmployeeAbilities,
   getEmployeeJob,
+  getEmployeeSummary,
   getEquipment,
   getEquipmentType,
   getEquipmentTypes,
@@ -92,6 +93,10 @@ export type EmployeeAbility = NonNullable<
 
 export type EmployeeJob = NonNullable<
   Awaited<ReturnType<typeof getEmployeeJob>>["data"]
+>;
+
+export type EmployeeSummary = NonNullable<
+  Awaited<ReturnType<typeof getEmployeeSummary>>["data"]
 >;
 
 export type Equipment = NonNullable<

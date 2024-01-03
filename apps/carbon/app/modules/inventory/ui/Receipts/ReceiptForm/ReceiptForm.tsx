@@ -191,7 +191,7 @@ const ReceiptForm = ({
                   onDataChange={setReceiptLines}
                 />
               </VStack>
-
+              <SectionTitle>Notes</SectionTitle>
               <Notes notes={notes} documentId={initialValues.id} />
             </VStack>
           </DrawerBody>

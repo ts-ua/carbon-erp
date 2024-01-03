@@ -6,7 +6,6 @@ import { Fragment } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import { Avatar } from "~/components";
 import { Hidden, RichText, Submit } from "~/components/Form";
-import { SectionTitle } from "~/components/Layout";
 import { usePermissions, useUser } from "~/hooks";
 import type { Note } from "~/modules/shared";
 import { noteValidator } from "~/modules/shared";
@@ -25,9 +24,7 @@ const Notes = ({ documentId, notes }: NotesProps) => {
   if (!isEmployee) return null;
 
   return (
-    <div className="w-full">
-      <SectionTitle>Notes</SectionTitle>
-
+    <>
       {notes.length > 0 ? (
         <Grid
           gridTemplateColumns="auto 1fr"
@@ -88,7 +85,7 @@ const Notes = ({ documentId, notes }: NotesProps) => {
           </VStack>
         </ValidatedForm>
       </div>
-    </div>
+    </>
   );
 };
 

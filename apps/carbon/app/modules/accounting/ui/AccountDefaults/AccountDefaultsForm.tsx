@@ -1,12 +1,17 @@
-import { Button, Heading, HStack, VStack } from "@carbon/react";
 import {
-  Grid,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  HStack,
   Tabs,
-} from "@chakra-ui/react";
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  VStack,
+} from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Select, Submit } from "~/components/Form";
@@ -54,22 +59,19 @@ const AccountDefaultsForm = ({
           width: "100%",
         }}
       >
-        <Tabs colorScheme="gray">
-          <TabList>
-            <Tab>Income Statement</Tab>
-            <Tab>Balance Sheet</Tab>
-          </TabList>
+        <Tabs defaultValue="income">
+          <TabsList>
+            <TabsTrigger value="income">Income Statement</TabsTrigger>
+            <TabsTrigger value="balance">Balance Sheet</TabsTrigger>
+          </TabsList>
 
-          <TabPanels>
-            <TabPanel>
-              <VStack spacing={8}>
-                <VStack spacing={4}>
-                  <Heading
-                    size="h4"
-                    className="uppercase text-muted-foreground"
-                  >
-                    Revenue
-                  </Heading>
+          <TabsContent value="income" className="py-6">
+            <VStack spacing={8}>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Revenue</CardTitle>
+                </CardHeader>
+                <CardContent>
                   <Grid
                     gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
                     gridColumnGap={8}
@@ -88,14 +90,13 @@ const AccountDefaultsForm = ({
                       options={incomeStatementAccountOptions}
                     />
                   </Grid>
-                </VStack>
-                <VStack spacing={4}>
-                  <Heading
-                    size="h4"
-                    className="uppercase text-muted-foreground"
-                  >
-                    Expenses
-                  </Heading>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Expenses</CardTitle>
+                </CardHeader>
+                <CardContent>
                   <Grid
                     gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
                     gridColumnGap={8}
@@ -155,14 +156,13 @@ const AccountDefaultsForm = ({
                       options={incomeStatementAccountOptions}
                     />
                   </Grid>
-                </VStack>
-                <VStack spacing={4}>
-                  <Heading
-                    size="h4"
-                    className="uppercase text-muted-foreground"
-                  >
-                    Fixed Assets
-                  </Heading>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Fixed Assets</CardTitle>
+                </CardHeader>
+                <CardContent>
                   <Grid
                     gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
                     gridColumnGap={8}
@@ -186,14 +186,13 @@ const AccountDefaultsForm = ({
                       options={incomeStatementAccountOptions}
                     />
                   </Grid>
-                </VStack>
-                <VStack spacing={4}>
-                  <Heading
-                    size="h4"
-                    className="uppercase text-muted-foreground"
-                  >
-                    Interest
-                  </Heading>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Interest</CardTitle>
+                </CardHeader>
+                <CardContent>
                   <Grid
                     gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
                     gridColumnGap={8}
@@ -222,18 +221,17 @@ const AccountDefaultsForm = ({
                       options={incomeStatementAccountOptions}
                     />
                   </Grid>
-                </VStack>
-              </VStack>
-            </TabPanel>
-            <TabPanel>
-              <VStack spacing={8}>
-                <VStack spacing={4}>
-                  <Heading
-                    size="h4"
-                    className="uppercase text-muted-foreground"
-                  >
-                    Current Assets
-                  </Heading>
+                </CardContent>
+              </Card>
+            </VStack>
+          </TabsContent>
+          <TabsContent value="balance" className="py-6">
+            <VStack spacing={8}>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Current Assets</CardTitle>
+                </CardHeader>
+                <CardContent>
                   <Grid
                     gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
                     gridColumnGap={8}
@@ -283,14 +281,13 @@ const AccountDefaultsForm = ({
                       options={balanceSheetAccountOptions}
                     />
                   </Grid>
-                </VStack>
-                <VStack spacing={4}>
-                  <Heading
-                    size="h4"
-                    className="uppercase text-muted-foreground"
-                  >
-                    Fixed Assets
-                  </Heading>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Fixed Assets</CardTitle>
+                </CardHeader>
+                <CardContent>
                   <Grid
                     gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
                     gridColumnGap={8}
@@ -319,14 +316,13 @@ const AccountDefaultsForm = ({
                       options={balanceSheetAccountOptions}
                     />
                   </Grid>
-                </VStack>
-                <VStack spacing={4}>
-                  <Heading
-                    size="h4"
-                    className="uppercase text-muted-foreground"
-                  >
-                    Liabilities
-                  </Heading>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Liabilities</CardTitle>
+                </CardHeader>
+                <CardContent>
                   <Grid
                     gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
                     gridColumnGap={8}
@@ -370,14 +366,13 @@ const AccountDefaultsForm = ({
                       options={balanceSheetAccountOptions}
                     />
                   </Grid>
-                </VStack>
-                <VStack spacing={4}>
-                  <Heading
-                    size="h4"
-                    className="uppercase text-muted-foreground"
-                  >
-                    Equity
-                  </Heading>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Equity</CardTitle>
+                </CardHeader>
+                <CardContent>
                   <Grid
                     gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
                     gridColumnGap={8}
@@ -390,10 +385,10 @@ const AccountDefaultsForm = ({
                       options={balanceSheetAccountOptions}
                     />
                   </Grid>
-                </VStack>
-              </VStack>
-            </TabPanel>
-          </TabPanels>
+                </CardContent>
+              </Card>
+            </VStack>
+          </TabsContent>
         </Tabs>
 
         <HStack>
