@@ -1,6 +1,8 @@
-import { Button, HStack, Select } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 import type { ShiftLocation } from "~/modules/resources";
@@ -14,27 +16,22 @@ const ShiftsTableFilters = ({ locations }: ShiftsTableFiltersProps) => {
   const permissions = usePermissions();
 
   const locationOptions =
-    locations?.map((location) => ({
-      value: location.id,
-      label: location.name,
+    locations?.map<{ value: string; label: string }>((location) => ({
+      value: location.id!,
+      label: location.name!,
     })) ?? [];
 
   return (
-    <HStack
-      className="px-4 py-3 justify-between border-b border-border w-full"
-      spacing={4}
-    >
+    <TableFilters>
       <HStack>
         <DebouncedInput param="name" size="sm" placeholder="Search" />
-        <Select
+        <Combobox
           size="sm"
-          value={locationOptions.find(
-            (type) => type.value === params.get("location")
-          )}
+          value={params.get("location") ?? ""}
           isClearable
           options={locationOptions}
           onChange={(selected) => {
-            setParams({ location: selected?.value });
+            setParams({ location: selected });
           }}
           aria-label="Location"
           placeholder="Location"
@@ -47,7 +44,7 @@ const ShiftsTableFilters = ({ locations }: ShiftsTableFiltersProps) => {
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

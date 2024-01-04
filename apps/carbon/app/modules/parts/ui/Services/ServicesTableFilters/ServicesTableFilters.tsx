@@ -1,6 +1,8 @@
-import { Button, HStack, Select } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox, Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 import { serviceType } from "~/modules/parts";
@@ -25,10 +27,7 @@ const ServicesTableFilters = ({ partGroups }: ServicesTableFiltersProps) => {
   }));
 
   return (
-    <HStack
-      className="px-4 py-3 justify-between border-b border-border w-full"
-      spacing={4}
-    >
+    <TableFilters>
       <HStack>
         <DebouncedInput
           param="search"
@@ -36,15 +35,13 @@ const ServicesTableFilters = ({ partGroups }: ServicesTableFiltersProps) => {
           placeholder="Search Services"
         />
         {partGroupsOptions.length > 0 && (
-          <Select
+          <Combobox
             size="sm"
             isClearable
-            value={partGroupsOptions.find(
-              (type) => type.value === params.get("group")
-            )}
+            value={params.get("group") ?? ""}
             options={partGroupsOptions}
             onChange={(selected) => {
-              setParams({ group: selected?.value });
+              setParams({ group: selected });
             }}
             aria-label="Groups"
             placeholder="Service Groups"
@@ -53,13 +50,11 @@ const ServicesTableFilters = ({ partGroups }: ServicesTableFiltersProps) => {
         {serviceTypeOptions.length > 0 && (
           <Select
             size="sm"
-            value={serviceTypeOptions.find(
-              (type) => type.value === params.get("type")
-            )}
+            value={params.get("type") ?? ""}
             isClearable
             options={serviceTypeOptions}
             onChange={(selected) => {
-              setParams({ type: selected?.value });
+              setParams({ type: selected });
             }}
             aria-label="Service Type"
             placeholder="Service Type"
@@ -73,7 +68,7 @@ const ServicesTableFilters = ({ partGroups }: ServicesTableFiltersProps) => {
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

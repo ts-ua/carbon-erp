@@ -1,4 +1,6 @@
-import { HStack, Select } from "@carbon/react";
+import { HStack } from "@carbon/react";
+import { Combobox, Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 import type { DocumentLabel } from "~/modules/documents/types";
@@ -26,43 +28,34 @@ const DocumentsTableFilters = ({ labels }: DocumentTableFiltersProps) => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
 
-  const labelOptions = labels.map((l) => ({
-    value: l.label,
-    label: l.label,
+  const labelOptions = labels.map<{ label: string; value: string }>((l) => ({
+    value: l.label!,
+    label: l.label!,
   }));
 
   return (
-    <HStack
-      className="px-4 py-3 justify-between border-b border-border w-full"
-      spacing={4}
-    >
+    <TableFilters>
       <HStack>
         <DebouncedInput param="search" size="sm" placeholder="Search" />
         <Select
           size="sm"
-          value={documentTypeOptions.find(
-            (type) => type.value === params.get("type")
-          )}
+          value={params.get("type") ?? ""}
           isClearable
           options={documentTypeOptions}
           onChange={(selected) => {
-            setParams({ type: selected?.value });
+            setParams({ type: selected });
           }}
           aria-label="Document Type"
           placeholder="Document Type"
         />
         {labels.length > 0 && (
-          <Select
+          <Combobox
             size="sm"
-            value={labelOptions.find(
-              (label) =>
-                params.getAll("labels").includes(label.value as string) ||
-                label.value === params.get("label")
-            )}
+            value={params.get("label") ?? ""}
             isClearable
             options={labelOptions}
             onChange={(selected) => {
-              setParams({ label: selected?.label });
+              setParams({ label: selected });
             }}
             aria-label="Label"
             placeholder="Label"
@@ -72,7 +65,7 @@ const DocumentsTableFilters = ({ labels }: DocumentTableFiltersProps) => {
       <HStack>
         {permissions.can("create", "documents") && <DocumentCreateForm />}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

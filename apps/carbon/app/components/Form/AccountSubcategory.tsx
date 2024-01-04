@@ -3,7 +3,7 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  Select,
+  ReactSelect,
 } from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useMemo } from "react";
@@ -93,7 +93,7 @@ const AccountSubcategory = ({
   return (
     <FormControl isInvalid={!!error}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
-      <Select
+      <ReactSelect
         {...getInputProps({
           // @ts-ignore
           id: name,

@@ -10,7 +10,7 @@ import {
   FormErrorMessage,
   FormLabel,
   HStack,
-  Select,
+  ReactSelect,
   VStack,
   useMount,
 } from "@carbon/react";
@@ -150,7 +150,7 @@ const SupplierLocationsBySupplier = ({
   return (
     <FormControl isInvalid={!!error}>
       <FormLabel htmlFor={SUPPLIER_LOCATION_FIELD}>Supplier Location</FormLabel>
-      <Select
+      <ReactSelect
         {...getInputProps({
           // @ts-ignore
           id: SUPPLIER_LOCATION_FIELD,

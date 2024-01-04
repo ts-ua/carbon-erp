@@ -1,3 +1,4 @@
+import { BsCartDash, BsCartPlus } from "react-icons/bs";
 import { usePermissions } from "~/hooks";
 import type { AuthenticatedRouteGroup } from "~/types";
 import { path } from "~/utils/path";
@@ -7,14 +8,16 @@ const invoicingRoutes: AuthenticatedRouteGroup[] = [
     name: "Manage",
     routes: [
       {
-        name: "Purchase Invoices",
+        name: "Purchasing",
         to: path.to.purchaseInvoices,
         role: "employee",
+        icon: <BsCartDash />,
       },
       {
-        name: "Sales Invoices",
+        name: "Sales",
         to: path.to.salesInvoices,
         role: "employee",
+        icon: <BsCartPlus />,
       },
     ],
   },

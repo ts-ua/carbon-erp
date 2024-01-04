@@ -10,7 +10,7 @@
  * @see WAI-ARIA Tree View https://www.w3.org/WAI/ARIA/apg/patterns/treeview/
  */
 
-import { FormLabel, Select } from "@carbon/react";
+import { FormLabel, ReactSelect } from "@carbon/react";
 import { usePermissions } from "~/hooks";
 import Combobox from "./components/Combobox";
 import Container from "./components/Container";
@@ -26,7 +26,7 @@ export default function Component(props: UserSelectProps) {
   const permissions = usePermissions();
 
   if (!permissions.is("employee"))
-    return <Select options={[]} isDisabled placeholder="Select..." />;
+    return <ReactSelect options={[]} isDisabled placeholder="Select..." />;
   return <UserSelect {...props} />;
 }
 

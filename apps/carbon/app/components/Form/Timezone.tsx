@@ -3,7 +3,7 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  Select as SelectBase,
+  ReactSelect as SelectBase,
   createFilter,
 } from "@carbon/react";
 import { useMemo } from "react";

@@ -1,4 +1,6 @@
-import { HStack, Select } from "@carbon/react";
+import { HStack } from "@carbon/react";
+import { Combobox } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { useUrlParams } from "~/hooks";
 import type { ListItem } from "~/types";
 
@@ -24,37 +26,30 @@ const PurchasingPostingGroupsFilters = ({
   }));
 
   return (
-    <HStack
-      className="px-4 py-3 justify-between border-b border-border w-full"
-      spacing={4}
-    >
-      <Select
-        size="sm"
-        isClearable
-        value={partGroupOptions.find(
-          (partGroup) => partGroup.value === params.get("partGroup")
-        )}
-        options={partGroupOptions}
-        onChange={(selected) => {
-          setParams({ partGroup: selected?.value });
-        }}
-        aria-label="Part Group"
-        placeholder="Part Group"
-      />
-      <Select
-        size="sm"
-        isClearable
-        value={supplierTypeOptions.find(
-          (supplierType) => supplierType.value === params.get("supplierType")
-        )}
-        options={supplierTypeOptions}
-        onChange={(selected) => {
-          setParams({ supplierType: selected?.value });
-        }}
-        aria-label="Supplier Type"
-        placeholder="Supplier Type"
-      />
-    </HStack>
+    <TableFilters>
+      <HStack>
+        <Combobox
+          size="sm"
+          isClearable
+          value={params.get("partGroup") ?? ""}
+          options={partGroupOptions}
+          onChange={(selected) => {
+            setParams({ partGroup: selected });
+          }}
+          placeholder="Part Group"
+        />
+        <Combobox
+          size="sm"
+          isClearable
+          value={params.get("supplierType") ?? ""}
+          options={supplierTypeOptions}
+          onChange={(selected) => {
+            setParams({ supplierType: selected });
+          }}
+          placeholder="Supplier Type"
+        />
+      </HStack>
+    </TableFilters>
   );
 };
 

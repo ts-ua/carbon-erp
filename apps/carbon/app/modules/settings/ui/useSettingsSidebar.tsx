@@ -1,3 +1,5 @@
+import { GoNumber } from "react-icons/go";
+import { TbBuildingFactory2 } from "react-icons/tb";
 import { usePermissions } from "~/hooks";
 import type { AuthenticatedRouteGroup } from "~/types";
 import { path } from "~/utils/path";
@@ -10,6 +12,7 @@ const settingsRoutes: AuthenticatedRouteGroup[] = [
         name: "Business",
         to: path.to.company,
         role: "employee",
+        icon: <TbBuildingFactory2 />,
       },
     ],
   },
@@ -20,6 +23,7 @@ const settingsRoutes: AuthenticatedRouteGroup[] = [
         name: "Sequences",
         to: path.to.sequences,
         role: "employee",
+        icon: <GoNumber />,
       },
     ],
   },

@@ -1,6 +1,8 @@
-import { Button, HStack, Select } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 
@@ -12,35 +14,23 @@ const HolidaysTableFilters = ({ years }: HolidaysTableFiltersProps) => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
 
-  const yearsOptions = years.map((year) => ({
+  const yearsOptions = years.map<{ label: string; value: string }>((year) => ({
     label: year.toString(),
-    value: year,
+    value: year.toString(),
   }));
 
   return (
-    <HStack
-      className="px-4 py-3 justify-between border-b border-border w-full"
-      spacing={4}
-    >
+    <TableFilters>
       <HStack>
         <DebouncedInput param="name" size="sm" placeholder="Search" />
-        <Select
+        <Combobox
           size="sm"
-          value={
-            params.get("year")
-              ? yearsOptions.find(
-                  (year) => year.value.toString() === params.get("year")
-                )
-              : {
-                  label: new Date().getFullYear().toString(),
-                  value: new Date().getFullYear(),
-                }
-          }
+          value={params.get("year") ?? ""}
           options={yearsOptions}
+          isClearable
           onChange={(selected) => {
-            setParams({ year: selected?.value });
+            setParams({ year: selected });
           }}
-          aria-label="Year"
           placeholder="Year"
         />
       </HStack>
@@ -51,7 +41,7 @@ const HolidaysTableFilters = ({ years }: HolidaysTableFiltersProps) => {
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

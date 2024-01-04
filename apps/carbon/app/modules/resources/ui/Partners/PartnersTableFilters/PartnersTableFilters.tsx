@@ -1,6 +1,8 @@
-import { Button, HStack, Select } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 import type { Ability } from "~/modules/resources/types";
@@ -14,27 +16,22 @@ const PartnersTableFilters = ({ abilities }: PartnersTableFiltersProps) => {
   const permissions = usePermissions();
 
   const abilitiesOptions =
-    abilities?.map((ability) => ({
-      value: ability.id,
-      label: ability.name,
+    abilities?.map<{ value: string; label: string }>((ability) => ({
+      value: ability.id!,
+      label: ability.name!,
     })) ?? [];
 
   return (
-    <HStack
-      className="px-4 py-3 justify-between border-b border-border w-full"
-      spacing={4}
-    >
+    <TableFilters>
       <HStack>
         <DebouncedInput param="name" size="sm" placeholder="Search" />
-        <Select
+        <Combobox
           size="sm"
-          value={abilitiesOptions.find(
-            (type) => type.value === params.get("ability")
-          )}
+          value={params.get("ability") ?? ""}
           isClearable
           options={abilitiesOptions}
           onChange={(selected) => {
-            setParams({ ability: selected?.value });
+            setParams({ ability: selected });
           }}
           aria-label="Ability"
           placeholder="Ability"
@@ -47,7 +44,7 @@ const PartnersTableFilters = ({ abilities }: PartnersTableFiltersProps) => {
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

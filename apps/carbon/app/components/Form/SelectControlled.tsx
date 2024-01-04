@@ -3,7 +3,7 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  Select,
+  ReactSelect,
 } from "@carbon/react";
 import { useEffect } from "react";
 import { useControlField, useField } from "remix-validated-form";
@@ -52,7 +52,7 @@ const SelectControlled = ({
     <FormControl isInvalid={!!error}>
       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
       {options.length > 0 ? (
-        <Select
+        <ReactSelect
           {...getInputProps({
             // @ts-ignore
             id: name,
@@ -69,7 +69,7 @@ const SelectControlled = ({
           onChange={handleChange}
         />
       ) : (
-        <Select
+        <ReactSelect
           isLoading={isLoading}
           options={[]}
           // @ts-ignore

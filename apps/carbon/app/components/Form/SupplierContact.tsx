@@ -3,7 +3,7 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  Select,
+  ReactSelect,
 } from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useMemo, useRef } from "react";
@@ -94,7 +94,7 @@ const SupplierContact = ({
     <FormControl isInvalid={!!error}>
       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
       <input type="hidden" name={name} id={name} value={value ?? ""} />
-      <Select
+      <ReactSelect
         {...props}
         value={controlledValue}
         isLoading={isLoading}

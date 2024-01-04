@@ -147,11 +147,7 @@ export async function getDocumentLabels(
   client: SupabaseClient<Database>,
   userId: string
 ) {
-  return client
-    .from("documentLabels")
-    .select("*")
-    .eq("userId", userId)
-    .eq("active", true);
+  return client.from("documentLabels").select("*").eq("userId", userId);
 }
 
 export async function insertDocumentFavorite(

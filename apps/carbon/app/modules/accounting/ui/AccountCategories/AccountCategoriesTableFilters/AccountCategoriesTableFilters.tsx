@@ -1,55 +1,44 @@
-import { Button, HStack, Select } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 import { accountClassTypes, incomeBalanceTypes } from "~/modules/accounting";
 
-const AttributeCategoriesTableFilters = () => {
+const AccountCategoriesTableFilters = () => {
   const permissions = usePermissions();
   const [params, setParams] = useUrlParams();
 
   return (
-    <HStack
-      spacing={4}
-      className="px-4 py-3 justify-between border-b border-border w-full"
-    >
+    <TableFilters>
       <HStack>
         <DebouncedInput param="name" size="sm" placeholder="Search" />
         <Select
           size="sm"
           placeholder="Income Balance"
-          value={incomeBalanceTypes
-            .map((incomeBalance) => ({
-              value: incomeBalance,
-              label: incomeBalance,
-            }))
-            .filter((type) => type.value === params.get("incomeBalance"))}
+          value={params.get("incomeBalance") ?? ""}
           isClearable
           options={incomeBalanceTypes.map((incomeBalance) => ({
             value: incomeBalance,
             label: incomeBalance,
           }))}
           onChange={(selected) => {
-            setParams({ incomeBalance: selected?.value });
+            setParams({ incomeBalance: selected });
           }}
         />
         <Select
           size="sm"
-          placeholder="Normal Balance"
-          value={accountClassTypes
-            .map((accountClass) => ({
-              value: accountClass,
-              label: accountClass,
-            }))
-            .filter((type) => type.value === params.get("accountClass"))}
+          placeholder="Account Class"
+          value={params.get("accountClass") ?? ""}
           isClearable
           options={accountClassTypes.map((accountClass) => ({
             value: accountClass,
             label: accountClass,
           }))}
           onChange={(selected) => {
-            setParams({ accountClass: selected?.value });
+            setParams({ accountClass: selected });
           }}
         />
       </HStack>
@@ -60,8 +49,8 @@ const AttributeCategoriesTableFilters = () => {
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 
-export default AttributeCategoriesTableFilters;
+export default AccountCategoriesTableFilters;

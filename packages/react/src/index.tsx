@@ -11,6 +11,17 @@ import {
   CardTitle,
 } from "./Card";
 import { ClientOnly } from "./ClientOnly";
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "./Command";
 import { ContextMenu } from "./ContextMenu";
 import { Count } from "./Count";
 import DataTable, { DataTableColumnHeader } from "./DataTable";
@@ -76,8 +87,24 @@ import type {
   OptionBase,
   OptionProps,
   SingleValue,
+} from "./ReactSelect";
+import {
+  CreatableSelect,
+  Select as ReactSelect,
+  createFilter,
+} from "./ReactSelect";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
 } from "./Select";
-import { CreatableSelect, Select, createFilter } from "./Select";
 import { Status } from "./Status";
 import Submit from "./Submit";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./Tabs";
@@ -114,6 +141,15 @@ export {
   CardHeader,
   CardTitle,
   ClientOnly,
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
   ContextMenu,
   Count,
   CreatableSelect,
@@ -169,7 +205,17 @@ export {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  ReactSelect,
   Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
   Status,
   Submit,
   Tabs,

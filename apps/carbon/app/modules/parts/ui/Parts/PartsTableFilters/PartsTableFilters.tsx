@@ -1,6 +1,8 @@
-import { Button, HStack, Select } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox, Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 import { partTypes } from "~/modules/parts";
@@ -25,22 +27,17 @@ const PartsTableFilters = ({ partGroups }: PartsTableFiltersProps) => {
   }));
 
   return (
-    <HStack
-      className="px-4 py-3 justify-between border-b border-border w-full"
-      spacing={4}
-    >
+    <TableFilters>
       <HStack>
         <DebouncedInput param="search" size="sm" placeholder="Search Parts" />
         {partGroupsOptions.length > 0 && (
-          <Select
+          <Combobox
             size="sm"
             isClearable
-            value={partGroupsOptions.find(
-              (type) => type.value === params.get("group")
-            )}
+            value={params.get("group") ?? ""}
             options={partGroupsOptions}
             onChange={(selected) => {
-              setParams({ group: selected?.value });
+              setParams({ group: selected });
             }}
             aria-label="Groups"
             placeholder="Part Groups"
@@ -49,13 +46,11 @@ const PartsTableFilters = ({ partGroups }: PartsTableFiltersProps) => {
         {partTypeOptions.length > 0 && (
           <Select
             size="sm"
-            value={partTypeOptions.find(
-              (type) => type.value === params.get("type")
-            )}
+            value={params.get("type") ?? ""}
             isClearable
             options={partTypeOptions}
             onChange={(selected) => {
-              setParams({ type: selected?.value });
+              setParams({ type: selected });
             }}
             aria-label="Part Type"
             placeholder="Part Type"
@@ -69,7 +64,7 @@ const PartsTableFilters = ({ partGroups }: PartsTableFiltersProps) => {
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

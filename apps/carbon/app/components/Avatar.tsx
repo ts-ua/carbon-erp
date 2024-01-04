@@ -7,10 +7,12 @@ type AvatarProps = AvatarBaseProps & {
   bucket?: string;
 };
 
-export const Avatar = forwardRef(
+const Avatar = forwardRef(
   ({ path, bucket = "avatars", ...props }: AvatarProps, ref) => {
     const imagePath = path ? getStoragePath(bucket, path) : undefined;
 
     return <AvatarBase ref={ref} src={imagePath} {...props} />;
   }
 );
+
+export default Avatar;

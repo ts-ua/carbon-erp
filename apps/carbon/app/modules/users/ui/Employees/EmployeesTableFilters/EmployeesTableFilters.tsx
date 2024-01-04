@@ -1,12 +1,14 @@
-import { Button, HStack, Select } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox, Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
-import type { EmployeeType } from "~/modules/users";
+import type { ListItem } from "~/types";
 
 type EmployeesTableFiltersProps = {
-  employeeTypes: Partial<EmployeeType>[];
+  employeeTypes: ListItem[];
 };
 
 const EmployeesTableFilters = ({
@@ -22,32 +24,22 @@ const EmployeesTableFilters = ({
     })) ?? [];
 
   return (
-    <HStack
-      className="px-4 py-3 justify-between border-b border-border w-full"
-      spacing={4}
-    >
+    <TableFilters>
       <HStack>
         <DebouncedInput param="name" size="sm" placeholder="Search" />
-        <Select
+        <Combobox
           size="sm"
-          value={employeeTypeOptions.find(
-            (type) => type.value === params.get("type")
-          )}
+          value={params.get("type") ?? ""}
           isClearable
           options={employeeTypeOptions}
           onChange={(selected) => {
-            setParams({ type: selected?.value });
+            setParams({ type: selected });
           }}
-          aria-label="Employee Type"
           placeholder="Employee Type"
         />
         <Select
           size="sm"
-          value={
-            params.get("active") === "false"
-              ? { value: "false", label: "Inactive" }
-              : { value: "true", label: "Active" }
-          }
+          value={params.get("active") === "false" ? "false" : "true"}
           options={[
             {
               value: "true",
@@ -59,9 +51,8 @@ const EmployeesTableFilters = ({
             },
           ]}
           onChange={(selected) => {
-            setParams({ active: selected?.value });
+            setParams({ active: selected });
           }}
-          aria-label="Active"
         />
       </HStack>
       <HStack>
@@ -71,7 +62,7 @@ const EmployeesTableFilters = ({
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

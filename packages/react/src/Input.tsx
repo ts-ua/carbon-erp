@@ -9,7 +9,7 @@ import { getValidChildren } from "~/utils/react";
 const InputGroupContext = createContext<boolean>(false);
 
 const inputGroupVariants = cva(
-  "flex relative w-full shadow-sm focus-within:outline-none ring-1 ring-border focus-within:ring-1 focus-within:ring-ring",
+  "flex relative w-full bg-background text-foreground shadow-sm focus-within:outline-none border border-input ring-1 ring-border ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
   {
     variants: {
       size: {
@@ -23,7 +23,7 @@ const inputGroupVariants = cva(
         false: "",
       },
       isInvalid: {
-        true: "ring-destructive focus-within:ring-offset-1 focus-within:ring-2 focus-within:ring-destructive",
+        true: "border-destructive focus-within:ring-destructive",
         false: "",
       },
     },
@@ -92,7 +92,7 @@ const InputGroup = forwardRef<HTMLDivElement, InputGroupProps>(
 InputGroup.displayName = "InputGroup";
 
 const inputVariants = cva(
-  "flex h-9 w-full px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:opacity-50 rounded-md ",
+  "flex w-full px-3 py-1 bg-background text-foreground transition-colors placeholder:text-muted-foreground disabled:opacity-50 rounded-md ",
   {
     variants: {
       size: {
@@ -102,9 +102,9 @@ const inputVariants = cva(
         xs: "h-6 rounded px-2 text-xs",
       },
       isInputGroup: {
-        true: "focus-visible:outline-none focus-visible:ring-0",
+        true: "h-auto outline-none focus-within:outline-none",
         false:
-          "border border-input focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed shadow-sm",
+          "border border-input ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed shadow-sm file:border-0 file:bg-transparent file:text-sm file:font-medium",
       },
       isFirstChild: {
         true: "",
@@ -115,7 +115,7 @@ const inputVariants = cva(
         false: "",
       },
       isInvalid: {
-        true: "",
+        true: "border-destructive ring-destructive focus-visible:ring-destructive",
         false: "",
       },
       isReadOnly: {
@@ -141,7 +141,7 @@ const inputVariants = cva(
       {
         isInvalid: true,
         isInputGroup: false,
-        class: "border-2 border-destructive focus-visible:ring-destructive",
+        class: "focus-visible:ring-destructive",
       },
     ],
     defaultVariants: {

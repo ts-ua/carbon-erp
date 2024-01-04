@@ -77,7 +77,7 @@ export const MenuList = <
     maxHeight,
     isMulti,
     innerProps,
-    selectProps: { size: sizeProp, focusBorderColor, errorBorderColor },
+    selectProps: { size: sizeProp },
   } = props;
 
   const list = React.useRef<List>(null);
@@ -89,8 +89,6 @@ export const MenuList = <
   const size = useSize(sizeProp);
   const inputStyles = useMultiStyleConfig("Input", {
     size,
-    focusBorderColor,
-    errorBorderColor,
   });
   const fieldStyles = inputStyles.field as Record<string, string>;
 
@@ -399,7 +397,6 @@ export const Option = <
       isMulti,
       hideSelectedOptions,
       selectedOptionStyle,
-      selectedOptionColorScheme,
     },
   } = props;
 
@@ -413,10 +410,7 @@ export const Option = <
     lg: "0.5rem 1rem",
   };
 
-  const selectedBg = useColorModeValue(
-    `${selectedOptionColorScheme}.500`,
-    `${selectedOptionColorScheme}.300`
-  );
+  const selectedBg = useColorModeValue(`blue.500`, `blue.300`);
   const selectedColor = useColorModeValue("white", "black");
 
   // Don't create exta space for the checkmark if using a multi select with

@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import type { Database } from "@carbon/database";
-import { Select } from "@carbon/react";
+import { ReactSelect } from "@carbon/react";
 import type {
   PostgrestSingleResponse,
   SupabaseClient,
@@ -61,6 +61,7 @@ const EditablePurchaseOrderLineNumber =
       onUpdate("shelfId", null);
 
       try {
+        if (!row.id) throw new Error("Purchase Order Line ID not found");
         const { error } = await client
           .from("purchaseOrderLine")
           .update({
@@ -122,6 +123,7 @@ const EditablePurchaseOrderLineNumber =
       onUpdate("unitPrice", cost.data?.unitCost ?? null);
 
       try {
+        if (!row.id) throw new Error("Purchase Order Line ID not found");
         const { error } = await client
           .from("purchaseOrderLine")
           .update({
@@ -159,7 +161,7 @@ const EditablePurchaseOrderLineNumber =
     );
 
     return (
-      <Select
+      <ReactSelect
         autoFocus
         value={controlledValue}
         options={selectOptions}

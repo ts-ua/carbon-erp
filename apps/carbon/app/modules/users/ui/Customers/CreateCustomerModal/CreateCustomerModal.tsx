@@ -11,7 +11,7 @@ import {
   ModalHeader,
   ModalOverlay,
   ModalTitle,
-  Select,
+  ReactSelect,
   VStack,
 } from "@carbon/react";
 import { Grid } from "@chakra-ui/react";
@@ -192,7 +192,7 @@ const CustomerContact = ({
     <FormControl isInvalid={!!error}>
       <FormLabel htmlFor={name}>Customer Contact</FormLabel>
       <input type="hidden" name={name} id={name} value={value ?? ""} />
-      <Select
+      <ReactSelect
         id={name}
         value={controlledValue}
         options={options}
