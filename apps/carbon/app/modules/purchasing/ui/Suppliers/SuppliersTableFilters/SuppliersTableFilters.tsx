@@ -1,6 +1,8 @@
-import { Button, HStack, Select } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox, Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 import type { SupplierStatus, SupplierType } from "~/modules/purchasing";
@@ -19,9 +21,9 @@ const SuppliersTableFilters = ({
   const permissions = usePermissions();
 
   const supplierTypeOptions =
-    supplierTypes?.map((type) => ({
-      value: type.id,
-      label: type.name,
+    supplierTypes?.map<{ value: string; label: string }>((type) => ({
+      value: type.id!,
+      label: type.name!,
     })) ?? [];
 
   const supplierStatusOptions =
@@ -31,24 +33,18 @@ const SuppliersTableFilters = ({
     })) ?? [];
 
   return (
-    <HStack
-      className="px-4 py-3 justify-between border-b border-border w-full"
-      spacing={4}
-    >
+    <TableFilters>
       <HStack>
         <DebouncedInput param="name" size="sm" placeholder="Search" />
         {supplierTypeOptions.length > 0 && (
-          <Select
+          <Combobox
             size="sm"
-            value={supplierTypeOptions.find(
-              (type) => type.value === params.get("type")
-            )}
+            value={params.get("type") ?? ""}
             isClearable
             options={supplierTypeOptions}
             onChange={(selected) => {
-              setParams({ type: selected?.value });
+              setParams({ type: selected });
             }}
-            aria-label="Supplier Type"
             placeholder="Supplier Type"
           />
         )}
@@ -56,14 +52,11 @@ const SuppliersTableFilters = ({
           <Select
             size="sm"
             isClearable
-            value={supplierStatusOptions.find(
-              (type) => type.value === params.get("status")
-            )}
+            value={params.get("status") ?? ""}
             options={supplierStatusOptions}
             onChange={(selected) => {
-              setParams({ status: selected?.value });
+              setParams({ status: selected });
             }}
-            aria-label="Status"
             placeholder="Supplier Status"
           />
         )}
@@ -75,7 +68,7 @@ const SuppliersTableFilters = ({
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

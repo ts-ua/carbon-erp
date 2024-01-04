@@ -7,7 +7,7 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Select,
+  ReactSelect,
   VStack,
   useMount,
 } from "@carbon/react";
@@ -119,7 +119,7 @@ const ShiftByLocation = ({
   return (
     <FormControl isInvalid={!!error}>
       <FormLabel htmlFor={SHIFT_FIELD}>Shift</FormLabel>
-      <Select
+      <ReactSelect
         {...getInputProps({
           // @ts-ignore
           id: SHIFT_FIELD,

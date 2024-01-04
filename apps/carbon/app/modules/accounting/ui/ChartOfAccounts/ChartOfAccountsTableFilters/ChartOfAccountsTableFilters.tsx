@@ -1,4 +1,4 @@
-import { Button, DatePicker, HStack, Select } from "@carbon/react";
+import { Button, DatePicker, HStack } from "@carbon/react";
 import {
   Grid,
   Popover,
@@ -12,6 +12,8 @@ import { parseDate } from "@internationalized/date";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
 import { MdCalendarMonth, MdClose } from "react-icons/md";
+import { Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { usePermissions, useUrlParams } from "~/hooks";
 import { incomeBalanceTypes } from "~/modules/accounting";
 
@@ -28,19 +30,15 @@ const ChartOfAccountsTableFilters = () => {
   }));
 
   return (
-    <HStack
-      spacing={4}
-      className="px-4 py-3 justify-between border-b border-border w-full"
-    >
+    <TableFilters>
       <HStack>
         <Select
-          // @ts-ignore
-          minW={200}
+          value={params.get("incomeBalance") ?? ""}
           placeholder="Income/Balance Sheet"
           options={incomeBalanceOptions}
           size="sm"
           isClearable
-          onChange={(newValue) => setParams({ incomeBalance: newValue?.value })}
+          onChange={(newValue) => setParams({ incomeBalance: newValue })}
         />
         <Popover placement="bottom" closeOnBlur>
           <PopoverTrigger>
@@ -101,7 +99,7 @@ const ChartOfAccountsTableFilters = () => {
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

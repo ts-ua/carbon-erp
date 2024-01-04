@@ -5,7 +5,7 @@ import type { Meta } from "../types";
 type TemplateProps = PropsWithChildren<{ title: string; meta: Meta }>;
 
 const Template = ({ title, meta, children }: TemplateProps) => {
-  // TODO: build fonts -- right now remix is struggling server side to load fonts
+  // TODO: serve fonts from remix server
   Font.register({
     family: "Satoshi",
     fonts: [
@@ -15,6 +15,12 @@ const Template = ({ title, meta, children }: TemplateProps) => {
       { src: "https://bradbarb.in/fonts/Satoshi-Bold.ttf", fontWeight: 700 },
       { src: "https://bradbarb.in/fonts/Satoshi-Black.ttf", fontWeight: 900 },
     ],
+  });
+
+  Font.register({
+    family: "Inter",
+    format: "truetype",
+    src: "https://bradbarb.in/fonts/Inter-V.ttf",
   });
 
   const styles = StyleSheet.create({

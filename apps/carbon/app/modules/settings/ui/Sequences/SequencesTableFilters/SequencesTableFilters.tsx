@@ -1,13 +1,14 @@
 import { HStack } from "@carbon/react";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 
 const SequencesTableFilters = () => {
   return (
-    <HStack className="px-4 py-3 justify-between border-b border-border w-full">
+    <TableFilters>
       <HStack>
         <DebouncedInput param="name" size="sm" placeholder="Search" />
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

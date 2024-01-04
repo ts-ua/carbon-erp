@@ -1,12 +1,14 @@
-import { Button, HStack, Select } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox, Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
-import type { CustomerType } from "~/modules/sales";
+import type { ListItem } from "~/types";
 
 type CustomerAccountsTableFiltersProps = {
-  customerTypes: Partial<CustomerType>[];
+  customerTypes: ListItem[];
 };
 
 const CustomerAccountsTableFilters = ({
@@ -16,38 +18,28 @@ const CustomerAccountsTableFilters = ({
   const permissions = usePermissions();
 
   const customerTypeOptions =
-    customerTypes?.map((type) => ({
-      value: type.id,
-      label: type.name,
+    customerTypes?.map<{ value: string; label: string }>((type) => ({
+      value: type.id!,
+      label: type.name!,
     })) ?? [];
 
   return (
-    <HStack
-      className="px-4 py-3 justify-between border-b border-border w-full"
-      spacing={4}
-    >
+    <TableFilters>
       <HStack>
         <DebouncedInput param="name" size="sm" placeholder="Search" />
-        <Select
+        <Combobox
           size="sm"
-          value={customerTypeOptions.find(
-            (type) => type.value === params.get("type")
-          )}
+          value={params.get("type") ?? ""}
           isClearable
           options={customerTypeOptions}
           onChange={(selected) => {
-            setParams({ type: selected?.value });
+            setParams({ type: selected });
           }}
-          aria-label="Customer Type"
           placeholder="Customer Type"
         />
         <Select
           size="sm"
-          value={
-            params.get("active") === "false"
-              ? { value: "false", label: "Inactive" }
-              : { value: "true", label: "Active" }
-          }
+          value={params.get("active") === "false" ? "false" : "true"}
           options={[
             {
               value: "true",
@@ -59,9 +51,8 @@ const CustomerAccountsTableFilters = ({
             },
           ]}
           onChange={(selected) => {
-            setParams({ active: selected?.value });
+            setParams({ active: selected });
           }}
-          aria-label="Active"
         />
       </HStack>
       <HStack>
@@ -71,7 +62,7 @@ const CustomerAccountsTableFilters = ({
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

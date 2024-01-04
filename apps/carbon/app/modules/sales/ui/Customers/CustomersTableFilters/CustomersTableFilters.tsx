@@ -1,6 +1,8 @@
-import { Button, HStack, Select } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox, Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 import type { CustomerStatus, CustomerType } from "~/modules/sales";
@@ -18,9 +20,9 @@ const CustomersTableFilters = ({
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
   const customerTypeOptions =
-    customerTypes?.map((type) => ({
-      value: type.id,
-      label: type.name,
+    customerTypes?.map<{ value: string; label: string }>((type) => ({
+      value: type.id!,
+      label: type.name!,
     })) ?? [];
 
   const customerStatusOptions =
@@ -30,22 +32,17 @@ const CustomersTableFilters = ({
     })) ?? [];
 
   return (
-    <HStack
-      className="px-4 py-3 justify-between border-b border-border w-full"
-      spacing={4}
-    >
+    <TableFilters>
       <HStack>
         <DebouncedInput param="name" size="sm" placeholder="Search" />
         {customerTypeOptions.length > 0 && (
-          <Select
+          <Combobox
             size="sm"
-            value={customerTypeOptions.find(
-              (type) => type.value === params.get("type")
-            )}
+            value={params.get("type") ?? ""}
             isClearable
             options={customerTypeOptions}
             onChange={(selected) => {
-              setParams({ type: selected?.value });
+              setParams({ type: selected });
             }}
             aria-label="Customer Type"
             placeholder="Customer Type"
@@ -55,12 +52,10 @@ const CustomersTableFilters = ({
           <Select
             size="sm"
             isClearable
-            value={customerStatusOptions.find(
-              (type) => type.value === params.get("status")
-            )}
+            value={params.get("status") ?? ""}
             options={customerStatusOptions}
             onChange={(selected) => {
-              setParams({ status: selected?.value });
+              setParams({ status: selected });
             }}
             aria-label="Status"
             placeholder="Customer Status"
@@ -76,7 +71,7 @@ const CustomersTableFilters = ({
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

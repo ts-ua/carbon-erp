@@ -3,7 +3,7 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  Select as SelectBase,
+  ReactSelect as SelectBase,
 } from "@carbon/react";
 import { useMemo } from "react";
 import { useField } from "remix-validated-form";

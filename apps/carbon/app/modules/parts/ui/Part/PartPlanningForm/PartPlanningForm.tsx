@@ -6,11 +6,11 @@ import {
   CardHeader,
   CardTitle,
   HStack,
-  Select,
   VStack,
 } from "@carbon/react";
 import { Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
+import { Combobox } from "~/components";
 import {
   Boolean,
   Hidden,
@@ -52,18 +52,15 @@ const PartPlanningForm = ({
             <CardTitle>Planning</CardTitle>
           </CardHeader>
           <CardAction>
-            <Select
-              // @ts-ignore
+            <Combobox
               size="sm"
-              value={locationOptions.find(
-                (location) => location.value === initialValues.locationId
-              )}
+              value={initialValues.locationId}
               options={locationOptions}
               onChange={(selected) => {
                 // hard refresh because initialValues update has no effect otherwise
                 window.location.href = `${path.to.partPlanning(
                   initialValues.partId
-                )}?location=${selected?.value}`;
+                )}?location=${selected}`;
               }}
             />
           </CardAction>

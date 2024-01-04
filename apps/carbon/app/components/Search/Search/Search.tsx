@@ -195,7 +195,7 @@ const SearchModal = ({
         <ModalBody className="max-h-[66vh]">
           <InputGroup
             size="lg"
-            className="ring-0 focus-within:ring-0 shadow-none"
+            className="ring-0 focus-within:ring-0 shadow-none border-0"
           >
             <InputLeftElement className="pointer-events-none">
               <FaSearch className="text-muted-foreground" />

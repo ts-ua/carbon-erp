@@ -1,6 +1,8 @@
-import { Button, HStack, Select } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox, Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 import { purchaseOrderStatusType } from "~/modules/purchasing";
@@ -25,34 +27,27 @@ const PurchaseOrdersTableFilters = () => {
   }));
 
   return (
-    <HStack
-      className="px-4 py-3 justify-between border-b border-border w-full"
-      spacing={4}
-    >
+    <TableFilters>
       <HStack>
         <DebouncedInput param="search" size="sm" placeholder="Search" />
         <Select
           size="sm"
-          value={purchaseOrderStatusOptions.find(
-            (type) => type.value === params.get("status")
-          )}
+          value={params.get("status") ?? ""}
           isClearable
           options={purchaseOrderStatusOptions}
           onChange={(selected) => {
-            setParams({ status: selected?.value });
+            setParams({ status: selected });
           }}
           aria-label="Status"
           placeholder="Status"
         />
-        <Select
+        <Combobox
           size="sm"
-          value={supplierOptions.find(
-            (supplier) => supplier.value === params.get("supplierId")
-          )}
+          value={params.get("supplierId") ?? ""}
           isClearable
           options={supplierOptions}
           onChange={(selected) => {
-            setParams({ supplierId: selected?.value });
+            setParams({ supplierId: selected });
           }}
           aria-label="Supplier"
           placeholder="Supplier"
@@ -65,7 +60,7 @@ const PurchaseOrdersTableFilters = () => {
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

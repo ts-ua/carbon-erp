@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import type { Database } from "@carbon/database";
-import { Select } from "@carbon/react";
+import { ReactSelect } from "@carbon/react";
 import type {
   PostgrestSingleResponse,
   SupabaseClient,
@@ -159,7 +159,7 @@ const EditablePurchaseInvoiceLineNumber =
     );
 
     return (
-      <Select
+      <ReactSelect
         autoFocus
         value={controlledValue}
         options={selectOptions}

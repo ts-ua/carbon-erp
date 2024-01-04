@@ -4,7 +4,7 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  Select,
+  ReactSelect,
   useMount,
 } from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
@@ -78,7 +78,7 @@ const Abilities = ({
           value={selection}
         />
       ))}
-      <Select
+      <ReactSelect
         {...props}
         isMulti
         value={controlledValue}

@@ -6,12 +6,12 @@ import {
   CardHeader,
   CardTitle,
   HStack,
-  Select,
   VStack,
 } from "@carbon/react";
 import { Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
+import { Combobox } from "~/components";
 import { CreatableSelect, Hidden, Number, Submit } from "~/components/Form";
 import { usePermissions } from "~/hooks";
 import type { PartQuantities } from "~/modules/parts";
@@ -57,18 +57,15 @@ const PartInventoryForm = ({
           </CardHeader>
 
           <CardAction>
-            <Select
-              // @ts-ignore
+            <Combobox
               size="sm"
-              value={locationOptions.find(
-                (location) => location.value === initialValues.locationId
-              )}
+              value={initialValues.locationId}
               options={locationOptions}
               onChange={(selected) => {
                 // hard refresh because initialValues update has no effect otherwise
                 window.location.href = `${path.to.partInventory(
                   initialValues.partId
-                )}?location=${selected?.value}`;
+                )}?location=${selected}`;
               }}
             />
           </CardAction>

@@ -1,6 +1,8 @@
-import { Button, HStack, Select } from "@carbon/react";
+import { Button, HStack, useMount } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams, useUser } from "~/hooks";
 import { receiptSourceDocumentType } from "~/modules/inventory";
@@ -17,6 +19,12 @@ const ReceiptsTableFilters = ({ locations }: ReceiptsTableFiltersProps) => {
     defaults: { locationId },
   } = useUser();
 
+  useMount(() => {
+    if (!params.get("location") && locationId) {
+      setParams({ location: locationId });
+    }
+  });
+
   const sourceDocumentOptions = receiptSourceDocumentType.map((type) => ({
     label: type,
     value: type,
@@ -28,41 +36,28 @@ const ReceiptsTableFilters = ({ locations }: ReceiptsTableFiltersProps) => {
   }));
 
   return (
-    <HStack
-      className="px-4 py-3 justify-between border-b border-border w-full"
-      spacing={4}
-    >
+    <TableFilters>
       <HStack>
         <DebouncedInput param="search" size="sm" placeholder="Search" />
-        <Select
+        <Combobox
           size="sm"
-          value={sourceDocumentOptions.find(
-            (document) => document.value === params.get("document")
-          )}
+          value={params.get("document") ?? ""}
           isClearable
           options={sourceDocumentOptions}
           onChange={(selected) => {
-            setParams({ document: selected?.value });
+            setParams({ document: selected });
           }}
           aria-label="Source Document"
           placeholder="Source Document"
         />
-        <Select
+        <Combobox
           size="sm"
-          value={
-            params.get("location")
-              ? locationOptions.find(
-                  (location) => location.value === params.get("location")
-                )
-              : locationOptions.find(
-                  (location) => location.value === locationId
-                )
-          }
+          value={params.get("location") ?? ""}
+          isClearable
           options={locationOptions}
           onChange={(selected) => {
-            setParams({ location: selected?.value });
+            setParams({ location: selected });
           }}
-          aria-label="Location"
           placeholder="Location"
         />
       </HStack>
@@ -73,7 +68,7 @@ const ReceiptsTableFilters = ({ locations }: ReceiptsTableFiltersProps) => {
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 
