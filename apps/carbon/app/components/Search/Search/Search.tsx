@@ -21,9 +21,9 @@ import { AiOutlinePartition } from "react-icons/ai";
 import { BiListCheck } from "react-icons/bi";
 import { BsArrowReturnLeft, BsCartDash, BsCartPlus } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
-import { FaSearch } from "react-icons/fa";
 import { HiOutlineDocumentDuplicate } from "react-icons/hi";
 import { PiShareNetworkFill } from "react-icons/pi";
+import { RxMagnifyingGlass } from "react-icons/rx";
 import { useSidebar } from "~/components/Layout/Sidebar/useSidebar";
 import { useSupabase } from "~/lib/supabase";
 import type { NavItem } from "~/types";
@@ -198,7 +198,7 @@ const SearchModal = ({
             className="ring-0 focus-within:ring-0 shadow-none border-0"
           >
             <InputLeftElement className="pointer-events-none">
-              <FaSearch className="text-muted-foreground" />
+              <RxMagnifyingGlass className="text-muted-foreground" />
             </InputLeftElement>
             <Input
               placeholder="Search..."
@@ -371,7 +371,7 @@ const SearchButton = () => {
   return (
     <>
       <Button
-        leftIcon={<FaSearch />}
+        leftIcon={<RxMagnifyingGlass />}
         variant="secondary"
         className="text-muted-foreground w-[200px] mt-2"
         onClick={searchModal.onOpen}

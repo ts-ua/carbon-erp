@@ -1,7 +1,6 @@
 "use client";
 
 import { type DialogProps } from "@radix-ui/react-dialog";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import { Command as CommandPrimitive } from "cmdk";
@@ -11,6 +10,7 @@ import type {
   HTMLAttributes,
 } from "react";
 import { forwardRef } from "react";
+import { RxMagnifyingGlass } from "react-icons/rx";
 
 import { Modal, ModalContent } from "~/Modal";
 import { cn } from "~/utils/cn";
@@ -69,7 +69,7 @@ const CommandInput = forwardRef<
     className="flex items-center border-b border-border px-3"
     cmdk-input-wrapper=""
   >
-    <MagnifyingGlassIcon className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+    <RxMagnifyingGlass className="mr-2 h-4 w-4 shrink-0 opacity-50" />
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
@@ -205,7 +205,7 @@ const CommandTrigger = forwardRef<ElementRef<"button">, CommandTriggerProps>(
     >
       {children}
 
-      <MagnifyingGlassIcon className="h-4 w-4 opacity-50" />
+      <RxMagnifyingGlass className="h-4 w-4 opacity-50" />
     </button>
   )
 );
