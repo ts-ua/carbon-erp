@@ -11,8 +11,11 @@ import type { ComponentPropsWithoutRef } from "react";
 import { forwardRef } from "react";
 import { MdClose } from "react-icons/md";
 
-type SelectProps = Omit<ComponentPropsWithoutRef<"button">, "onChange"> & {
-  size: "sm" | "md" | "lg";
+export type SelectProps = Omit<
+  ComponentPropsWithoutRef<"button">,
+  "onChange"
+> & {
+  size?: "sm" | "md" | "lg";
   value?: string;
   options: {
     label: string;

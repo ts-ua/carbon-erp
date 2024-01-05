@@ -69,7 +69,7 @@ const SupplierPaymentForm = ({ initialValues }: SupplierPaymentFormProps) => {
               <Supplier
                 name="invoiceSupplierId"
                 label="Invoice Supplier"
-                onChange={({ value }) => setSupplier(value as string)}
+                onChange={(value) => setSupplier(value?.value as string)}
               />
               <SupplierLocation
                 name="invoiceSupplierLocationId"

@@ -240,8 +240,8 @@ const PurchaseInvoiceLineForm = ({
                 name="invoiceLineType"
                 label="Type"
                 options={purchaseInvoiceLineTypeOptions}
-                onChange={({ value }) => {
-                  onTypeChange(value as PurchaseInvoiceLineType);
+                onChange={(value) => {
+                  onTypeChange(value?.value as PurchaseInvoiceLineType);
                 }}
               />
               {type === "Part" && (
@@ -249,8 +249,8 @@ const PurchaseInvoiceLineForm = ({
                   name="partId"
                   label="Part"
                   partReplenishmentSystem="Buy"
-                  onChange={({ value }) => {
-                    onPartChange(value as string);
+                  onChange={(value) => {
+                    onPartChange(value?.value as string);
                   }}
                 />
               )}
@@ -260,8 +260,8 @@ const PurchaseInvoiceLineForm = ({
                   name="serviceId"
                   label="Service"
                   serviceType="External"
-                  onChange={({ value }) => {
-                    onServiceChange(value as string);
+                  onChange={(value) => {
+                    onServiceChange(value?.value as string);
                   }}
                 />
               )}
@@ -271,11 +271,11 @@ const PurchaseInvoiceLineForm = ({
                   name="accountNumber"
                   label="Account"
                   classes={["Expense", "Asset"]}
-                  onChange={({ label }) => {
+                  onChange={(value) => {
                     setPartData((d) => ({
                       ...d,
                       partId: "",
-                      description: label,
+                      description: value?.label!,
                       uom: "EA",
                       shelfId: "",
                     }));

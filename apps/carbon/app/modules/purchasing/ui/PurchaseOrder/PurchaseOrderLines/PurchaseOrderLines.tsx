@@ -53,6 +53,7 @@ const PurchaseOrderLines = () => {
     canDelete,
     supabase,
     partOptions,
+    serviceOptions,
     accountOptions,
     onCellEdit,
   } = usePurchaseOrderLines();
@@ -265,6 +266,7 @@ const PurchaseOrderLines = () => {
       partId: EditablePurchaseOrderLineNumber(onCellEdit, {
         client: supabase,
         parts: partOptions,
+        services: serviceOptions,
         accounts: accountOptions,
         defaultLocationId: defaults.locationId,
         userId: userId,
@@ -274,6 +276,7 @@ const PurchaseOrderLines = () => {
       onCellEdit,
       supabase,
       partOptions,
+      serviceOptions,
       accountOptions,
       defaults.locationId,
       userId,

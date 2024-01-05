@@ -4,6 +4,7 @@ import { useCallback, useMemo } from "react";
 import { usePermissions, useUser } from "~/hooks";
 import { useSupabase } from "~/lib/supabase";
 import type { getAccountsList } from "~/modules/accounting";
+import type { getServicesList } from "~/modules/parts";
 import type { PurchaseOrderLine } from "~/modules/purchasing";
 import { usePurchasedParts } from "~/stores/parts";
 import { path } from "~/utils/path";
@@ -17,13 +18,6 @@ export default function usePurchaseOrderLines() {
   const canDelete = permissions.can("delete", "purchasing");
 
   const parts = usePurchasedParts();
-  const accountsFetcher =
-    useFetcher<Awaited<ReturnType<typeof getAccountsList>>>();
-
-  useMount(() => {
-    accountsFetcher.load(`${path.to.api.accounts}?type=Posting`);
-  });
-
   const partOptions = useMemo(
     () =>
       parts.map((p) => ({
@@ -33,15 +27,39 @@ export default function usePurchaseOrderLines() {
     [parts]
   );
 
+  const accountsFetcher =
+    useFetcher<Awaited<ReturnType<typeof getAccountsList>>>();
+  useMount(() => {
+    accountsFetcher.load(
+      `${path.to.api.accounts}?type=Posting&class=Expense&class=Asset`
+    );
+  });
   const accountOptions = useMemo(
     () =>
       accountsFetcher.data?.data
-        ? accountsFetcher.data?.data.map((c) => ({
-            value: c.number,
-            label: c.number,
+        ? accountsFetcher.data?.data.map((a) => ({
+            value: a.number,
+            label: a.number,
           }))
         : [],
     [accountsFetcher.data]
+  );
+
+  const servicesFetcher =
+    useFetcher<Awaited<ReturnType<typeof getServicesList>>>();
+  useMount(() => {
+    servicesFetcher.load(`${path.to.api.services}?type=External`);
+  });
+
+  const serviceOptions = useMemo(
+    () =>
+      servicesFetcher.data?.data
+        ? servicesFetcher.data?.data.map((s) => ({
+            value: s.id,
+            label: s.id,
+          }))
+        : [],
+    [servicesFetcher.data]
   );
 
   const onCellEdit = useCallback(
@@ -53,7 +71,7 @@ export default function usePurchaseOrderLines() {
           [id]: value,
           updatedBy: userId,
         })
-        .eq("id", row.id);
+        .eq("id", row.id!);
     },
     [supabase, userId]
   );
@@ -63,6 +81,7 @@ export default function usePurchaseOrderLines() {
     canDelete,
     canEdit,
     partOptions,
+    serviceOptions,
     supabase,
     onCellEdit,
   };

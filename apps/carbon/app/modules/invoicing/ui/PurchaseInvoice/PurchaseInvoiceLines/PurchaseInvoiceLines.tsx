@@ -51,6 +51,7 @@ const PurchaseInvoiceLines = () => {
     canDelete,
     supabase,
     partOptions,
+    serviceOptions,
     accountOptions,
     onCellEdit,
   } = usePurchaseInvoiceLines();
@@ -178,6 +179,7 @@ const PurchaseInvoiceLines = () => {
       partId: EditablePurchaseInvoiceLineNumber(onCellEdit, {
         client: supabase,
         parts: partOptions,
+        services: serviceOptions,
         accounts: accountOptions,
         defaultLocationId: defaults.locationId,
         userId: userId,
@@ -187,6 +189,7 @@ const PurchaseInvoiceLines = () => {
       onCellEdit,
       supabase,
       partOptions,
+      serviceOptions,
       accountOptions,
       defaults.locationId,
       userId,

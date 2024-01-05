@@ -13,10 +13,10 @@ import { useNavigate, useParams } from "@remix-run/react";
 import { useMemo } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
+  Combobox,
   Hidden,
   Input,
   Number,
-  Select,
   Submit,
   Supplier,
 } from "~/components/Form";
@@ -44,7 +44,7 @@ const PartSupplierForm = ({ initialValues }: PartSupplierFormProps) => {
   const unitOfMeasureOptions = useMemo(() => {
     return (
       sharedPartData?.unitOfMeasures.map((unitOfMeasure) => ({
-        label: unitOfMeasure.code,
+        label: unitOfMeasure.name,
         value: unitOfMeasure.code,
       })) ?? []
     );
@@ -88,7 +88,7 @@ const PartSupplierForm = ({ initialValues }: PartSupplierFormProps) => {
             <VStack spacing={4}>
               <Supplier name="supplierId" label="Supplier" />
               <Input name="supplierPartId" label="Supplier Part ID" />
-              <Select
+              <Combobox
                 name="supplierUnitOfMeasureCode"
                 label="Unit of Measure"
                 options={unitOfMeasureOptions}

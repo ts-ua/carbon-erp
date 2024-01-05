@@ -69,7 +69,7 @@ const CustomerPaymentForm = ({ initialValues }: CustomerPaymentFormProps) => {
               <Customer
                 name="invoiceCustomerId"
                 label="Invoice Customer"
-                onChange={({ value }) => setCustomer(value as string)}
+                onChange={(value) => setCustomer(value?.value as string)}
               />
               <CustomerLocation
                 name="invoiceCustomerLocationId"

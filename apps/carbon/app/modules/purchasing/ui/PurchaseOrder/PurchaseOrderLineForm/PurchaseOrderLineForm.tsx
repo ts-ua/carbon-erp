@@ -238,8 +238,8 @@ const PurchaseOrderLineForm = ({
                 name="purchaseOrderLineType"
                 label="Type"
                 options={purchaseOrderLineTypeOptions}
-                onChange={({ value }) => {
-                  onTypeChange(value as PurchaseOrderLineType);
+                onChange={(value) => {
+                  onTypeChange(value?.value as PurchaseOrderLineType);
                 }}
               />
               {type === "Part" && (
@@ -247,8 +247,8 @@ const PurchaseOrderLineForm = ({
                   name="partId"
                   label="Part"
                   partReplenishmentSystem="Buy"
-                  onChange={({ value }) => {
-                    onPartChange(value as string);
+                  onChange={(value) => {
+                    onPartChange(value?.value as string);
                   }}
                 />
               )}
@@ -258,8 +258,8 @@ const PurchaseOrderLineForm = ({
                   name="serviceId"
                   label="Service"
                   serviceType="External"
-                  onChange={({ value }) => {
-                    onServiceChange(value as string);
+                  onChange={(value) => {
+                    onServiceChange(value?.value as string);
                   }}
                 />
               )}
@@ -269,10 +269,10 @@ const PurchaseOrderLineForm = ({
                   name="accountNumber"
                   label="Account"
                   classes={["Expense", "Asset"]}
-                  onChange={({ label }) => {
+                  onChange={(value) => {
                     setPartData({
                       partId: "",
-                      description: label,
+                      description: value?.label ?? "",
                       unitPrice: "0",
                       uom: "EA",
                       shelfId: "",

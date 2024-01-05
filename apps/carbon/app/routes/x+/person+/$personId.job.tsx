@@ -52,8 +52,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  console.log({ data: validation.data });
-
   const updateJob = await upsertEmployeeJob(client, personId, validation.data);
   if (updateJob.error) {
     return redirect(

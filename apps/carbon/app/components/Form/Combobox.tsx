@@ -6,17 +6,17 @@ import {
 } from "@carbon/react";
 
 import { useControlField, useField } from "remix-validated-form";
-import { Select as SelectBase } from "~/components";
-import type { SelectProps as SelectBaseProps } from "~/components/Select";
+import { Combobox as ComboboxBase } from "~/components";
+import type { ComboboxProps as ComboboxBaseProps } from "~/components/Combobox";
 
-export type SelectProps = Omit<SelectBaseProps, "onChange"> & {
+export type ComboboxProps = Omit<ComboboxBaseProps, "onChange"> & {
   name: string;
   label?: string;
   helperText?: string;
   onChange?: (newValue: { value: string; label: string } | null) => void;
 };
 
-const Select = ({ name, label, helperText, ...props }: SelectProps) => {
+const Combobox = ({ name, label, helperText, ...props }: ComboboxProps) => {
   const { getInputProps, error } = useField(name);
   const [value, setValue] = useControlField<string | undefined>(name);
 
@@ -38,9 +38,9 @@ const Select = ({ name, label, helperText, ...props }: SelectProps) => {
         type="hidden"
         name={name}
         id={name}
-        value={value ?? undefined}
+        value={value}
       />
-      <SelectBase
+      <ComboboxBase
         {...props}
         value={value}
         onChange={(newValue) => {
@@ -59,6 +59,6 @@ const Select = ({ name, label, helperText, ...props }: SelectProps) => {
   );
 };
 
-Select.displayName = "Select";
+Combobox.displayName = "Combobox";
 
-export default Select;
+export default Combobox;

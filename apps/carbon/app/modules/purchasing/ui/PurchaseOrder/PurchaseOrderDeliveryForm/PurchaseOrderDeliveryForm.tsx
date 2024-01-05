@@ -111,7 +111,7 @@ const PurchaseOrderDeliveryForm = ({
                   <Customer
                     name="customerId"
                     label="Customer"
-                    onChange={({ value }) => setCustomer(value as string)}
+                    onChange={(value) => setCustomer(value?.value as string)}
                   />
                   <CustomerLocation
                     name="customerLocationId"

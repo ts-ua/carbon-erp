@@ -12,6 +12,7 @@ import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Boolean,
+  Combobox,
   Input,
   InputControlled,
   Select,
@@ -165,14 +166,14 @@ const PartForm = ({ initialValues }: PartFormProps) => {
                 label="Part Type"
                 options={partTypeOptions}
               />
-              <Select
+              <Combobox
                 name="unitOfMeasureCode"
                 label="Unit of Measure"
                 options={unitOfMeasureOptions}
               />
             </VStack>
             <VStack>
-              <Select
+              <Combobox
                 name="partGroupId"
                 label="Part Group"
                 options={partGroupOptions}

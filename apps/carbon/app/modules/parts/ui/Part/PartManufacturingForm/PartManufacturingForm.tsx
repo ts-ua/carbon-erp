@@ -55,11 +55,11 @@ const PartManufacturingForm = ({
                 label="Manufacturing Policy"
                 options={partManufacturingPolicyOptions}
               />
-              <Select
+              {/* <Select
                 name="routingId"
                 label="Routing ID"
                 options={[{ label: "", value: "" }]}
-              />
+              /> */}
             </VStack>
             <VStack>
               <Number name="manufacturingLeadTime" label="Lead Time (Days)" />

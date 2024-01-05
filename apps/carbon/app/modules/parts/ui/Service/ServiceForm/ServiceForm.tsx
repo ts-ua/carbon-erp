@@ -12,6 +12,7 @@ import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Boolean,
+  Combobox,
   Input,
   InputControlled,
   Select,
@@ -142,7 +143,7 @@ const ServiceForm = ({ initialValues }: ServiceFormProps) => {
                 label="Service Type"
                 options={serviceTypeOptions}
               />
-              <Select
+              <Combobox
                 name="partGroupId"
                 label="Part Group"
                 options={partGroupOptions}

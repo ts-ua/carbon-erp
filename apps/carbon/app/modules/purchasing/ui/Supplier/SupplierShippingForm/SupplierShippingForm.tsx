@@ -75,7 +75,7 @@ const SupplierShippingForm = ({ initialValues }: SupplierShippingFormProps) => {
               <Supplier
                 name="shippingSupplierId"
                 label="Shipping Supplier"
-                onChange={({ value }) => setSupplier(value as string)}
+                onChange={(value) => setSupplier(value?.value as string)}
               />
               <SupplierLocation
                 name="shippingSupplierLocationId"

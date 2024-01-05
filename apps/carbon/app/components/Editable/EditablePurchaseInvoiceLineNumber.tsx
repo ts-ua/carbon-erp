@@ -1,10 +1,10 @@
 /* eslint-disable react/display-name */
 import type { Database } from "@carbon/database";
-import { ReactSelect } from "@carbon/react";
 import type {
   PostgrestSingleResponse,
   SupabaseClient,
 } from "@supabase/supabase-js";
+import { Combobox } from "~/components";
 import type { EditableTableCellComponentProps } from "~/components/Editable";
 import type { PurchaseInvoiceLine } from "~/modules/invoicing";
 
@@ -19,6 +19,7 @@ const EditablePurchaseInvoiceLineNumber =
       client?: SupabaseClient<Database>;
       parts: { label: string; value: string }[];
       accounts: { label: string; value: string }[];
+      services: { label: string; value: string }[];
       defaultLocationId: string | null;
       userId: string;
     }
@@ -30,46 +31,34 @@ const EditablePurchaseInvoiceLineNumber =
     onError,
     onUpdate,
   }: EditableTableCellComponentProps<PurchaseInvoiceLine>) => {
-    const { client, parts, accounts, userId } = options;
+    const { client, parts, services, accounts, userId } = options;
     const selectOptions =
       row.invoiceLineType === "Part"
         ? parts
+        : row.invoiceLineType === "Service"
+        ? services
         : row.invoiceLineType === "G/L Account"
         ? accounts
         : [];
 
-    const onAccountChange = async ({
-      value,
-      label,
-    }: {
-      value: string;
-      label: string;
-    }) => {
+    const onAccountChange = async (accountNumber: string) => {
       if (!client) throw new Error("Supabase client not found");
 
       const account = await client
         .from("account")
         .select("name")
-        .eq("number", value)
+        .eq("number", accountNumber)
         .single();
 
       onUpdate("description", account.data?.name ?? "");
-      onUpdate("partId", null);
-      onUpdate("assetId", null);
-      onUpdate("accountNumber", value);
-      onUpdate("unitOfMeasureCode", null);
-      onUpdate("shelfId", null);
+      onUpdate("accountNumber", accountNumber);
 
       try {
         const { error } = await client
           .from("purchaseInvoiceLine")
           .update({
-            partId: null,
-            assetId: null,
-            accountNumber: value,
+            accountNumber: accountNumber,
             description: account.data?.name ?? "",
-            unitOfMeasureCode: null,
-            shelfId: null,
             updatedBy: userId,
           })
           .eq("id", row.id);
@@ -81,12 +70,7 @@ const EditablePurchaseInvoiceLineNumber =
       }
     };
 
-    const onPartChange = async ({
-      value: partId,
-    }: {
-      value: string;
-      label: string;
-    }) => {
+    const onPartChange = async (partId: string) => {
       if (!client) throw new Error("Supabase client not found");
       const [part, shelf, cost] = await Promise.all([
         client
@@ -114,8 +98,6 @@ const EditablePurchaseInvoiceLineNumber =
 
       onUpdate("partId", partId);
       onUpdate("description", part.data?.name);
-      onUpdate("assetId", null);
-      onUpdate("accountNumber", null);
       onUpdate("unitOfMeasureCode", part.data?.unitOfMeasureCode ?? null);
       onUpdate("locationId", options.defaultLocationId);
       onUpdate("shelfId", shelf.data?.defaultShelfId ?? null);
@@ -144,29 +126,60 @@ const EditablePurchaseInvoiceLineNumber =
       }
     };
 
-    const onChange = (newValue: { value: string; label: string } | null) => {
+    const onServiceChange = async (serviceId: string) => {
+      if (!client) throw new Error("Supabase client not found");
+      const service = await client
+        .from("service")
+        .select("name")
+        .eq("id", serviceId)
+        .single();
+
+      if (service.error) {
+        onError();
+        return;
+      }
+
+      onUpdate("serviceId", serviceId);
+      onUpdate("description", service.data?.name);
+
+      try {
+        const { error } = await client
+          .from("purchaseInvoiceLine")
+          .update({
+            serviceId: serviceId,
+            updatedBy: userId,
+          })
+          .eq("id", row.id);
+
+        if (error) onError();
+      } catch (error) {
+        console.error(error);
+        onError();
+      }
+    };
+
+    const onChange = (newValue: string | null) => {
       if (!newValue) return;
 
       if (row.invoiceLineType === "Part") {
         onPartChange(newValue);
       } else if (row.invoiceLineType === "G/L Account") {
         onAccountChange(newValue);
+      } else if (row.invoiceLineType === "Service") {
+        onServiceChange(newValue);
       }
     };
 
-    const controlledValue = selectOptions.find(
-      (option) => option.value === value
-    );
+    const selectedValue = getValue(row);
 
     return (
-      <ReactSelect
+      <Combobox
         autoFocus
-        value={controlledValue}
+        value={selectedValue ?? ""}
         options={selectOptions}
         onChange={onChange}
-        // @ts-ignore
-        borderRadius="none"
         size="sm"
+        className="border-0 rounded-none w-full"
       />
     );
   };
@@ -174,3 +187,18 @@ const EditablePurchaseInvoiceLineNumber =
 EditablePurchaseInvoiceLineNumber.displayName =
   "EditablePurchaseInvoiceLineNumber";
 export default EditablePurchaseInvoiceLineNumber;
+
+function getValue(row: PurchaseInvoiceLine) {
+  switch (row.invoiceLineType) {
+    case "Part":
+      return row.partId;
+    case "Service":
+      return row.serviceId;
+    case "G/L Account":
+      return row.accountNumber;
+    case "Fixed Asset":
+      return row.assetId;
+    default:
+      return null;
+  }
+}

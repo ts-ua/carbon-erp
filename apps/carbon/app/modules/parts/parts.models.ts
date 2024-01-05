@@ -40,7 +40,7 @@ export const partValidator = withZod(
         message: "Replenishment system is required",
       }),
     }),
-    partGroupId: z.string().optional(),
+    partGroupId: zfd.text(z.string().optional()),
     partType: z.enum(partTypes, {
       errorMap: (issue, ctx) => ({
         message: "Part type is required",

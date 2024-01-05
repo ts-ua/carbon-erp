@@ -72,7 +72,7 @@ const ContractorForm = ({ initialValues }: ContractorFormProps) => {
                 name="supplierId"
                 label="Supplier"
                 isReadOnly={isEditing}
-                onChange={({ value }) => setSupplier(value as string)}
+                onChange={(value) => setSupplier(value?.value as string)}
               />
               <SupplierContact
                 name="id"

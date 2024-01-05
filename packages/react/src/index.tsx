@@ -21,6 +21,7 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
+  CommandTrigger,
 } from "./Command";
 import { ContextMenu } from "./ContextMenu";
 import { Count } from "./Count";
@@ -150,6 +151,7 @@ export {
   CommandList,
   CommandSeparator,
   CommandShortcut,
+  CommandTrigger,
   ContextMenu,
   Count,
   CreatableSelect,

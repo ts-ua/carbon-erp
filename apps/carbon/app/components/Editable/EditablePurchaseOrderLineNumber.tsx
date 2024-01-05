@@ -1,10 +1,10 @@
 /* eslint-disable react/display-name */
 import type { Database } from "@carbon/database";
-import { ReactSelect } from "@carbon/react";
 import type {
   PostgrestSingleResponse,
   SupabaseClient,
 } from "@supabase/supabase-js";
+import { Combobox } from "~/components";
 import type { EditableTableCellComponentProps } from "~/components/Editable";
 import type { PurchaseOrderLine } from "~/modules/purchasing";
 
@@ -18,6 +18,7 @@ const EditablePurchaseOrderLineNumber =
     options: {
       client?: SupabaseClient<Database>;
       parts: { label: string; value: string }[];
+      services: { label: string; value: string }[];
       accounts: { label: string; value: string }[];
       defaultLocationId: string | null;
       userId: string;
@@ -30,50 +31,37 @@ const EditablePurchaseOrderLineNumber =
     onError,
     onUpdate,
   }: EditableTableCellComponentProps<PurchaseOrderLine>) => {
-    const { client, parts, accounts, userId } = options;
+    const { client, parts, services, accounts, userId } = options;
     const selectOptions =
       row.purchaseOrderLineType === "Part"
         ? parts
+        : row.purchaseOrderLineType === "Service"
+        ? services
         : row.purchaseOrderLineType === "G/L Account"
         ? accounts
         : [];
 
-    const onAccountChange = async ({
-      value,
-      label,
-    }: {
-      value: string;
-      label: string;
-    }) => {
+    const onAccountChange = async (accountNumber: string) => {
       if (!client) throw new Error("Supabase client not found");
 
       const account = await client
         .from("account")
         .select("name")
-        .eq("number", value)
+        .eq("number", accountNumber)
         .single();
 
       onUpdate("description", account.data?.name ?? "");
-      onUpdate("partId", null);
-      onUpdate("assetId", null);
-      onUpdate("accountNumber", value);
-      onUpdate("unitOfMeasureCode", null);
-      onUpdate("shelfId", null);
+      onUpdate("accountNumber", accountNumber);
 
       try {
-        if (!row.id) throw new Error("Purchase Order Line ID not found");
         const { error } = await client
           .from("purchaseOrderLine")
           .update({
-            partId: null,
-            assetId: null,
-            accountNumber: value,
+            accountNumber: accountNumber,
             description: account.data?.name ?? "",
-            unitOfMeasureCode: null,
-            shelfId: null,
             updatedBy: userId,
           })
-          .eq("id", row.id);
+          .eq("id", row.id!);
 
         if (error) onError();
       } catch (error) {
@@ -82,12 +70,7 @@ const EditablePurchaseOrderLineNumber =
       }
     };
 
-    const onPartChange = async ({
-      value: partId,
-    }: {
-      value: string;
-      label: string;
-    }) => {
+    const onPartChange = async (partId: string) => {
       if (!client) throw new Error("Supabase client not found");
       const [part, shelf, cost] = await Promise.all([
         client
@@ -115,15 +98,12 @@ const EditablePurchaseOrderLineNumber =
 
       onUpdate("partId", partId);
       onUpdate("description", part.data?.name);
-      onUpdate("assetId", null);
-      onUpdate("accountNumber", null);
       onUpdate("unitOfMeasureCode", part.data?.unitOfMeasureCode ?? null);
       onUpdate("locationId", options.defaultLocationId);
       onUpdate("shelfId", shelf.data?.defaultShelfId ?? null);
       onUpdate("unitPrice", cost.data?.unitCost ?? null);
 
       try {
-        if (!row.id) throw new Error("Purchase Order Line ID not found");
         const { error } = await client
           .from("purchaseOrderLine")
           .update({
@@ -134,10 +114,10 @@ const EditablePurchaseOrderLineNumber =
             unitOfMeasureCode: part.data?.unitOfMeasureCode ?? null,
             locationId: options.defaultLocationId,
             shelfId: shelf.data?.defaultShelfId ?? null,
-            unitPrice: cost.data?.unitCost ?? null,
+            unitPrice: cost.data?.unitCost,
             updatedBy: userId,
           })
-          .eq("id", row.id);
+          .eq("id", row.id!);
 
         if (error) onError();
       } catch (error) {
@@ -146,31 +126,78 @@ const EditablePurchaseOrderLineNumber =
       }
     };
 
-    const onChange = (newValue: { value: string; label: string } | null) => {
+    const onServiceChange = async (serviceId: string) => {
+      if (!client) throw new Error("Supabase client not found");
+      const service = await client
+        .from("service")
+        .select("name")
+        .eq("id", serviceId)
+        .single();
+
+      if (service.error) {
+        onError();
+        return;
+      }
+
+      onUpdate("serviceId", serviceId);
+      onUpdate("description", service.data?.name);
+
+      try {
+        const { error } = await client
+          .from("purchaseOrderLine")
+          .update({
+            serviceId: serviceId,
+            updatedBy: userId,
+          })
+          .eq("id", row.id!);
+
+        if (error) onError();
+      } catch (error) {
+        console.error(error);
+        onError();
+      }
+    };
+
+    const onChange = (newValue: string | null) => {
       if (!newValue) return;
 
       if (row.purchaseOrderLineType === "Part") {
         onPartChange(newValue);
       } else if (row.purchaseOrderLineType === "G/L Account") {
         onAccountChange(newValue);
+      } else if (row.purchaseOrderLineType === "Service") {
+        onServiceChange(newValue);
       }
     };
 
-    const controlledValue = selectOptions.find(
-      (option) => option.value === value
-    );
+    const selectedValue = getValue(row);
 
     return (
-      <ReactSelect
+      <Combobox
         autoFocus
-        value={controlledValue}
+        value={selectedValue ?? ""}
         options={selectOptions}
         onChange={onChange}
-        // @ts-ignore
-        borderRadius="none"
         size="sm"
+        className="border-0 rounded-none w-full"
       />
     );
   };
 
+EditablePurchaseOrderLineNumber.displayName = "EditablePurchaseOrderLineNumber";
 export default EditablePurchaseOrderLineNumber;
+
+function getValue(row: PurchaseOrderLine) {
+  switch (row.purchaseOrderLineType) {
+    case "Part":
+      return row.partId;
+    case "Service":
+      return row.serviceId;
+    case "G/L Account":
+      return row.accountNumber;
+    case "Fixed Asset":
+      return row.assetId;
+    default:
+      return null;
+  }
+}
