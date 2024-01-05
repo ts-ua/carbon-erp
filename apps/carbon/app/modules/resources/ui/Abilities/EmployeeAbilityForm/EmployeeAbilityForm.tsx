@@ -91,8 +91,10 @@ const EmployeeAbilityForm = ({
               <Select
                 name="trainingStatus"
                 label="Training Status"
-                onChange={({ value }) => {
-                  setInProgress(value === AbilityEmployeeStatus.InProgress);
+                onChange={(value) => {
+                  setInProgress(
+                    value?.value === AbilityEmployeeStatus.InProgress
+                  );
                 }}
                 options={[
                   {

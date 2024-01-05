@@ -10,13 +10,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const searchParams = new URLSearchParams(url.search);
   const type = searchParams.get("type");
   const classes = searchParams.getAll("class");
-  const incomeBalance = searchParams.get("incomeBalance");
 
-  return json(
-    await getAccountsList(authorized.client, {
-      type,
-      incomeBalance,
-      classes,
-    })
-  );
+  const incomeBalance = searchParams.get("incomeBalance");
+  const result = await getAccountsList(authorized.client, {
+    type,
+    incomeBalance,
+    classes,
+  });
+
+  return json(result);
 }

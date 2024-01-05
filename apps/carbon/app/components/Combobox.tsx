@@ -1,10 +1,10 @@
 import {
-  Button,
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandTrigger,
   HStack,
   IconButton,
   Popover,
@@ -15,10 +15,13 @@ import {
 import type { ComponentPropsWithoutRef } from "react";
 import { forwardRef } from "react";
 import { MdClose } from "react-icons/md";
-import { RxCaretSort, RxCheck } from "react-icons/rx";
+import { RxCheck } from "react-icons/rx";
 
-type ComboboxProps = Omit<ComponentPropsWithoutRef<"button">, "onChange"> & {
-  size: "sm" | "md" | "lg";
+export type ComboboxProps = Omit<
+  ComponentPropsWithoutRef<"button">,
+  "onChange"
+> & {
+  size?: "sm" | "md" | "lg";
   value?: string;
   options: {
     label: string;
@@ -27,7 +30,7 @@ type ComboboxProps = Omit<ComponentPropsWithoutRef<"button">, "onChange"> & {
   isClearable?: boolean;
   isReadOnly?: boolean;
   placeholder?: string;
-  onChange: (selected: string) => void;
+  onChange?: (selected: string) => void;
 };
 
 const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
@@ -48,24 +51,19 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
       <HStack spacing={1}>
         <Popover>
           <PopoverTrigger asChild>
-            <Button
-              size={size === "sm" ? "md" : size}
-              variant="secondary"
+            <CommandTrigger
+              size={size}
               role="combobox"
-              className={cn(
-                "min-w-[160px] justify-between hover:bg-background font-normal",
-                !value && "text-muted-foreground"
-              )}
+              className={cn("min-w-[160px]", !value && "text-muted-foreground")}
               ref={ref}
               {...props}
             >
               {value
                 ? options.find((option) => option.value === value)?.label
                 : placeholder ?? "Select"}
-              <RxCaretSort className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-            </Button>
+            </CommandTrigger>
           </PopoverTrigger>
-          <PopoverContent className="w-[200px] p-0">
+          <PopoverContent className="min-w-[200px] w-[--radix-popover-trigger-width] p-0">
             <Command>
               <CommandInput placeholder="Search..." className="h-9" />
               <CommandEmpty>No option found.</CommandEmpty>
@@ -75,7 +73,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
                     value={option.label}
                     key={option.value}
                     onSelect={() => {
-                      onChange(option.value);
+                      onChange?.(option.value);
                     }}
                   >
                     {option.label}
@@ -96,7 +94,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
             variant="ghost"
             aria-label="Clear"
             icon={<MdClose />}
-            onClick={() => onChange("")}
+            onClick={() => onChange?.("")}
             size={size === "sm" ? "md" : size}
           />
         )}

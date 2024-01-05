@@ -23,7 +23,6 @@ const useSelectProps = <
   menuIsOpen,
   ...props
 }: Props<Option, IsMulti, Group>): Props<Option, IsMulti, Group> => {
-  console.log({ isReadOnly });
   const inputProps = {
     id: inputId,
     disabled: isDisabled,
@@ -35,8 +34,6 @@ const useSelectProps = <
     onFocus,
     onBlur,
   };
-
-  console.log({ inputProps });
 
   // Unless `menuIsOpen` is controlled, disable it if the select is readonly
   const realMenuIsOpen =

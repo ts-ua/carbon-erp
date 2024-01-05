@@ -6,6 +6,7 @@ import AccountSubcategory from "./AccountSubcategory";
 import Array from "./Array";
 import Boolean from "./Boolean";
 import Color from "./Color";
+import Combobox from "./Combobox";
 import CreatableMultiSelect from "./CreatableMultiSelect";
 import CreatableSelect from "./CreatableSelect";
 import Currency from "./Currency";
@@ -50,6 +51,7 @@ export {
   Array,
   Boolean,
   Color,
+  Combobox,
   CreatableMultiSelect,
   CreatableSelect,
   Currency,

@@ -10,9 +10,9 @@ import { Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Boolean,
+  Combobox,
   Hidden,
   Number,
-  Select,
   Submit,
   Supplier,
 } from "~/components/Form";
@@ -60,7 +60,7 @@ const PartPurchasingForm = ({
               <Number name="purchasingLeadTime" label="Lead Time (Days)" />
             </VStack>
             <VStack>
-              <Select
+              <Combobox
                 name="purchasingUnitOfMeasureCode"
                 label="Purchasing Unit of Measure"
                 options={unitOfMeasureOptions}

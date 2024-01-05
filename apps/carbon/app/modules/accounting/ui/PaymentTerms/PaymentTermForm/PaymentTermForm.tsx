@@ -74,9 +74,9 @@ const PaymentTermForm = ({ initialValues }: PaymentTermFormProps) => {
                 name="calculationMethod"
                 label="After"
                 options={calculationMethodOptions}
-                onChange={({ value }) => {
+                onChange={(value) => {
                   setSelectedCalculationMethod(
-                    value as PaymentTermCalculationMethod
+                    value?.value as PaymentTermCalculationMethod
                   );
                 }}
               />

@@ -1,4 +1,4 @@
-import { Box, Td } from "@chakra-ui/react";
+import { Td } from "@chakra-ui/react";
 import type { Cell as CellType } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
 import { memo, useState } from "react";
@@ -78,7 +78,7 @@ const Cell = <T extends object>({
       onFocus={onFocus}
     >
       {isSelected && isEditing && hasEditableTableCellComponent ? (
-        <Box position="absolute" w="full" left={0} top="2px">
+        <div className="mx-[-1rem] my-[-0.5rem]">
           {hasEditableTableCellComponent
             ? flexRender(editableCell, {
                 accessorKey,
@@ -92,7 +92,7 @@ const Cell = <T extends object>({
                 },
               })
             : null}
-        </Box>
+        </div>
       ) : (
         <div ref={ref}>
           {flexRender(cell.column.columnDef.cell, cell.getContext())}

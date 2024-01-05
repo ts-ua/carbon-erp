@@ -68,7 +68,11 @@ const EquipmentTypeForm = ({
               <Input name="name" label="Name" />
               <TextArea name="description" label="Description" />
               <Color name="color" label="Color" />
-              <Ability name="requiredAbility" label="Required Ability" />
+              <Ability
+                name="requiredAbility"
+                label="Required Ability"
+                isClearable
+              />
             </VStack>
           </DrawerBody>
           <DrawerFooter>

@@ -33,6 +33,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const partId = createPart.data?.id;
+  if (!partId) throw new Error("Part ID not found");
 
   return redirect(path.to.part(partId));
 }

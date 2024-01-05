@@ -171,6 +171,46 @@ const CommandShortcut = ({
 };
 CommandShortcut.displayName = "CommandShortcut";
 
+const commandTriggerVariants = cva(
+  "bg-background flex w-full items-center justify-between whitespace-nowrap rounded-md border border-input shadow-sm ring-offset-background data-[placeholder]:text-muted-foreground ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+  {
+    variants: {
+      size: {
+        lg: "h-12 px-4 py-3 rounded-lg text-base space-x-4",
+        md: "h-10 px-3 py-2 rounded-md text-base space-x-3",
+        sm: "h-8  px-3 py-2 rounded text-sm space-x-2",
+      },
+    },
+    defaultVariants: {
+      size: "md",
+    },
+  }
+);
+
+interface CommandTriggerProps
+  extends ComponentPropsWithoutRef<"button">,
+    VariantProps<typeof commandTriggerVariants> {}
+
+const CommandTrigger = forwardRef<ElementRef<"button">, CommandTriggerProps>(
+  ({ size, className, children, ...props }, ref) => (
+    <button
+      ref={ref}
+      className={cn(
+        commandTriggerVariants({
+          size,
+        }),
+        className
+      )}
+      {...props}
+    >
+      {children}
+
+      <MagnifyingGlassIcon className="h-4 w-4 opacity-50" />
+    </button>
+  )
+);
+CommandTrigger.displayName = "CommandTrigger";
+
 export {
   Command,
   CommandDialog,
@@ -181,4 +221,5 @@ export {
   CommandList,
   CommandSeparator,
   CommandShortcut,
+  CommandTrigger,
 };

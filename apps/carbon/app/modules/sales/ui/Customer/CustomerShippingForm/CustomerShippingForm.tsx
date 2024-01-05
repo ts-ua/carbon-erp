@@ -75,7 +75,7 @@ const CustomerShippingForm = ({ initialValues }: CustomerShippingFormProps) => {
               <Customer
                 name="shippingCustomerId"
                 label="Shipping Customer"
-                onChange={({ value }) => setCustomer(value as string)}
+                onChange={(value) => setCustomer(value?.value as string)}
               />
               <CustomerLocation
                 name="shippingCustomerLocationId"

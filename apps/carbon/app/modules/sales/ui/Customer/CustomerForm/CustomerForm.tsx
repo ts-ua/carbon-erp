@@ -10,7 +10,14 @@ import {
 } from "@carbon/react";
 import { Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
-import { Employee, Hidden, Input, Select, Submit } from "~/components/Form";
+import {
+  Combobox,
+  Employee,
+  Hidden,
+  Input,
+  Select,
+  Submit,
+} from "~/components/Form";
 import { usePermissions, useRouteData } from "~/hooks";
 import type { CustomerStatus, CustomerType } from "~/modules/sales";
 import { customerValidator } from "~/modules/sales";
@@ -79,7 +86,7 @@ const CustomerForm = ({ initialValues }: CustomerFormProps) => {
               <Input name="taxId" label="Tax ID" />
             </VStack>
             <VStack>
-              <Select
+              <Combobox
                 name="customerTypeId"
                 label="Customer Type"
                 options={customerTypeOptions}
