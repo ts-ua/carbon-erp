@@ -9,7 +9,7 @@ import { getValidChildren } from "~/utils/react";
 const InputGroupContext = createContext<boolean>(false);
 
 const inputGroupVariants = cva(
-  "flex relative w-full bg-background text-foreground shadow-sm focus-within:outline-none border border-input ring-1 ring-border ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+  "flex relative w-full bg-background text-foreground shadow-sm focus-within:outline-none border border-input ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
   {
     variants: {
       size: {

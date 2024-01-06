@@ -50,14 +50,12 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const { id, name, color, parentDepartmentId } = validation.data;
+  const { id, ...data } = validation.data;
   if (!id) throw notFound("Department ID was not found");
 
   const updateDepartment = await upsertDepartment(client, {
     id,
-    name,
-    color,
-    parentDepartmentId,
+    ...data,
     updatedBy: userId,
   });
 
@@ -86,6 +84,8 @@ export default function DepartmentRoute() {
     color: department.color ?? "#000000",
     parentDepartmentId: department.parentDepartmentId ?? undefined,
   };
+
+  console.log({ initialValues });
 
   return <DepartmentForm initialValues={initialValues} />;
 }

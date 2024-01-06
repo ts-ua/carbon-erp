@@ -1,33 +1,14 @@
-import {
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
-  ReactSelect,
-} from "@carbon/react";
 import { useMemo } from "react";
-import { useControlField, useField } from "remix-validated-form";
 import type { PartReplenishmentSystem } from "~/modules/parts";
 import { useParts } from "~/stores";
-import type { SelectProps } from "./Select";
+import type { ComboboxProps } from "./Combobox";
+import Combobox from "./Combobox";
 
-type PartSelectProps = Omit<SelectProps, "options"> & {
+type PartSelectProps = Omit<ComboboxProps, "options"> & {
   partReplenishmentSystem?: PartReplenishmentSystem;
 };
 
-const Part = ({
-  name,
-  label = "Part",
-  partReplenishmentSystem,
-  helperText,
-  isLoading,
-  isReadOnly,
-  placeholder = "Select Part",
-  onChange,
-  ...props
-}: PartSelectProps) => {
-  const { getInputProps, error } = useField(name);
-  const [value, setValue] = useControlField<string | undefined>(name);
+const Part = ({ partReplenishmentSystem, ...props }: PartSelectProps) => {
   const [parts] = useParts();
 
   const options = useMemo(
@@ -49,46 +30,8 @@ const Part = ({
     [partReplenishmentSystem, parts]
   );
 
-  const handleChange = (selection: {
-    value: string | number;
-    label: string;
-  }) => {
-    const newValue = (selection.value as string) || undefined;
-    setValue(newValue);
-    if (onChange && typeof onChange === "function") {
-      onChange(selection);
-    }
-  };
-
-  const controlledValue = useMemo(
-    // @ts-ignore
-    () => options.find((option) => option.value === value),
-    [value, options]
-  );
-
   return (
-    <FormControl isInvalid={!!error}>
-      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-      <ReactSelect
-        {...getInputProps({
-          // @ts-ignore
-          id: name,
-        })}
-        {...props}
-        options={options}
-        value={controlledValue}
-        isLoading={isLoading}
-        placeholder={placeholder}
-        w="full"
-        isReadOnly={isReadOnly}
-        onChange={handleChange}
-      />
-      {error ? (
-        <FormErrorMessage>{error}</FormErrorMessage>
-      ) : (
-        helperText && <FormHelperText>{helperText}</FormHelperText>
-      )}
-    </FormControl>
+    <Combobox options={options} {...props} label={props?.label ?? "Part"} />
   );
 };
 

@@ -6,18 +6,20 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   HStack,
-  ReactSelect,
   VStack,
   useMount,
 } from "@carbon/react";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect, useMemo } from "react";
-import { ValidatedForm, useControlField, useField } from "remix-validated-form";
-import { Abilities, Number, Submit, Supplier } from "~/components/Form";
+import { ValidatedForm, useControlField } from "remix-validated-form";
+import {
+  Ability,
+  Number,
+  SelectControlled,
+  Submit,
+  Supplier,
+} from "~/components/Form";
 import { usePermissions } from "~/hooks";
 import type { getSupplierLocations } from "~/modules/purchasing";
 import { partnerValidator } from "~/modules/resources";
@@ -41,9 +43,11 @@ const PartnerForm = ({ initialValues }: PartnerFormProps) => {
   const supplierLocationFetcher =
     useFetcher<Awaited<ReturnType<typeof getSupplierLocations>>>();
 
-  const onSupplierChange = ({ value }: { value: string | number }) => {
-    if (value)
-      supplierLocationFetcher.load(path.to.api.supplierLocations(`${value}`));
+  const onSupplierChange = (newValue: { value: string | number } | null) => {
+    if (newValue)
+      supplierLocationFetcher.load(
+        path.to.api.supplierLocations(`${newValue.value}`)
+      );
   };
 
   useMount(() => {
@@ -74,7 +78,9 @@ const PartnerForm = ({ initialValues }: PartnerFormProps) => {
           validator={partnerValidator}
           method="post"
           action={
-            isEditing ? path.to.partner(initialValues.id) : path.to.newPartner
+            isEditing
+              ? path.to.partner(initialValues.id, initialValues.abilityId)
+              : path.to.newPartner
           }
           defaultValues={initialValues}
           className="flex flex-col h-full"
@@ -95,7 +101,7 @@ const PartnerForm = ({ initialValues }: PartnerFormProps) => {
                 initialLocation={initialValues.id}
                 isReadOnly={isEditing}
               />
-              <Abilities name="abilities" label="Abilities" />
+              <Ability name="abilityId" label="Ability" />
               <Number
                 name="hoursPerWeek"
                 label="Hours per Week"
@@ -119,49 +125,42 @@ const PartnerForm = ({ initialValues }: PartnerFormProps) => {
   );
 };
 
-const SUPPLIER_LOCATION_FIELD = "id";
-
 const SupplierLocationsBySupplier = ({
   supplierLocations,
   initialLocation,
   isReadOnly,
 }: {
-  supplierLocations: { value: string | number; label: string }[];
+  supplierLocations: { value: string; label: string }[];
   initialLocation?: string;
   isReadOnly: boolean;
 }) => {
-  const { error, getInputProps } = useField(SUPPLIER_LOCATION_FIELD);
-
-  const [supplierLocation, setSupplierLocation] = useControlField<{
-    value: string | number;
-    label: string;
-  } | null>(SUPPLIER_LOCATION_FIELD);
+  const [supplierLocation, setSupplierLocation] = useControlField<
+    string | null
+  >("id");
 
   useEffect(() => {
     // if the initial value is in the options, set it, otherwise set to null
     if (supplierLocations) {
       setSupplierLocation(
-        supplierLocations.find((s) => s.value === initialLocation) ?? null
+        supplierLocations.find((s) => s.value === initialLocation)?.value ??
+          null
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [supplierLocations, initialLocation]);
 
+  const onChange = (newValue: { value: string } | null) => {
+    setSupplierLocation(newValue?.value ?? null);
+  };
+
   return (
-    <FormControl isInvalid={!!error}>
-      <FormLabel htmlFor={SUPPLIER_LOCATION_FIELD}>Supplier Location</FormLabel>
-      <ReactSelect
-        {...getInputProps({
-          // @ts-ignore
-          id: SUPPLIER_LOCATION_FIELD,
-        })}
-        options={supplierLocations}
-        value={supplierLocation}
-        onChange={setSupplierLocation}
-        isReadOnly={isReadOnly}
-      />
-      {error && <FormErrorMessage>{error}</FormErrorMessage>}
-    </FormControl>
+    <SelectControlled
+      name="id"
+      options={supplierLocations}
+      value={supplierLocation ?? undefined}
+      onChange={onChange}
+      isReadOnly={isReadOnly}
+    />
   );
 };
 

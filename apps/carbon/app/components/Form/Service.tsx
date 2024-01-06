@@ -1,36 +1,16 @@
-import {
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
-  ReactSelect,
-  useMount,
-} from "@carbon/react";
+import { useMount } from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
 import { useMemo } from "react";
-import { useControlField, useField } from "remix-validated-form";
 import type { ServiceType, getServicesList } from "~/modules/parts";
 import { path } from "~/utils/path";
-import type { SelectProps } from "./Select";
+import type { ComboboxProps } from "./Combobox";
+import Combobox from "./Combobox";
 
-type ServiceSelectProps = Omit<SelectProps, "options"> & {
+type ServiceSelectProps = Omit<ComboboxProps, "options"> & {
   serviceType?: ServiceType;
 };
 
-const Service = ({
-  name,
-  label = "Service",
-  serviceType,
-  helperText,
-  isLoading,
-  isReadOnly,
-  placeholder = "Select Service",
-  onChange,
-  ...props
-}: ServiceSelectProps) => {
-  const { getInputProps, error } = useField(name);
-  const [value, setValue] = useControlField<string | undefined>(name);
-
+const Service = ({ serviceType, ...props }: ServiceSelectProps) => {
   const servicesFetcher =
     useFetcher<Awaited<ReturnType<typeof getServicesList>>>();
 
@@ -50,46 +30,8 @@ const Service = ({
     [servicesFetcher.data]
   );
 
-  const handleChange = (selection: {
-    value: string | number;
-    label: string;
-  }) => {
-    const newValue = (selection.value as string) || undefined;
-    setValue(newValue);
-    if (onChange && typeof onChange === "function") {
-      onChange(selection);
-    }
-  };
-
-  const controlledValue = useMemo(
-    // @ts-ignore
-    () => options.find((option) => option.value === value),
-    [value, options]
-  );
-
   return (
-    <FormControl isInvalid={!!error}>
-      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-      <ReactSelect
-        {...getInputProps({
-          // @ts-ignore
-          id: name,
-        })}
-        {...props}
-        options={options}
-        value={controlledValue}
-        isLoading={isLoading}
-        placeholder={placeholder}
-        w="full"
-        isReadOnly={isReadOnly}
-        onChange={handleChange}
-      />
-      {error ? (
-        <FormErrorMessage>{error}</FormErrorMessage>
-      ) : (
-        helperText && <FormHelperText>{helperText}</FormHelperText>
-      )}
-    </FormControl>
+    <Combobox options={options} {...props} label={props?.label ?? "Service"} />
   );
 };
 

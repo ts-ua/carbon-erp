@@ -65,7 +65,7 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
     ? !permissions.can("update", "accounting")
     : !permissions.can("create", "accounting");
 
-  const onAccountCategoryChange = (category?: AccountCategoryType) => {
+  const onAccountCategoryChange = (category: AccountCategoryType | null) => {
     if (category) {
       setAccountCategoryId(category.id ?? "");
       setIncomeBalance(category.incomeBalance ?? "Income Statement");
@@ -140,7 +140,7 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
                   value={incomeBalance}
                   onChange={(newValue) => {
                     if (newValue)
-                      setIncomeBalance(newValue as AccountIncomeBalance);
+                      setIncomeBalance(newValue.value as AccountIncomeBalance);
                   }}
                 />
               </VStack>
@@ -154,7 +154,8 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
                   }))}
                   value={accountClass}
                   onChange={(newValue) => {
-                    if (newValue) setAccountClass(newValue as AccountClass);
+                    if (newValue)
+                      setAccountClass(newValue.value as AccountClass);
                   }}
                 />
                 <Select

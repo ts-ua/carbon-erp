@@ -1,118 +1,62 @@
-import {
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
-  ReactSelect,
-} from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
-import { useEffect, useMemo, useRef } from "react";
-import { useControlField, useField } from "remix-validated-form";
+import { useEffect, useMemo } from "react";
 import type {
   SupplierLocation as SupplierLocationType,
   getSupplierLocations,
 } from "~/modules/purchasing";
 import { path } from "~/utils/path";
-import type { SelectProps } from "./Select";
 
-type SupplierLocationSelectProps = Omit<SelectProps, "options" | "onChange"> & {
+import type { ComboboxProps } from "./Combobox";
+import Combobox from "./Combobox";
+
+type SupplierLocationSelectProps = Omit<
+  ComboboxProps,
+  "options" | "onChange"
+> & {
   supplier?: string;
-  onChange?: (supplierLocation: SupplierLocationType | null) => void;
+  onChange?: (supplier: SupplierLocationType | null) => void;
 };
 
-const SupplierLocation = ({
-  name,
-  label = "Supplier Location",
-  supplier,
-  helperText,
-  isLoading,
-  isReadOnly,
-  placeholder = "Select Supplier Location",
-  onChange,
-  ...props
-}: SupplierLocationSelectProps) => {
-  const initialLoad = useRef(true);
-  const { error } = useField(name);
-  const [value, setValue] = useControlField<string | null>(name);
-
-  const supplierLocationFetcher =
+const SupplierLocation = (props: SupplierLocationSelectProps) => {
+  const supplierLocationsFetcher =
     useFetcher<Awaited<ReturnType<typeof getSupplierLocations>>>();
 
   useEffect(() => {
-    if (supplier) {
-      supplierLocationFetcher.load(path.to.api.supplierLocations(supplier));
-    }
-    if (initialLoad.current) {
-      initialLoad.current = false;
-    } else {
-      setValue(null);
-      if (onChange) {
-        onChange(null);
-      }
+    if (props?.supplier) {
+      supplierLocationsFetcher.load(
+        path.to.api.supplierLocations(props.supplier)
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [supplier]);
+  }, [props.supplier]);
 
   const options = useMemo(
     () =>
-      supplierLocationFetcher.data?.data
-        ? supplierLocationFetcher.data?.data.map((c) => ({
-            value: c.id,
-            // @ts-ignore
-            label: `${c.address?.addressLine1} ${c.address?.city}, ${c.address?.state}`,
-          }))
-        : [],
-    [supplierLocationFetcher.data]
+      supplierLocationsFetcher.data?.data?.map((c) => ({
+        value: c.id,
+        label: `${c.address?.addressLine1} ${c.address?.city}, ${c.address?.state}`,
+      })) ?? [],
+
+    [supplierLocationsFetcher.data]
   );
 
-  const handleChange = (
-    selection: {
-      value: string | number;
-      label: string;
-    } | null
-  ) => {
-    const newValue = (selection?.value as string) ?? null;
-    setValue(newValue);
-    if (onChange && typeof onChange === "function") {
-      if (newValue === null) onChange(newValue);
-      const location = supplierLocationFetcher.data?.data?.find(
-        (c) => c.id === newValue
-      );
+  const onChange = (newValue: { label: string; value: string } | null) => {
+    const location =
+      supplierLocationsFetcher.data?.data?.find(
+        (location) => location.id === newValue?.value
+      ) ?? null;
 
-      onChange(location ?? null);
-    }
+    props.onChange?.(location as SupplierLocationType | null);
   };
 
-  const controlledValue = useMemo(
-    // @ts-ignore
-    () => options.find((option) => option.value === value),
-    [value, options]
-  );
-
   return (
-    <FormControl isInvalid={!!error}>
-      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-      <input type="hidden" name={name} id={name} value={value ?? ""} />
-      <ReactSelect
-        {...props}
-        value={controlledValue}
-        isLoading={isLoading}
-        options={options}
-        placeholder={placeholder}
-        isClearable
-        // @ts-ignore
-        onChange={handleChange}
-        w="full"
-      />
-      {error ? (
-        <FormErrorMessage>{error}</FormErrorMessage>
-      ) : (
-        helperText && <FormHelperText>{helperText}</FormHelperText>
-      )}
-    </FormControl>
+    <Combobox
+      options={options}
+      {...props}
+      onChange={onChange}
+      label={props?.label ?? "Supplier Location"}
+    />
   );
 };
-
-SupplierLocation.displayName = "SupplierLocation";
 
 export default SupplierLocation;

@@ -9,6 +9,10 @@ code {
 }
 
 :root {
+  --nextra-primary-hue: 230deg;
+}
+
+.dark {
   --nextra-primary-hue: 161deg;
 }
 

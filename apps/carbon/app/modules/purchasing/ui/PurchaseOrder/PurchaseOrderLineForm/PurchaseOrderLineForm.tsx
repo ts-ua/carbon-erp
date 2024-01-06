@@ -183,20 +183,18 @@ const PurchaseOrderLineForm = ({
     });
   };
 
-  const onLocationChange = async (
-    newLocationId: string | number | undefined
-  ) => {
+  const onLocationChange = async (newLocation: { value: string } | null) => {
     if (!supabase) throw new Error("supabase is not defined");
-    if (typeof newLocationId !== "string")
+    if (typeof newLocation?.value !== "string")
       throw new Error("locationId is not a string");
 
-    setLocationId(newLocationId);
+    setLocationId(newLocation.value);
     if (!partData.partId) return;
     const shelf = await supabase
       .from("partInventory")
       .select("defaultShelfId")
       .eq("partId", partData.partId)
-      .eq("locationId", newLocationId)
+      .eq("locationId", newLocation.value)
       .maybeSingle();
 
     setPartData((d) => ({
@@ -333,12 +331,14 @@ const PurchaseOrderLineForm = ({
                       label="Shelf"
                       options={shelfOptions}
                       value={partData.shelfId}
-                      onChange={(newValue) =>
-                        setPartData((d) => ({
-                          ...d,
-                          shelfId: newValue as string,
-                        }))
-                      }
+                      onChange={(newValue) => {
+                        if (newValue) {
+                          setPartData((d) => ({
+                            ...d,
+                            shelfId: newValue?.value as string,
+                          }));
+                        }
+                      }}
                     />
                   )}
                 </>

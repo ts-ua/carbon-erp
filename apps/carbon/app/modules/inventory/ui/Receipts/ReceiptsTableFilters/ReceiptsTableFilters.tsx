@@ -1,10 +1,10 @@
-import { Button, HStack, useMount } from "@carbon/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
 import { Combobox } from "~/components";
 import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
-import { usePermissions, useUrlParams, useUser } from "~/hooks";
+import { usePermissions, useUrlParams } from "~/hooks";
 import { receiptSourceDocumentType } from "~/modules/inventory";
 import type { ListItem } from "~/types";
 
@@ -15,15 +15,6 @@ type ReceiptsTableFiltersProps = {
 const ReceiptsTableFilters = ({ locations }: ReceiptsTableFiltersProps) => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
-  const {
-    defaults: { locationId },
-  } = useUser();
-
-  useMount(() => {
-    if (!params.get("location") && locationId) {
-      setParams({ location: locationId });
-    }
-  });
 
   const sourceDocumentOptions = receiptSourceDocumentType.map((type) => ({
     label: type,

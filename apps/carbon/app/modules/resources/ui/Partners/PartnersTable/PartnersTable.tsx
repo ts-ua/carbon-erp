@@ -27,7 +27,7 @@ const PartnersTable = memo(({ data, count }: PartnersTableProps) => {
   const columns = useMemo<ColumnDef<(typeof rows)[number]>[]>(() => {
     return [
       {
-        accessorKey: "supplier",
+        accessorKey: "supplierName",
         header: "Supplier",
         cell: ({ row }) => (
           <HStack>
@@ -52,6 +52,11 @@ const PartnersTable = memo(({ data, count }: PartnersTableProps) => {
         ),
       },
       {
+        accessorKey: "abilityName",
+        header: "Ability",
+        cell: (item) => item.getValue(),
+      },
+      {
         accessorKey: "hoursPerWeek",
         header: "Hours per Week",
         cell: (item) => item.getValue(),
@@ -68,7 +73,8 @@ const PartnersTable = memo(({ data, count }: PartnersTableProps) => {
             onClick={() => {
               navigate(
                 `${path.to.partner(
-                  row.supplierLocationId!
+                  row.supplierLocationId!,
+                  row.abilityId!
                 )}?${params.toString()}`
               );
             }}
