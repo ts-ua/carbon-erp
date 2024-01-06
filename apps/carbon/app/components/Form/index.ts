@@ -31,6 +31,7 @@ import Select from "./Select";
 import SelectControlled from "./SelectControlled";
 import Sequence from "./Sequence";
 import Service from "./Service";
+import Shift from "./Shift";
 import Slider from "./Slider";
 import Submit from "./Submit";
 import Supplier from "./Supplier";
@@ -76,6 +77,7 @@ export {
   SelectControlled,
   Sequence,
   Service,
+  Shift,
   Slider,
   Submit,
   Supplier,

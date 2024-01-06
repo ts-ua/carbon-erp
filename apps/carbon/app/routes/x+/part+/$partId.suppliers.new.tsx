@@ -42,7 +42,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       path.to.partSuppliers(partId),
       await flash(
         request,
-        error(createPartSupplier.error, "Failed to create part supplier.")
+        error(createPartSupplier.error, "Failed to create part supplier")
       )
     );
   }

@@ -10,6 +10,7 @@ import type {
   employeeJobValidator,
   equipmentValidator,
   locationValidator,
+  partnerValidator,
 } from "./resources.models";
 
 export async function deleteAbility(
@@ -287,7 +288,7 @@ export async function getContractors(
   }
 
   if (args?.ability) {
-    query.contains("abilityIds", [args.ability]);
+    query.eq("abilityId", args?.ability);
   }
 
   if (args) {
@@ -506,12 +507,14 @@ export async function getLocationsList(client: SupabaseClient<Database>) {
 
 export async function getPartner(
   client: SupabaseClient<Database>,
-  partnerId: string
+  partnerId: string,
+  abilityId: string
 ) {
   return client
     .from("partners")
     .select("*")
     .eq("supplierLocationId", partnerId)
+    .eq("abilityId", abilityId)
     .single();
 }
 
@@ -526,7 +529,7 @@ export async function getPartners(
   }
 
   if (args?.ability) {
-    query.contains("abilityIds", [args.ability]);
+    query.eq("abilityId", args.ability);
   }
 
   if (args) {
@@ -1146,52 +1149,23 @@ export async function upsertLocation(
 
 export async function upsertPartner(
   client: SupabaseClient<Database>,
-  partnerWithAbilities:
-    | {
-        id: string;
-        hoursPerWeek?: number;
-        abilities: string[];
+  partner:
+    | (Omit<TypeOfValidator<typeof partnerValidator>, "supplierId"> & {
         createdBy: string;
-      }
-    | {
-        id: string;
-        hoursPerWeek?: number;
-        abilities: string[];
+      })
+    | (Omit<TypeOfValidator<typeof partnerValidator>, "supplierId"> & {
         updatedBy: string;
-      }
+      })
 ) {
-  const { abilities, ...partner } = partnerWithAbilities;
   if ("updatedBy" in partner) {
-    const updatePartner = await client
+    return client
       .from("partner")
       .update(sanitize(partner))
-      .eq("id", partner.id);
-    if (updatePartner.error) {
-      return updatePartner;
-    }
-    const deletePartnerAbilities = await client
-      .from("partnerAbility")
-      .delete()
-      .eq("partnerId", partner.id);
-    if (deletePartnerAbilities.error) {
-      return deletePartnerAbilities;
-    }
+      .eq("id", partner.id)
+      .eq("abilityId", partner.abilityId);
   } else {
-    const createPartner = await client.from("partner").insert([partner]);
-    if (createPartner.error) {
-      return createPartner;
-    }
+    return await client.from("partner").insert([partner]);
   }
-
-  const partnerAbilities = abilities.map((ability) => {
-    return {
-      partnerId: partner.id,
-      abilityId: ability,
-      createdBy: "createdBy" in partner ? partner.createdBy : partner.updatedBy,
-    };
-  });
-
-  return client.from("partnerAbility").insert(partnerAbilities);
 }
 
 export async function upsertShift(

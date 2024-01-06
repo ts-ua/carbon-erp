@@ -1,115 +1,62 @@
-import {
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
-  ReactSelect,
-} from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
-import { useEffect, useMemo, useRef } from "react";
-import { useControlField, useField } from "remix-validated-form";
+import { useEffect, useMemo } from "react";
 import type {
   CustomerLocation as CustomerLocationType,
   getCustomerLocations,
 } from "~/modules/sales";
 import { path } from "~/utils/path";
-import type { SelectProps } from "./Select";
 
-type CustomerLocationSelectProps = Omit<SelectProps, "options" | "onChange"> & {
+import type { ComboboxProps } from "./Combobox";
+import Combobox from "./Combobox";
+
+type CustomerLocationSelectProps = Omit<
+  ComboboxProps,
+  "options" | "onChange"
+> & {
   customer?: string;
-  onChange?: (customerLocation: CustomerLocationType | undefined) => void;
+  onChange?: (customer: CustomerLocationType | null) => void;
 };
 
-const CustomerLocation = ({
-  name,
-  label = "Customer Location",
-  customer,
-  helperText,
-  isLoading,
-  isReadOnly,
-  placeholder = "Select Customer Location",
-  onChange,
-  ...props
-}: CustomerLocationSelectProps) => {
-  const initialLoad = useRef(true);
-  const { error } = useField(name);
-  const [value, setValue] = useControlField<string | undefined>(name);
-
-  const customerLocationFetcher =
+const CustomerLocation = (props: CustomerLocationSelectProps) => {
+  const customerLocationsFetcher =
     useFetcher<Awaited<ReturnType<typeof getCustomerLocations>>>();
 
   useEffect(() => {
-    if (customer) {
-      customerLocationFetcher.load(path.to.api.customerLocations(customer));
-    }
-    if (initialLoad.current) {
-      initialLoad.current = false;
-    } else {
-      setValue(undefined);
-      if (onChange) {
-        onChange(undefined);
-      }
+    if (props?.customer) {
+      customerLocationsFetcher.load(
+        path.to.api.customerLocations(props.customer)
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [customer]);
+  }, [props.customer]);
 
   const options = useMemo(
     () =>
-      customerLocationFetcher.data?.data
-        ? customerLocationFetcher.data?.data.map((c) => ({
-            value: c.id,
-            // @ts-ignore
-            label: `${c.address?.addressLine1} ${c.address?.city}, ${c.address?.state}`,
-          }))
-        : [],
-    [customerLocationFetcher.data]
+      customerLocationsFetcher.data?.data?.map((c) => ({
+        value: c.id,
+        label: `${c.address?.addressLine1} ${c.address?.city}, ${c.address?.state}`,
+      })) ?? [],
+
+    [customerLocationsFetcher.data]
   );
 
-  const handleChange = (selection: {
-    value: string | number;
-    label: string;
-  }) => {
-    const newValue = (selection.value as string) || undefined;
-    setValue(newValue);
-    if (onChange && typeof onChange === "function") {
-      if (newValue === undefined) onChange(newValue);
-      const contact = customerLocationFetcher.data?.data?.find(
-        (c) => c.id === newValue
-      );
+  const onChange = (newValue: { label: string; value: string } | null) => {
+    const location =
+      customerLocationsFetcher.data?.data?.find(
+        (location) => location.id === newValue?.value
+      ) ?? null;
 
-      onChange(contact);
-    }
+    props.onChange?.(location as CustomerLocationType | null);
   };
 
-  const controlledValue = useMemo(
-    // @ts-ignore
-    () => options.find((option) => option.value === value),
-    [value, options]
-  );
-
   return (
-    <FormControl isInvalid={!!error}>
-      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-      <input type="hidden" name={name} id={name} value={value} />
-      <ReactSelect
-        {...props}
-        value={controlledValue}
-        isLoading={isLoading}
-        options={options}
-        placeholder={placeholder}
-        // @ts-ignore
-        onChange={handleChange}
-        w="full"
-      />
-      {error ? (
-        <FormErrorMessage>{error}</FormErrorMessage>
-      ) : (
-        helperText && <FormHelperText>{helperText}</FormHelperText>
-      )}
-    </FormControl>
+    <Combobox
+      options={options}
+      {...props}
+      onChange={onChange}
+      label={props?.label ?? "Customer Location"}
+    />
   );
 };
-
-CustomerLocation.displayName = "CustomerLocation";
 
 export default CustomerLocation;

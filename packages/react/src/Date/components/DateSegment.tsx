@@ -1,11 +1,10 @@
-import { Box } from "@chakra-ui/react";
 import { useDateSegment } from "@react-aria/datepicker";
 import type {
   DateSegment as DateSegmentType,
   useDateFieldState,
 } from "@react-stately/datepicker";
+import clsx from "clsx";
 import { useId, useRef } from "react";
-import { useColor } from "../../hooks";
 
 export const DateSegment = ({
   segment,
@@ -25,38 +24,25 @@ export const DateSegment = ({
     segmentProps["aria-describedby"] = instanceId;
   }
 
-  const lighter = useColor("gray.500");
-  const light = useColor("gray.600");
-  const black = useColor("black");
-
   return (
-    <Box
+    <div
       {...segmentProps}
-      id={instanceId}
       ref={ref}
-      style={{
-        ...segmentProps.style,
-        fontVariantNumeric: "tabular-nums",
-        boxSizing: "content-box",
-      }}
-      minWidth={
-        segment.maxValue !== undefined
-          ? String(segment.maxValue).length + "ch"
-          : undefined
-      }
-      paddingX="0.5"
-      textAlign="end"
-      outline="none"
-      rounded="md"
-      color={
-        segment.isPlaceholder ? lighter : !segment.isEditable ? light : black
-      }
-      _focus={{
-        background: "gray.500",
-        color: "white",
-      }}
+      className="box-content tabular-nums text-right outline-none rounded-sm group focus:ring-2 focus:ring-offset-2"
     >
-      {segment.text}
-    </Box>
+      <span
+        aria-hidden="true"
+        className={clsx("w-full text-center", {
+          hidden: !segment.isPlaceholder,
+          "h-0": !segment.isPlaceholder,
+          block: segment.isPlaceholder,
+        })}
+      >
+        {segment.isPlaceholder
+          ? segment.text.toUpperCase()
+          : segment.placeholder}
+      </span>
+      {segment.isPlaceholder ? "" : segment.text}
+    </div>
   );
 };

@@ -1,7 +1,7 @@
-import { HStack, Loading } from "@carbon/react";
-import type { IconProps } from "@chakra-ui/react";
+import { HStack, Loading, cn } from "@carbon/react";
 import { Box, Icon, List, ListItem } from "@chakra-ui/react";
-import { FaCheck, FaChevronRight } from "react-icons/fa";
+import { FaChevronRight } from "react-icons/fa";
+import { RxCheck } from "react-icons/rx";
 import useUserSelectContext from "../provider";
 import type { IndividualOrGroup, OptionGroup } from "../types";
 import { useGroupStyles, useOptionStyles } from "./useUserSelectStyles";
@@ -76,6 +76,7 @@ const Group = ({ group }: { group: OptionGroup }) => {
     >
       <Box
         role="treeitem"
+        aria-selected={isExpanded ? "true" : "false"}
         onClick={() =>
           group.expanded ? onGroupCollapse(group.uid) : onGroupExpand(group.uid)
         }
@@ -113,10 +114,6 @@ const Group = ({ group }: { group: OptionGroup }) => {
   );
 };
 
-const CheckIcon = (iconProps: IconProps) => (
-  <Icon as={FaCheck} {...iconProps} />
-);
-
 const Option = ({
   id,
   item,
@@ -147,13 +144,11 @@ const Option = ({
       sx={sx}
     >
       <HStack spacing={1} className="w-full items-center">
-        <CheckIcon
-          display="block"
-          marginEnd="0.75rem"
-          fontSize="0.8rem"
-          w={4}
-          h={4}
-          opacity={isSelected ? 1 : 0}
+        <RxCheck
+          className={cn(
+            "block mr-[0.75rem] text-[0.8rem] w-4 h-4",
+            isSelected ? "opacity-100" : "opacity-0"
+          )}
         />
         <span className="line-clamp-1">{name}</span>
       </HStack>

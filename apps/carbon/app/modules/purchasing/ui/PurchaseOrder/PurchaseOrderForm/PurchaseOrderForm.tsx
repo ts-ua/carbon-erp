@@ -15,7 +15,6 @@ import {
   Hidden,
   Input,
   Select,
-  SelectControlled,
   Submit,
   Supplier,
   SupplierContact,
@@ -124,7 +123,7 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
                 {isEditing && (
                   <>
                     {permissions.can("delete", "purchasing") && (
-                      <SelectControlled
+                      <Select
                         name="status"
                         label="Status"
                         value={initialValues.status}

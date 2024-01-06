@@ -4,53 +4,28 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  ReactSelect,
   VStack,
-  useMount,
 } from "@carbon/react";
-import { useFetcher } from "@remix-run/react";
-import { useEffect, useMemo } from "react";
-import { ValidatedForm, useControlField, useField } from "remix-validated-form";
+import { useState } from "react";
+import { ValidatedForm } from "remix-validated-form";
 import {
   DatePicker,
   Employee,
   Hidden,
   Input,
   Location,
+  Shift,
   Submit,
 } from "~/components/Form";
-import type { EmployeeJob, getShiftsList } from "~/modules/resources";
+import type { EmployeeJob } from "~/modules/resources";
 import { employeeJobValidator } from "~/modules/resources";
-import { path } from "~/utils/path";
 
 type PersonJobProps = {
   job: EmployeeJob;
 };
 
 const PersonJob = ({ job }: PersonJobProps) => {
-  const shiftFetcher = useFetcher<Awaited<ReturnType<typeof getShiftsList>>>();
-
-  const onLocationChange = (selected: { value: string | number } | null) => {
-    if (selected?.value)
-      shiftFetcher.load(path.to.api.shifts(`${selected.value}`));
-  };
-
-  useMount(() => {
-    if (job.locationId) shiftFetcher.load(path.to.api.shifts(job.locationId));
-  });
-
-  const shifts = useMemo(
-    () =>
-      shiftFetcher.data?.data?.map((shift) => ({
-        value: shift.id,
-        label: shift.name,
-      })) ?? [],
-    [shiftFetcher.data]
-  );
-
+  const [location, setLocation] = useState<string | null>(job.locationId);
   return (
     <ValidatedForm
       validator={employeeJobValidator}
@@ -74,11 +49,12 @@ const PersonJob = ({ job }: PersonJobProps) => {
             <Location
               name="locationId"
               label="Location"
-              onChange={onLocationChange}
+              onChange={(l) => setLocation(l?.value ?? null)}
             />
-            <ShiftByLocation
-              shifts={shifts}
-              initialShift={job.shiftId ?? undefined}
+            <Shift
+              location={location ?? undefined}
+              name="shiftId"
+              label="Shift"
             />
             <Employee name="managerId" label="Manager" />
             <Hidden name="intent" value="job" />
@@ -89,49 +65,6 @@ const PersonJob = ({ job }: PersonJobProps) => {
         </CardFooter>
       </Card>
     </ValidatedForm>
-  );
-};
-
-const SHIFT_FIELD = "shiftId";
-
-const ShiftByLocation = ({
-  shifts,
-  initialShift,
-}: {
-  shifts: { value: string | number; label: string }[];
-  initialShift?: string;
-}) => {
-  const { error, getInputProps } = useField(SHIFT_FIELD);
-
-  const [shift, setShift] = useControlField<{
-    value: string | number;
-    label: string;
-  } | null>(SHIFT_FIELD);
-
-  useEffect(() => {
-    // if the initial value is in the options, set it, otherwise set to null
-    if (shifts) {
-      setShift(shifts.find((s) => s.value === initialShift) ?? null);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shifts, initialShift]);
-
-  return (
-    <FormControl isInvalid={!!error}>
-      <FormLabel htmlFor={SHIFT_FIELD}>Shift</FormLabel>
-      <ReactSelect
-        {...getInputProps({
-          // @ts-ignore
-          id: SHIFT_FIELD,
-        })}
-        options={shifts}
-        value={shift}
-        onChange={setShift}
-        // @ts-ignore
-        w="full"
-      />
-      {error && <FormErrorMessage>{error}</FormErrorMessage>}
-    </FormControl>
   );
 };
 

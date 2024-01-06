@@ -1,33 +1,14 @@
-import {
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
-  ReactSelect,
-  useMount,
-} from "@carbon/react";
+import { useMount } from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
 import { useMemo } from "react";
-import { useControlField, useField } from "remix-validated-form";
 import type { getDepartmentsList } from "~/modules/resources";
 import { path } from "~/utils/path";
-import type { SelectProps } from "./Select";
+import type { ComboboxProps } from "./Combobox";
+import Combobox from "./Combobox";
 
-type DepartmentSelectProps = Omit<SelectProps, "options">;
+type DepartmentSelectProps = Omit<ComboboxProps, "options">;
 
-const Department = ({
-  name,
-  label = "Department",
-  helperText,
-  isLoading,
-  isReadOnly,
-  placeholder = "Select Department",
-  onChange,
-  ...props
-}: DepartmentSelectProps) => {
-  const { error } = useField(name);
-  const [value, setValue] = useControlField<string | undefined>(name);
-
+const Department = (props: DepartmentSelectProps) => {
   const departmentFetcher =
     useFetcher<Awaited<ReturnType<typeof getDepartmentsList>>>();
 
@@ -46,42 +27,12 @@ const Department = ({
     [departmentFetcher.data]
   );
 
-  const handleChange = (selection: {
-    value: string | number;
-    label: string;
-  }) => {
-    const newValue = (selection.value as string) || undefined;
-    setValue(newValue);
-    if (onChange && typeof onChange === "function") {
-      onChange(selection);
-    }
-  };
-
-  const controlledValue = useMemo(
-    // @ts-ignore
-    () => options.find((option) => option.value === value),
-    [value, options]
-  );
-
   return (
-    <FormControl isInvalid={!!error}>
-      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-      <input type="hidden" name={name} id={name} value={value} />
-      <ReactSelect
-        {...props}
-        value={controlledValue}
-        isLoading={isLoading}
-        options={options}
-        placeholder={placeholder}
-        // @ts-ignore
-        onChange={handleChange}
-      />
-      {error ? (
-        <FormErrorMessage>{error}</FormErrorMessage>
-      ) : (
-        helperText && <FormHelperText>{helperText}</FormHelperText>
-      )}
-    </FormControl>
+    <Combobox
+      options={options}
+      {...props}
+      label={props?.label ?? "Department"}
+    />
   );
 };
 

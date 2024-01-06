@@ -138,9 +138,9 @@ const ReceiptForm = ({
                           })) ?? []
                         }
                         value={locationId ?? undefined}
-                        onChange={(newValue) =>
-                          setLocationId(newValue as string)
-                        }
+                        onChange={(newValue) => {
+                          if (newValue) setLocationId(newValue.value as string);
+                        }}
                         isReadOnly={isPosted}
                       />
                       <Select
@@ -151,10 +151,12 @@ const ReceiptForm = ({
                           value: v,
                         }))}
                         onChange={(newValue) => {
-                          setSourceDocument(
-                            newValue.value as ReceiptSourceDocument
-                          );
-                          setSourceDocumentId(null);
+                          if (newValue) {
+                            setSourceDocument(
+                              newValue.value as ReceiptSourceDocument
+                            );
+                            setSourceDocumentId(null);
+                          }
                         }}
                         isReadOnly={isPosted}
                       />
@@ -167,7 +169,9 @@ const ReceiptForm = ({
                         }))}
                         value={sourceDocumentId ?? undefined}
                         onChange={(newValue) => {
-                          setSourceDocumentId(newValue as string);
+                          if (newValue) {
+                            setSourceDocumentId(newValue.value as string);
+                          }
                         }}
                         isReadOnly={isPosted}
                       />

@@ -1,41 +1,22 @@
-import {
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
-  ReactSelect,
-  useMount,
-} from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
 import { useMemo } from "react";
-import { useControlField, useField } from "remix-validated-form";
-import type { getSequencesList } from "~/modules/settings";
 import { path } from "~/utils/path";
+
+import { useMount } from "@carbon/react";
+import type { getSequencesList } from "~/modules/settings";
 import type { SelectProps } from "./Select";
+import Select from "./Select";
 
 type SequenceSelectProps = Omit<SelectProps, "options"> & {
   table: string;
 };
 
-const Sequence = ({
-  name,
-  label = "Sequence",
-  table,
-  helperText,
-  isLoading,
-  isReadOnly,
-  placeholder = "Select Sequence",
-  onChange,
-  ...props
-}: SequenceSelectProps) => {
-  const { error } = useField(name);
-  const [value, setValue] = useControlField<string | undefined>(name);
-
+const Sequence = (props: SequenceSelectProps) => {
   const sequenceFetcher =
     useFetcher<Awaited<ReturnType<typeof getSequencesList>>>();
 
   useMount(() => {
-    sequenceFetcher.load(path.to.api.sequences(table));
+    sequenceFetcher.load(path.to.api.sequences(props.table));
   });
 
   const options = useMemo(
@@ -49,45 +30,9 @@ const Sequence = ({
     [sequenceFetcher.data]
   );
 
-  const handleChange = (selection: {
-    value: string | number;
-    label: string;
-  }) => {
-    const newValue = (selection.value as string) || undefined;
-    setValue(newValue);
-    if (onChange && typeof onChange === "function") {
-      onChange(selection);
-    }
-  };
-
-  const controlledValue = useMemo(
-    () =>
-      options.find((option) => option.value === value) ?? options?.[0] ?? null,
-    [value, options]
-  );
-
   return (
-    <FormControl isInvalid={!!error}>
-      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-      <input type="hidden" name={name} id={name} value={value} />
-      <ReactSelect
-        {...props}
-        value={controlledValue}
-        isLoading={isLoading}
-        options={options}
-        placeholder={placeholder}
-        // @ts-ignore
-        onChange={handleChange}
-      />
-      {error ? (
-        <FormErrorMessage>{error}</FormErrorMessage>
-      ) : (
-        helperText && <FormHelperText>{helperText}</FormHelperText>
-      )}
-    </FormControl>
+    <Select options={options} {...props} label={props?.label ?? "Sequence"} />
   );
 };
-
-Sequence.displayName = "Sequence";
 
 export default Sequence;

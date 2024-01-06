@@ -3,8 +3,8 @@ import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import {
-  getPartner,
   PartnerForm,
+  getPartner,
   partnerValidator,
   upsertPartner,
 } from "~/modules/resources";
@@ -19,10 +19,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     view: "resources",
   });
 
-  const { supplierLocationId } = params;
+  const { supplierLocationId, abilityId } = params;
   if (!supplierLocationId) throw notFound("Partner ID was not found");
+  if (!abilityId) throw notFound("Ability ID was not found");
 
-  const partner = await getPartner(client, supplierLocationId);
+  const partner = await getPartner(client, supplierLocationId, abilityId);
 
   if (partner.error) {
     return redirect(
@@ -48,13 +49,10 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const { id, hoursPerWeek, abilities } = validation.data;
-  if (!id) throw notFound("Partner ID was not found");
+  const { supplierId, ...data } = validation.data;
 
   const updatePartner = await upsertPartner(client, {
-    id,
-    hoursPerWeek,
-    abilities,
+    ...data,
     updatedBy: userId,
   });
 
@@ -63,7 +61,7 @@ export async function action({ request }: ActionFunctionArgs) {
       path.to.partners,
       await flash(
         request,
-        error(updatePartner.error, "Failed to create partner.")
+        error(updatePartner.error, "Failed to create partner")
       )
     );
   }
@@ -81,7 +79,7 @@ export default function PartnerRoute() {
     id: partner.supplierLocationId ?? "",
     supplierId: partner.supplierId ?? "",
     hoursPerWeek: partner.hoursPerWeek ?? 0,
-    abilities: partner.abilityIds ?? ([] as string[]),
+    abilityId: partner.abilityId ?? "",
   };
 
   return <PartnerForm initialValues={initialValues} />;

@@ -304,7 +304,8 @@ export const path = {
     partSuppliers: (id: string) => generatePath(`${x}/part/${id}/suppliers`),
     parts: `${x}/parts`,
     partsSearch: `${x}/parts/search`,
-    partner: (id: string) => generatePath(`${x}/resources/partners/${id}`),
+    partner: (id: string, abilityId: string) =>
+      generatePath(`${x}/resources/partners/${id}/${abilityId}`),
     partners: `${x}/resources/partners`,
     paymentTerm: (id: string) =>
       generatePath(`${x}/accounting/payment-terms/${id}`),

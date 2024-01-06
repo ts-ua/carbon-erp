@@ -59,7 +59,7 @@ const Input = () => {
       />
 
       <InputRightElement>
-        <HStack spacing={1} className="mr-2">
+        <HStack spacing={1}>
           {loading && <Spinner size="sm" />}
           {!loading && !disabled && inputValue.length > 0 && (
             <IconButton

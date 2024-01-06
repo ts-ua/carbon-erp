@@ -3929,6 +3929,7 @@ export interface Database {
       };
       partner: {
         Row: {
+          abilityId: string;
           active: boolean;
           createdAt: string;
           createdBy: string;
@@ -3938,6 +3939,7 @@ export interface Database {
           updatedBy: string | null;
         };
         Insert: {
+          abilityId: string;
           active?: boolean;
           createdAt?: string;
           createdBy: string;
@@ -3947,6 +3949,7 @@ export interface Database {
           updatedBy?: string | null;
         };
         Update: {
+          abilityId?: string;
           active?: boolean;
           createdAt?: string;
           createdBy?: string;
@@ -3956,6 +3959,12 @@ export interface Database {
           updatedBy?: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: "partner_abilityId_fkey";
+            columns: ["abilityId"];
+            referencedRelation: "ability";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "partner_createdBy_fkey";
             columns: ["createdBy"];
@@ -3997,64 +4006,6 @@ export interface Database {
             columns: ["updatedBy"];
             referencedRelation: "userDefaults";
             referencedColumns: ["userId"];
-          }
-        ];
-      };
-      partnerAbility: {
-        Row: {
-          abilityId: string;
-          createdAt: string;
-          createdBy: string;
-          partnerId: string;
-        };
-        Insert: {
-          abilityId: string;
-          createdAt?: string;
-          createdBy: string;
-          partnerId: string;
-        };
-        Update: {
-          abilityId?: string;
-          createdAt?: string;
-          createdBy?: string;
-          partnerId?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "partnerAbility_abilityId_fkey";
-            columns: ["abilityId"];
-            referencedRelation: "ability";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "partnerAbility_createdBy_fkey";
-            columns: ["createdBy"];
-            referencedRelation: "user";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "partnerAbility_createdBy_fkey";
-            columns: ["createdBy"];
-            referencedRelation: "employeeSummary";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "partnerAbility_createdBy_fkey";
-            columns: ["createdBy"];
-            referencedRelation: "userDefaults";
-            referencedColumns: ["userId"];
-          },
-          {
-            foreignKeyName: "partnerAbility_partnerId_fkey";
-            columns: ["partnerId"];
-            referencedRelation: "partner";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "partnerAbility_partnerId_fkey";
-            columns: ["partnerId"];
-            referencedRelation: "partners";
-            referencedColumns: ["supplierLocationId"];
           }
         ];
       };
@@ -9455,7 +9406,8 @@ export interface Database {
       };
       partners: {
         Row: {
-          abilityIds: string[] | null;
+          abilityId: string | null;
+          abilityName: string | null;
           active: boolean | null;
           city: string | null;
           hoursPerWeek: number | null;
@@ -9465,6 +9417,12 @@ export interface Database {
           supplierName: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: "partner_abilityId_fkey";
+            columns: ["abilityId"];
+            referencedRelation: "ability";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "partner_id_fkey";
             columns: ["supplierLocationId"];

@@ -16,7 +16,6 @@ import {
   Hidden,
   Input,
   Select,
-  SelectControlled,
   Submit,
   Supplier,
   SupplierContact,
@@ -126,7 +125,7 @@ const PurchaseInvoiceForm = ({
                 <DatePicker name="dateIssued" label="Date Issued" />
                 <DatePicker name="dateDue" label="Due Date" />
                 {isEditing && (
-                  <SelectControlled
+                  <Select
                     name="status"
                     label="Status"
                     value={initialValues.status}
