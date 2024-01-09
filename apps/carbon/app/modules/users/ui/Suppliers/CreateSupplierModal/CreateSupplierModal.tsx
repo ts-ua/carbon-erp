@@ -10,13 +10,13 @@ import {
   ModalFooter,
   ModalHeader,
   ModalTitle,
-  ReactSelect,
   VStack,
 } from "@carbon/react";
 import { Grid } from "@chakra-ui/react";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ValidatedForm, useControlField, useField } from "remix-validated-form";
+import { Combobox } from "~/components";
 import { Submit, Supplier } from "~/components/Form";
 import { useUrlParams } from "~/hooks";
 import type {
@@ -153,16 +153,10 @@ const SupplierContact = ({
     [supplierContactFetcher.data]
   );
 
-  const handleChange = (
-    selection: {
-      value: string | number;
-      label: string;
-    } | null
-  ) => {
-    const newValue = selection === null ? null : (selection.value as string);
-    setValue(newValue);
+  const handleChange = (newValue: string) => {
+    setValue(newValue ?? "");
     if (onChange && typeof onChange === "function") {
-      if (newValue === null) onChange(newValue);
+      if (!newValue) onChange(null);
       const contact = supplierContactFetcher.data?.data?.find(
         (c) => c.id === newValue
       );
@@ -171,31 +165,24 @@ const SupplierContact = ({
     }
   };
 
-  const controlledValue = useMemo(
-    // @ts-ignore
-    () => options.find((option) => option.value === value),
-    [value, options]
-  );
-
   // so that we can call onChange on load
   useEffect(() => {
-    if (controlledValue && controlledValue.value === defaultValue) {
-      handleChange(controlledValue);
+    if (value && value === defaultValue) {
+      handleChange(value);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [controlledValue?.value]);
+  }, [value, supplierContactFetcher.data?.data]);
 
   return (
     <FormControl isInvalid={!!error}>
       <FormLabel htmlFor={name}>Supplier Contact</FormLabel>
       <input type="hidden" name={name} id={name} value={value ?? ""} />
-      <ReactSelect
+      <Combobox
         id={name}
-        value={controlledValue}
+        value={value ?? undefined}
         options={options}
         onChange={handleChange}
-        isClearable
-        w="full"
+        className="w-full"
       />
       {error && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>
