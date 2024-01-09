@@ -1,5 +1,4 @@
 import {
-  CreatableSelect,
   HStack,
   HoverCard,
   HoverCardContent,
@@ -19,12 +18,13 @@ import {
   TagLabel,
   Text,
 } from "@chakra-ui/react";
+import { useRevalidator } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { BsPencilSquare, BsStar, BsStarFill } from "react-icons/bs";
 import { IoMdAdd, IoMdTrash } from "react-icons/io";
 import { VscOpenPreview } from "react-icons/vsc";
-import { Avatar, Table } from "~/components";
+import { Avatar, CreatableCombobox, Table } from "~/components";
 import { Confirm, ConfirmDelete } from "~/components/Modals";
 import { useUrlParams } from "~/hooks";
 import type { Document, DocumentLabel } from "~/modules/documents";
@@ -39,6 +39,8 @@ type DocumentsTableProps = {
 };
 
 const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
+  console.log(labels);
+  const revalidator = useRevalidator();
   const [params] = useUrlParams();
   const filter = params.get("q");
   // put rows in state for use with optimistic ui updates
@@ -215,22 +217,19 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
                 </Tag>
               </PopoverTrigger>
               <PopoverContent className="w-[300px] p-0">
-                <CreatableSelect
-                  defaultValue={
-                    row.original.labels.map((label) => ({
-                      value: label,
-                      label: label,
-                    })) ?? []
-                  }
-                  isClearable
-                  isMulti
+                <CreatableCombobox
                   options={labelOptions}
-                  onChange={(newValues) =>
-                    onLabel(
-                      row.original,
-                      newValues.map((v) => v.value)
-                    )
+                  selected={row.original.labels}
+                  onChange={(newValue) =>
+                    onLabel(row.original, [...row.original.labels, newValue])
                   }
+                  onCreateOption={async (newValue) => {
+                    await onLabel(row.original, [
+                      ...row.original.labels,
+                      newValue,
+                    ]);
+                    revalidator.revalidate();
+                  }}
                 />
               </PopoverContent>
             </Popover>
@@ -288,6 +287,7 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
     onDeleteLabel,
     onFavorite,
     onLabel,
+    revalidator,
     setLabel,
   ]);
 

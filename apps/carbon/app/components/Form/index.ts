@@ -7,8 +7,7 @@ import Array from "./Array";
 import Boolean from "./Boolean";
 import Color from "./Color";
 import Combobox from "./Combobox";
-import CreatableMultiSelect from "./CreatableMultiSelect";
-import CreatableSelect from "./CreatableSelect";
+import CreatableCombobox from "./CreatableCombobox";
 import Currency from "./Currency";
 import Customer from "./Customer";
 import CustomerContact from "./CustomerContact";
@@ -53,8 +52,7 @@ export {
   Boolean,
   Color,
   Combobox,
-  CreatableMultiSelect,
-  CreatableSelect,
+  CreatableCombobox,
   Currency,
   Customer,
   CustomerContact,

@@ -14,7 +14,7 @@ type CustomerContactSelectProps = Omit<
   "options" | "onChange"
 > & {
   customer?: string;
-  onChange?: (customer: CustomerContactType | null) => void;
+  onChange?: (customer: CustomerContactType["contact"] | null) => void;
 };
 
 const CustomerContact = (props: CustomerContactSelectProps) => {
@@ -46,7 +46,7 @@ const CustomerContact = (props: CustomerContactSelectProps) => {
         (contact) => contact.id === newValue?.value
       ) ?? null;
 
-    props.onChange?.(contact as CustomerContactType | null);
+    props.onChange?.(contact?.contact ?? null);
   };
 
   return (

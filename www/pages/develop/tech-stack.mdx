@@ -1,6 +1,6 @@
 ---
 title: Carbon ERP Tech Stack
-description: TypeScript, React, Chakra UI, Remix, Supabase
+description: TypeScript, React, shadcn, Remix, Supabase
 ---
 
 # Tech Stack
@@ -11,7 +11,7 @@ Our tech stack aims to be as simple as possible, while still being powerful enou
 - [React](https://reactjs.org) for the frontend
 - [Remix](https://remix.run) for the routing and compiling
 - [Supabase](https://supabase.io) for the database and authentication
-- [Chakra UI](https://chakra-ui.com) for the UI components
+- [shadcn](https://ui.shadcn.com) (Tailwind, Radix, cva) for the UI components
 
 We also use [Redis](https://redis.io) for caching and queues and [Vercel](https://vercel.com) for hosting, though in most cases you probably won't interact with those.
 
@@ -133,24 +133,20 @@ But unlike a raw SQL query, the data that we get back is strongly-typed, neatly-
 
 {/* TODO: explain why this is actually a bad setup for joins -- recommend putting joins in SQL VIEWs and then using the supabase client to supabase.from("view").select("*") */}
 
-## Chakra UI
+## shadcn
 
-[Chakra UI](https://chakra-ui.com) is a flexible component library that gives us accessibility, full-control, and simplicty. It implements the WAI-ARIA spec behaviors with some basic primitive components (like Button and Modal) while providing an easy-to-modify API for customizing the design.
+[shadcn](https://ui.shadcn.com) is an open source starting point for a component library that combines [Radix UI](https://radix-ui.com) with [Tailwind](https://tailwindcss.com) to provide beautiful, accessibile primitives for our `@carbon/react` component package. While the underlying implementation details are [a little complex](https://cva.style/docs/getting-started/variants), the developer experience is extremely simple.
 
-While it's not the most performant choice, it provides an easy-to-use developer experience that should allow contributors to quickly build out new features without an expertise in CSS.
-
-Here's an example of a Chakra UI button:
+Here's an example of a button:
 
 ```jsx
-import { Button } from "@chakra-ui/react";
+import { Button } from "@carbon/react";
 
 function App() {
   return (
-    <Button size="lg" variant="outline">
+    <Button size="lg" variant="secondary">
       Click me
     </Button>
   );
 }
 ```
-
-There are a lot of other component libraries out there, but we chose Chakra UI because it gives us a lot of flexibility while providing great user and developer experience. We're hopeful that Chakra will implement Panda under the hood in v4, which will give us high-level performance. If we had time, we'd probably move everything over to Radix + Tailwind (assuming we could keep things super simple for the developer).
