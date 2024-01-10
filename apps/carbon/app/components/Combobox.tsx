@@ -58,9 +58,13 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
               ref={ref}
               {...props}
             >
-              {value
-                ? options.find((option) => option.value === value)?.label
-                : placeholder ?? "Select"}
+              {value ? (
+                options.find((option) => option.value === value)?.label
+              ) : (
+                <span className="text-muted-foreground">
+                  {placeholder ?? "Select"}
+                </span>
+              )}
             </CommandTrigger>
           </PopoverTrigger>
           <PopoverContent className="min-w-[200px] w-[--radix-popover-trigger-width] p-0">

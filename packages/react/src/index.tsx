@@ -1,4 +1,5 @@
 import { ActionMenu } from "./ActionMenu";
+import { Badge } from "./Badge";
 import type { ButtonProps } from "./Button";
 import { Button } from "./Button";
 import {
@@ -22,6 +23,7 @@ import {
   CommandSeparator,
   CommandShortcut,
   CommandTrigger,
+  multiSelectTriggerVariants,
 } from "./Command";
 import { ContextMenu } from "./ContextMenu";
 import { Count } from "./Count";
@@ -82,18 +84,6 @@ import {
   ModalTrigger,
 } from "./Modal";
 import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
-import type {
-  GroupBase,
-  MultiValue,
-  OptionBase,
-  OptionProps,
-  SingleValue,
-} from "./ReactSelect";
-import {
-  CreatableSelect,
-  Select as ReactSelect,
-  createFilter,
-} from "./ReactSelect";
 import {
   Select,
   SelectContent,
@@ -133,6 +123,7 @@ import { cn } from "./utils/cn";
 
 export {
   ActionMenu,
+  Badge,
   Button,
   Card,
   CardAction,
@@ -154,7 +145,6 @@ export {
   CommandTrigger,
   ContextMenu,
   Count,
-  CreatableSelect,
   DataTable,
   DataTableColumnHeader,
   DatePicker,
@@ -207,7 +197,6 @@ export {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  ReactSelect,
   Select,
   SelectContent,
   SelectGroup,
@@ -232,7 +221,7 @@ export {
   TooltipTrigger,
   VStack,
   cn,
-  createFilter,
+  multiSelectTriggerVariants,
   theme,
   useColor,
   useDebounce,
@@ -246,12 +235,4 @@ export {
   useNotification,
   useOutsideClick,
 };
-export type {
-  ButtonProps,
-  GroupBase,
-  InputProps,
-  MultiValue,
-  OptionBase,
-  OptionProps,
-  SingleValue,
-};
+export type { ButtonProps, InputProps };
