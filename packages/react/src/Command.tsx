@@ -187,6 +187,59 @@ const commandTriggerVariants = cva(
   }
 );
 
+export const multiSelectTriggerVariants = cva(
+  "w-full justify-between font-normal",
+  {
+    variants: {
+      size: {
+        lg: "text-base",
+        md: "text-base",
+        sm: "text-sm",
+      },
+      hasSelections: {
+        true: "h-full",
+        false: "",
+      },
+    },
+    compoundVariants: [
+      {
+        size: "lg",
+        hasSelections: true,
+        class: "py-3 px-4",
+      },
+      {
+        size: "lg",
+        hasSelections: false,
+        class: "h-12",
+      },
+      {
+        size: "md",
+        hasSelections: true,
+        class: "py-2 px-3",
+      },
+      {
+        size: "md",
+        hasSelections: false,
+        class: "h-10",
+      },
+      {
+        size: "sm",
+        hasSelections: true,
+        class: "py-1 px-2",
+      },
+      {
+        size: "sm",
+        hasSelections: false,
+        class: "h-8",
+      },
+    ],
+    defaultVariants: {
+      size: "md",
+      hasSelections: false,
+    },
+  }
+);
+
 interface CommandTriggerProps
   extends ComponentPropsWithoutRef<"button">,
     VariantProps<typeof commandTriggerVariants> {}

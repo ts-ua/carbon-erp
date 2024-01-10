@@ -1,41 +1,14 @@
-import type { MultiValue } from "@carbon/react";
-import {
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
-  ReactSelect,
-  useMount,
-} from "@carbon/react";
+import { useMount } from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
 import { useMemo } from "react";
-import { useControlField, useField } from "remix-validated-form";
 import type { getAbilitiesList } from "~/modules/resources";
 import { path } from "~/utils/path";
-import type { SelectProps } from "./Select";
+import type { MultiSelectProps } from "./MultiSelect";
+import MultiSelect from "./MultiSelect";
 
-type AbilitiesSelectProps = Omit<SelectProps, "options" | "onChange"> & {
-  onChange?: (
-    selections: MultiValue<{
-      value: string;
-      label: string;
-    }>
-  ) => void;
-};
+type AbilitiesSelectProps = Omit<MultiSelectProps, "options" | "value">;
 
-const Abilities = ({
-  name,
-  label = "Abilities",
-  helperText,
-  isLoading,
-  isReadOnly,
-  placeholder = "Select Abilities",
-  onChange,
-  ...props
-}: AbilitiesSelectProps) => {
-  const { error } = useField(name);
-  const [value, setValue] = useControlField<string[]>(name);
-
+const Abilities = (props: AbilitiesSelectProps) => {
   const abilityFetcher =
     useFetcher<Awaited<ReturnType<typeof getAbilitiesList>>>();
 
@@ -54,45 +27,12 @@ const Abilities = ({
     [abilityFetcher.data]
   );
 
-  const handleChange = (
-    selections: MultiValue<{ value: string; label: string }>
-  ) => {
-    const newValue = selections.map((s) => s.value as string) || [];
-    setValue(newValue);
-    onChange?.(selections);
-  };
-
-  const controlledValue = useMemo(
-    () => options?.filter((option) => value?.includes(option.value)) ?? [],
-    [value, options]
-  );
-
   return (
-    <FormControl isInvalid={!!error}>
-      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-      {value.map((selection, index) => (
-        <input
-          key={`${name}[${index}]`}
-          type="hidden"
-          name={`${name}[${index}]`}
-          value={selection}
-        />
-      ))}
-      <ReactSelect
-        {...props}
-        isMulti
-        value={controlledValue}
-        isLoading={isLoading}
-        options={options}
-        placeholder={placeholder}
-        onChange={handleChange}
-      />
-      {error ? (
-        <FormErrorMessage>{error}</FormErrorMessage>
-      ) : (
-        helperText && <FormHelperText>{helperText}</FormHelperText>
-      )}
-    </FormControl>
+    <MultiSelect
+      options={options}
+      {...props}
+      label={props?.label ?? "Ability"}
+    />
   );
 };
 
