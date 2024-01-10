@@ -10,7 +10,6 @@ import {
   HStack,
   VStack,
 } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
 
@@ -103,12 +102,7 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
           <DrawerBody>
             <Hidden name="id" />
 
-            <Grid
-              gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
-              gridColumnGap={8}
-              gridRowGap={2}
-              w="full"
-            >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
               <VStack spacing={4}>
                 <Input name="number" label="Account Number" />
                 <Input name="name" label="Name" />
@@ -170,7 +164,7 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
                 />
                 <Boolean name="directPosting" label="Direct Posting" />
               </VStack>
-            </Grid>
+            </div>
           </DrawerBody>
           <DrawerFooter>
             <HStack>

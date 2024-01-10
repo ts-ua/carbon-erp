@@ -10,7 +10,6 @@ import {
   VStack,
   useMount,
 } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Input, Select, Submit } from "~/components/Form";
@@ -59,14 +58,13 @@ const CreateEmployeeModal = () => {
           <ModalBody>
             <VStack spacing={4}>
               <Input name="email" label="Email" />
-              <Grid templateColumns="1fr 1fr" gap={4}>
+              <div className="grid grid-cols-2 gap-4 w-full">
                 <Input name="firstName" label="First Name" />
                 <Input name="lastName" label="Last Name" />
-              </Grid>
+              </div>
               <Select
                 name="employeeType"
                 label="Employee Type"
-                isLoading={employeeTypeFetcher.state === "loading"}
                 options={employeeTypeOptions}
                 placeholder="Select Employee Type"
               />

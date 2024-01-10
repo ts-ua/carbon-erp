@@ -2,6 +2,7 @@ import {
   ActionMenu,
   ContextMenu,
   VStack,
+  cn,
   useColor,
   useEscape,
   useMount,
@@ -10,7 +11,6 @@ import { clip } from "@carbon/utils";
 import type { ThemeTypings } from "@chakra-ui/react";
 import {
   Table as ChakraTable,
-  Grid,
   MenuList,
   Tbody,
   Th,
@@ -452,9 +452,11 @@ const Table = <T extends object>({
         ref={tableContainerRef}
         onKeyDown={editMode ? onKeyDown : undefined}
       >
-        <Grid
-          w="full"
-          gridTemplateColumns={withColumnOrdering ? "auto 1fr" : "1fr"}
+        <div
+          className={cn(
+            "grid w-full",
+            withColumnOrdering ? "grid-cols-[auto_1fr]" : "grid-cols-1"
+          )}
         >
           {/* Pinned left columns */}
           {withColumnOrdering ? (
@@ -733,7 +735,7 @@ const Table = <T extends object>({
               })}
             </Tbody>
           </ChakraTable>
-        </Grid>
+        </div>
       </div>
       {withPagination && (
         <Pagination {...pagination} colorScheme={colorScheme} />

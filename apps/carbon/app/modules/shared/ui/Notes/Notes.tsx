@@ -1,6 +1,5 @@
 import { Button, HStack, HTML, VStack } from "@carbon/react";
 import { formatTimeAgo } from "@carbon/utils";
-import { Grid } from "@chakra-ui/react";
 import { Form } from "@remix-run/react";
 import { Fragment } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -26,12 +25,7 @@ const Notes = ({ documentId, notes }: NotesProps) => {
   return (
     <>
       {notes.length > 0 ? (
-        <Grid
-          gridTemplateColumns="auto 1fr"
-          gridColumnGap={4}
-          gridRowGap={8}
-          w="full"
-        >
+        <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-8 w-full">
           {notes.map((note) => {
             if (!note.user || Array.isArray(note.user))
               throw new Error("Invalid user");
@@ -60,7 +54,7 @@ const Notes = ({ documentId, notes }: NotesProps) => {
               </Fragment>
             );
           })}
-        </Grid>
+        </div>
       ) : (
         <div className="text-muted-foreground p-4 w-full text-center">
           No notes

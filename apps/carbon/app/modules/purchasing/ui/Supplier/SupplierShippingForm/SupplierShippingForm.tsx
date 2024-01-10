@@ -7,7 +7,6 @@ import {
   HStack,
   VStack,
 } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -65,12 +64,7 @@ const SupplierShippingForm = ({ initialValues }: SupplierShippingFormProps) => {
         </CardHeader>
         <CardContent>
           <Hidden name="supplierId" />
-          <Grid
-            gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
             <VStack>
               <Supplier
                 name="shippingSupplierId"
@@ -100,7 +94,7 @@ const SupplierShippingForm = ({ initialValues }: SupplierShippingFormProps) => {
                 options={shippingTermOptions}
               />
             </VStack>
-          </Grid>
+          </div>
         </CardContent>
         <CardFooter>
           <HStack>

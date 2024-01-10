@@ -6,7 +6,6 @@ import {
   CardTitle,
   VStack,
 } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -56,12 +55,7 @@ const PurchaseOrderPaymentForm = ({
         </CardHeader>
         <CardContent>
           <Hidden name="id" />
-          <Grid
-            gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
             <VStack>
               <Supplier
                 name="invoiceSupplierId"
@@ -90,7 +84,7 @@ const PurchaseOrderPaymentForm = ({
             <VStack>
               <Boolean name="paymentComplete" label="Payment Complete" />
             </VStack>
-          </Grid>
+          </div>
         </CardContent>
         <CardFooter>
           <Submit isDisabled={!permissions.can("update", "purchasing")}>

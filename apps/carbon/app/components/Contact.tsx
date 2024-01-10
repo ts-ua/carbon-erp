@@ -1,5 +1,5 @@
 import { ActionMenu, Dot, HStack, VStack } from "@carbon/react";
-import { Avatar, Grid, MenuItem } from "@chakra-ui/react";
+import { Avatar, MenuItem } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import type { Action } from "~/types";
 
@@ -32,7 +32,7 @@ const Contact = ({ contact, url, user, actions }: ContactProps) => {
     : UserStatus.None;
 
   return (
-    <Grid w="full" gridColumnGap={4} gridTemplateColumns="auto 1fr auto">
+    <div className="grid w-full gap-4 grid-cols-[auto_1fr_auto]">
       <Avatar size="sm" name={`${name}`} />
       <VStack spacing={0}>
         <HStack>
@@ -69,7 +69,7 @@ const Contact = ({ contact, url, user, actions }: ContactProps) => {
           ))}
         </ActionMenu>
       )}
-    </Grid>
+    </div>
   );
 };
 

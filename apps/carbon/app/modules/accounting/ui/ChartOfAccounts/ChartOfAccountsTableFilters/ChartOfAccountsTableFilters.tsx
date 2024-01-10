@@ -1,6 +1,5 @@
 import { Button, DatePicker, HStack } from "@carbon/react";
 import {
-  Grid,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -55,11 +54,7 @@ const ChartOfAccountsTableFilters = () => {
             </PopoverHeader>
             <PopoverArrow />
             <PopoverBody maxH="50vh">
-              <Grid
-                gridTemplateColumns={"1fr 3fr"}
-                gridRowGap={2}
-                alignItems="center"
-              >
+              <div className="grid grid-cols-[1fr_3fr] gap-y-2 items-center">
                 <p className="text-sm text-muted-foreground">Start Date</p>
                 <DatePicker
                   value={startDate ? parseDate(startDate) : null}
@@ -72,7 +67,7 @@ const ChartOfAccountsTableFilters = () => {
                   value={endDate ? parseDate(endDate) : null}
                   onChange={(value) => setParams({ endDate: value.toString() })}
                 />
-              </Grid>
+              </div>
             </PopoverBody>
           </PopoverContent>
         </Popover>

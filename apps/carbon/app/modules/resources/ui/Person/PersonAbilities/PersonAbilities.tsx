@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
-import { Grid, Icon, List, ListItem } from "@chakra-ui/react";
+import { Icon, List, ListItem } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import clsx from "clsx";
 import type { IconType } from "react-icons";
@@ -61,11 +61,7 @@ const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
 
               return (
                 <ListItem key={employeeAbility.id}>
-                  <Grid
-                    key={employeeAbility.id}
-                    gridTemplateColumns="auto 1fr auto"
-                    gridColumnGap={4}
-                  >
+                  <div className="grid-cols-[auto_1fr_auto] space-x-4">
                     <div
                       className={clsx(
                         "flex h-10 w-10 rounded-full items-center justify-center",
@@ -103,7 +99,7 @@ const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
                         })}
                       </p>
                     </div>
-                  </Grid>
+                  </div>
                 </ListItem>
               );
             })}

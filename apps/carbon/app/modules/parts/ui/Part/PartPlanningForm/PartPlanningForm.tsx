@@ -8,7 +8,6 @@ import {
   HStack,
   VStack,
 } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Combobox } from "~/components";
 import {
@@ -68,12 +67,7 @@ const PartPlanningForm = ({
         <CardContent>
           <Hidden name="partId" />
           <Hidden name="locationId" />
-          <Grid
-            gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
             <VStack>
               <SelectForm
                 name="reorderingPolicy"
@@ -124,7 +118,7 @@ const PartPlanningForm = ({
                 label="Reorder Maximum Inventory"
               />
             </VStack>
-          </Grid>
+          </div>
         </CardContent>
         <CardFooter>
           <Submit isDisabled={!permissions.can("update", "parts")}>Save</Submit>
