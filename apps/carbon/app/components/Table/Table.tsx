@@ -16,7 +16,6 @@ import {
   Th,
   Thead,
   Tr,
-  VisuallyHidden,
 } from "@chakra-ui/react";
 import type {
   ColumnDef,
@@ -776,7 +775,7 @@ function getActionColumn<T>(
   return [
     {
       id: "Actions",
-      header: () => <VisuallyHidden>Actions</VisuallyHidden>,
+      header: () => <span className="sr-only">Actions</span>,
       cell: (item) => (
         <div className="flex justify-end">
           <ActionMenu>{renderContextMenu(item.row.original)}</ActionMenu>
