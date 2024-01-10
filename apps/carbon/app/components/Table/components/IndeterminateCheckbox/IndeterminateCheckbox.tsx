@@ -1,4 +1,4 @@
-import { Checkbox, VisuallyHidden } from "@chakra-ui/react";
+import { Checkbox } from "@chakra-ui/react";
 
 type IndeterminateCheckboxProps = {
   checked: boolean;
@@ -18,7 +18,7 @@ const IndeterminateCheckbox = ({
       ml={2}
       {...rest}
     >
-      <VisuallyHidden>Select Row</VisuallyHidden>
+      <span className="sr-only">Select Row</span>
     </Checkbox>
   );
 };

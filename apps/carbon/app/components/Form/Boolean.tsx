@@ -7,7 +7,6 @@ import {
 } from "@carbon/react";
 import type { SwitchProps, SystemStyleObject } from "@chakra-ui/react";
 import {
-  VisuallyHidden,
   chakra,
   omitThemingProps,
   useCheckbox,
@@ -72,7 +71,7 @@ const Boolean = forwardRef<HTMLInputElement, FormBooleanProps>(
             className="chakra-switch"
             __css={containerStyles}
           >
-            <VisuallyHidden>
+            <span className="sr-only">
               <input
                 ref={ref}
                 type="checkbox"
@@ -86,7 +85,7 @@ const Boolean = forwardRef<HTMLInputElement, FormBooleanProps>(
                   onChange?.(e.target.checked);
                 }}
               />
-            </VisuallyHidden>
+            </span>
             <HStack>
               <chakra.span
                 {...getCheckboxProps()}
