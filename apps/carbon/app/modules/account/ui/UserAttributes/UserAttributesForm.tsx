@@ -1,5 +1,12 @@
-import { Button, HStack, VStack, useColor, useDisclosure } from "@carbon/react";
-import { Grid, Switch } from "@chakra-ui/react";
+import {
+  Button,
+  HStack,
+  Switch,
+  VStack,
+  useColor,
+  useDisclosure,
+} from "@carbon/react";
+import { Grid } from "@chakra-ui/react";
 import { parseDate } from "@internationalized/date";
 import { useFetcher, useParams } from "@remix-run/react";
 import { useState } from "react";
@@ -438,11 +445,11 @@ function renderTypedDisplay({
           pt={3}
           w="full"
         >
-          <p className="text-muted-foreground self-center">{attribute.name}</p>
+          <p className="text-muted-foreground items-center">{attribute.name}</p>
           {displayValue === "N/A" ? (
             <p className="self-center">{displayValue}</p>
           ) : (
-            <Switch isReadOnly isChecked={displayValue === true} />
+            <Switch disabled checked={displayValue === true} />
           )}
           <HStack className="justify-between w-full self-center">
             <Button

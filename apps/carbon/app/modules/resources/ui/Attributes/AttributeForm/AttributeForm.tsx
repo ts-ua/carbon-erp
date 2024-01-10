@@ -49,7 +49,7 @@ const AttributeForm = ({
 
   const options =
     dataTypes?.map((dt) => ({
-      value: dt.id,
+      value: dt.id.toString(),
       label: dt.label,
     })) ?? [];
 
@@ -63,7 +63,7 @@ const AttributeForm = ({
   );
 
   const onChangeCheckForListType = (selected: {
-    value: string | number;
+    value: string;
     label: string;
   }) => {
     setIsList(Number(selected.value) === DataType.List);

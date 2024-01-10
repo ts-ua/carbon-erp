@@ -1,4 +1,4 @@
-import { Button, HStack, IconButton } from "@carbon/react";
+import { Button, HStack, IconButton, Switch } from "@carbon/react";
 import {
   Menu,
   MenuButton,
@@ -11,7 +11,6 @@ import {
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
-  Switch,
 } from "@chakra-ui/react";
 import { Reorder } from "framer-motion";
 import { BsChevronDown, BsListUl } from "react-icons/bs";
@@ -75,8 +74,8 @@ const Sort = ({ columnAccessors }: SortProps) => {
                         <>{columnAccessors[column] ?? ""}</>
                       </span>
                       <Switch
-                        isChecked={direction === "asc"}
-                        onChange={() => toggleSortByDirection(column)}
+                        checked={direction === "asc"}
+                        onCheckedChange={() => toggleSortByDirection(column)}
                       />
                       <span className="text-sm text-muted-foreground">
                         Ascending

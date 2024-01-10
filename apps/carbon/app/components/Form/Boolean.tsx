@@ -4,15 +4,10 @@ import {
   FormHelperText,
   FormLabel,
   HStack,
+  Switch,
 } from "@carbon/react";
-import type { SwitchProps, SystemStyleObject } from "@chakra-ui/react";
-import {
-  chakra,
-  omitThemingProps,
-  useCheckbox,
-  useMultiStyleConfig,
-} from "@chakra-ui/react";
-import { forwardRef, useMemo } from "react";
+import type { SwitchProps } from "@chakra-ui/react";
+import { forwardRef } from "react";
 import { useControlField, useField } from "remix-validated-form";
 
 type FormBooleanProps = Omit<SwitchProps, "onChange"> & {
@@ -28,80 +23,26 @@ const Boolean = forwardRef<HTMLInputElement, FormBooleanProps>(
     const { getInputProps, error } = useField(name);
     const [value, setValue] = useControlField<boolean>(name);
 
-    const styles = useMultiStyleConfig("Switch", {
-      colorScheme: "green",
-      ...props,
-    });
-    const { ...ownProps } = omitThemingProps(props);
-
-    const { getCheckboxProps, getRootProps, getLabelProps } = useCheckbox({
-      ...ownProps,
-      isChecked: value,
-    });
-
-    const containerStyles: SystemStyleObject = useMemo(
-      () => ({
-        display: "inline-block",
-        position: "relative",
-        verticalAlign: "middle",
-        lineHeight: 0,
-        ...styles.container,
-      }),
-      [styles.container]
-    );
-
-    const trackStyles: SystemStyleObject = useMemo(
-      () => ({
-        display: "inline-flex",
-        flexShrink: 0,
-        justifyContent: "flex-start",
-        boxSizing: "content-box",
-        cursor: "pointer",
-        ...styles.track,
-      }),
-      [styles.track]
-    );
-
     return (
       <FormControl isInvalid={!!error} className="pt-2">
         {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-        <HStack className="w-full">
-          <chakra.label
-            {...getRootProps()}
-            className="chakra-switch"
-            __css={containerStyles}
-          >
-            <span className="sr-only">
-              <input
-                ref={ref}
-                type="checkbox"
-                disabled={props.isDisabled}
-                {...getInputProps({
-                  type: "checkbox",
-                  id: name,
-                })}
-                onChange={(e) => {
-                  setValue(e.target.checked);
-                  onChange?.(e.target.checked);
-                }}
-              />
-            </span>
-            <HStack>
-              <chakra.span
-                {...getCheckboxProps()}
-                className="chakra-switch__track"
-                __css={trackStyles}
-              >
-                <chakra.span
-                  __css={styles.thumb}
-                  className="chakra-switch__thumb"
-                  data-checked={value ? "" : undefined}
-                />
-              </chakra.span>
-              {description && <p {...getLabelProps()}>{description}</p>}
-            </HStack>
-          </chakra.label>
+        <HStack>
+          {/* @ts-ignore */}
+          <Switch
+            {...getInputProps()}
+            checked={value}
+            onCheckedChange={(checked) => {
+              setValue(checked);
+              onChange?.(checked);
+            }}
+            aria-label={label}
+            {...props}
+          />
+          {description && (
+            <p className="text-muted-foreground text-sm">{description}</p>
+          )}
         </HStack>
+
         {error ? (
           <FormErrorMessage>{error}</FormErrorMessage>
         ) : (
