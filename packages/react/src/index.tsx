@@ -98,6 +98,7 @@ import {
 } from "./Select";
 import { Status } from "./Status";
 import Submit from "./Submit";
+import { Switch } from "./Switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./Tabs";
 import ThemeProvider, { theme } from "./Theme";
 import {
@@ -209,6 +210,7 @@ export {
   SelectValue,
   Status,
   Submit,
+  Switch,
   Tabs,
   TabsContent,
   TabsList,
