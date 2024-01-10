@@ -11,7 +11,6 @@ import {
   TabsTrigger,
   VStack,
 } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Select, Submit } from "~/components/Form";
@@ -72,13 +71,7 @@ const AccountDefaultsForm = ({
                   <CardTitle>Revenue</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Grid
-                    gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
-                    gridColumnGap={8}
-                    gridRowGap={4}
-                    mb={4}
-                    w="full"
-                  >
+                  <div className="grid gap-y-4 gap-x-8 grid-cols-1 md:grid-cols-2">
                     <Select
                       name="salesAccount"
                       label="Sales"
@@ -89,7 +82,7 @@ const AccountDefaultsForm = ({
                       label="Sales Discounts"
                       options={incomeStatementAccountOptions}
                     />
-                  </Grid>
+                  </div>
                 </CardContent>
               </Card>
               <Card>
@@ -97,13 +90,7 @@ const AccountDefaultsForm = ({
                   <CardTitle>Expenses</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Grid
-                    gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
-                    gridColumnGap={8}
-                    gridRowGap={4}
-                    mb={4}
-                    w="full"
-                  >
+                  <div className="grid gap-y-4 gap-x-8 grid-cols-1 md:grid-cols-2">
                     <Select
                       name="costOfGoodsSoldAccount"
                       label="Cost of Goods Sold"
@@ -155,7 +142,7 @@ const AccountDefaultsForm = ({
                       label="Maintenance Expense"
                       options={incomeStatementAccountOptions}
                     />
-                  </Grid>
+                  </div>
                 </CardContent>
               </Card>
               <Card>
@@ -163,13 +150,7 @@ const AccountDefaultsForm = ({
                   <CardTitle>Fixed Assets</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Grid
-                    gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
-                    gridColumnGap={8}
-                    gridRowGap={4}
-                    mb={4}
-                    w="full"
-                  >
+                  <div className="grid gap-y-4 gap-x-8 grid-cols-1 md:grid-cols-2">
                     <Select
                       name="assetDepreciationExpenseAccount"
                       label="Depreciation Expense"
@@ -185,7 +166,7 @@ const AccountDefaultsForm = ({
                       label="Service Charges"
                       options={incomeStatementAccountOptions}
                     />
-                  </Grid>
+                  </div>
                 </CardContent>
               </Card>
               <Card>
@@ -193,13 +174,7 @@ const AccountDefaultsForm = ({
                   <CardTitle>Interest</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Grid
-                    gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
-                    gridColumnGap={8}
-                    gridRowGap={4}
-                    mb={4}
-                    w="full"
-                  >
+                  <div className="grid gap-y-4 gap-x-8 grid-cols-1 md:grid-cols-2">
                     <Select
                       name="interestAccount"
                       label="Interest"
@@ -220,7 +195,7 @@ const AccountDefaultsForm = ({
                       label="Rounding Account"
                       options={incomeStatementAccountOptions}
                     />
-                  </Grid>
+                  </div>
                 </CardContent>
               </Card>
             </VStack>
@@ -232,13 +207,7 @@ const AccountDefaultsForm = ({
                   <CardTitle>Current Assets</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Grid
-                    gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
-                    gridColumnGap={8}
-                    gridRowGap={4}
-                    mb={4}
-                    w="full"
-                  >
+                  <div className="grid gap-y-4 gap-x-8 grid-cols-1 md:grid-cols-2">
                     <Select
                       name="inventoryAccount"
                       label="Inventory"
@@ -280,7 +249,7 @@ const AccountDefaultsForm = ({
                       label="Bank - Foreign Currency"
                       options={balanceSheetAccountOptions}
                     />
-                  </Grid>
+                  </div>
                 </CardContent>
               </Card>
               <Card>
@@ -288,13 +257,7 @@ const AccountDefaultsForm = ({
                   <CardTitle>Fixed Assets</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Grid
-                    gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
-                    gridColumnGap={8}
-                    gridRowGap={4}
-                    mb={4}
-                    w="full"
-                  >
+                  <div className="grid gap-y-4 gap-x-8 grid-cols-1 md:grid-cols-2">
                     <Select
                       name="assetAquisitionCostAccount"
                       label="Asset Aquisition Cost"
@@ -315,7 +278,7 @@ const AccountDefaultsForm = ({
                       label="Accumulated Depreciation on Disposal"
                       options={balanceSheetAccountOptions}
                     />
-                  </Grid>
+                  </div>
                 </CardContent>
               </Card>
               <Card>
@@ -323,13 +286,7 @@ const AccountDefaultsForm = ({
                   <CardTitle>Liabilities</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Grid
-                    gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
-                    gridColumnGap={8}
-                    gridRowGap={4}
-                    mb={4}
-                    w="full"
-                  >
+                  <div className="grid gap-y-4 gap-x-8 grid-cols-1 md:grid-cols-2">
                     <Select
                       name="prepaymentAccount"
                       label="Prepayments"
@@ -365,7 +322,7 @@ const AccountDefaultsForm = ({
                       label="Reverse Charge Sales Tax"
                       options={balanceSheetAccountOptions}
                     />
-                  </Grid>
+                  </div>
                 </CardContent>
               </Card>
               <Card>
@@ -373,18 +330,13 @@ const AccountDefaultsForm = ({
                   <CardTitle>Equity</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Grid
-                    gridTemplateColumns={["1fr", "1fr 1fr", "1fr 1fr"]}
-                    gridColumnGap={8}
-                    gridRowGap={4}
-                    w="full"
-                  >
+                  <div className="grid gap-y-4 gap-x-8 grid-cols-1 md:grid-cols-2">
                     <Select
                       name="retainedEarningsAccount"
                       label="Retained Earnings"
                       options={balanceSheetAccountOptions}
                     />
-                  </Grid>
+                  </div>
                 </CardContent>
               </Card>
             </VStack>

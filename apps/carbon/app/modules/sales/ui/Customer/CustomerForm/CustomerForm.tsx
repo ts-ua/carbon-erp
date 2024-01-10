@@ -7,8 +7,8 @@ import {
   CardTitle,
   HStack,
   VStack,
+  cn,
 } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Combobox,
@@ -73,13 +73,11 @@ const CustomerForm = ({ initialValues }: CustomerFormProps) => {
         </CardHeader>
         <CardContent>
           <Hidden name="id" />
-          <Grid
-            gridTemplateColumns={
-              isEditing ? ["1fr", "1fr", "1fr 1fr 1fr"] : "1fr"
-            }
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
+          <div
+            className={cn(
+              "grid w-full gap-x-8 gap-y-2",
+              isEditing ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1"
+            )}
           >
             <VStack>
               <Input name="name" label="Name" />
@@ -106,7 +104,7 @@ const CustomerForm = ({ initialValues }: CustomerFormProps) => {
                 </VStack>
               </>
             )}
-          </Grid>
+          </div>
         </CardContent>
         <CardFooter>
           <HStack>

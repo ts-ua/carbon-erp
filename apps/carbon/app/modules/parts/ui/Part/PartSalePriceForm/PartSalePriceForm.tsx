@@ -6,7 +6,6 @@ import {
   CardTitle,
   VStack,
 } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Boolean,
@@ -49,12 +48,7 @@ const PartSalePriceForm = ({
         </CardHeader>
         <CardContent>
           <Hidden name="partId" />
-          <Grid
-            gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
             <VStack>
               <Number name="unitSalePrice" label="Unit Sale Price" />
               <Currency name="currencyCode" label="Currency" />
@@ -74,7 +68,7 @@ const PartSalePriceForm = ({
                 label="Allow Invoice Discount"
               />
             </VStack>
-          </Grid>
+          </div>
         </CardContent>
         <CardFooter>
           <Submit isDisabled={!permissions.can("update", "parts")}>Save</Submit>

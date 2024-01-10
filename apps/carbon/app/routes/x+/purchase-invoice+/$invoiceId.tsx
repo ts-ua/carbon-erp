@@ -1,4 +1,3 @@
-import { Grid } from "@chakra-ui/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
@@ -75,15 +74,10 @@ export default function PurchaseInvoiceRoute() {
   return (
     <>
       <PurchaseInvoiceHeader />
-      <Grid
-        gridTemplateColumns={["1fr", "1fr", "1fr 4fr"]}
-        gridGap={4}
-        w="full"
-        h="full"
-      >
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_4fr] h-full w-full gap-x-4">
         <PurchaseInvoiceSidebar />
         <Outlet />
-      </Grid>
+      </div>
     </>
   );
 }

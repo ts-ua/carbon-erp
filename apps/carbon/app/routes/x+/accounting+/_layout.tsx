@@ -1,5 +1,4 @@
 import { VStack } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
@@ -80,11 +79,11 @@ export default function AccountingRoute() {
   const { groups } = useAccountingSidebar();
 
   return (
-    <Grid w="full" h="full" templateColumns="auto 1fr">
+    <div className="grid grid-cols-[auto_1fr] w-full h-full">
       <GroupedContentSidebar groups={groups} />
       <VStack spacing={0} className="h-full">
         <Outlet />
       </VStack>
-    </Grid>
+    </div>
   );
 }

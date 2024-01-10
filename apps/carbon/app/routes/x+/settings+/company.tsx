@@ -1,5 +1,4 @@
 import { VStack } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -121,10 +120,10 @@ export default function Company() {
         title="Company"
         subtitle="This information will be displayed on document headers."
       />
-      <Grid gridTemplateColumns={["1fr", "1fr auto"]} w="full" gridGap={8}>
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 w-full">
         <CompanyForm company={initialValues} />
         <CompanyLogoForm company={company} />
-      </Grid>
+      </div>
     </VStack>
   );
 }

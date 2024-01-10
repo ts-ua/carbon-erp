@@ -1,5 +1,5 @@
-import { ClientOnly, HStack, IconButton, useColor } from "@carbon/react";
-import { Avatar, Grid, GridItem } from "@chakra-ui/react";
+import { ClientOnly, HStack, IconButton } from "@carbon/react";
+import { Avatar } from "@chakra-ui/react";
 import { redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 import { BsFillHexagonFill } from "react-icons/bs";
@@ -50,15 +50,15 @@ export default function OnboardingLayout() {
     // not sure why we need this ClientOnly, but things break without it
     <ClientOnly fallback={null}>
       {() => (
-        <Grid h="100vh" w="100vw" templateColumns="auto 1fr">
+        <div className="grid grid-cols-[auto_1fr] h-screen w-screen">
           <SidebarPlaceholder />
-          <Grid templateRows="auto 1fr" h="full" w="full">
+          <div className="gri grid-rows-[auto_1fr] h-full w-full">
             <TopbarPlaceholder />
             <div>
               <Outlet />
             </div>
-          </Grid>
-        </Grid>
+          </div>
+        </div>
       )}
     </ClientOnly>
   );
@@ -66,23 +66,11 @@ export default function OnboardingLayout() {
 
 function TopbarPlaceholder() {
   return (
-    <GridItem
-      bg={useColor("white")}
-      borderBottom={1}
-      borderBottomColor={useColor("gray.200")}
-      borderBottomStyle="solid"
-      display="grid"
-      gap={4}
-      gridTemplateColumns="1fr"
-      position="sticky"
-      px={4}
-      top={0}
-      zIndex={1}
-    >
+    <div className="grid bg-background border-b border-border gap-4 grid-cols-1 sticky px-4 top-0 z-1">
       <HStack className="justify-end py-2" spacing={1}>
         <Avatar size="sm" />
       </HStack>
-    </GridItem>
+    </div>
   );
 }
 

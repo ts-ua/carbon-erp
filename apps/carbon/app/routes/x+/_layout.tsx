@@ -1,5 +1,4 @@
 import { VStack, useNotification } from "@carbon/react";
-import { Grid, GridItem } from "@chakra-ui/react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Outlet, useLoaderData, useNavigation } from "@remix-run/react";
@@ -96,19 +95,19 @@ export default function AuthenticatedRoute() {
   return (
     <SupabaseProvider session={session}>
       <RealtimeDataProvider>
-        <Grid h="100vh" w="100vw" templateColumns="auto 1fr">
+        <div className="grid grid-cols-[auto_1fr] h-screen w-screen">
           <IconSidebar />
-          <GridItem w="full" h="full">
-            <Grid templateRows="auto 1fr" h="full" w="full">
+          <div className="w-full h-full">
+            <div className="grid grid-rows-[auto_1fr] h-full w-full">
               <Topbar />
               <div className="flex w-full h-full">
                 <VStack spacing={0} className="bg-muted">
                   <Outlet />
                 </VStack>
               </div>
-            </Grid>
-          </GridItem>
-        </Grid>
+            </div>
+          </div>
+        </div>
       </RealtimeDataProvider>
     </SupabaseProvider>
   );

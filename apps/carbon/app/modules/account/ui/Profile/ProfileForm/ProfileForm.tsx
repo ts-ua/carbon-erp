@@ -6,7 +6,6 @@ import {
   CardTitle,
   VStack,
 } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Hidden, Input, Submit, TextArea } from "~/components/Form";
@@ -36,10 +35,10 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
         </CardHeader>
         <CardContent>
           <VStack spacing={4} className="my-4">
-            <Grid gridTemplateColumns="1fr 1fr" gridColumnGap={4} w="full">
+            <div className="grid grid-cols-2 gap-4 w-full">
               <Input name="firstName" label="First Name" />
               <Input name="lastName" label="Last Name" />
-            </Grid>
+            </div>
             <TextArea name="about" label="About" characterLimit={160} my={2} />
             <Hidden name="intent" value="about" />
           </VStack>

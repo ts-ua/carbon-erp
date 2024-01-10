@@ -1,5 +1,4 @@
 import { VStack } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import type { MetaFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 import { ContentSidebar } from "~/components/Layout/Sidebar";
@@ -21,11 +20,11 @@ export default function AccountRoute() {
   const { links } = useAccountSidebar();
 
   return (
-    <Grid w="full" h="full" templateColumns="auto 1fr">
+    <div className="grid w-full h-full grid-cols-[auto_1fr]">
       <ContentSidebar links={links} />
       <VStack spacing={0} className="h-full p-8 bg-background">
         <Outlet />
       </VStack>
-    </Grid>
+    </div>
   );
 }

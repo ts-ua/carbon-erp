@@ -1,4 +1,4 @@
-import { Grid, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import type {
   ColumnDef,
   ColumnFiltersState,
@@ -66,7 +66,7 @@ const DataTable = <TData, TValue>({
   return (
     <VStack spacing={0} className="h-full">
       <div className="h-full bg-background overflow-scroll">
-        <Grid w="full" gridTemplateColumns="1fr">
+        <div className="grid w-full grid-cols-1">
           <Table>
             <Thead>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -125,7 +125,7 @@ const DataTable = <TData, TValue>({
               )}
             </Tbody>
           </Table>
-        </Grid>
+        </div>
       </div>
       <DataTablePagination table={table} />
     </VStack>

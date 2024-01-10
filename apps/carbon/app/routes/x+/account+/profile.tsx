@@ -5,7 +5,6 @@ import {
   CardTitle,
   VStack,
 } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -140,11 +139,7 @@ export default function AccountProfile() {
         subtitle="This information will be displayed publicly so be careful what you
         share."
       />
-      <Grid
-        gridTemplateColumns={["1fr", "1fr auto"]}
-        w="full"
-        gridColumnGap={8}
-      >
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 w-full">
         <VStack spacing={8}>
           <ProfileForm user={user} />
           {attributes.length ? (
@@ -167,7 +162,7 @@ export default function AccountProfile() {
           )}
         </VStack>
         <ProfilePhotoForm user={user} />
-      </Grid>
+      </div>
     </>
   );
 }

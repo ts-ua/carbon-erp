@@ -1,5 +1,4 @@
 import { VStack } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Hidden, Input, Submit } from "~/components/Form";
 import { SectionTitle } from "~/components/Layout";
@@ -22,7 +21,7 @@ const CompanyForm = ({ company }: CompanyFormProps) => {
         defaultValues={company}
       >
         <VStack spacing={4} className="my-4">
-          <Grid gridTemplateColumns="1fr 1fr" gridGap={4} w="full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <Input name="name" label="Company Name" />
             <Input name="taxId" label="Tax ID" />
             <Input name="addressLine1" label="Address Line 1" />
@@ -35,7 +34,7 @@ const CompanyForm = ({ company }: CompanyFormProps) => {
             <Input name="fax" label="Fax Number" />
             <Input name="email" label="Email" />
             <Input name="website" label="Website" />
-          </Grid>
+          </div>
 
           <Hidden name="intent" value="about" />
           <Submit>Save</Submit>

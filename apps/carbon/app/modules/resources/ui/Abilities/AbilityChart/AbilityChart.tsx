@@ -1,8 +1,8 @@
-import { AxisLeft, AxisBottom } from "@visx/axis";
+import { AxisBottom, AxisLeft } from "@visx/axis";
 import { curveNatural } from "@visx/curve";
 import { Drag } from "@visx/drag";
 import { LinearGradient } from "@visx/gradient";
-import { GridRows, GridColumns } from "@visx/grid";
+import { GridColumns, GridRows } from "@visx/grid";
 import { Group } from "@visx/group";
 import { PatternLines } from "@visx/pattern";
 import { scaleLinear } from "@visx/scale";

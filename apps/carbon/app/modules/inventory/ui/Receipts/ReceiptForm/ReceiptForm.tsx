@@ -12,7 +12,6 @@ import {
   MenubarItem,
   VStack,
 } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import { Outlet } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -121,12 +120,7 @@ const ReceiptForm = ({
                   />
                   <Hidden name="supplierId" value={supplierId ?? ""} />
                   <VStack spacing={4} className="min-h-full">
-                    <Grid
-                      gridTemplateColumns={["1fr", "1fr", "1fr 1fr"]}
-                      gridColumnGap={8}
-                      gridRowGap={4}
-                      w="full"
-                    >
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 w-full">
                       <Input name="receiptId" label="Receipt ID" isReadOnly />
                       <SelectControlled
                         name="locationId"
@@ -179,7 +173,7 @@ const ReceiptForm = ({
                         name="externalDocumentId"
                         label="External Reference"
                       />
-                    </Grid>
+                    </div>
                   </VStack>
                 </ValidatedForm>
               </div>

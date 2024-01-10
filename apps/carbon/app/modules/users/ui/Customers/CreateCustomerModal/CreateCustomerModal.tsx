@@ -13,7 +13,6 @@ import {
   ModalTitle,
   VStack,
 } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ValidatedForm, useControlField, useField } from "remix-validated-form";
@@ -87,7 +86,7 @@ const CreateCustomerModal = () => {
                     <FormLabel>Email</FormLabel>
                     <Input isReadOnly value={contact?.email ?? ""} />
                   </FormControl>
-                  <Grid templateColumns="1fr 1fr" gap={4}>
+                  <div className="grid grid-cols-2 gap-4 w-full">
                     <FormControl>
                       <FormLabel>First Name</FormLabel>
                       <Input isReadOnly value={contact?.firstName ?? ""} />
@@ -96,7 +95,7 @@ const CreateCustomerModal = () => {
                       <FormLabel>Last Name</FormLabel>
                       <Input isReadOnly value={contact?.lastName ?? ""} />
                     </FormControl>
-                  </Grid>
+                  </div>
                 </>
               )}
             </VStack>

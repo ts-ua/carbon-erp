@@ -1,5 +1,4 @@
 import { Button, HStack } from "@carbon/react";
-import { GridItem } from "@chakra-ui/react";
 import { BiHelpCircle } from "react-icons/bi";
 import { BsChatSquare } from "react-icons/bs";
 import { Search } from "~/components/Search";
@@ -9,10 +8,7 @@ import Create from "./Create";
 
 const Topbar = () => {
   return (
-    <GridItem
-      className="grid bg-background text-foreground border-b border-border px-4 top-0 sticky z-10 space-x-4"
-      gridTemplateColumns="1fr auto 1fr"
-    >
+    <div className="grid bg-background text-foreground border-b border-border px-4 top-0 sticky z-10 space-x-4 grid-cols-[1fr_auto_1fr] items-center">
       <Breadcrumbs />
       <Search />
       <HStack spacing={1} className="justify-end py-2">
@@ -37,7 +33,7 @@ const Topbar = () => {
         </Button>
         <AvatarMenu />
       </HStack>
-    </GridItem>
+    </div>
   );
 };
 

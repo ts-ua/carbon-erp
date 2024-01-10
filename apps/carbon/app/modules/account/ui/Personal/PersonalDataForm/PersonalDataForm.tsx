@@ -1,5 +1,4 @@
 import { VStack } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Submit } from "~/components/Form";
 import type { PersonalData } from "~/modules/account";
@@ -20,7 +19,6 @@ const PersonalDataForm = ({ personalData }: PersonalDataFormProps) => {
         defaultValues={personalData}
       >
         <VStack spacing={4} className="mt-4">
-          <Grid gridTemplateColumns="1fr 1fr" gridColumnGap={4} w="full"></Grid>
           <Submit>Save</Submit>
         </VStack>
       </ValidatedForm>

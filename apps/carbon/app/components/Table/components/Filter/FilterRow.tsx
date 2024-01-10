@@ -1,5 +1,5 @@
 import { IconButton, Input, useDebounce } from "@carbon/react";
-import { Grid, Select } from "@chakra-ui/react";
+import { Select } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { filterOperatorLabels } from "~/utils/query";
@@ -41,7 +41,7 @@ const FilterRow = ({
   };
 
   return (
-    <Grid gridColumnGap={2} gridTemplateColumns="1fr 1fr 1fr auto">
+    <div className="grid gap-x-2 grid-cols-[1fr_1fr_1fr_auto]">
       <Select size="sm" defaultValue={column} onChange={onColumnChange}>
         {Object.entries(columnAccessors).map(([accessor, title]) => (
           <option key={accessor} value={accessor}>
@@ -68,7 +68,7 @@ const FilterRow = ({
         onClick={onRemove}
         variant="ghost"
       />
-    </Grid>
+    </div>
   );
 };
 

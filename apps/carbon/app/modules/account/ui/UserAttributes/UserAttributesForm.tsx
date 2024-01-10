@@ -6,7 +6,6 @@ import {
   useColor,
   useDisclosure,
 } from "@carbon/react";
-import { Grid } from "@chakra-ui/react";
 import { parseDate } from "@internationalized/date";
 import { useFetcher, useParams } from "@remix-run/react";
 import { useState } from "react";
@@ -161,15 +160,7 @@ function renderTypedForm({
           fetcher={updateFetcher}
           onSubmit={(data) => onSubmit(data.value)}
         >
-          <Grid
-            gridTemplateColumns="1fr 2fr 1fr"
-            borderTopColor={borderColor}
-            borderTopStyle="solid"
-            borderTopWidth={1}
-            columnGap={2}
-            pt={3}
-            w="full"
-          >
+          <div className="grid grid-cols-[1fr_2fr_1fr] border-t border-border gap-x-2 pt-3 w-full items-center">
             <p className="text-muted-foreground self-center">
               {attribute.name}
             </p>
@@ -185,7 +176,7 @@ function renderTypedForm({
                 Cancel
               </Button>
             </HStack>
-          </Grid>
+          </div>
         </ValidatedForm>
       );
     case DataType.Date:
@@ -202,15 +193,7 @@ function renderTypedForm({
           fetcher={updateFetcher}
           onSubmit={(data) => onSubmit(data.value)}
         >
-          <Grid
-            gridTemplateColumns="1fr 2fr 1fr"
-            borderTopColor={borderColor}
-            borderTopStyle="solid"
-            borderTopWidth={1}
-            columnGap={2}
-            pt={3}
-            w="full"
-          >
+          <div className="grid grid-cols-[1fr_2fr_1fr] border-t border-border gap-x-2 pt-3 w-full items-center">
             <p className="text-muted-foreground self-center">
               {attribute.name}
             </p>
@@ -226,7 +209,7 @@ function renderTypedForm({
                 Cancel
               </Button>
             </HStack>
-          </Grid>
+          </div>
         </ValidatedForm>
       );
     case DataType.List:
@@ -243,15 +226,7 @@ function renderTypedForm({
           fetcher={updateFetcher}
           onSubmit={(data) => onSubmit(data.value)}
         >
-          <Grid
-            gridTemplateColumns="1fr 2fr 1fr"
-            borderTopColor={borderColor}
-            borderTopStyle="solid"
-            borderTopWidth={1}
-            columnGap={2}
-            pt={3}
-            w="full"
-          >
+          <div className="grid grid-cols-[1fr_2fr_1fr] border-t border-border gap-x-2 pt-3 w-full items-center">
             <p className="text-muted-foreground self-center">
               {attribute.name}
             </p>
@@ -269,13 +244,13 @@ function renderTypedForm({
                 }
               />
             </div>
-            <HStack className="justify-between w-full self-center">
+            <HStack className="justify-end w-full self-center">
               <Submit type="submit">Save</Submit>
               <Button variant="ghost" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
-          </Grid>
+          </div>
         </ValidatedForm>
       );
     case DataType.Numeric:
@@ -292,15 +267,7 @@ function renderTypedForm({
           fetcher={updateFetcher}
           onSubmit={(data) => onSubmit(data.value)}
         >
-          <Grid
-            gridTemplateColumns="1fr 2fr 1fr"
-            borderTopColor={borderColor}
-            borderTopStyle="solid"
-            borderTopWidth={1}
-            columnGap={2}
-            pt={3}
-            w="full"
-          >
+          <div className="grid grid-cols-[1fr_2fr_1fr] border-t border-border gap-x-2 pt-3 w-full items-center">
             <p className="text-muted-foreground self-center">
               {attribute.name}
             </p>
@@ -310,13 +277,13 @@ function renderTypedForm({
               <Hidden name="userAttributeValueId" />
               <NumberInput name="value" />
             </div>
-            <HStack className="justify-between w-full self-center">
+            <HStack className="justify-end w-full self-center">
               <Submit type="submit">Save</Submit>
               <Button variant="ghost" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
-          </Grid>
+          </div>
         </ValidatedForm>
       );
     case DataType.Text:
@@ -333,15 +300,7 @@ function renderTypedForm({
           fetcher={updateFetcher}
           onSubmit={(data) => onSubmit(data.value)}
         >
-          <Grid
-            gridTemplateColumns="1fr 2fr 1fr"
-            borderTopColor={borderColor}
-            borderTopStyle="solid"
-            borderTopWidth={1}
-            columnGap={2}
-            pt={3}
-            w="full"
-          >
+          <div className="grid grid-cols-[1fr_2fr_1fr] border-t border-border gap-x-2 pt-3 w-full items-center">
             <p className="text-muted-foreground self-center">
               {attribute.name}
             </p>
@@ -351,13 +310,13 @@ function renderTypedForm({
               <Hidden name="userAttributeValueId" />
               <Input name="value" />
             </div>
-            <HStack className="justify-between w-full self-center">
+            <HStack className="justify-end w-full self-center">
               <Submit type="submit">Save</Submit>
               <Button variant="ghost" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
-          </Grid>
+          </div>
         </ValidatedForm>
       );
     case DataType.User:
@@ -374,15 +333,7 @@ function renderTypedForm({
           fetcher={updateFetcher}
           onSubmit={(data) => onSubmit(data.value)}
         >
-          <Grid
-            gridTemplateColumns="1fr 2fr 1fr"
-            borderTopColor={borderColor}
-            borderTopStyle="solid"
-            borderTopWidth={1}
-            columnGap={2}
-            pt={3}
-            w="full"
-          >
+          <div className="grid grid-cols-[1fr_2fr_1fr] border-t border-border gap-x-2 pt-3 w-full items-center">
             <p className="text-muted-foreground self-center">
               {attribute.name}
             </p>
@@ -392,13 +343,13 @@ function renderTypedForm({
               <Hidden name="userAttributeValueId" />
               <Employee name="value" />
             </div>
-            <HStack className="justify-between w-full self-center">
+            <HStack className="justify-end w-full self-center">
               <Submit type="submit">Save</Submit>
               <Button variant="ghost" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
-          </Grid>
+          </div>
         </ValidatedForm>
       );
     default:
@@ -437,21 +388,14 @@ function renderTypedDisplay({
   switch (type) {
     case DataType.Boolean:
       return (
-        <Grid
-          gridTemplateColumns="1fr 2fr 1fr"
-          borderTopColor={borderColor}
-          borderTopStyle="solid"
-          borderTopWidth={1}
-          pt={3}
-          w="full"
-        >
+        <div className="grid grid-cols-[1fr_2fr_1fr] border-t border-border gap-x-2 pt-3 w-full items-center">
           <p className="text-muted-foreground items-center">{attribute.name}</p>
           {displayValue === "N/A" ? (
             <p className="self-center">{displayValue}</p>
           ) : (
             <Switch disabled checked={displayValue === true} />
           )}
-          <HStack className="justify-between w-full self-center">
+          <HStack className="justify-end w-full self-center">
             <Button
               isDisabled={!isAuthorized && (!attribute.canSelfManage ?? true)}
               variant="ghost"
@@ -460,20 +404,13 @@ function renderTypedDisplay({
               Update
             </Button>
           </HStack>
-        </Grid>
+        </div>
       );
     case DataType.Date:
     case DataType.List:
     case DataType.Text:
       return (
-        <Grid
-          gridTemplateColumns="1fr 2fr 1fr"
-          borderTopColor={borderColor}
-          borderTopStyle="solid"
-          borderTopWidth={1}
-          pt={3}
-          w="full"
-        >
+        <div className="grid grid-cols-[1fr_2fr_1fr] border-t border-border gap-x-2 pt-3 w-full items-center">
           <p className="text-muted-foreground self-center">{attribute.name}</p>
           <p className="self-center">{displayValue}</p>
           <UpdateRemoveButtons
@@ -487,18 +424,11 @@ function renderTypedDisplay({
             {...props}
             onSubmit={setOptimisticUpdate}
           />
-        </Grid>
+        </div>
       );
     case DataType.Numeric:
       return (
-        <Grid
-          gridTemplateColumns="1fr 2fr 1fr"
-          borderTopColor={borderColor}
-          borderTopStyle="solid"
-          borderTopWidth={1}
-          pt={3}
-          w="full"
-        >
+        <div className="grid grid-cols-[1fr_2fr_1fr] border-t border-border gap-x-2 pt-3 w-full items-center">
           <p className="text-muted-foreground self-center">{attribute.name}</p>
           <p className="self-center">{displayValue.toLocaleString("en-US")}</p>
           <UpdateRemoveButtons
@@ -509,18 +439,11 @@ function renderTypedDisplay({
             {...props}
             onSubmit={setOptimisticUpdate}
           />
-        </Grid>
+        </div>
       );
     case DataType.User:
       return (
-        <Grid
-          gridTemplateColumns="1fr 2fr 1fr"
-          borderTopColor={borderColor}
-          borderTopStyle="solid"
-          borderTopWidth={1}
-          pt={3}
-          w="full"
-        >
+        <div className="grid grid-cols-[1fr_2fr_1fr] border-t border-border gap-x-2 pt-3 w-full items-center">
           <p className="text-muted-foreground self-center">{attribute.name}</p>
           {value ? (
             <UserSelect disabled value={value.toString()} />
@@ -536,7 +459,7 @@ function renderTypedDisplay({
             {...props}
             onSubmit={setOptimisticUpdate}
           />
-        </Grid>
+        </div>
       );
   }
 }
