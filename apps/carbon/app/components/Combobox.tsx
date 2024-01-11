@@ -13,7 +13,7 @@ import {
   cn,
 } from "@carbon/react";
 import type { ComponentPropsWithoutRef } from "react";
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { RxCheck } from "react-icons/rx";
 
@@ -47,15 +47,17 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
     },
     ref
   ) => {
+    const [open, setOpen] = useState(false);
     return (
       <HStack spacing={1}>
-        <Popover>
+        <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <CommandTrigger
               size={size}
               role="combobox"
               className={cn("min-w-[160px]", !value && "text-muted-foreground")}
               ref={ref}
+              onClick={() => setOpen(true)}
               {...props}
             >
               {value ? (
@@ -78,6 +80,7 @@ const Combobox = forwardRef<HTMLButtonElement, ComboboxProps>(
                     key={option.value}
                     onSelect={() => {
                       onChange?.(option.value);
+                      setOpen(false);
                     }}
                   >
                     {option.label}

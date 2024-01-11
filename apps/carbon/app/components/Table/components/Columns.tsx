@@ -1,12 +1,12 @@
-import { Button, HStack, IconButton } from "@carbon/react";
 import {
+  Button,
+  HStack,
+  IconButton,
   Popover,
-  PopoverArrow,
-  PopoverBody,
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import type { Column, ColumnOrderState } from "@tanstack/react-table";
 import { Reorder } from "framer-motion";
 import {
@@ -32,21 +32,21 @@ const Columns = <T extends object>({
   setColumnOrder,
 }: ColumnsProps<T>) => {
   return (
-    <Popover placement="bottom" closeOnBlur>
-      <PopoverTrigger>
+    <Popover>
+      <PopoverTrigger asChild>
         <Button variant="ghost" leftIcon={<BsLayoutThreeColumns />}>
           Columns
         </Button>
       </PopoverTrigger>
-      <PopoverContent w={360} boxShadow="xl">
+      <PopoverContent className="w-96">
         <PopoverHeader>
           <p className="text-sm">Edit column view</p>
           <p className="text-xs text-muted-foreground">
             Manage and reorder columns
           </p>
         </PopoverHeader>
-        <PopoverArrow />
-        <PopoverBody maxH="50vh" overflow="auto">
+
+        <div className="max-h-48 overflow-y-auto">
           <Reorder.Group
             axis="y"
             values={columnOrder}
@@ -103,7 +103,7 @@ const Columns = <T extends object>({
               return acc;
             }, [])}
           </Reorder.Group>
-        </PopoverBody>
+        </div>
       </PopoverContent>
     </Popover>
   );

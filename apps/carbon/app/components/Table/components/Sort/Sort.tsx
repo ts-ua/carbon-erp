@@ -1,17 +1,15 @@
-import { Button, HStack, IconButton, Switch } from "@carbon/react";
 import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
+  Button,
+  HStack,
+  IconButton,
   Popover,
-  PopoverArrow,
-  PopoverBody,
   PopoverContent,
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
-} from "@chakra-ui/react";
+  Switch,
+} from "@carbon/react";
+import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { Reorder } from "framer-motion";
 import { BsChevronDown, BsListUl } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
@@ -33,8 +31,8 @@ const Sort = ({ columnAccessors }: SortProps) => {
   const hasNoSorts = sorts.length === 0;
 
   return (
-    <Popover placement="bottom" closeOnBlur>
-      <PopoverTrigger>
+    <Popover>
+      <PopoverTrigger asChild>
         <Button
           variant={hasNoSorts ? "ghost" : "primary"}
           leftIcon={<BsListUl />}
@@ -42,7 +40,7 @@ const Sort = ({ columnAccessors }: SortProps) => {
           {hasNoSorts ? "Sort" : "Sorted"}
         </Button>
       </PopoverTrigger>
-      <PopoverContent w={420} boxShadow="xl">
+      <PopoverContent className="w-[420px]">
         {hasNoSorts && (
           <PopoverHeader>
             <p className="text-sm">No sorts applied to this view</p>
@@ -51,47 +49,45 @@ const Sort = ({ columnAccessors }: SortProps) => {
             </p>
           </PopoverHeader>
         )}
-        <PopoverArrow />
+
         {!hasNoSorts && (
-          <PopoverBody>
-            <Reorder.Group
-              axis="y"
-              values={sorts}
-              onReorder={reorderSorts}
-              className="space-y-2"
-            >
-              {sorts.map((sort) => {
-                const [column, direction] = sort.split(":");
-                return (
-                  <Reorder.Item key={sort} value={sort} className="rounded-lg">
-                    <HStack>
-                      <IconButton
-                        aria-label="Drag handle"
-                        icon={<MdOutlineDragIndicator />}
-                        variant="ghost"
-                      />
-                      <span className="text-sm flex-grow">
-                        <>{columnAccessors[column] ?? ""}</>
-                      </span>
-                      <Switch
-                        checked={direction === "asc"}
-                        onCheckedChange={() => toggleSortByDirection(column)}
-                      />
-                      <span className="text-sm text-muted-foreground">
-                        Ascending
-                      </span>
-                      <IconButton
-                        aria-label="Remove sort by column"
-                        icon={<IoMdClose />}
-                        onClick={() => removeSortBy(sort)}
-                        variant="ghost"
-                      />
-                    </HStack>
-                  </Reorder.Item>
-                );
-              })}
-            </Reorder.Group>
-          </PopoverBody>
+          <Reorder.Group
+            axis="y"
+            values={sorts}
+            onReorder={reorderSorts}
+            className="space-y-2"
+          >
+            {sorts.map((sort) => {
+              const [column, direction] = sort.split(":");
+              return (
+                <Reorder.Item key={sort} value={sort} className="rounded-lg">
+                  <HStack>
+                    <IconButton
+                      aria-label="Drag handle"
+                      icon={<MdOutlineDragIndicator />}
+                      variant="ghost"
+                    />
+                    <span className="text-sm flex-grow">
+                      <>{columnAccessors[column] ?? ""}</>
+                    </span>
+                    <Switch
+                      checked={direction === "asc"}
+                      onCheckedChange={() => toggleSortByDirection(column)}
+                    />
+                    <span className="text-sm text-muted-foreground">
+                      Ascending
+                    </span>
+                    <IconButton
+                      aria-label="Remove sort by column"
+                      icon={<IoMdClose />}
+                      onClick={() => removeSortBy(sort)}
+                      variant="ghost"
+                    />
+                  </HStack>
+                </Reorder.Item>
+              );
+            })}
+          </Reorder.Group>
         )}
 
         <PopoverFooter>
