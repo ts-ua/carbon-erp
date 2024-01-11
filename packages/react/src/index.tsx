@@ -84,7 +84,13 @@ import {
   ModalTitle,
   ModalTrigger,
 } from "./Modal";
-import { Popover, PopoverContent, PopoverTrigger } from "./Popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverFooter,
+  PopoverHeader,
+  PopoverTrigger,
+} from "./Popover";
 import {
   Select,
   SelectContent,
@@ -200,6 +206,8 @@ export {
   ModalTrigger,
   Popover,
   PopoverContent,
+  PopoverFooter,
+  PopoverHeader,
   PopoverTrigger,
   Select,
   SelectContent,

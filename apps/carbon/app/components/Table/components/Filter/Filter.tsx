@@ -1,13 +1,12 @@
-import { Button, VStack } from "@carbon/react";
 import {
+  Button,
   Popover,
-  PopoverArrow,
-  PopoverBody,
   PopoverContent,
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
-} from "@chakra-ui/react";
+  VStack,
+} from "@carbon/react";
 import { BsFilter, BsPlus } from "react-icons/bs";
 import { useUrlParams } from "~/hooks";
 import FilterRow from "./FilterRow";
@@ -40,8 +39,8 @@ const Filter = ({ columnAccessors }: FilterProps) => {
   };
 
   return (
-    <Popover placement="bottom" closeOnBlur>
-      <PopoverTrigger>
+    <Popover>
+      <PopoverTrigger asChild>
         <Button
           variant={filters.length === 0 ? "ghost" : "primary"}
           leftIcon={<BsFilter />}
@@ -49,7 +48,7 @@ const Filter = ({ columnAccessors }: FilterProps) => {
           {filters.length === 0 ? "Filter" : "Filtered"}
         </Button>
       </PopoverTrigger>
-      <PopoverContent w={480} boxShadow="xl">
+      <PopoverContent className="w-[480px]">
         {filters.length === 0 && (
           <PopoverHeader>
             <p className="text-sm">No filters applied to this view</p>
@@ -58,29 +57,26 @@ const Filter = ({ columnAccessors }: FilterProps) => {
             </p>
           </PopoverHeader>
         )}
-        <PopoverArrow />
 
         {filters.length > 0 && (
-          <PopoverBody>
-            <VStack>
-              {filters.reduce<JSX.Element[]>((acc, filter, index) => {
-                const [column, operator, searchValue] = filter.split(":");
-                if (!column || !operator) return acc;
-                acc.push(
-                  <FilterRow
-                    key={`filter-${column}-${[index]}`}
-                    column={column}
-                    columnAccessors={columnAccessors}
-                    operator={operator}
-                    searchValue={searchValue}
-                    onRemove={() => removeFilter(index)}
-                    onUpdate={(newFilter) => updateFilter(index, newFilter)}
-                  />
-                );
-                return acc;
-              }, [])}
-            </VStack>
-          </PopoverBody>
+          <VStack>
+            {filters.reduce<JSX.Element[]>((acc, filter, index) => {
+              const [column, operator, searchValue] = filter.split(":");
+              if (!column || !operator) return acc;
+              acc.push(
+                <FilterRow
+                  key={`filter-${column}-${[index]}`}
+                  column={column}
+                  columnAccessors={columnAccessors}
+                  operator={operator}
+                  searchValue={searchValue}
+                  onRemove={() => removeFilter(index)}
+                  onUpdate={(newFilter) => updateFilter(index, newFilter)}
+                />
+              );
+              return acc;
+            }, [])}
+          </VStack>
         )}
         <PopoverFooter>
           <Button variant="secondary" leftIcon={<BsPlus />} onClick={addFilter}>

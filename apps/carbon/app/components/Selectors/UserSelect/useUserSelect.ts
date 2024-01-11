@@ -40,7 +40,6 @@ const defaultProps = {
   selections: [] as IndividualOrGroup[],
   selectionsMaxHeight: 400,
   showAvatars: false,
-  testID: "UserSelect",
   usersOnly: false,
   onCancel: () => {},
 };

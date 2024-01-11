@@ -209,7 +209,7 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
               </Tag>
             ))}
             <Popover>
-              <PopoverTrigger>
+              <PopoverTrigger asChild>
                 <Tag cursor="pointer">
                   <TagLabel>
                     <IoMdAdd />
@@ -217,6 +217,7 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
                 </Tag>
               </PopoverTrigger>
               <PopoverContent className="w-[300px] p-0">
+                {/* TODO: we should have a CreateableMultiSelect component for this */}
                 <CreatableCombobox
                   options={labelOptions}
                   selected={row.original.labels}

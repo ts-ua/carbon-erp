@@ -1,12 +1,12 @@
-import { Button, DatePicker, HStack } from "@carbon/react";
 import {
+  Button,
+  DatePicker,
+  HStack,
   Popover,
-  PopoverArrow,
-  PopoverBody,
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { parseDate } from "@internationalized/date";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
@@ -39,36 +39,32 @@ const ChartOfAccountsTableFilters = () => {
           isClearable
           onChange={(newValue) => setParams({ incomeBalance: newValue })}
         />
-        <Popover placement="bottom" closeOnBlur>
-          <PopoverTrigger>
+        <Popover>
+          <PopoverTrigger asChild>
             <Button variant="solid" leftIcon={<MdCalendarMonth />}>
               Date Range
             </Button>
           </PopoverTrigger>
-          <PopoverContent w={360} boxShadow="xl">
+          <PopoverContent className="w-[390px]">
             <PopoverHeader>
               <p className="text-sm">Edit date range</p>
               <p className="text-xs text-muted-foreground">
                 Select date range to filter net change and balance at date
               </p>
             </PopoverHeader>
-            <PopoverArrow />
-            <PopoverBody maxH="50vh">
-              <div className="grid grid-cols-[1fr_3fr] gap-y-2 items-center">
-                <p className="text-sm text-muted-foreground">Start Date</p>
-                <DatePicker
-                  value={startDate ? parseDate(startDate) : null}
-                  onChange={(value) =>
-                    setParams({ startDate: value.toString() })
-                  }
-                />
-                <p className="text-sm text-muted-foreground">End Date</p>
-                <DatePicker
-                  value={endDate ? parseDate(endDate) : null}
-                  onChange={(value) => setParams({ endDate: value.toString() })}
-                />
-              </div>
-            </PopoverBody>
+
+            <div className="grid grid-cols-[1fr_3fr] gap-y-2 items-center">
+              <p className="text-sm text-muted-foreground">Start Date</p>
+              <DatePicker
+                value={startDate ? parseDate(startDate) : null}
+                onChange={(value) => setParams({ startDate: value.toString() })}
+              />
+              <p className="text-sm text-muted-foreground">End Date</p>
+              <DatePicker
+                value={endDate ? parseDate(endDate) : null}
+                onChange={(value) => setParams({ endDate: value.toString() })}
+              />
+            </div>
           </PopoverContent>
         </Popover>
         {[...params.entries()].length > 0 && (

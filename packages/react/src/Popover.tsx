@@ -29,4 +29,40 @@ const PopoverContent = forwardRef<
 ));
 PopoverContent.displayName = PopoverPrimitive.Content.displayName;
 
-export { Popover, PopoverContent, PopoverTrigger };
+const PopoverHeader = forwardRef<
+  ElementRef<"div">,
+  ComponentPropsWithoutRef<"div">
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "-mx-4 -mt-4 mb-4 px-4 py-2 border-b border-border text-sm font-medium text-foreground",
+      className
+    )}
+    {...props}
+  />
+));
+PopoverHeader.displayName = "PopoverHeader";
+
+const PopoverFooter = forwardRef<
+  ElementRef<"div">,
+  ComponentPropsWithoutRef<"div">
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "-mx-4 -mb-4 mt-4 px-4 py-2 border-t border-border text-sm font-medium text-foreground",
+      className
+    )}
+    {...props}
+  />
+));
+PopoverFooter.displayName = "PopoverFooter";
+
+export {
+  Popover,
+  PopoverContent,
+  PopoverFooter,
+  PopoverHeader,
+  PopoverTrigger,
+};

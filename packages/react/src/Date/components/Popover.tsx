@@ -1,4 +1,4 @@
-import { Box, useColorModeValue, useOutsideClick } from "@chakra-ui/react";
+import { useOutsideClick } from "@chakra-ui/react";
 import { useRef } from "react";
 import { useEscape } from "../../hooks";
 
@@ -13,20 +13,11 @@ export function Popover(props: any) {
   });
 
   return (
-    <Box
-      ref={popoverRef}
-      background={useColorModeValue("white", "gray.900")}
-      borderRadius="md"
-      position="absolute"
-      zIndex="10"
-      top="100%"
-      boxShadow="lg"
-      marginTop="1"
-      padding="6"
-      outline="none"
+    <div
       {...rest}
+      className="absolute rounded-md z-[10] top-[100%] shadow-lg mt-1 p-6 outline-none bg-popover"
     >
       {children}
-    </Box>
+    </div>
   );
 }
