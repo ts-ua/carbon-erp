@@ -79,17 +79,19 @@ const EmployeePermissionsForm = ({
               <label className="block text-sm font-medium leading-none">
                 Permissions
               </label>
-              {Object.entries(permissions)
-                .sort((a, b) => a[0].localeCompare(b[0]))
-                .map(([module, data], index) => (
-                  <div key={index}>
-                    <PermissionCheckboxes
-                      module={module}
-                      permissions={data}
-                      updatePermissions={updatePermissions}
-                    />
-                  </div>
-                ))}
+              <VStack spacing={8}>
+                {Object.entries(permissions)
+                  .sort((a, b) => a[0].localeCompare(b[0]))
+                  .map(([module, data], index) => (
+                    <div key={index}>
+                      <PermissionCheckboxes
+                        module={module}
+                        permissions={data}
+                        updatePermissions={updatePermissions}
+                      />
+                    </div>
+                  ))}
+              </VStack>
               <Hidden name="id" />
               <Hidden name="data" value={JSON.stringify(permissions)} />
             </VStack>

@@ -1,4 +1,5 @@
-import { Checkbox, Link, MenuItem } from "@chakra-ui/react";
+import { Checkbox } from "@carbon/react";
+import { Link, MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -36,9 +37,8 @@ const CurrenciesTable = memo(({ data, count }: CurrenciesTableProps) => {
         cell: (item) => item.getValue(),
       },
       {
-        accessorKey: "symbol",
         header: "Symbol",
-        cell: (item) => item.getValue(),
+        cell: ({ row }) => row.original.symbol,
       },
       {
         accessorKey: "exchangeRate",
@@ -49,7 +49,7 @@ const CurrenciesTable = memo(({ data, count }: CurrenciesTableProps) => {
         accessorKey: "isBaseCurrency",
         header: "Default Currency",
         cell: ({ row }) => (
-          <Checkbox isChecked={row.original.isBaseCurrency} isReadOnly />
+          <Checkbox isChecked={row.original.isBaseCurrency} disabled />
         ),
       },
     ];

@@ -1,12 +1,12 @@
 import {
+  Checkbox,
+  HStack,
   IconButton,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-  useColor,
 } from "@carbon/react";
-import { Checkbox, List, ListItem } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { MdOutlineClear, MdPlaylistAdd } from "react-icons/md";
 import { Avatar } from "~/components";
@@ -37,42 +37,35 @@ const SelectionList = () => {
     [selectionItemsById]
   );
 
-  const background = useColor("gray.100");
-
   return (
     <TooltipProvider>
-      <List
-        w="full"
-        maxW={width}
-        mt={1}
-        maxH={selectionsMaxHeight}
-        overflowY={selectionsMaxHeight ? "auto" : undefined}
+      <ul
+        className="w-full mt-1"
+        style={{
+          maxWidth: width,
+          maxHeight: selectionsMaxHeight,
+          overflowY: selectionsMaxHeight ? "auto" : undefined,
+        }}
       >
         {selected.map((item) => {
           const id = `UserSelection:SelectedItem-${item.id}`;
           const canExpand = !checkedSelections && !readOnly && isGroup(item);
 
           return (
-            <ListItem
-              key={item.id}
-              p={2}
-              borderRadius="md"
-              _hover={{ background }}
-            >
-              <div className="flex space-x-2">
+            <li className="p-2 rounded-md hover:bg-accent" key={item.id}>
+              <div className="flex items-center space-x-2">
                 {checkedSelections ? (
-                  <>
+                  <HStack className="w-full">
                     <Checkbox
                       id={`${instanceId}:${id}:checkbox`}
                       data-testid={id}
                       isChecked={item.isChecked}
-                      onChange={() => onToggleChecked(item)}
-                      size="lg"
-                      flexGrow={2}
-                    >
-                      <p className="text-sm line-clamp-1">{item.label}</p>
-                    </Checkbox>
-                  </>
+                      onCheckedChange={() => onToggleChecked(item)}
+                    />
+                    <p className="flex-grow text-sm line-clamp-1">
+                      {item.label}
+                    </p>
+                  </HStack>
                 ) : (
                   <>
                     {"fullName" in item ? (
@@ -123,10 +116,10 @@ const SelectionList = () => {
                   </Tooltip>
                 )}
               </div>
-            </ListItem>
+            </li>
           );
         })}
-      </List>
+      </ul>
     </TooltipProvider>
   );
 };

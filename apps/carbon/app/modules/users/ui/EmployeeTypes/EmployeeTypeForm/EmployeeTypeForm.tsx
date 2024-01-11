@@ -9,7 +9,6 @@ import {
   HStack,
   VStack,
 } from "@carbon/react";
-import { FormLabel } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -89,18 +88,22 @@ const EmployeeTypeForm = ({ initialValues }: EmployeeTypeFormProps) => {
               />
             </VStack>
             <VStack>
-              <FormLabel>Default Permissions</FormLabel>
-              {Object.entries(permissions)
-                .sort((a, b) => a[0].localeCompare(b[0]))
-                .map(([module, data], index) => (
-                  <div key={index}>
-                    <PermissionCheckboxes
-                      module={module}
-                      permissions={data.permission}
-                      updatePermissions={updatePermissions}
-                    />
-                  </div>
-                ))}
+              <label className="block text-sm font-medium leading-none">
+                Default Permissions
+              </label>
+              <VStack spacing={8}>
+                {Object.entries(permissions)
+                  .sort((a, b) => a[0].localeCompare(b[0]))
+                  .map(([module, data], index) => (
+                    <div key={index}>
+                      <PermissionCheckboxes
+                        module={module}
+                        permissions={data.permission}
+                        updatePermissions={updatePermissions}
+                      />
+                    </div>
+                  ))}
+              </VStack>
             </VStack>
           </DrawerBody>
           <DrawerFooter>
