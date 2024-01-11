@@ -106,7 +106,7 @@ const AbilityChart = ({
             <LinearGradient
               id="fill"
               from="var(--chakra-colors-lime-200)"
-              to="var(--chakra-colors-gray-500)"
+              to="var(--chakra-colors-zinc-500)"
               fromOpacity={0.2}
               toOpacity={0}
             />
@@ -115,7 +115,7 @@ const AbilityChart = ({
               id="diagonalLines"
               height={6}
               width={6}
-              stroke="var(--chakra-colors-gray-500)"
+              stroke="var(--chakra-colors-zinc-500)"
               strokeWidth={1}
               orientation={["diagonal"]}
             />
@@ -158,7 +158,7 @@ const AbilityChart = ({
           data={shadowData}
           y={(d) => yScale(y(d))}
           x={(d) => xScale(x(d))}
-          stroke="var(--chakra-colors-gray-900)"
+          stroke="var(--chakra-colors-zinc-900)"
           strokeOpacity="0.5"
           strokeWidth={2}
           curve={curveNatural}

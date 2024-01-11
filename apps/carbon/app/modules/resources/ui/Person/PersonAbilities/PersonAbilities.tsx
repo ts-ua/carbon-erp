@@ -70,7 +70,7 @@ const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
                             abilityStatus === AbilityEmployeeStatus.Complete,
                           "bg-blue-400 text-white dark:bg-blue-500 dark:text-white":
                             abilityStatus === AbilityEmployeeStatus.InProgress,
-                          "bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200":
+                          "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200":
                             abilityStatus === AbilityEmployeeStatus.NotStarted,
                         }
                       )}
