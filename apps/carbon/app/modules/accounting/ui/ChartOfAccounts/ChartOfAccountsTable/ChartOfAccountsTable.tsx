@@ -1,5 +1,5 @@
-import { Button, HStack } from "@carbon/react";
-import { Checkbox, Link, Text } from "@chakra-ui/react";
+import { Button, Checkbox, HStack, cn } from "@carbon/react";
+import { Link } from "@chakra-ui/react";
 import { Link as RemixLink, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo } from "react";
@@ -54,12 +54,12 @@ const ChartOfAccountsTable = memo(({ data }: ChartOfAccountsTableProps) => {
         cell: ({ row }) => {
           const isPosting = row.original.type === "Posting";
           return (
-            <Text
-              fontWeight={isPosting ? "normal" : "bold"}
-              pl={`calc(${0.75 * row.original.level}rem)`}
+            <div
+              className={cn(!isPosting && "font-bold")}
+              style={{ paddingLeft: `calc(${0.75 * row.original.level}rem)` }}
             >
               {row.original.name}
-            </Text>
+            </div>
           );
         },
       },

@@ -1,6 +1,6 @@
-import { Box, Checkbox, Stack } from "@chakra-ui/react";
-import { capitalize } from "~/utils/string";
+import { Checkbox, HStack, VStack } from "@carbon/react";
 import type { Permission } from "~/modules/users";
+import { capitalize } from "~/utils/string";
 
 type PermissionProps = {
   module: string;
@@ -26,33 +26,35 @@ const PermissionCheckboxes = ({
   };
 
   return (
-    <Box mb={8}>
-      <Checkbox
-        isChecked={allChecked}
-        isIndeterminate={isIndeterminate}
-        onChange={(e) =>
-          updatePermissions(module, {
-            view: e.target.checked,
-            create: e.target.checked,
-            update: e.target.checked,
-            delete: e.target.checked,
-          })
-        }
-      >
-        {capitalize(module)}
-      </Checkbox>
-      <Stack pl={6} mt={2} spacing={2}>
+    <div>
+      <HStack>
+        <Checkbox
+          isChecked={allChecked || isIndeterminate}
+          isIndeterminate={isIndeterminate}
+          onCheckedChange={(checked) =>
+            updatePermissions(module, {
+              view: !!checked,
+              create: !!checked,
+              update: !!checked,
+              delete: !!checked,
+            })
+          }
+        />
+        <span>{capitalize(module)}</span>
+      </HStack>
+
+      <VStack className="pl-6 mt-2">
         {labels.map((verb, index) => (
-          <Checkbox
-            key={index}
-            isChecked={permissions[verb]}
-            onChange={(e) => updateByPosition(index, e.target.checked)}
-          >
-            {`${capitalize(labels[index])} ${capitalize(module)}`}
-          </Checkbox>
+          <HStack key={index}>
+            <Checkbox
+              isChecked={permissions[verb]}
+              onCheckedChange={(checked) => updateByPosition(index, !!checked)}
+            />
+            <span>{`${capitalize(labels[index])} ${capitalize(module)}`}</span>
+          </HStack>
         ))}
-      </Stack>
-    </Box>
+      </VStack>
+    </div>
   );
 };
 

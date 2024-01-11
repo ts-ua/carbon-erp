@@ -5,16 +5,11 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  HStack,
-} from "@carbon/react";
-import {
   Checkbox,
+  HStack,
   IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/react";
+} from "@carbon/react";
+import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
@@ -81,7 +76,7 @@ const PurchaseOrderLines = () => {
                   as={IconButton}
                   aria-label="Edit purchase order line type"
                   icon={<MdMoreHoriz />}
-                  size="sm"
+                  size="md"
                   position="absolute"
                   right={-1}
                   top="-6px"

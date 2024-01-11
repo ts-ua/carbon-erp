@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./Card";
+import { Checkbox } from "./Checkbox";
 import { ClientOnly } from "./ClientOnly";
 import {
   Command,
@@ -134,6 +135,7 @@ export {
   CardFooter,
   CardHeader,
   CardTitle,
+  Checkbox,
   ClientOnly,
   Command,
   CommandDialog,
