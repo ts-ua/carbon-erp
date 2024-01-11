@@ -2,13 +2,13 @@ import { Button, HStack } from "@carbon/react";
 import type { Column, ColumnOrderState } from "@tanstack/react-table";
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { MdOutlineEditNote } from "react-icons/md";
-import type { TableAction } from "../../types";
-import Actions from "../Actions";
-import Columns from "../Columns";
-import Filter from "../Filter";
-import type { PaginationProps } from "../Pagination";
-import { PaginationButtons } from "../Pagination";
-import Sort from "../Sort";
+import type { TableAction } from "../types";
+import Actions from "./Actions";
+import Columns from "./Columns";
+import Filter from "./Filter";
+import type { PaginationProps } from "./Pagination";
+import { PaginationButtons } from "./Pagination";
+import Sort from "./Sort";
 
 type HeaderProps<T> = {
   actions: TableAction<T>[];

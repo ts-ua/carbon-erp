@@ -1,5 +1,4 @@
-import { useColor } from "@carbon/react";
-import { Tr } from "@chakra-ui/react";
+import { Tr, cn } from "@carbon/react";
 import type { Row as RowType } from "@tanstack/react-table";
 import type { MutableRefObject } from "react";
 import { memo } from "react";
@@ -7,11 +6,9 @@ import type {
   EditableTableCellComponent,
   Position,
 } from "~/components/Editable";
-import Cell from "../Cell";
+import Cell from "./Cell";
 
 type RowProps<T> = {
-  borderColor: string;
-  backgroundColor: string;
   editableComponents?: Record<string, EditableTableCellComponent<T> | object>;
   editedCells?: string[];
   isEditing: boolean;
@@ -31,8 +28,6 @@ type RowProps<T> = {
 };
 
 const Row = <T extends object>({
-  borderColor,
-  backgroundColor,
   editableComponents,
   editedCells,
   isEditing,
@@ -50,17 +45,16 @@ const Row = <T extends object>({
   onCellUpdate,
   onRowClick,
 }: RowProps<T>) => {
-  const frozenBackgroundColor = useColor("white");
   return (
     <Tr
       key={row.id}
-      bg={isFrozenColumn ? frozenBackgroundColor : undefined}
+      className={cn(
+        "hover:bg-background border-b border-border transition-colors",
+        isFrozenColumn && "bg-background",
+        rowIsClickable && "cursor-pointer"
+      )}
       onClick={onRowClick}
       ref={rowRef}
-      _hover={{
-        cursor: rowIsClickable ? "pointer" : undefined,
-        backgroundColor,
-      }}
     >
       {(isFrozenColumn
         ? row.getLeftVisibleCells()
@@ -77,7 +71,6 @@ const Row = <T extends object>({
         return (
           <Cell<T>
             key={cell.id}
-            borderColor={borderColor}
             cell={cell}
             columnIndex={columnIndex}
             // @ts-ignore

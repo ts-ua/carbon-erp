@@ -1,7 +1,7 @@
 import { Button } from "@carbon/react";
 import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { IoMdCheckboxOutline } from "react-icons/io";
-import type { TableAction } from "../../types";
+import type { TableAction } from "../types";
 
 type ActionsProps<T> = {
   actions: TableAction<T>[];

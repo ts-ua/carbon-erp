@@ -1,22 +1,19 @@
 import {
   ActionMenu,
   ContextMenu,
+  Table as TableBase,
+  Tbody,
+  Th,
+  Thead,
+  Tr,
   VStack,
   cn,
-  useColor,
   useEscape,
   useMount,
 } from "@carbon/react";
 import { clip } from "@carbon/utils";
 import type { ThemeTypings } from "@chakra-ui/react";
-import {
-  Table as ChakraTable,
-  MenuList,
-  Tbody,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
+import { MenuList } from "@chakra-ui/react";
 import type {
   ColumnDef,
   ColumnOrderState,
@@ -419,10 +416,6 @@ const Table = <T extends object>({
   const rows = table.getRowModel().rows;
   const rowsAreClickable = !editMode && typeof onRowClick === "function";
 
-  const defaultBackground = useColor("white");
-  const borderColor = useColor("gray.200");
-  const rowBackground = useColor("gray.50");
-
   return (
     <VStack spacing={0} className="h-full">
       {(withColumnOrdering ||
@@ -460,18 +453,10 @@ const Table = <T extends object>({
         >
           {/* Pinned left columns */}
           {withColumnOrdering ? (
-            <ChakraTable
-              bg={defaultBackground}
-              borderRightColor={borderColor}
-              borderRightStyle="solid"
-              borderRightWidth={4}
-              position="sticky"
-              left={0}
-              zIndex={50}
-            >
+            <TableBase className="bg-background border-r-4 border-border sticky left-0 z-50">
               <Thead>
                 {table.getLeftHeaderGroups().map((headerGroup) => (
-                  <Tr key={headerGroup.id} h={10}>
+                  <Tr key={headerGroup.id} className="h-10">
                     {headerGroup.headers.map((header) => {
                       const accessorKey = getAccessorKey(
                         header.column.columnDef
@@ -493,11 +478,11 @@ const Table = <T extends object>({
                               ? () => toggleSortBy(accessorKey ?? "")
                               : undefined
                           }
-                          cursor={sortable ? "pointer" : undefined}
+                          className={cn(
+                            "px-4 py-2 whitespace-nowrap",
+                            editMode && "cursor-pointer border-r border-border"
+                          )}
                           colSpan={header.colSpan}
-                          px={4}
-                          py={2}
-                          whiteSpace="nowrap"
                         >
                           {header.isPlaceholder ? null : (
                             <div className="flex justify-start items-center text-xs text-muted-foreground">
@@ -535,8 +520,6 @@ const Table = <T extends object>({
                     >
                       {(ref) => (
                         <Row
-                          borderColor={borderColor}
-                          backgroundColor={rowBackground}
                           editableComponents={editableComponents}
                           isEditing={isEditing}
                           isEditMode={editMode}
@@ -564,8 +547,6 @@ const Table = <T extends object>({
                   ) : (
                     <Row
                       key={row.id}
-                      borderColor={borderColor}
-                      backgroundColor={rowBackground}
                       editableComponents={editableComponents}
                       isEditing={isEditing}
                       isEditMode={editMode}
@@ -589,17 +570,17 @@ const Table = <T extends object>({
                   );
                 })}
               </Tbody>
-            </ChakraTable>
+            </TableBase>
           ) : null}
 
           {/* Unpinned columns */}
-          <ChakraTable>
+          <TableBase>
             <Thead>
               {(withColumnOrdering
                 ? table.getCenterHeaderGroups()
                 : table.getHeaderGroups()
               ).map((headerGroup) => (
-                <Tr key={headerGroup.id} h={10}>
+                <Tr key={headerGroup.id} className="h-10">
                   {headerGroup.headers.map((header) => {
                     const accessorKey = getAccessorKey(header.column.columnDef);
 
@@ -619,14 +600,12 @@ const Table = <T extends object>({
                             ? () => toggleSortBy(accessorKey ?? "")
                             : undefined
                         }
-                        borderRightColor={borderColor}
-                        borderRightStyle="solid"
-                        borderRightWidth={editMode ? 1 : undefined}
-                        cursor={sortable ? "pointer" : undefined}
-                        px={4}
-                        py={3}
-                        w={header.getSize()}
-                        whiteSpace="nowrap"
+                        className={cn(
+                          "px-4 py-3 whitespace-nowrap",
+                          editMode && "border-r-1 border-border",
+                          sortable && "cursor-pointer"
+                        )}
+                        style={{ width: header.getSize() }}
                       >
                         {header.isPlaceholder ? null : (
                           <div className="flex justify-start items-center text-xs text-muted-foreground">
@@ -667,8 +646,6 @@ const Table = <T extends object>({
                   >
                     {(ref) => (
                       <Row
-                        borderColor={borderColor}
-                        backgroundColor={rowBackground}
                         // @ts-ignore
                         editableComponents={editableComponents}
                         isEditing={isEditing}
@@ -702,8 +679,6 @@ const Table = <T extends object>({
                 ) : (
                   <Row
                     key={row.id}
-                    borderColor={borderColor}
-                    backgroundColor={rowBackground}
                     // @ts-ignore
                     editableComponents={editableComponents}
                     isEditing={isEditing}
@@ -734,7 +709,7 @@ const Table = <T extends object>({
                 );
               })}
             </Tbody>
-          </ChakraTable>
+          </TableBase>
         </div>
       </div>
       {withPagination && (

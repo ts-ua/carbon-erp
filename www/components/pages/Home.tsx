@@ -59,7 +59,7 @@ function Hero() {
                   }}
                   className="max-w-5xl mx-auto text-7xl font-extrabold tracking-tighter leading-tighter sm:text-7xl lg:text-8xl xl:text-8xl"
                 >
-                  <span className="dark:bg-clip-text dark:text-transparent dark:bg-gradient-to-b dark:from-white  dark:to-gray-400">
+                  <span className="dark:bg-clip-text dark:text-transparent dark:bg-gradient-to-b dark:from-white  dark:to-zinc-400">
                     ERP for
                   </span>{" "}
                   <span className="bg-gradient-to-r bg-clip-text text-transparent dark:bg-gradient-to-b dark:from-[#3ECF8E] dark:via-[#3ECF8E] dark:to-[#3ecfb2] from-black via-orange-600 to-amber-500 ">
@@ -86,7 +86,7 @@ function Hero() {
                     delay: 3.0,
                     ease: "easeInOut",
                   }}
-                  className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-black no-underline bg-zinc-200 border border-zinc-300 dark:border-zinc-700 rounded-md dark:bg-zinc-800 dark:text-white betterhover:dark:hover:bg-gray-800 betterhover:hover:bg-zinc-300 md:text-lg md:px-12 md:leading-6 fix-width-auto xl:w-auto"
+                  className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-black no-underline bg-zinc-200 border border-zinc-300 dark:border-zinc-700 rounded-md dark:bg-zinc-800 dark:text-white betterhover:dark:hover:bg-zinc-800 betterhover:hover:bg-zinc-300 md:text-lg md:px-12 md:leading-6 fix-width-auto xl:w-auto"
                   href="/learn/introduction"
                 >
                   Learn
@@ -98,7 +98,7 @@ function Hero() {
                     delay: 3.2,
                     ease: "easeInOut",
                   }}
-                  className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white no-underline bg-zinc-800 border border-zinc-700 dark:border-zinc-200 rounded-md dark:bg-zinc-100 dark:text-black betterhover:dark:hover:bg-gray-300 betterhover:hover:bg-gray-700 md:text-lg md:px-12 md:leading-6 fix-width-auto xl:w-auto"
+                  className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white no-underline bg-zinc-800 border border-zinc-700 dark:border-zinc-200 rounded-md dark:bg-zinc-100 dark:text-black betterhover:dark:hover:bg-zinc-300 betterhover:hover:bg-zinc-700 md:text-lg md:px-12 md:leading-6 fix-width-auto xl:w-auto"
                   href="/develop/getting-started"
                 >
                   Develop
@@ -137,13 +137,13 @@ function Overview() {
 function OpenSource() {
   return (
     <section id="open-source" className="relative">
-      <div className="relative mt-20 border-t border-gray-200 dark:border-gray-900 bg-white/10 dark:bg-black/10 py-20 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] dark:shadow-[inset_10px_-50px_94px_0_rgb(50,50,50,0.2)] backdrop-blur">
+      <div className="relative mt-20 border-t border-zinc-200 dark:border-zinc-900 bg-white/10 dark:bg-black/10 py-20 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] dark:shadow-[inset_10px_-50px_94px_0_rgb(50,50,50,0.2)] backdrop-blur">
         <div className="mx-auto w-full lg:max-w-7xl px-2.5">
           <div className="mx-auto text-center">
-            <h2 className="text-gray-800 dark:text-white font-display text-4xl font-extrabold leading-tight  sm:text-5xl sm:leading-tight tracking-tighter">
+            <h2 className="text-zinc-800 dark:text-white font-display text-4xl font-extrabold leading-tight  sm:text-5xl sm:leading-tight tracking-tighter">
               Proudly Open Source
             </h2>
-            <p className="mt-5 text-gray-600 dark:text-gray-300 sm:text-lg font-medium">
+            <p className="mt-5 text-zinc-600 dark:text-zinc-300 sm:text-lg font-medium">
               Our source code is available on GitHub - feel free to use, modify,
               or contribute!
             </p>
@@ -155,7 +155,7 @@ function OpenSource() {
               rel="noreferrer"
             >
               <div className="flex items-center">
-                <div className="flex h-10 items-center space-x-2 rounded-md border border-gray-600 dark:border-none bg-gray-800 dark:bg-black p-6">
+                <div className="flex h-10 items-center space-x-2 rounded-md border border-zinc-600 dark:border-none bg-zinc-800 dark:bg-black p-6">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"

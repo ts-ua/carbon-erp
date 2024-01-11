@@ -1,6 +1,17 @@
-import { HStack, VStack, useColor, useEscape, useMount } from "@carbon/react";
+import {
+  HStack,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  VStack,
+  cn,
+  useEscape,
+  useMount,
+} from "@carbon/react";
 import { clip } from "@carbon/utils";
-import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import type { ColumnDef, ColumnOrderState } from "@tanstack/react-table";
 import {
   flexRender,
@@ -326,9 +337,6 @@ const Grid = <T extends object>({
 
   const rows = table.getRowModel().rows;
 
-  const borderColor = useColor("gray.200");
-  const rowBackground = useColor("gray.50");
-
   return (
     <VStack spacing={0} className="h-full">
       {/* {withColumnOrdering && (
@@ -351,7 +359,7 @@ const Grid = <T extends object>({
         <Table>
           <Thead>
             {table.getHeaderGroups().map((headerGroup) => (
-              <Tr key={headerGroup.id} h={10}>
+              <Tr key={headerGroup.id} className="h-10">
                 {headerGroup.headers.map((header) => {
                   const accessorKey = getAccessorKey(header.column.columnDef);
 
@@ -371,17 +379,16 @@ const Grid = <T extends object>({
                       //     ? () => toggleSortBy(accessorKey ?? "")
                       //     : undefined
                       // }
-                      borderRightColor={borderColor}
-                      borderRightStyle="solid"
-                      borderRightWidth={1}
-                      cursor={sortable ? "pointer" : undefined}
-                      px={4}
-                      py={3}
-                      w={header.getSize()}
-                      whiteSpace="nowrap"
+                      className={cn(
+                        "border-r border-border px-4 py-3 whitespace-nowrap text-sm",
+                        sortable && "cursor-pointer"
+                      )}
+                      style={{
+                        width: header.getSize(),
+                      }}
                     >
                       {header.isPlaceholder ? null : (
-                        <div className="flex justify-start items-center text-xs text-gray-500">
+                        <div className="flex justify-start items-center text-xs text-zinc-500">
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext()
@@ -413,8 +420,6 @@ const Grid = <T extends object>({
               return (
                 <Row
                   key={row.id}
-                  borderColor={borderColor}
-                  backgroundColor={rowBackground}
                   editableComponents={canEdit ? editableComponents : {}}
                   isEditing={isEditing}
                   selectedCell={selectedCell}
@@ -427,12 +432,7 @@ const Grid = <T extends object>({
               );
             })}
             {rows.length === 0 && !onNewRow && (
-              <Tr
-                h={10}
-                _hover={{
-                  backgroundColor: "gray.100",
-                }}
-              >
+              <Tr className="h-10 hover:bg-zinc-100 dark:hover:bg-zinc-900">
                 <Td colSpan={24}>
                   <p className="text-muted-foreground text-center w-full">
                     No Data
@@ -443,11 +443,7 @@ const Grid = <T extends object>({
             {onNewRow && (
               <Tr
                 onClick={onNewRow}
-                cursor="pointer"
-                h={10}
-                _hover={{
-                  backgroundColor: "gray.100",
-                }}
+                className="cursor-pointer h-10 hover:bg-zinc-100 dark:hover:bg-zinc-900"
               >
                 <Td colSpan={24}>
                   <HStack className="items-start h-6">

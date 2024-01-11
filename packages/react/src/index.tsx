@@ -99,6 +99,7 @@ import {
 import { Status } from "./Status";
 import Submit from "./Submit";
 import { Switch } from "./Switch";
+import { Table, TableCaption, Tbody, Td, Tfoot, Th, Thead, Tr } from "./Table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./Tabs";
 import ThemeProvider, { theme } from "./Theme";
 import {
@@ -211,16 +212,24 @@ export {
   Status,
   Submit,
   Switch,
+  Table,
+  TableCaption,
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
+  Tbody,
+  Td,
+  Tfoot,
+  Th,
+  Thead,
   ThemeProvider,
   TimePicker,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
+  Tr,
   VStack,
   cn,
   multiSelectTriggerVariants,

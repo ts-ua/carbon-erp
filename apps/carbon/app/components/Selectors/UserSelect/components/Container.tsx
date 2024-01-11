@@ -1,25 +1,21 @@
-import { Box } from "@chakra-ui/react";
-import type { ReactNode } from "react";
+import { cn } from "@carbon/react";
+import type { ComponentPropsWithoutRef } from "react";
 import { forwardRef } from "react";
 
-interface ContainerProps {
-  children: ReactNode;
-  testID?: string;
+interface ContainerProps extends ComponentPropsWithoutRef<"div"> {
   width?: number;
 }
 
 const Container = forwardRef<HTMLDivElement, ContainerProps>(
-  ({ width, testID, children }, ref) => (
-    <Box
+  ({ width, children, className, ...props }, ref) => (
+    <div
       ref={ref}
-      data-testid={testID}
-      display="inline-block"
-      position="relative"
-      maxW={width}
-      w="full"
+      {...props}
+      className={cn("inline-block relative w-full", className)}
+      style={{ maxWidth: width }}
     >
       {children}
-    </Box>
+    </div>
   )
 );
 
