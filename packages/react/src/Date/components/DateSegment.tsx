@@ -28,7 +28,7 @@ export const DateSegment = ({
     <div
       {...segmentProps}
       ref={ref}
-      className="box-content tabular-nums text-right outline-none rounded-sm group focus:ring-2 focus:ring-offset-2"
+      className="box-content tabular-nums text-right outline-none rounded-sm group focus:ring-2 ring-ring focus:ring-offset-2"
     >
       <span
         aria-hidden="true"

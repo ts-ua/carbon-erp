@@ -1,4 +1,9 @@
-import { AvatarGroup, MenuItem } from "@chakra-ui/react";
+import {
+  AvatarGroup,
+  AvatarGroupList,
+  AvatarOverflowIndicator,
+} from "@carbon/react";
+import { MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -45,20 +50,23 @@ const GroupsTable = memo(({ data, count }: GroupsTableProps) => {
         header: "Members",
         // accessorKey: undefined, // makes the column unsortable
         cell: ({ row }) => (
-          <AvatarGroup max={5} size="sm" spacing={-2}>
-            {row.original.members.map(
-              (
-                member: { name: string | null; avatar: string | null },
-                index: number
-              ) => (
-                <Avatar
-                  key={index}
-                  name={member.name ?? undefined}
-                  title={member.name ?? undefined}
-                  path={member.avatar}
-                />
-              )
-            )}
+          <AvatarGroup limit={3}>
+            <AvatarGroupList>
+              {row.original.members.map(
+                (
+                  member: { name: string | null; avatar: string | null },
+                  index: number
+                ) => (
+                  <Avatar
+                    key={index}
+                    name={member.name ?? undefined}
+                    title={member.name ?? undefined}
+                    path={member.avatar}
+                  />
+                )
+              )}
+            </AvatarGroupList>
+            <AvatarOverflowIndicator />
           </AvatarGroup>
         ),
       },

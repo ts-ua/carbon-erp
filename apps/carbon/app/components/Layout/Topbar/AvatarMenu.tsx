@@ -22,10 +22,9 @@ const AvatarMenu = () => {
         arial-label="User Menu"
         as={Avatar}
         path={user.avatarUrl}
+        name={name}
         title={name}
         role="button"
-        size="sm"
-        cursor="pointer"
       />
       <MenuList fontSize="sm" boxShadow="xl" minW={48}>
         <MenuItem>Signed in as {name}</MenuItem>

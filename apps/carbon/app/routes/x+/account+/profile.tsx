@@ -10,7 +10,6 @@ import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import { PageTitle } from "~/components/Layout";
-import type { PublicAttributes } from "~/modules/account";
 import {
   ProfileForm,
   ProfilePhotoForm,
@@ -111,11 +110,7 @@ export async function action({ request }: ActionFunctionArgs) {
         path.to.profile,
         await flash(
           request,
-          success(
-            photoPath === null
-              ? "Removed avatar. Please refresh the page."
-              : "Updated avatar. Please refresh the page."
-          )
+          success(photoPath === null ? "Removed avatar" : "Updated avatar")
         )
       );
     } else {
@@ -143,16 +138,18 @@ export default function AccountProfile() {
         <VStack spacing={8}>
           <ProfileForm user={user} />
           {attributes.length ? (
-            attributes.map((category: PublicAttributes) => (
-              <Card key={category.id}>
-                <CardHeader>
-                  <CardTitle>{category.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <UserAttributesForm attributeCategory={category} />
-                </CardContent>
-              </Card>
-            ))
+            <>
+              {attributes.map((category) => (
+                <Card key={category.id}>
+                  <CardHeader>
+                    <CardTitle>{category.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <UserAttributesForm attributeCategory={category} />
+                  </CardContent>
+                </Card>
+              ))}
+            </>
           ) : (
             <Card>
               <CardContent className="text-muted-foreground w-full text-center py-8">

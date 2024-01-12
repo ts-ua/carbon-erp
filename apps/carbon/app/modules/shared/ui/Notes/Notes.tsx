@@ -32,7 +32,7 @@ const Notes = ({ documentId, notes }: NotesProps) => {
             return (
               <Fragment key={note.id}>
                 {/* @ts-ignore */}
-                <Avatar path={note.user.avatarUrl} />
+                <Avatar path={note.user.avatarUrl} name={note.user?.fullName} />
                 <VStack spacing={1}>
                   {/* @ts-ignore */}
                   <p className="font-bold">{note.user?.fullName!}</p>

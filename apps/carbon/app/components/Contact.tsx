@@ -1,5 +1,5 @@
-import { ActionMenu, Dot, HStack, VStack } from "@carbon/react";
-import { Avatar, MenuItem } from "@chakra-ui/react";
+import { ActionMenu, Avatar, Dot, HStack, VStack } from "@carbon/react";
+import { MenuItem } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import type { Action } from "~/types";
 

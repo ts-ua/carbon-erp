@@ -1,4 +1,9 @@
-import { AvatarGroup, Link, MenuItem } from "@chakra-ui/react";
+import {
+  AvatarGroup,
+  AvatarGroupList,
+  AvatarOverflowIndicator,
+} from "@carbon/react";
+import { Link, MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -70,15 +75,18 @@ const AbilitiesTable = memo(({ data, count }: AbilitiesTableProps) => {
         header: "Employees",
         // accessorKey: undefined, // makes the column unsortable
         cell: ({ row }) => (
-          <AvatarGroup max={5} size="sm" spacing={-2}>
-            {row.original.employees.map((employee, index: number) => (
-              <Avatar
-                key={index}
-                name={employee.name ?? undefined}
-                title={employee.name ?? undefined}
-                path={employee.avatarUrl}
-              />
-            ))}
+          <AvatarGroup limit={5}>
+            <AvatarGroupList>
+              {row.original.employees.map((employee, index: number) => (
+                <Avatar
+                  key={index}
+                  name={employee.name ?? undefined}
+                  title={employee.name ?? undefined}
+                  path={employee.avatarUrl}
+                />
+              ))}
+            </AvatarGroupList>
+            <AvatarOverflowIndicator />
           </AvatarGroup>
         ),
       },

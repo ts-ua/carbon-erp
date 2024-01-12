@@ -81,8 +81,8 @@ export async function action({ request }: ActionFunctionArgs) {
           request,
           success(
             logoPath === null
-              ? "Removed logo. Please refresh the page."
-              : "Updated logo. Please refresh the page."
+              ? "Removed logo. Please refresh the page"
+              : "Updated logo"
           )
         )
       );
