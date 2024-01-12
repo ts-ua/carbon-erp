@@ -1,5 +1,5 @@
-import { Button, useDisclosure } from "@carbon/react";
-import { Badge, Link, MenuItem } from "@chakra-ui/react";
+import { Button, Hyperlink, useDisclosure } from "@carbon/react";
+import { Badge, MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
@@ -43,9 +43,9 @@ const AttributeCategoriesTable = memo(
           accessorKey: "name",
           header: "Category",
           cell: ({ row }) => (
-            <Link onClick={() => navigate(row.original.id)}>
+            <Hyperlink onClick={() => navigate(row.original.id)}>
               {row.original.name}
-            </Link>
+            </Hyperlink>
           ),
         },
         {

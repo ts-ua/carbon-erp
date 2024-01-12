@@ -32,7 +32,7 @@ const IconSidebar = () => {
     <div className="h-full border-r border-border bg-background z-10">
       <div>
         <TooltipProvider>
-          <VStack spacing={0} className="sticky">
+          <VStack spacing={0} className="self-start sticky">
             <Button
               isIcon
               asChild

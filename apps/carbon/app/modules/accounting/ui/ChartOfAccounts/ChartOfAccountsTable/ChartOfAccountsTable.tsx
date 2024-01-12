@@ -1,5 +1,4 @@
-import { Button, Checkbox, HStack, cn } from "@carbon/react";
-import { Link } from "@chakra-ui/react";
+import { Button, Checkbox, HStack, Hyperlink, cn } from "@carbon/react";
 import { Link as RemixLink, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo } from "react";
@@ -23,12 +22,12 @@ const ChartOfAccountsTable = memo(({ data }: ChartOfAccountsTableProps) => {
 
           return (
             <HStack>
-              <Link
+              <Hyperlink
+                className={cn(!isPosting && "font-bold")}
                 onClick={() => navigate(row.original.id)}
-                fontWeight={isPosting ? "normal" : "bold"}
               >
                 {row.original.number}
-              </Link>
+              </Hyperlink>
 
               <div className="relative w-6 h-6">
                 <Button

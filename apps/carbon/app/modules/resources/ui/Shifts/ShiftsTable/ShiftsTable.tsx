@@ -1,4 +1,5 @@
-import { AvatarGroup, Badge, Link, MenuItem } from "@chakra-ui/react";
+import { Hyperlink } from "@carbon/react";
+import { AvatarGroup, Badge, MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -91,9 +92,9 @@ const ShiftsTable = memo(({ data, count }: ShiftsTableProps) => {
         accessorKey: "name",
         header: "Shift",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(row.original.id)}>
+          <Hyperlink onClick={() => navigate(row.original.id)}>
             {row.original.name}
-          </Link>
+          </Hyperlink>
         ),
       },
       {

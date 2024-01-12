@@ -1,5 +1,5 @@
-import { Button } from "@carbon/react";
-import { Link, MenuItem } from "@chakra-ui/react";
+import { Button, Hyperlink } from "@carbon/react";
+import { MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo } from "react";
@@ -22,9 +22,11 @@ const SuppliersTable = memo(({ data, count }: SuppliersTableProps) => {
         accessorKey: "name",
         header: "Name",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(path.to.supplier(row.original.id!))}>
+          <Hyperlink
+            onClick={() => navigate(path.to.supplier(row.original.id!))}
+          >
             {row.original.name}
-          </Link>
+          </Hyperlink>
         ),
       },
       {

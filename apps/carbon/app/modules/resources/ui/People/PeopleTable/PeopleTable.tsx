@@ -1,5 +1,5 @@
-import { HStack } from "@carbon/react";
-import { Link, MenuItem, Text } from "@chakra-ui/react";
+import { HStack, Hyperlink } from "@carbon/react";
+import { MenuItem, Text } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -105,13 +105,13 @@ const PeopleTable = memo(
                 path={row.original.user?.avatarUrl!}
               />
 
-              <Link
+              <Hyperlink
                 onClick={() => {
                   navigate(path.to.person(row?.original.user?.id!));
                 }}
               >
                 {row.original.user?.fullName}
-              </Link>
+              </Hyperlink>
             </HStack>
           ),
         },

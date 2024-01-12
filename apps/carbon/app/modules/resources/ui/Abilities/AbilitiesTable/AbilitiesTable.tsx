@@ -2,8 +2,9 @@ import {
   AvatarGroup,
   AvatarGroupList,
   AvatarOverflowIndicator,
+  Hyperlink,
 } from "@carbon/react";
-import { Link, MenuItem } from "@chakra-ui/react";
+import { MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -66,9 +67,9 @@ const AbilitiesTable = memo(({ data, count }: AbilitiesTableProps) => {
         accessorKey: "name",
         header: "Ability",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(path.to.ability(row.original.id))}>
+          <Hyperlink onClick={() => navigate(path.to.ability(row.original.id))}>
             {row.original.name}
-          </Link>
+          </Hyperlink>
         ),
       },
       {

@@ -5,21 +5,21 @@ import {
   CardHeader,
   CardTitle,
   HStack,
-} from "@carbon/react";
-import { convertKbToString } from "@carbon/utils";
-import {
-  IconButton,
-  Link,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
+  Hyperlink,
   Table,
   Tbody,
   Td,
   Th,
   Thead,
   Tr,
+} from "@carbon/react";
+import { convertKbToString } from "@carbon/utils";
+import {
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
 } from "@chakra-ui/react";
 import { Outlet } from "@remix-run/react";
 import { MdMoreVert } from "react-icons/md";
@@ -67,7 +67,7 @@ const PurchaseOrderDocuments = ({
               <Tr>
                 <Th>Name</Th>
                 <Th>Size</Th>
-                {/* <Th>Uploaded By</Th> */}
+
                 <Th></Th>
               </Tr>
             </Thead>
@@ -78,9 +78,9 @@ const PurchaseOrderDocuments = ({
                     <Td>
                       <HStack>
                         <DocumentIcon fileName={attachment.name} />
-                        <Link onClick={() => download(attachment)}>
+                        <Hyperlink onClick={() => download(attachment)}>
                           {attachment.name}
-                        </Link>
+                        </Hyperlink>
                       </HStack>
                     </Td>
                     <Td>
@@ -88,15 +88,6 @@ const PurchaseOrderDocuments = ({
                         Math.floor((attachment.metadata?.size ?? 0) / 1024)
                       )}
                     </Td>
-                    {/* <Td>
-                      <HStack>
-                        <Avatar
-                          size="sm"
-                          path={getAvatarPath(attachment.owner) ?? null}
-                        />
-                        <Text>{getFullName(attachment.owner)}</Text>
-                      </HStack>
-                    </Td> */}
                     <Td>
                       <div className="flex justify-end w-full">
                         <Menu>
@@ -124,7 +115,10 @@ const PurchaseOrderDocuments = ({
                 ))
               ) : (
                 <Tr>
-                  <Td colSpan={24} py={8} color="gray.500" textAlign="center">
+                  <Td
+                    colSpan={24}
+                    className="py-8 text-muted-foreground text-center"
+                  >
                     No {isExternal ? "external" : "internal"} attachments
                   </Td>
                 </Tr>

@@ -1,4 +1,5 @@
-import { Link, MenuItem } from "@chakra-ui/react";
+import { Hyperlink } from "@carbon/react";
+import { MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -24,9 +25,9 @@ const SequencesTable = memo(({ data, count }: SequencesTableProps) => {
         accessorKey: "name",
         header: "Name",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(row.original.table)}>
+          <Hyperlink onClick={() => navigate(row.original.table)}>
             {row.original.name}
-          </Link>
+          </Hyperlink>
         ),
       },
       {
