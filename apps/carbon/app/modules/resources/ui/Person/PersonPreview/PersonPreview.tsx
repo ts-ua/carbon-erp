@@ -8,6 +8,7 @@ import {
 } from "@carbon/react";
 import { Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
+import { Avatar } from "~/components";
 import { useRouteData } from "~/hooks";
 import type { EmployeeSummary } from "~/modules/resources";
 import { path } from "~/utils/path";
@@ -22,11 +23,16 @@ const PartPreview = () => {
 
   return (
     <Card>
-      <HStack className="justify-between items-start">
+      <HStack className="justify-between items-center p-6 pl-0">
         <CardHeader>
           <CardTitle>{routeData?.employeeSummary?.name}</CardTitle>
           <CardDescription>{routeData?.employeeSummary?.title}</CardDescription>
         </CardHeader>
+        <Avatar
+          size="lg"
+          name={routeData?.employeeSummary?.name ?? undefined}
+          path={routeData?.employeeSummary?.avatarUrl}
+        />
       </HStack>
       <CardContent>
         <Stack direction={["column", "column", "row"]} spacing={8}>

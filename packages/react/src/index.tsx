@@ -1,4 +1,11 @@
 import { ActionMenu } from "./ActionMenu";
+import type { AvatarProps } from "./Avatar";
+import {
+  Avatar,
+  AvatarGroup,
+  AvatarGroupList,
+  AvatarOverflowIndicator,
+} from "./Avatar";
 import { Badge } from "./Badge";
 import type { ButtonProps } from "./Button";
 import { Button } from "./Button";
@@ -132,6 +139,10 @@ import { cn } from "./utils/cn";
 
 export {
   ActionMenu,
+  Avatar,
+  AvatarGroup,
+  AvatarGroupList,
+  AvatarOverflowIndicator,
   Badge,
   Button,
   Card,
@@ -256,4 +267,4 @@ export {
   useNotification,
   useOutsideClick,
 };
-export type { ButtonProps, InputProps };
+export type { AvatarProps, ButtonProps, InputProps };

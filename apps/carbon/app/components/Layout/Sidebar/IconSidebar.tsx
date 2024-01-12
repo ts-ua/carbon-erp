@@ -30,39 +30,47 @@ const IconSidebar = () => {
 
   return (
     <div className="h-full border-r border-border bg-background z-10">
-      <Button isIcon asChild variant="ghost" size="lg" className="rounded-none">
-        <Link to="/">
-          <BsFillHexagonFill />
-        </Link>
-      </Button>
-      <TooltipProvider>
-        <VStack spacing={0} className="top-[50px] sticky">
-          {links.map((link) => {
-            const module = link.to.split("/")[2]; // link.to is "/x/parts" -- this returns "parts"
+      <div>
+        <TooltipProvider>
+          <VStack spacing={0} className="sticky">
+            <Button
+              isIcon
+              asChild
+              variant="ghost"
+              size="lg"
+              className="rounded-none"
+            >
+              <Link to="/">
+                <BsFillHexagonFill />
+              </Link>
+            </Button>
+            {links.map((link) => {
+              const module = link.to.split("/")[2]; // link.to is "/x/parts" -- this returns "parts"
 
-            const isActive = matchedModules.has(module);
-            return (
-              <Tooltip key={link.to}>
-                <TooltipTrigger asChild>
-                  <Button
-                    asChild
-                    isIcon
-                    aria-label={link.name}
-                    variant={isActive ? "primary" : "ghost"}
-                    size="lg"
-                    className="rounded-none"
-                  >
-                    <Link to={link.to} prefetch="intent">
-                      <link.icon />
-                    </Link>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right">{link.name}</TooltipContent>
-              </Tooltip>
-            );
-          })}
-        </VStack>
-      </TooltipProvider>
+              const isActive = matchedModules.has(module);
+              return (
+                <Tooltip key={link.to}>
+                  <TooltipTrigger asChild>
+                    <Button
+                      asChild
+                      isIcon
+                      aria-label={link.name}
+                      variant={isActive ? "primary" : "ghost"}
+                      size="lg"
+                      className="rounded-none"
+                    >
+                      <Link to={link.to} prefetch="intent">
+                        <link.icon />
+                      </Link>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">{link.name}</TooltipContent>
+                </Tooltip>
+              );
+            })}
+          </VStack>
+        </TooltipProvider>
+      </div>
     </div>
   );
 };

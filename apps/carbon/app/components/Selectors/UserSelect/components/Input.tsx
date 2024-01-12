@@ -1,4 +1,6 @@
 import {
+  Avatar,
+  AvatarGroup,
   HStack,
   IconButton,
   Input as InputBase,
@@ -6,7 +8,7 @@ import {
   InputLeftElement,
   InputRightElement,
 } from "@carbon/react";
-import { Avatar, AvatarGroup, Spinner } from "@chakra-ui/react";
+import { Spinner } from "@chakra-ui/react";
 import { MdOutlineClear } from "react-icons/md";
 import useUserSelectContext from "../provider";
 
@@ -27,9 +29,9 @@ const Input = () => {
     <InputGroup>
       {isMulti ? (
         <InputLeftElement>
-          <AvatarGroup size="xs" max={2}>
-            <Avatar />
-            <Avatar />
+          <AvatarGroup size="xs" limit={2}>
+            <Avatar size="xs" />
+            <Avatar size="xs" />
           </AvatarGroup>
         </InputLeftElement>
       ) : (

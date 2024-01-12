@@ -66,7 +66,11 @@ const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
 
   return (
     <VStack className="px-8 items-center">
-      <Avatar size="2xl" path={user?.avatarUrl} title={user?.fullName ?? ""} />
+      <Avatar
+        size="2xl"
+        path={user?.avatarUrl}
+        name={user?.fullName ?? undefined}
+      />
       <File accept="image/*" onChange={uploadImage}>
         {user.avatarUrl ? "Change" : "Upload"}
       </File>

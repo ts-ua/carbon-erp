@@ -1,18 +1,21 @@
-import type { AvatarProps as AvatarBaseProps } from "@chakra-ui/react";
-import { Avatar as AvatarBase, forwardRef } from "@chakra-ui/react";
+import type { AvatarProps as AvatarBaseProps } from "@carbon/react";
+import { Avatar as AvatarBase } from "@carbon/react";
+import { forwardRef } from "react";
 import { getStoragePath } from "~/utils/path";
 
 type AvatarProps = AvatarBaseProps & {
-  path: string | null;
+  path?: string | null;
   bucket?: string;
 };
 
-const Avatar = forwardRef(
-  ({ path, bucket = "avatars", ...props }: AvatarProps, ref) => {
+const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(
+  ({ name, path, bucket = "avatars", ...props }, ref) => {
     const imagePath = path ? getStoragePath(bucket, path) : undefined;
 
-    return <AvatarBase ref={ref} src={imagePath} {...props} />;
+    // @ts-ignore
+    return <AvatarBase src={imagePath} name={name} ref={ref} {...props} />;
   }
 );
+Avatar.displayName = "Avatar";
 
 export default Avatar;

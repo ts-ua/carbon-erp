@@ -9311,6 +9311,7 @@ export interface Database {
       };
       employeeSummary: {
         Row: {
+          avatarUrl: string | null;
           departmentName: string | null;
           id: string | null;
           locationName: string | null;

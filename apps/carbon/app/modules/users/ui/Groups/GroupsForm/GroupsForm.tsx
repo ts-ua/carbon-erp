@@ -59,7 +59,6 @@ const GroupForm = ({ initialValues }: GroupFormProps) => {
               <Users
                 name="selections"
                 selectionsMaxHeight={"calc(100vh - 330px)"}
-                checkedSelections
                 label="Group Members"
                 verbose
               />

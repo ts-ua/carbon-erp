@@ -76,7 +76,6 @@ export default function ResetPasswordRoute() {
             <HStack spacing={4}>
               <Submit>Reset Password</Submit>
               <Button
-                size="md"
                 variant="solid"
                 onClick={() => navigate(path.to.authenticatedRoot)}
               >

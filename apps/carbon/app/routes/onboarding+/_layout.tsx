@@ -1,5 +1,4 @@
-import { ClientOnly, HStack, IconButton } from "@carbon/react";
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, ClientOnly, HStack, IconButton } from "@carbon/react";
 import { redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 import { BsFillHexagonFill } from "react-icons/bs";
