@@ -3,6 +3,7 @@ import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
+  Hyperlink,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -11,7 +12,6 @@ import {
 import { convertKbToString } from "@carbon/utils";
 import {
   Icon,
-  Link,
   MenuItem,
   Tag,
   TagCloseButton,
@@ -156,7 +156,7 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
               onClick={() => onFavorite(row.original)}
             />
             <DocumentIcon fileName={row.original.name} />
-            <Link onClick={() => download(row.original)}>
+            <Hyperlink onClick={() => download(row.original)}>
               {row.original.type &&
               (isImage(row.original.type) || isPdf(row.original.type)) ? (
                 <HoverCard>
@@ -191,7 +191,7 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
               ) : (
                 <>{row.original.name}</>
               )}
-            </Link>
+            </Hyperlink>
           </HStack>
         ),
       },

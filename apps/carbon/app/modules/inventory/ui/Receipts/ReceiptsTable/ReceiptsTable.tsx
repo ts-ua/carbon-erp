@@ -1,5 +1,6 @@
+import { Hyperlink } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
-import { Link, MenuItem } from "@chakra-ui/react";
+import { MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -31,9 +32,9 @@ const ReceiptsTable = memo(({ data, count }: ReceiptsTableProps) => {
         accessorKey: "receiptId",
         header: "Receipt ID",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(row.original.id)}>
+          <Hyperlink onClick={() => navigate(row.original.id)}>
             {row.original.receiptId}
-          </Link>
+          </Hyperlink>
         ),
       },
       {
@@ -49,7 +50,7 @@ const ReceiptsTable = memo(({ data, count }: ReceiptsTableProps) => {
           switch (row.original.sourceDocument) {
             case "Purchase Order":
               return (
-                <Link
+                <Hyperlink
                   onClick={() =>
                     navigate(
                       path.to.purchaseOrder(row.original.sourceDocumentId!)
@@ -57,11 +58,11 @@ const ReceiptsTable = memo(({ data, count }: ReceiptsTableProps) => {
                   }
                 >
                   {row.original.sourceDocumentReadableId}
-                </Link>
+                </Hyperlink>
               );
             case "Purchase Invoice":
               return (
-                <Link
+                <Hyperlink
                   onClick={() =>
                     navigate(
                       path.to.purchaseInvoice(row.original.sourceDocumentId!)
@@ -69,7 +70,7 @@ const ReceiptsTable = memo(({ data, count }: ReceiptsTableProps) => {
                   }
                 >
                   {row.original.sourceDocumentReadableId}
-                </Link>
+                </Hyperlink>
               );
             default:
               return null;

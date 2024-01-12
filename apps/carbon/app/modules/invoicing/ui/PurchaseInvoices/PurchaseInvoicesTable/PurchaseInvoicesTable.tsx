@@ -1,5 +1,5 @@
-import { HStack } from "@carbon/react";
-import { Link, MenuItem, Text, useDisclosure } from "@chakra-ui/react";
+import { HStack, Hyperlink, useDisclosure } from "@carbon/react";
+import { MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo, useState } from "react";
@@ -40,7 +40,7 @@ const PurchaseInvoicesTable = memo(
           accessorKey: "invoiceId",
           header: "Invoice Number",
           cell: ({ row }) => (
-            <Link
+            <Hyperlink
               onClick={
                 row.original?.id !== null
                   ? () => navigate(path.to.purchaseInvoice(row.original.id!))
@@ -48,7 +48,7 @@ const PurchaseInvoicesTable = memo(
               }
             >
               {row.original?.invoiceId}
-            </Link>
+            </Hyperlink>
           ),
         },
         {
@@ -82,7 +82,7 @@ const PurchaseInvoicesTable = memo(
             return (
               <HStack>
                 <Avatar size="sm" path={row.original.createdByAvatar} />
-                <Text>{row.original.createdByFullName}</Text>
+                <span>{row.original.createdByFullName}</span>
               </HStack>
             );
           },
@@ -99,7 +99,7 @@ const PurchaseInvoicesTable = memo(
             return row.original.updatedByFullName ? (
               <HStack>
                 <Avatar size="sm" path={row.original.updatedByAvatar ?? null} />
-                <Text>{row.original.updatedByFullName}</Text>
+                <span>{row.original.updatedByFullName}</span>
               </HStack>
             ) : null;
           },

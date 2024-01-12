@@ -1,5 +1,5 @@
-import { HStack, useDisclosure } from "@carbon/react";
-import { Icon, Link, MenuItem, Text } from "@chakra-ui/react";
+import { HStack, Hyperlink, useDisclosure } from "@carbon/react";
+import { MenuItem, Text } from "@chakra-ui/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { BsPencilSquare, BsStar, BsStarFill } from "react-icons/bs";
@@ -64,18 +64,21 @@ const PurchaseOrdersTable = memo(
           header: "PO Number",
           cell: ({ row }) => (
             <HStack>
-              <Icon
-                color={row.original.favorite ? "yellow.400" : "gray.300"}
-                cursor="pointer"
-                h={4}
-                w={4}
-                as={row.original.favorite ? BsStarFill : BsStar}
-                onClick={() => onFavorite(row.original)}
-              />
+              {row.original.favorite ? (
+                <BsStarFill
+                  className="text-yellow-400 cursor-pointer h-4 w-4"
+                  onClick={() => onFavorite(row.original)}
+                />
+              ) : (
+                <BsStar
+                  className="text-muted-foreground cursor-pointer h-4 w-4"
+                  onClick={() => onFavorite(row.original)}
+                />
+              )}
 
-              <Link onClick={() => edit(row.original)}>
+              <Hyperlink onClick={() => edit(row.original)}>
                 {row.original.purchaseOrderId}
-              </Link>
+              </Hyperlink>
             </HStack>
           ),
         },

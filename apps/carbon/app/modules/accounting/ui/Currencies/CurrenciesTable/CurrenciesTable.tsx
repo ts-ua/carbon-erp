@@ -1,5 +1,5 @@
-import { Checkbox } from "@carbon/react";
-import { Link, MenuItem } from "@chakra-ui/react";
+import { Checkbox, Hyperlink } from "@carbon/react";
+import { MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -26,9 +26,9 @@ const CurrenciesTable = memo(({ data, count }: CurrenciesTableProps) => {
         accessorKey: "name",
         header: "Name",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(row.original.id)}>
+          <Hyperlink onClick={() => navigate(row.original.id)}>
             {row.original.name}
-          </Link>
+          </Hyperlink>
         ),
       },
       {

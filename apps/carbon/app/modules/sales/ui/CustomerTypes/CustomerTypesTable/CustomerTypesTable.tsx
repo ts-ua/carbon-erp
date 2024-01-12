@@ -1,4 +1,5 @@
-import { Link, MenuItem } from "@chakra-ui/react";
+import { Hyperlink } from "@carbon/react";
+import { MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -25,9 +26,9 @@ const CustomerTypesTable = memo(({ data, count }: CustomerTypesTableProps) => {
         accessorKey: "name",
         header: "Customer Type",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(row.original.id)}>
+          <Hyperlink onClick={() => navigate(row.original.id)}>
             {row.original.name}
-          </Link>
+          </Hyperlink>
         ),
       },
       {

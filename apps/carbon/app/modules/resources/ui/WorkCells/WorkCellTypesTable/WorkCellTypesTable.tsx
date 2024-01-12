@@ -1,5 +1,5 @@
-import { Button, HStack, useDisclosure } from "@carbon/react";
-import { Icon, Link, MenuItem } from "@chakra-ui/react";
+import { Button, HStack, Hyperlink, useDisclosure } from "@carbon/react";
+import { MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
@@ -45,13 +45,12 @@ const WorkCellTypesTable = memo(({ data, count }: WorkCellTypesTableProps) => {
         header: "Work Cell Type",
         cell: ({ row }) => (
           <HStack>
-            <Link onClick={() => navigate(row.original.id)}>
+            <Hyperlink onClick={() => navigate(row.original.id)}>
               {row.original.name}
-            </Link>
+            </Hyperlink>
             {row.original.requiredAbility && (
-              <Icon
-                as={BsFillCheckCircleFill}
-                color="green.500"
+              <BsFillCheckCircleFill
+                className="text-green-500"
                 title="Requires ability"
               />
             )}

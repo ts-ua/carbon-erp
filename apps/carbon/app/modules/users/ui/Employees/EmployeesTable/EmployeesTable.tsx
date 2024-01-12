@@ -1,5 +1,5 @@
-import { HStack, useDisclosure } from "@carbon/react";
-import { Link, MenuItem } from "@chakra-ui/react";
+import { HStack, Hyperlink, useDisclosure } from "@carbon/react";
+import { MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
@@ -65,13 +65,11 @@ const EmployeesTable = memo(
             <HStack>
               <Avatar
                 size="sm"
-                // @ts-ignore
-                name={row.original.user?.fullName}
-                // @ts-ignore
-                path={row.original.user?.avatarUrl}
+                name={row.original.user?.fullName ?? undefined}
+                path={row.original.user?.avatarUrl ?? undefined}
               />
-              {/* // @ts-ignore */}
-              <Link
+
+              <Hyperlink
                 onClick={() =>
                   navigate(
                     `${path.to.employeeAccount(
@@ -80,11 +78,8 @@ const EmployeesTable = memo(
                   )
                 }
               >
-                {
-                  // @ts-ignore
-                  `${row.original.user?.firstName} ${row.original.user?.lastName}`
-                }
-              </Link>
+                {`${row.original.user?.firstName} ${row.original.user?.lastName}`}
+              </Hyperlink>
             </HStack>
           ),
         },
