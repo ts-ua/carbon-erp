@@ -6,11 +6,10 @@ import {
   HStack,
   Switch,
 } from "@carbon/react";
-import type { SwitchProps } from "@chakra-ui/react";
 import { forwardRef } from "react";
 import { useControlField, useField } from "remix-validated-form";
 
-type FormBooleanProps = Omit<SwitchProps, "onChange"> & {
+type FormBooleanProps = {
   name: string;
   label?: string;
   helperText?: string;
@@ -27,7 +26,6 @@ const Boolean = forwardRef<HTMLInputElement, FormBooleanProps>(
       <FormControl isInvalid={!!error} className="pt-2">
         {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
         <HStack>
-          {/* @ts-ignore */}
           <Switch
             {...getInputProps()}
             checked={value}

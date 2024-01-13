@@ -1,5 +1,9 @@
-import { Button, Hyperlink } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import {
+  Button,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  Hyperlink,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo } from "react";
@@ -76,12 +80,10 @@ const SuppliersTable = memo(({ data, count }: SuppliersTableProps) => {
     // eslint-disable-next-line react/display-name
     () => (row: Supplier) =>
       (
-        <MenuItem
-          icon={<BsPencilSquare />}
-          onClick={() => navigate(path.to.supplier(row.id!))}
-        >
+        <DropdownMenuItem onClick={() => navigate(path.to.supplier(row.id!))}>
+          <DropdownMenuIcon icon={<BsPencilSquare />} />
           Edit Supplier
-        </MenuItem>
+        </DropdownMenuItem>
       ),
     [navigate]
   );

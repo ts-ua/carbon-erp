@@ -1,5 +1,4 @@
-import { Hyperlink } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import { DropdownMenuIcon, DropdownMenuItem, Hyperlink } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -49,38 +48,34 @@ const SupplierTypesTable = memo(({ data, count }: SupplierTypesTableProps) => {
     (row: SupplierType) => {
       return (
         <>
-          <MenuItem
-            icon={<BsPeopleFill />}
+          <DropdownMenuItem
             onClick={() => {
               navigate(`${path.to.suppliers}?type=${row.id}`);
             }}
           >
+            <DropdownMenuIcon icon={<BsPeopleFill />} />
             View Suppliers
-          </MenuItem>
-          <MenuItem
-            isDisabled={
-              row.protected || !permissions.can("update", "purchasing")
-            }
-            icon={<BsPencilSquare />}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={row.protected || !permissions.can("update", "purchasing")}
             onClick={() => {
               navigate(`${path.to.supplierType(row.id)}?${params.toString()}`);
             }}
           >
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
             Edit Supplier Type
-          </MenuItem>
-          <MenuItem
-            isDisabled={
-              row.protected || !permissions.can("delete", "purchasing")
-            }
-            icon={<IoMdTrash />}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={row.protected || !permissions.can("delete", "purchasing")}
             onClick={() => {
               navigate(
                 `${path.to.deleteSupplierType(row.id)}?${params.toString()}`
               );
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Supplier Type
-          </MenuItem>
+          </DropdownMenuItem>
         </>
       );
     },

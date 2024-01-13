@@ -1,5 +1,10 @@
 import {
   Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
   HStack,
   IconButton,
   Popover,
@@ -9,7 +14,6 @@ import {
   PopoverTrigger,
   Switch,
 } from "@carbon/react";
-import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { Reorder } from "framer-motion";
 import { BsChevronDown, BsListUl } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
@@ -91,15 +95,13 @@ const Sort = ({ columnAccessors }: SortProps) => {
         )}
 
         <PopoverFooter>
-          <Menu isLazy>
-            <MenuButton
-              as={Button}
-              rightIcon={<BsChevronDown />}
-              variant="secondary"
-            >
-              Pick a column to sort by
-            </MenuButton>
-            <MenuList fontSize="sm" boxShadow="xl">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button rightIcon={<BsChevronDown />} variant="secondary">
+                Pick a column to sort by
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-48">
               {Object.keys(columnAccessors)
                 .filter((columnAccessor) => {
                   return !sorts
@@ -108,17 +110,17 @@ const Sort = ({ columnAccessors }: SortProps) => {
                 })
                 .map((columnAccessor) => {
                   return (
-                    <MenuItem
+                    <DropdownMenuItem
                       key={columnAccessor}
                       onClick={() => toggleSortBy(columnAccessor)}
-                      icon={<BsListUl />}
                     >
+                      <DropdownMenuIcon icon={<BsListUl />} />
                       {columnAccessors[columnAccessor]}
-                    </MenuItem>
+                    </DropdownMenuItem>
                   );
                 })}
-            </MenuList>
-          </Menu>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </PopoverFooter>
       </PopoverContent>
     </Popover>

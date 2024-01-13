@@ -8,11 +8,12 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
+  DropdownMenuIcon,
+  DropdownMenuItem,
   HStack,
   IconButton,
   useDisclosure,
 } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
 import { Link, useFetcher } from "@remix-run/react";
 import { Reorder } from "framer-motion";
 import { useMemo, useState } from "react";
@@ -103,15 +104,16 @@ const AttributeCategoryDetail = ({
   const renderContextMenu = (attributeId: string) => {
     return (
       <>
-        <MenuItem as={Link} to={attributeId} icon={<BsPencilSquare />}>
-          Edit Attribute
-        </MenuItem>
-        <MenuItem
-          onClick={() => onDelete(attributeMap[attributeId])}
-          icon={<IoMdTrash />}
-        >
+        <DropdownMenuItem asChild>
+          <Link to={attributeId}>
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            Edit Attribute
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => onDelete(attributeMap[attributeId])}>
+          <DropdownMenuIcon icon={<IoMdTrash />} />
           Delete Attribute
-        </MenuItem>
+        </DropdownMenuItem>
       </>
     );
   };

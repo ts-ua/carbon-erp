@@ -1,4 +1,6 @@
 import {
+  DropdownMenuIcon,
+  DropdownMenuItem,
   HStack,
   HoverCard,
   HoverCardContent,
@@ -10,14 +12,7 @@ import {
   useDisclosure,
 } from "@carbon/react";
 import { convertKbToString } from "@carbon/utils";
-import {
-  Icon,
-  MenuItem,
-  Tag,
-  TagCloseButton,
-  TagLabel,
-  Text,
-} from "@chakra-ui/react";
+import { Tag, TagCloseButton, TagLabel, Text } from "@chakra-ui/react";
 import { useRevalidator } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
@@ -147,14 +142,17 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
         header: "Name",
         cell: ({ row }) => (
           <HStack>
-            <Icon
-              color={row.original.favorite ? "yellow.400" : "gray.300"}
-              cursor="pointer"
-              h={4}
-              w={4}
-              as={row.original.favorite ? BsStarFill : BsStar}
-              onClick={() => onFavorite(row.original)}
-            />
+            {row.original.favorite ? (
+              <BsStarFill
+                className="cursor-pointer w-4 h-4 text-yellow-400"
+                onClick={() => onFavorite(row.original)}
+              />
+            ) : (
+              <BsStar
+                className="cursor-pointer w-4 h-4 text-muted-foreground"
+                onClick={() => onFavorite(row.original)}
+              />
+            )}
             <DocumentIcon fileName={row.original.name} />
             <Hyperlink onClick={() => download(row.original)}>
               {row.original.type &&
@@ -342,34 +340,32 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
     // eslint-disable-next-line react/display-name
     return (row: Document) => (
       <>
-        <MenuItem
-          icon={<BsPencilSquare />}
-          isDisabled={canUpdate(row)}
-          onClick={() => edit(row)}
-        >
+        <DropdownMenuItem disabled={canUpdate(row)} onClick={() => edit(row)}>
+          <DropdownMenuIcon icon={<BsPencilSquare />} />
           Edit
-        </MenuItem>
-        <MenuItem icon={<VscOpenPreview />} onClick={() => download(row)}>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => download(row)}>
+          <DropdownMenuIcon icon={<VscOpenPreview />} />
           Download
-        </MenuItem>
-        <MenuItem
-          icon={<BsStar />}
+        </DropdownMenuItem>
+        <DropdownMenuItem
           onClick={() => {
             onFavorite(row);
           }}
         >
+          <DropdownMenuIcon icon={<BsStar />} />
           Favorite
-        </MenuItem>
-        <MenuItem
-          icon={<IoMdTrash />}
-          isDisabled={canDelete(row)}
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          disabled={canDelete(row)}
           onClick={() => {
             setSelectedDocument(row);
             deleteDocumentModal.onOpen();
           }}
         >
+          <DropdownMenuIcon icon={<IoMdTrash />} />
           {filter !== "trash" ? "Move to Trash" : "Restore from Trash"}
-        </MenuItem>
+        </DropdownMenuItem>
       </>
     );
   }, [

@@ -1,5 +1,10 @@
-import { Avatar, HStack, Hyperlink } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import {
+  Avatar,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  HStack,
+  Hyperlink,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -56,8 +61,7 @@ const ContractorsTable = memo(({ data, count }: ContractorsTableProps) => {
     (row: Contractor) => {
       return (
         <>
-          <MenuItem
-            icon={<BsPencilSquare />}
+          <DropdownMenuItem
             onClick={() => {
               navigate(
                 `${path.to.contractor(
@@ -66,11 +70,11 @@ const ContractorsTable = memo(({ data, count }: ContractorsTableProps) => {
               );
             }}
           >
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
             Edit Contractor
-          </MenuItem>
-          <MenuItem
-            isDisabled={!permissions.can("delete", "resources")}
-            icon={<IoMdTrash />}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={!permissions.can("delete", "resources")}
             onClick={() => {
               navigate(
                 `${path.to.deleteContractor(
@@ -79,8 +83,9 @@ const ContractorsTable = memo(({ data, count }: ContractorsTableProps) => {
               );
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Contractor
-          </MenuItem>
+          </DropdownMenuItem>
         </>
       );
     },

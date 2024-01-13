@@ -4,8 +4,13 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
   HStack,
   Hyperlink,
+  IconButton,
   Table,
   Tbody,
   Td,
@@ -14,13 +19,6 @@ import {
   Tr,
 } from "@carbon/react";
 import { convertKbToString } from "@carbon/utils";
-import {
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/react";
 import { Outlet } from "@remix-run/react";
 import { MdMoreVert } from "react-icons/md";
 import { DocumentIcon } from "~/modules/documents";
@@ -90,25 +88,28 @@ const PurchaseOrderDocuments = ({
                     </Td>
                     <Td>
                       <div className="flex justify-end w-full">
-                        <Menu>
-                          <MenuButton
-                            aria-label="More"
-                            as={IconButton}
-                            icon={<MdMoreVert />}
-                            variant="outline"
-                          />
-                          <MenuList>
-                            <MenuItem onClick={() => download(attachment)}>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <IconButton
+                              aria-label="More"
+                              icon={<MdMoreVert />}
+                              variant="secondary"
+                            />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DropdownMenuItem
+                              onClick={() => download(attachment)}
+                            >
                               Download
-                            </MenuItem>
-                            <MenuItem
-                              isDisabled={!canDelete}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              disabled={!canDelete}
                               onClick={() => deleteAttachment(attachment)}
                             >
                               Delete
-                            </MenuItem>
-                          </MenuList>
-                        </Menu>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     </Td>
                   </Tr>

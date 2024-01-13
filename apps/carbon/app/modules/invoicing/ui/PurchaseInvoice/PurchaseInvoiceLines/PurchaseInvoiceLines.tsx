@@ -5,15 +5,14 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
   HStack,
-} from "@carbon/react";
-import {
   IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
@@ -72,35 +71,33 @@ const PurchaseInvoiceLines = () => {
           <HStack className="justify-between min-w-[100px]">
             <span>{row.original.invoiceLineType}</span>
             <div className="relative w-6 h-5">
-              <Menu>
-                <MenuButton
-                  as={IconButton}
-                  aria-label="Edit purchase order line type"
-                  icon={<MdMoreHoriz />}
-                  size="sm"
-                  position="absolute"
-                  right={-1}
-                  top="-6px"
-                  variant="ghost"
-                  onClick={(e) => e.stopPropagation()}
-                />
-                <MenuList>
-                  <MenuItem
-                    icon={<BsPencilSquare />}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <IconButton
+                    aria-label="Edit purchase order line type"
+                    icon={<MdMoreHoriz />}
+                    className="absolute right-[-1px] top-[-6px]"
+                    variant="ghost"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem
                     onClick={() => navigate(row.original.id)}
-                    isDisabled={!isEditable || !canEdit}
+                    disabled={!isEditable || !canEdit}
                   >
+                    <DropdownMenuIcon icon={<BsPencilSquare />} />
                     Edit Line
-                  </MenuItem>
-                  <MenuItem
-                    icon={<IoMdTrash />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
                     onClick={() => navigate(`delete/${row.original.id}`)}
-                    isDisabled={!isEditable || !canDelete}
+                    disabled={!isEditable || !canDelete}
                   >
+                    <DropdownMenuIcon icon={<IoMdTrash />} />
                     Delete Line
-                  </MenuItem>
-                </MenuList>
-              </Menu>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </HStack>
         ),

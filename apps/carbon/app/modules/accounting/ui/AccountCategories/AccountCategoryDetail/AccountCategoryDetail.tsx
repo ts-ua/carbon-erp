@@ -8,11 +8,12 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
+  DropdownMenuIcon,
+  DropdownMenuItem,
   HStack,
   VStack,
   useDisclosure,
 } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
@@ -51,19 +52,6 @@ const AccountCategoryDetail = ({
     deleteModal.onClose();
   };
 
-  const renderContextMenu = (subcategory: AccountSubcategory) => {
-    return (
-      <>
-        <MenuItem as={Link} to={subcategory.id} icon={<BsPencilSquare />}>
-          Edit Subcategory
-        </MenuItem>
-        <MenuItem onClick={() => onDelete(subcategory)} icon={<IoMdTrash />}>
-          Delete Subcategory
-        </MenuItem>
-      </>
-    );
-  };
-
   return (
     <>
       <Drawer
@@ -85,7 +73,18 @@ const AccountCategoryDetail = ({
                 return (
                   <HStack spacing={1} key={subcategory.id} className="w-full">
                     <p className="flex-grow">{subcategory.name}</p>
-                    <ActionMenu>{renderContextMenu(subcategory)}</ActionMenu>
+                    <ActionMenu>
+                      <DropdownMenuItem asChild>
+                        <Link to={subcategory.id}>
+                          <DropdownMenuIcon icon={<BsPencilSquare />} />
+                          Edit Subcategory
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => onDelete(subcategory)}>
+                        <DropdownMenuIcon icon={<IoMdTrash />} />
+                        Delete Subcategory
+                      </DropdownMenuItem>
+                    </ActionMenu>
                   </HStack>
                 );
               })}

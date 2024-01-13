@@ -1,5 +1,12 @@
-import { ActionMenu, Avatar, Dot, HStack, VStack } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import {
+  ActionMenu,
+  Avatar,
+  Dot,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  HStack,
+  VStack,
+} from "@carbon/react";
 import { Link } from "@remix-run/react";
 import type { Action } from "~/types";
 
@@ -59,13 +66,10 @@ const Contact = ({ contact, url, user, actions }: ContactProps) => {
       {actions.length > 0 && (
         <ActionMenu>
           {actions.map((action) => (
-            <MenuItem
-              key={action.label}
-              icon={action.icon}
-              onClick={action.onClick}
-            >
+            <DropdownMenuItem key={action.label} onClick={action.onClick}>
+              {action.icon && <DropdownMenuIcon icon={action.icon} />}
               {action.label}
-            </MenuItem>
+            </DropdownMenuItem>
           ))}
         </ActionMenu>
       )}

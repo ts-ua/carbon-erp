@@ -1,5 +1,4 @@
-import { Hyperlink } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import { DropdownMenuIcon, DropdownMenuItem, Hyperlink } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -44,24 +43,24 @@ const UnitOfMeasuresTable = memo(
       (row: (typeof data)[number]) => {
         return (
           <>
-            <MenuItem
-              isDisabled={!permissions.can("update", "parts")}
-              icon={<BsPencilSquare />}
+            <DropdownMenuItem
+              disabled={!permissions.can("update", "parts")}
               onClick={() => {
                 navigate(`${path.to.uom(row.id)}?${params.toString()}`);
               }}
             >
+              <DropdownMenuIcon icon={<BsPencilSquare />} />
               Edit Unit of Measure
-            </MenuItem>
-            <MenuItem
-              isDisabled={!permissions.can("delete", "parts")}
-              icon={<IoMdTrash />}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={!permissions.can("delete", "parts")}
               onClick={() => {
                 navigate(`${path.to.deleteUom(row.id)}?${params.toString()}`);
               }}
             >
+              <DropdownMenuIcon icon={<IoMdTrash />} />
               Delete Unit of Measure
-            </MenuItem>
+            </DropdownMenuItem>
           </>
         );
       },

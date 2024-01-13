@@ -2,9 +2,10 @@ import {
   AvatarGroup,
   AvatarGroupList,
   AvatarOverflowIndicator,
+  DropdownMenuIcon,
+  DropdownMenuItem,
   Hyperlink,
 } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -115,23 +116,23 @@ const AbilitiesTable = memo(({ data, count }: AbilitiesTableProps) => {
     (row: (typeof rows)[number]) => {
       return (
         <>
-          <MenuItem
-            icon={<BsPencilSquare />}
+          <DropdownMenuItem
             onClick={() => {
               navigate(path.to.ability(row.id));
             }}
           >
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
             Edit Ability
-          </MenuItem>
-          <MenuItem
-            isDisabled={!permissions.can("delete", "resources")}
-            icon={<IoMdTrash />}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={!permissions.can("delete", "resources")}
             onClick={() => {
               navigate(path.to.deleteAbility(row.id));
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Ability
-          </MenuItem>
+          </DropdownMenuItem>
         </>
       );
     },

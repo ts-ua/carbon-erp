@@ -1,5 +1,10 @@
-import { HStack, Hyperlink, useDisclosure } from "@carbon/react";
-import { MenuItem, Text } from "@chakra-ui/react";
+import {
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  HStack,
+  Hyperlink,
+  useDisclosure,
+} from "@carbon/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { BsPencilSquare, BsStar, BsStarFill } from "react-icons/bs";
@@ -113,7 +118,7 @@ const PurchaseOrdersTable = memo(
             return (
               <HStack>
                 <Avatar size="sm" path={row.original.createdByAvatar} />
-                <Text>{row.original.createdByFullName}</Text>
+                <p>{row.original.createdByFullName}</p>
               </HStack>
             );
           },
@@ -130,7 +135,7 @@ const PurchaseOrdersTable = memo(
             return row.original.updatedByFullName ? (
               <HStack>
                 <Avatar size="sm" path={row.original.updatedByAvatar ?? null} />
-                <Text>{row.original.updatedByFullName}</Text>
+                <p>{row.original.updatedByFullName}</p>
               </HStack>
             ) : null;
           },
@@ -155,43 +160,44 @@ const PurchaseOrdersTable = memo(
       // eslint-disable-next-line react/display-name
       return (row: PurchaseOrder) => (
         <>
-          <MenuItem
-            icon={<BsPencilSquare />}
-            isDisabled={!permissions.can("view", "purchasing")}
+          <DropdownMenuItem
+            disabled={!permissions.can("view", "purchasing")}
             onClick={() => edit(row)}
           >
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
             Edit
-          </MenuItem>
-          <MenuItem
-            icon={<BsStar />}
+          </DropdownMenuItem>
+          <DropdownMenuItem
             onClick={() => {
               onFavorite(row);
             }}
           >
+            <DropdownMenuIcon icon={<BsStar />} />
             Favorite
-          </MenuItem>
-          <MenuItem
-            icon={<MdCallReceived />}
-            isDisabled={
-              !["Draft", "Approved"].includes(row.status ?? "") ||
-              !permissions.can("update", "inventory")
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={
+              !["To Recieve", "To Receive and Invoice"].includes(
+                row.status ?? ""
+              ) || !permissions.can("update", "inventory")
             }
             onClick={() => {
               receive(row);
             }}
           >
+            <DropdownMenuIcon icon={<MdCallReceived />} />
             Receive
-          </MenuItem>
-          <MenuItem
-            icon={<IoMdTrash />}
-            isDisabled={!permissions.can("delete", "purchasing")}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={!permissions.can("delete", "purchasing")}
             onClick={() => {
               setSelectedPurchaseOrder(row);
               deletePurchaseOrderModal.onOpen();
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete
-          </MenuItem>
+          </DropdownMenuItem>
         </>
       );
     }, [deletePurchaseOrderModal, edit, onFavorite, permissions, receive]);

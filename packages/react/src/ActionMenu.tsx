@@ -1,29 +1,32 @@
-import { IconButton, Menu, MenuButton, MenuList } from "@chakra-ui/react";
 import type { PropsWithChildren } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "./Dropdown";
+import { IconButton } from "./IconButton";
 
 type ActionMenuProps = PropsWithChildren<{
   icon?: JSX.Element;
   disabled?: boolean;
 }>;
 
-const ActionMenu = ({ children, disabled, icon }: ActionMenuProps) => {
+const ActionMenu = ({ children, ...props }: ActionMenuProps) => {
   return (
-    <Menu isLazy>
-      <MenuButton
-        as={IconButton}
-        aria-label="Expand options"
-        icon={icon ? icon : <BsThreeDotsVertical />}
-        colorScheme="gray"
-        isDisabled={disabled}
-        variant="outline"
-        onClick={(e) => e.stopPropagation()}
-      />
-
-      <MenuList fontSize="sm" boxShadow="xl">
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <IconButton
+          aria-label="Open"
+          variant="secondary"
+          icon={<BsThreeDotsVertical />}
+          {...props}
+        />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
         {children}
-      </MenuList>
-    </Menu>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

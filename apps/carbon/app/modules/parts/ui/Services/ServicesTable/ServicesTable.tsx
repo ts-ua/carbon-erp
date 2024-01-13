@@ -1,5 +1,4 @@
-import { Hyperlink } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import { DropdownMenuIcon, DropdownMenuItem, Hyperlink } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo } from "react";
@@ -59,12 +58,10 @@ const ServicesTable = memo(({ data, count }: ServicesTableProps) => {
   const renderContextMenu = useMemo(() => {
     // eslint-disable-next-line react/display-name
     return (row: Service) => (
-      <MenuItem
-        icon={<BsPencilSquare />}
-        onClick={() => navigate(path.to.service(row.id!))}
-      >
+      <DropdownMenuItem onClick={() => navigate(path.to.service(row.id!))}>
+        <DropdownMenuIcon icon={<BsPencilSquare />} />
         Edit Service
-      </MenuItem>
+      </DropdownMenuItem>
     );
   }, [navigate]);
 

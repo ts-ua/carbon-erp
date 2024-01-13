@@ -1,5 +1,5 @@
-import { HStack } from "@carbon/react";
-import { Badge, MenuItem, Progress } from "@chakra-ui/react";
+import { DropdownMenuIcon, DropdownMenuItem, HStack } from "@carbon/react";
+import { Badge, Progress } from "@chakra-ui/react";
 import { useNavigate, useParams } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useCallback, useMemo } from "react";
@@ -126,24 +126,24 @@ const AbilityEmployeesTable = ({
     (row: (typeof rows)[number]) => {
       return (
         <>
-          <MenuItem
-            isDisabled={!permissions.can("update", "resources")}
-            icon={<BsPencilSquare />}
+          <DropdownMenuItem
+            disabled={!permissions.can("update", "resources")}
             onClick={() => {
               navigate(path.to.employeeAbility(abilityId, row.id));
             }}
           >
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
             Edit Employee Ability
-          </MenuItem>
-          <MenuItem
-            isDisabled={!permissions.can("delete", "resources")}
-            icon={<IoMdTrash />}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={!permissions.can("delete", "resources")}
             onClick={() => {
               navigate(path.to.deleteEmployeeAbility(abilityId, row.id));
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Employee Ability
-          </MenuItem>
+          </DropdownMenuItem>
         </>
       );
     },

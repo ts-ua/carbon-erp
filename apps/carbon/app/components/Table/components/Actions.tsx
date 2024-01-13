@@ -1,5 +1,11 @@
-import { Button } from "@carbon/react";
-import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@carbon/react";
 import { IoMdCheckboxOutline } from "react-icons/io";
 import type { TableAction } from "../types";
 
@@ -14,27 +20,25 @@ const Actions = <T extends Object>({
 }: ActionsProps<T>) => {
   const disabled = selectedRows.length === 0;
   return (
-    <Menu isLazy>
-      <MenuButton
-        as={Button}
-        leftIcon={<IoMdCheckboxOutline />}
-        variant="ghost"
-      >
-        Actions
-      </MenuButton>
-      <MenuList fontSize="sm" boxShadow="xl">
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button leftIcon={<IoMdCheckboxOutline />} variant="ghost">
+          Actions
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-48">
         {actions.map((action) => (
-          <MenuItem
+          <DropdownMenuItem
             key={action.label}
             onClick={() => action.onClick(selectedRows)}
-            isDisabled={disabled || action.disabled}
-            icon={action.icon}
+            disabled={disabled || action.disabled}
           >
+            {action.icon && <DropdownMenuIcon icon={action.icon} />}
             {action.label}
-          </MenuItem>
+          </DropdownMenuItem>
         ))}
-      </MenuList>
-    </Menu>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
