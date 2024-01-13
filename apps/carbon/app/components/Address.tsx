@@ -1,5 +1,9 @@
-import { ActionMenu, VStack } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import {
+  ActionMenu,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  VStack,
+} from "@carbon/react";
 import { BsPinMapFill } from "react-icons/bs";
 import type { Action } from "~/types";
 
@@ -30,13 +34,10 @@ const Address = ({ address, actions }: AddressProps) => {
       {actions.length > 0 && (
         <ActionMenu>
           {actions.map((action) => (
-            <MenuItem
-              key={action.label}
-              icon={action.icon}
-              onClick={action.onClick}
-            >
+            <DropdownMenuItem key={action.label} onClick={action.onClick}>
+              {action.icon && <DropdownMenuIcon icon={action.icon} />}
               {action.label}
-            </MenuItem>
+            </DropdownMenuItem>
           ))}
         </ActionMenu>
       )}

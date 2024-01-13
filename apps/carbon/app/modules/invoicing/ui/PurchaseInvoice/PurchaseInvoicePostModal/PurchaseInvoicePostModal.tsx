@@ -8,7 +8,7 @@ import {
   ModalHeader,
   ModalTitle,
 } from "@carbon/react";
-import { ListItem, UnorderedList } from "@chakra-ui/react";
+
 import { Form } from "@remix-run/react";
 import { path } from "~/utils/path";
 
@@ -45,13 +45,13 @@ const PurchaseInvoicePostModal = ({
                 Are you sure you want to post this invoice? A receipt will be
                 automatically created and posted for:
               </p>
-              <UnorderedList mt={2}>
+              <ul className="mt-2">
                 {linesToReceive.map((line) => (
-                  <ListItem key={line.partId}>
+                  <li key={line.partId}>
                     {`${line.partId} (${line.quantity})`}
-                  </ListItem>
+                  </li>
                 ))}
-              </UnorderedList>
+              </ul>
             </>
           ) : (
             <p>Are you sure you want to post this invoice?</p>

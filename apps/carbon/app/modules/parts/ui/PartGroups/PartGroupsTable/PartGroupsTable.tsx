@@ -1,5 +1,4 @@
-import { Hyperlink } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import { DropdownMenuIcon, DropdownMenuItem, Hyperlink } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -46,26 +45,26 @@ const PartGroupsTable = memo(({ data, count }: PartGroupsTableProps) => {
     (row: (typeof rows)[number]) => {
       return (
         <>
-          <MenuItem
-            isDisabled={!permissions.can("update", "parts")}
-            icon={<BsPencilSquare />}
+          <DropdownMenuItem
+            disabled={!permissions.can("update", "parts")}
             onClick={() => {
               navigate(`${path.to.partGroup(row.id)}?${params.toString()}`);
             }}
           >
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
             Edit Part Group
-          </MenuItem>
-          <MenuItem
-            isDisabled={!permissions.can("delete", "parts")}
-            icon={<IoMdTrash />}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={!permissions.can("delete", "parts")}
             onClick={() => {
               navigate(
                 `${path.to.deletePartGroup(row.id)}?${params.toString()}`
               );
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Part Group
-          </MenuItem>
+          </DropdownMenuItem>
         </>
       );
     },

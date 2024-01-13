@@ -1,5 +1,4 @@
-import { Hyperlink } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import { DropdownMenuIcon, DropdownMenuItem, Hyperlink } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -58,26 +57,26 @@ const PaymentTermsTable = memo(({ data, count }: PaymentTermsTableProps) => {
     (row: (typeof data)[number]) => {
       return (
         <>
-          <MenuItem
-            isDisabled={!permissions.can("update", "accounting")}
-            icon={<BsPencilSquare />}
+          <DropdownMenuItem
+            disabled={!permissions.can("update", "accounting")}
             onClick={() => {
               navigate(`${path.to.paymentTerm(row.id)}?${params.toString()}`);
             }}
           >
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
             Edit Payment Term
-          </MenuItem>
-          <MenuItem
-            isDisabled={!permissions.can("delete", "accounting")}
-            icon={<IoMdTrash />}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={!permissions.can("delete", "accounting")}
             onClick={() => {
               navigate(
                 `${path.to.deletePaymentTerm(row.id)}?${params.toString()}`
               );
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Payment Term
-          </MenuItem>
+          </DropdownMenuItem>
         </>
       );
     },

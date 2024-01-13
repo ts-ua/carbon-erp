@@ -4,11 +4,11 @@ import {
   FormErrorMessage,
   useEditor,
 } from "@carbon/react";
-import type { BoxProps } from "@chakra-ui/react";
+import type { ComponentProps } from "react";
 import { useEffect } from "react";
 import { useControlField, useField } from "remix-validated-form";
 
-type RichTextProps = BoxProps & {
+type RichTextProps = ComponentProps<typeof Editor> & {
   name: string;
   output?: "html" | "json" | "text";
 };
@@ -53,7 +53,7 @@ const RichText = ({ name, output = "html", ...props }: RichTextProps) => {
 
   return (
     <FormControl isInvalid={!!error}>
-      <Editor editor={editor} {...props} />
+      <Editor {...props} editor={editor} />
       <input
         {...getInputProps({
           // @ts-ignore

@@ -13,7 +13,7 @@ import {
   useKeyboardShortcuts,
 } from "@carbon/react";
 import { clip } from "@carbon/utils";
-import { Icon, Kbd, List } from "@chakra-ui/react";
+import { Kbd } from "@chakra-ui/react";
 import { Link, useNavigate } from "@remix-run/react";
 import clsx from "clsx";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -209,7 +209,7 @@ const SearchModal = ({
           </InputGroup>
 
           <div className="h-[calc(100%-3rem)] overflow-y-scroll p-4 pt-0">
-            <List role="listbox" ref={listboxRef}>
+            <ul role="listbox" ref={listboxRef}>
               {moduleResults.map((item, itemIndex) => (
                 <Module
                   key={item.to}
@@ -233,7 +233,7 @@ const SearchModal = ({
                   }
                 />
               ))}
-            </List>
+            </ul>
           </div>
         </ModalBody>
       </ModalContent>
@@ -241,40 +241,41 @@ const SearchModal = ({
   );
 };
 
-const resultIconProps = {
-  mr: 4,
-  w: 8,
-  h: 8,
-  color: "gray.500",
-};
-
 function ResultIcon({ entity }: { entity: SearchResult["entity"] | "Module" }) {
   switch (entity) {
     case "Customer":
-      return <Icon as={PiShareNetworkFill} {...resultIconProps} />;
+      return (
+        <PiShareNetworkFill className="w-8 h-8 mr-4 text-muted-foreground" />
+      );
     case "Document":
-      return <Icon as={HiOutlineDocumentDuplicate} {...resultIconProps} />;
+      return (
+        <HiOutlineDocumentDuplicate className="w-8 h-8 mr-4 text-muted-foreground" />
+      );
     case "Job":
-      return <Icon as={BiListCheck} {...resultIconProps} />;
+      return <BiListCheck className="w-8 h-8 mr-4 text-muted-foreground" />;
     case "Part":
-      return <Icon as={AiOutlinePartition} {...resultIconProps} />;
+      return (
+        <AiOutlinePartition className="w-8 h-8 mr-4 text-muted-foreground" />
+      );
     case "Person":
-      return <Icon as={CgProfile} {...resultIconProps} />;
+      return <CgProfile className="w-8 h-8 mr-4 text-muted-foreground" />;
     case "Resource":
-      return <Icon as={CgProfile} {...resultIconProps} />;
+      return <CgProfile className="w-8 h-8 mr-4 text-muted-foreground" />;
     case "Purchase Order":
-      return <Icon as={BsCartDash} {...resultIconProps} />;
+      return <BsCartDash className="w-8 h-8 mr-4 text-muted-foreground" />;
     case "Sales Order":
-      return <Icon as={BsCartPlus} {...resultIconProps} />;
+      return <BsCartPlus className="w-8 h-8 mr-4 text-muted-foreground" />;
     case "Supplier":
-      return <Icon as={PiShareNetworkFill} {...resultIconProps} />;
+      return (
+        <PiShareNetworkFill className="w-8 h-8 mr-4 text-muted-foreground" />
+      );
     default:
       return null;
   }
 }
 
 function EnterIcon() {
-  return <Icon h={6} w={6} color="gray.500" as={BsArrowReturnLeft} />;
+  return <BsArrowReturnLeft className="w-6 h-6 text-muted-foreground" />;
 }
 
 function Result({

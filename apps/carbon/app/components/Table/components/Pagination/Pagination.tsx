@@ -1,6 +1,16 @@
-import { Button, HStack, IconButton } from "@carbon/react";
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  HStack,
+  IconButton,
+} from "@carbon/react";
 import type { ThemeTypings } from "@chakra-ui/react";
-import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
 export type PaginationProps = {
@@ -33,23 +43,30 @@ const Pagination = (props: PaginationProps) => {
       className="text-center bg-background border-t border-border justify-between px-4 py-2 w-full z-[1]"
       spacing={6}
     >
-      <Menu>
-        <MenuButton as={Button} variant="ghost">
-          {pageSize} {pageSizeLabel}
-        </MenuButton>
-        <MenuList fontSize="sm" boxShadow="xl" minW={48}>
-          {pageSizes.map((size) => (
-            <MenuItem
-              key={`${size}`}
-              onClick={() => {
-                setPageSize(size);
-              }}
-            >
-              {size} {pageSizeLabel}
-            </MenuItem>
-          ))}
-        </MenuList>
-      </Menu>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost">
+            {pageSize} {pageSizeLabel}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" className="w-48">
+          <DropdownMenuLabel>Results per page</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuRadioGroup value={`${pageSize}`}>
+            {pageSizes.map((size) => (
+              <DropdownMenuRadioItem
+                key={`${size}`}
+                value={`${size}`}
+                onClick={() => {
+                  setPageSize(size);
+                }}
+              >
+                {size} {pageSizeLabel}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
       <HStack>
         <PaginationButtons {...props} />
       </HStack>

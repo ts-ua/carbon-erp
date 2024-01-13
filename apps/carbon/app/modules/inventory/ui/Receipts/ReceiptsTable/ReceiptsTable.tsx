@@ -1,6 +1,5 @@
-import { Hyperlink } from "@carbon/react";
+import { DropdownMenuIcon, DropdownMenuItem, Hyperlink } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
-import { MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -104,28 +103,28 @@ const ReceiptsTable = memo(({ data, count }: ReceiptsTableProps) => {
     (row: Receipt) => {
       return (
         <>
-          <MenuItem
-            isDisabled={!permissions.can("update", "inventory")}
-            icon={<BsPencilSquare />}
+          <DropdownMenuItem
+            disabled={!permissions.can("update", "inventory")}
             onClick={() => {
               navigate(`${path.to.receipt(row.id)}?${params.toString()}`);
             }}
           >
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
             Edit Receipt
-          </MenuItem>
-          <MenuItem
-            isDisabled={
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={
               !permissions.can("delete", "inventory") ||
               !!row.postingDate ||
               row.status === "Pending"
             }
-            icon={<IoMdTrash />}
             onClick={() => {
               navigate(`${path.to.deleteReceipt(row.id)}?${params.toString()}`);
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Receipt
-          </MenuItem>
+          </DropdownMenuItem>
         </>
       );
     },

@@ -1,5 +1,4 @@
 import { Button, HStack, useMount } from "@carbon/react";
-import { Icon } from "@chakra-ui/react";
 import { useState } from "react";
 import { AiOutlineCodeSandbox } from "react-icons/ai";
 import { BsCaretDownFill } from "react-icons/bs";
@@ -71,16 +70,15 @@ const PartsTreeExplorer = () => {
               onClick={() => toggleNode(node.id)}
               isDisabled={!node.children}
             >
-              <Icon
-                as={BsCaretDownFill}
-                w={4}
-                h={4}
-                transition="transform .25s ease"
-                transform={
-                  expandedNodes[node.id] || !node.children
-                    ? undefined
-                    : "rotate(-0.25turn)"
-                }
+              <BsCaretDownFill
+                className="w-4 h-4"
+                style={{
+                  transition: "transform .25s ease",
+                  transform:
+                    expandedNodes[node.id] || !node.children
+                      ? undefined
+                      : "rotate(-0.25turn)",
+                }}
               />
             </Button>
             <Button

@@ -1,5 +1,10 @@
-import { HStack, Hyperlink, useDisclosure } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import {
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  HStack,
+  Hyperlink,
+  useDisclosure,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo, useState } from "react";
@@ -124,16 +129,15 @@ const PurchaseInvoicesTable = memo(
       // eslint-disable-next-line react/display-name
       return (row: PurchaseInvoice) => (
         <>
-          <MenuItem
-            icon={<BsPencilSquare />}
-            isDisabled={!permissions.can("view", "invoicing")}
+          <DropdownMenuItem
+            disabled={!permissions.can("view", "invoicing")}
             onClick={() => navigate(path.to.purchaseInvoice(row.id!))}
           >
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
             Edit
-          </MenuItem>
-          <MenuItem
-            icon={<IoMdTrash />}
-            isDisabled={
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={
               row.status !== "Draft" || !permissions.can("delete", "invoicing")
             }
             onClick={() => {
@@ -141,8 +145,9 @@ const PurchaseInvoicesTable = memo(
               closePurchaseInvoiceModal.onOpen();
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete
-          </MenuItem>
+          </DropdownMenuItem>
         </>
       );
     }, [closePurchaseInvoiceModal, navigate, permissions]);

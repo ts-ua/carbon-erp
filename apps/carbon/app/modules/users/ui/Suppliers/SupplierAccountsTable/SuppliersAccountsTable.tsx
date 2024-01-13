@@ -57,18 +57,11 @@ const SupplierAccountsTable = memo(
             <HStack>
               <Avatar
                 size="sm"
-                // @ts-ignore
-                name={row.original.user?.fullName}
-                // @ts-ignore
-                path={row.original.user?.avatarUrl}
+                name={row.original.user?.fullName ?? undefined}
+                path={row.original.user?.avatarUrl ?? undefined}
               />
 
-              <span>
-                {
-                  // @ts-ignore
-                  `${row.original.user?.firstName} ${row.original.user?.lastName}`
-                }
-              </span>
+              <span>{row.original.user?.fullName ?? ""}</span>
             </HStack>
           ),
         },
