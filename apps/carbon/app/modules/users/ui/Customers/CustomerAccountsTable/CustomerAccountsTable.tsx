@@ -1,10 +1,13 @@
-import { HStack, useDisclosure } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import {
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  HStack,
+  useDisclosure,
+} from "@carbon/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BsEnvelope } from "react-icons/bs";
 import { FaBan } from "react-icons/fa";
-import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
 import { usePermissions } from "~/hooks";
 import type { Customer } from "~/modules/users";
@@ -142,14 +145,6 @@ const CustomerAccountsTable = memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // const editableComponents = useMemo(
-    //   () => ({
-    //     "user.firstName": EditableName,
-    //     "user.lastName": EditableName,
-    //   }),
-    //   []
-    // );
-
     const renderContextMenu = useCallback(
       (row: (typeof data)[number]) => {
         if (Array.isArray(row.user) || !row.user) {
@@ -158,25 +153,25 @@ const CustomerAccountsTable = memo(
         const userId = row.user.id as string;
         return (
           <>
-            <MenuItem
-              icon={<BsEnvelope />}
+            <DropdownMenuItem
               onClick={() => {
                 setSelectedUserIds([userId]);
                 resendInviteModal.onOpen();
               }}
             >
+              <DropdownMenuIcon icon={<BsEnvelope />} />
               Send Account Invite
-            </MenuItem>
+            </DropdownMenuItem>
             {row.user?.active === true && (
-              <MenuItem
-                icon={<IoMdTrash />}
+              <DropdownMenuItem
                 onClick={(e) => {
                   setSelectedUserIds([userId]);
                   deactivateCustomerModal.onOpen();
                 }}
               >
+                <DropdownMenuIcon icon={<FaBan />} />
                 Deactivate Customer
-              </MenuItem>
+              </DropdownMenuItem>
             )}
           </>
         );

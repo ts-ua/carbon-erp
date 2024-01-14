@@ -1,11 +1,15 @@
-import { HStack, Hyperlink, useDisclosure } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import {
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  HStack,
+  Hyperlink,
+  useDisclosure,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BsEnvelope, BsPencilSquare, BsShieldLock } from "react-icons/bs";
 import { FaBan } from "react-icons/fa";
-import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
 import type { Employee } from "~/modules/users";
@@ -167,35 +171,35 @@ const EmployeesTable = memo(
         if (Array.isArray(user) || user === null) return null;
         return (
           <>
-            <MenuItem
-              icon={<BsPencilSquare />}
+            <DropdownMenuItem
               onClick={() =>
                 navigate(
                   `${path.to.employeeAccount(user.id)}?${params.toString()}`
                 )
               }
             >
+              <DropdownMenuIcon icon={<BsPencilSquare />} />
               Edit Employee
-            </MenuItem>
-            <MenuItem
-              icon={<BsEnvelope />}
+            </DropdownMenuItem>
+            <DropdownMenuItem
               onClick={() => {
                 setSelectedUserIds([user.id]);
                 resendInviteModal.onOpen();
               }}
             >
+              <DropdownMenuIcon icon={<BsEnvelope />} />
               Send Account Invite
-            </MenuItem>
+            </DropdownMenuItem>
             {user.active === true && (
-              <MenuItem
-                icon={<IoMdTrash />}
+              <DropdownMenuItem
                 onClick={(e) => {
                   setSelectedUserIds([user.id]);
                   deactivateEmployeeModal.onOpen();
                 }}
               >
+                <DropdownMenuIcon icon={<FaBan />} />
                 Deactivate Employee
-              </MenuItem>
+              </DropdownMenuItem>
             )}
           </>
         );

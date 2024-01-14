@@ -1,5 +1,10 @@
-import { Avatar, HStack, Hyperlink } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import {
+  Avatar,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  HStack,
+  Hyperlink,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -68,8 +73,7 @@ const PartnersTable = memo(({ data, count }: PartnersTableProps) => {
     (row: (typeof rows)[number]) => {
       return (
         <>
-          <MenuItem
-            icon={<BsPencilSquare />}
+          <DropdownMenuItem
             onClick={() => {
               navigate(
                 `${path.to.partner(
@@ -79,11 +83,11 @@ const PartnersTable = memo(({ data, count }: PartnersTableProps) => {
               );
             }}
           >
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
             Edit Partner
-          </MenuItem>
-          <MenuItem
-            isDisabled={!permissions.can("delete", "resources")}
-            icon={<IoMdTrash />}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={!permissions.can("delete", "resources")}
             onClick={() => {
               navigate(
                 `${path.to.deletePartner(
@@ -92,8 +96,9 @@ const PartnersTable = memo(({ data, count }: PartnersTableProps) => {
               );
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Partner
-          </MenuItem>
+          </DropdownMenuItem>
         </>
       );
     },

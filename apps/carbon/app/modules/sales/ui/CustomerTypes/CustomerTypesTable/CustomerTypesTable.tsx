@@ -1,5 +1,4 @@
-import { Hyperlink } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import { DropdownMenuIcon, DropdownMenuItem, Hyperlink } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -49,34 +48,34 @@ const CustomerTypesTable = memo(({ data, count }: CustomerTypesTableProps) => {
     (row: (typeof data)[number]) => {
       return (
         <>
-          <MenuItem
-            icon={<BsPeopleFill />}
+          <DropdownMenuItem
             onClick={() => {
               navigate(`${path.to.customers}?type=${row.id}`);
             }}
           >
+            <DropdownMenuIcon icon={<BsPeopleFill />} />
             View Customers
-          </MenuItem>
-          <MenuItem
-            isDisabled={row.protected || !permissions.can("update", "sales")}
-            icon={<BsPencilSquare />}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={row.protected || !permissions.can("update", "sales")}
             onClick={() => {
               navigate(`${path.to.customerType(row.id)}?${params.toString()}`);
             }}
           >
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
             Edit Customer Type
-          </MenuItem>
-          <MenuItem
-            isDisabled={row.protected || !permissions.can("delete", "sales")}
-            icon={<IoMdTrash />}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={row.protected || !permissions.can("delete", "sales")}
             onClick={() => {
               navigate(
                 `${path.to.deleteCustomerType(row.id)}?${params.toString()}`
               );
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Customer Type
-          </MenuItem>
+          </DropdownMenuItem>
         </>
       );
     },

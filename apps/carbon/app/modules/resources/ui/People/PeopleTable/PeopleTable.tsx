@@ -1,5 +1,9 @@
-import { HStack, Hyperlink } from "@carbon/react";
-import { MenuItem, Text } from "@chakra-ui/react";
+import {
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  HStack,
+  Hyperlink,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -65,7 +69,7 @@ const PeopleTable = memo(
                 name={user.fullName ?? undefined}
                 path={user.avatarUrl}
               />
-              <Text>{user.fullName ?? ""}</Text>
+              <p>{user.fullName ?? ""}</p>
             </HStack>
           );
         }
@@ -164,16 +168,16 @@ const PeopleTable = memo(
       return permissions.can("update", "resources")
         ? (row: (typeof rows)[number]) => {
             return (
-              <MenuItem
-                icon={<BsPencilSquare />}
+              <DropdownMenuItem
                 onClick={() =>
                   navigate(
                     `${path.to.person(row.user?.id!)}?${params.toString()}`
                   )
                 }
               >
+                <DropdownMenuIcon icon={<BsPencilSquare />} />
                 Edit Employee
-              </MenuItem>
+              </DropdownMenuItem>
             );
           }
         : undefined;

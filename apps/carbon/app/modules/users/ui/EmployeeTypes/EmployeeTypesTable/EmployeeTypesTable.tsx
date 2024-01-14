@@ -1,5 +1,4 @@
-import { Hyperlink } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import { DropdownMenuIcon, DropdownMenuItem, Hyperlink } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -52,34 +51,34 @@ const EmployeeTypesTable = memo(({ data, count }: EmployeeTypesTableProps) => {
     (row: (typeof data)[number]) => {
       return (
         <>
-          <MenuItem
-            icon={<BsPeopleFill />}
+          <DropdownMenuItem
             onClick={() => {
               navigate(`${path.to.employeeAccounts}?type=${row.id}`);
             }}
           >
+            <DropdownMenuIcon icon={<BsPeopleFill />} />
             View Employees
-          </MenuItem>
-          <MenuItem
-            isDisabled={row.protected || !permissions.can("update", "users")}
-            icon={<BsPencilSquare />}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={row.protected || !permissions.can("update", "users")}
             onClick={() => {
               navigate(`${path.to.employeeType(row.id)}?${params.toString()}`);
             }}
           >
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
             Edit Employee Type
-          </MenuItem>
-          <MenuItem
-            isDisabled={row.protected || !permissions.can("delete", "users")}
-            icon={<IoMdTrash />}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={row.protected || !permissions.can("delete", "users")}
             onClick={() => {
               navigate(
                 `${path.to.deleteEmployeeType(row.id)}?${params.toString()}`
               );
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Employee Type
-          </MenuItem>
+          </DropdownMenuItem>
         </>
       );
     },

@@ -7,11 +7,12 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
+  DropdownMenuIcon,
+  DropdownMenuItem,
   HStack,
   VStack,
   useDisclosure,
 } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
@@ -55,12 +56,16 @@ const WorkCellTypeDetail = ({
     if (!workCell || Array.isArray(workCell)) return null;
     return (
       <>
-        <MenuItem as={Link} to={workCell.id!} icon={<BsPencilSquare />}>
-          Edit Cell
-        </MenuItem>
-        <MenuItem onClick={() => onDelete(workCell)} icon={<IoMdTrash />}>
+        <DropdownMenuItem asChild>
+          <Link to={workCell.id}>
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            Edit Cell
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => onDelete(workCell)}>
+          <DropdownMenuIcon icon={<IoMdTrash />} />
           Delete Cell
-        </MenuItem>
+        </DropdownMenuItem>
       </>
     );
   };

@@ -15,7 +15,7 @@ const variants = {
     width: 180,
   },
   hidden: {
-    width: 15,
+    width: 4,
   },
 };
 

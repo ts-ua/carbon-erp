@@ -2,8 +2,9 @@ import {
   AvatarGroup,
   AvatarGroupList,
   AvatarOverflowIndicator,
+  DropdownMenuIcon,
+  DropdownMenuItem,
 } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -77,34 +78,34 @@ const GroupsTable = memo(({ data, count }: GroupsTableProps) => {
     (row: (typeof rows)[number]) => {
       return (
         <>
-          <MenuItem
-            isDisabled={
+          <DropdownMenuItem
+            disabled={
               row.isEmployeeTypeGroup ||
               row.isCustomerTypeGroup ||
               row.isSupplierTypeGroup ||
               !permissions.can("update", "users")
             }
-            icon={<BsPencilSquare />}
             onClick={() => {
               navigate(path.to.group(row.id));
             }}
           >
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
             Edit Group
-          </MenuItem>
-          <MenuItem
-            isDisabled={
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={
               row.isEmployeeTypeGroup ||
               row.isCustomerTypeGroup ||
               row.isSupplierTypeGroup ||
               !permissions.can("delete", "users")
             }
-            icon={<IoMdTrash />}
             onClick={() => {
               navigate(path.to.deleteGroup(row.id));
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Group
-          </MenuItem>
+          </DropdownMenuItem>
         </>
       );
     },
