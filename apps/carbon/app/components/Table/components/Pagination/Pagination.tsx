@@ -105,7 +105,7 @@ export const PaginationButtons = ({
         </>
       ) : (
         <>
-          <div className="flex text-sm font-medium align-center">
+          <div className="text-foreground flex text-sm font-medium align-center">
             {count > 0 ? offset + 1 : 0} - {Math.min(offset + pageSize, count)}{" "}
             of {count}
           </div>

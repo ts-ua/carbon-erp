@@ -1,4 +1,3 @@
-import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import type { Column } from "@tanstack/react-table";
 import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import {
@@ -6,6 +5,13 @@ import {
   MdKeyboardArrowDown,
   MdKeyboardArrowUp,
 } from "react-icons/md";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../Dropdown";
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -22,8 +28,8 @@ export function DataTableColumnHeader<TData, TValue>({
   }
 
   return (
-    <Menu>
-      <MenuButton className="flex items-center justify-between cursor-pointer">
+    <DropdownMenu>
+      <DropdownMenuTrigger className="flex items-center justify-between cursor-pointer">
         <div className="flex flex-start items-center text-xs text-muted-foreground">
           {title}
           <span className="pl-4">
@@ -36,28 +42,24 @@ export function DataTableColumnHeader<TData, TValue>({
             )}
           </span>
         </div>
-      </MenuButton>
-      <MenuList>
-        <MenuItem
-          icon={<MdKeyboardArrowUp />}
-          onClick={() => column.toggleSorting(false)}
-        >
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-96">
+        <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
+          <DropdownMenuIcon icon={<MdKeyboardArrowUp />} />
           Asc
-        </MenuItem>
-        <MenuItem
-          icon={<MdKeyboardArrowDown />}
-          onClick={() => column.toggleSorting(true)}
-        >
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
+          <DropdownMenuIcon icon={<MdKeyboardArrowDown />} />
           Desc
-        </MenuItem>
-        <MenuItem
-          icon={<MdDisabledVisible />}
+        </DropdownMenuItem>
+        <DropdownMenuItem
           disabled={!column.getCanHide()}
           onClick={() => column.toggleVisibility(false)}
         >
+          <DropdownMenuIcon icon={<MdDisabledVisible />} />
           Hide
-        </MenuItem>
-      </MenuList>
-    </Menu>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

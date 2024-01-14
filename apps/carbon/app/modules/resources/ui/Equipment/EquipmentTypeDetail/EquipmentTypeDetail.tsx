@@ -7,11 +7,12 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
+  DropdownMenuIcon,
+  DropdownMenuItem,
   HStack,
   VStack,
   useDisclosure,
 } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
@@ -55,12 +56,16 @@ const EquipmentTypeDetail = ({
   const renderContextMenu = (equipment: Equipment) => {
     return (
       <>
-        <MenuItem as={Link} to={equipment.id} icon={<BsPencilSquare />}>
-          Edit Unit
-        </MenuItem>
-        <MenuItem onClick={() => onDelete(equipment)} icon={<IoMdTrash />}>
+        <DropdownMenuItem asChild>
+          <Link to={equipment.id}>
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            Edit Unit
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => onDelete(equipment)}>
+          <DropdownMenuIcon icon={<IoMdTrash />} />
           Delete Unit
-        </MenuItem>
+        </DropdownMenuItem>
       </>
     );
   };

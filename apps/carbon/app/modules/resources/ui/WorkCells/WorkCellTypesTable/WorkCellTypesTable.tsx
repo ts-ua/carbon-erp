@@ -1,5 +1,11 @@
-import { Button, HStack, Hyperlink, useDisclosure } from "@carbon/react";
-import { MenuItem } from "@chakra-ui/react";
+import {
+  Button,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  HStack,
+  Hyperlink,
+  useDisclosure,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
@@ -106,41 +112,41 @@ const WorkCellTypesTable = memo(({ data, count }: WorkCellTypesTableProps) => {
   >(
     (row) => (
       <>
-        <MenuItem
-          icon={<BiAddToQueue />}
+        <DropdownMenuItem
           onClick={() => {
             navigate(
               `${path.to.newWorkCellUnit(row.id)}?${params?.toString()}`
             );
           }}
         >
+          <DropdownMenuIcon icon={<BiAddToQueue />} />
           New Unit
-        </MenuItem>
-        <MenuItem
-          icon={<BsListUl />}
+        </DropdownMenuItem>
+        <DropdownMenuItem
           onClick={() => {
             navigate(
               `${path.to.workCellTypeList(row.id)}?${params?.toString()}`
             );
           }}
         >
+          <DropdownMenuIcon icon={<BsListUl />} />
           Edit Work Cells
-        </MenuItem>
-        <MenuItem
-          icon={<BsPencilSquare />}
+        </DropdownMenuItem>
+        <DropdownMenuItem
           onClick={() => {
             navigate(path.to.workCellType(row.id));
           }}
         >
+          <DropdownMenuIcon icon={<BsPencilSquare />} />
           Edit Work Cell Type
-        </MenuItem>
-        <MenuItem
-          isDisabled={!permissions.can("delete", "users")}
-          icon={<IoMdTrash />}
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          disabled={!permissions.can("delete", "users")}
           onClick={() => onDelete(row)}
         >
+          <DropdownMenuIcon icon={<IoMdTrash />} />
           Delete Work Cell Type
-        </MenuItem>
+        </DropdownMenuItem>
       </>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps

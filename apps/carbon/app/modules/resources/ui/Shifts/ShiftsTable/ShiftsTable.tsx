@@ -1,5 +1,12 @@
-import { Hyperlink } from "@carbon/react";
-import { AvatarGroup, Badge, MenuItem } from "@chakra-ui/react";
+import {
+  AvatarGroup,
+  AvatarGroupList,
+  AvatarOverflowIndicator,
+  Badge,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  Hyperlink,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -80,7 +87,7 @@ const ShiftsTable = memo(({ data, count }: ShiftsTableProps) => {
     ].filter(Boolean);
 
     return days.map((day) => (
-      <Badge key={day as string} mr={0.5}>
+      <Badge key={day as string} variant="outline" className="mr-0.5">
         {day}
       </Badge>
     ));
@@ -101,15 +108,18 @@ const ShiftsTable = memo(({ data, count }: ShiftsTableProps) => {
         header: "Employees",
         // accessorKey: undefined, // makes the column unsortable
         cell: ({ row }) => (
-          <AvatarGroup max={5} size="sm" spacing={-2}>
-            {row.original.employees.map((employee, index: number) => (
-              <Avatar
-                key={index}
-                name={employee.name ?? undefined}
-                title={employee.name ?? undefined}
-                path={employee.avatarUrl}
-              />
-            ))}
+          <AvatarGroup limit={5} size="sm">
+            <AvatarGroupList>
+              {row.original.employees.map((employee, index: number) => (
+                <Avatar
+                  key={index}
+                  name={employee.name ?? undefined}
+                  title={employee.name ?? undefined}
+                  path={employee.avatarUrl}
+                />
+              ))}
+            </AvatarGroupList>
+            <AvatarOverflowIndicator />
           </AvatarGroup>
         ),
       },
@@ -139,23 +149,23 @@ const ShiftsTable = memo(({ data, count }: ShiftsTableProps) => {
     (row: (typeof rows)[number]) => {
       return (
         <>
-          <MenuItem
-            icon={<BsPencilSquare />}
+          <DropdownMenuItem
             onClick={() => {
               navigate(`${path.to.shift(row.id)}?${params.toString()}}`);
             }}
           >
+            <DropdownMenuIcon icon={<BsPencilSquare />} />
             Edit Shift
-          </MenuItem>
-          <MenuItem
-            isDisabled={!permissions.can("delete", "resources")}
-            icon={<IoMdTrash />}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={!permissions.can("delete", "resources")}
             onClick={() => {
               navigate(`${path.to.deleteShift(row.id)}?${params.toString()}`);
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Shift
-          </MenuItem>
+          </DropdownMenuItem>
         </>
       );
     },
