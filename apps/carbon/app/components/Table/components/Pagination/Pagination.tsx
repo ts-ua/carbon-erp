@@ -10,7 +10,6 @@ import {
   HStack,
   IconButton,
 } from "@carbon/react";
-import type { ThemeTypings } from "@chakra-ui/react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
 export type PaginationProps = {
@@ -25,7 +24,6 @@ export type PaginationProps = {
   nextPage: () => void;
   previousPage: () => void;
   setPageSize: (size: number) => void;
-  colorScheme?: ThemeTypings["colorSchemes"];
 };
 
 const Pagination = (props: PaginationProps) => {

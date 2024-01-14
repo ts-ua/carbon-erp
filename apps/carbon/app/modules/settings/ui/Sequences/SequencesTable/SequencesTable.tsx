@@ -1,8 +1,8 @@
-import { DropdownMenuIcon, DropdownMenuItem, Hyperlink } from "@carbon/react";
+import { Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
 import type { Sequence } from "~/modules/settings";
@@ -61,7 +61,7 @@ const SequencesTable = memo(({ data, count }: SequencesTableProps) => {
     (row: (typeof data)[number]) => {
       return (
         <>
-          <DropdownMenuItem
+          <MenuItem
             disabled={!permissions.can("update", "settings")}
             onClick={() => {
               navigate(
@@ -69,9 +69,9 @@ const SequencesTable = memo(({ data, count }: SequencesTableProps) => {
               );
             }}
           >
-            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Sequence
-          </DropdownMenuItem>
+          </MenuItem>
         </>
       );
     },

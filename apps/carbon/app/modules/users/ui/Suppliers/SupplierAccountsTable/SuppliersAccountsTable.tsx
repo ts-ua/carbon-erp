@@ -1,9 +1,4 @@
-import {
-  DropdownMenuIcon,
-  DropdownMenuItem,
-  HStack,
-  useDisclosure,
-} from "@carbon/react";
+import { HStack, MenuIcon, MenuItem, useDisclosure } from "@carbon/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BsEnvelope } from "react-icons/bs";
@@ -145,25 +140,25 @@ const SupplierAccountsTable = memo(
         const userId = row.user.id as string;
         return (
           <>
-            <DropdownMenuItem
+            <MenuItem
               onClick={() => {
                 setSelectedUserIds([userId]);
                 resendInviteModal.onOpen();
               }}
             >
-              <DropdownMenuIcon icon={<BsEnvelope />} />
+              <MenuIcon icon={<BsEnvelope />} />
               Send Account Invite
-            </DropdownMenuItem>
+            </MenuItem>
             {row.user?.active === true && (
-              <DropdownMenuItem
+              <MenuItem
                 onClick={(e) => {
                   setSelectedUserIds([userId]);
                   deactivateSupplierModal.onOpen();
                 }}
               >
-                <DropdownMenuIcon icon={<FaBan />} />
+                <MenuIcon icon={<FaBan />} />
                 Deactivate Supplier
-              </DropdownMenuItem>
+              </MenuItem>
             )}
           </>
         );

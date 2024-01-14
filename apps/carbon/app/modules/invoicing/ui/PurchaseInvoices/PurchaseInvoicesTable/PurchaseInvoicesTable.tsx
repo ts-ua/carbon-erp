@@ -1,14 +1,14 @@
 import {
-  DropdownMenuIcon,
-  DropdownMenuItem,
   HStack,
   Hyperlink,
+  MenuIcon,
+  MenuItem,
   useDisclosure,
 } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo, useState } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -129,14 +129,14 @@ const PurchaseInvoicesTable = memo(
       // eslint-disable-next-line react/display-name
       return (row: PurchaseInvoice) => (
         <>
-          <DropdownMenuItem
+          <MenuItem
             disabled={!permissions.can("view", "invoicing")}
             onClick={() => navigate(path.to.purchaseInvoice(row.id!))}
           >
-            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             disabled={
               row.status !== "Draft" || !permissions.can("delete", "invoicing")
             }
@@ -145,9 +145,9 @@ const PurchaseInvoicesTable = memo(
               closePurchaseInvoiceModal.onOpen();
             }}
           >
-            <DropdownMenuIcon icon={<IoMdTrash />} />
+            <MenuIcon icon={<IoMdTrash />} />
             Delete
-          </DropdownMenuItem>
+          </MenuItem>
         </>
       );
     }, [closePurchaseInvoiceModal, navigate, permissions]);

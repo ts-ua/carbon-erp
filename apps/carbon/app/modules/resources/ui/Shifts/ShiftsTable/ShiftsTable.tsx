@@ -3,14 +3,14 @@ import {
   AvatarGroupList,
   AvatarOverflowIndicator,
   Badge,
-  DropdownMenuIcon,
-  DropdownMenuItem,
   Hyperlink,
+  MenuIcon,
+  MenuItem,
 } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -149,23 +149,23 @@ const ShiftsTable = memo(({ data, count }: ShiftsTableProps) => {
     (row: (typeof rows)[number]) => {
       return (
         <>
-          <DropdownMenuItem
+          <MenuItem
             onClick={() => {
               navigate(`${path.to.shift(row.id)}?${params.toString()}}`);
             }}
           >
-            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Shift
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             disabled={!permissions.can("delete", "resources")}
             onClick={() => {
               navigate(`${path.to.deleteShift(row.id)}?${params.toString()}`);
             }}
           >
-            <DropdownMenuIcon icon={<IoMdTrash />} />
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Shift
-          </DropdownMenuItem>
+          </MenuItem>
         </>
       );
     },

@@ -1,13 +1,8 @@
-import {
-  Checkbox,
-  DropdownMenuIcon,
-  DropdownMenuItem,
-  Hyperlink,
-} from "@carbon/react";
+import { Checkbox, Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -63,16 +58,16 @@ const CurrenciesTable = memo(({ data, count }: CurrenciesTableProps) => {
     (row: (typeof data)[number]) => {
       return (
         <>
-          <DropdownMenuItem
+          <MenuItem
             disabled={!permissions.can("update", "accounting")}
             onClick={() => {
               navigate(`${path.to.currency(row.id)}?${params.toString()}`);
             }}
           >
-            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Currency
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             disabled={!permissions.can("delete", "accounting")}
             onClick={() => {
               navigate(
@@ -80,9 +75,9 @@ const CurrenciesTable = memo(({ data, count }: CurrenciesTableProps) => {
               );
             }}
           >
-            <DropdownMenuIcon icon={<IoMdTrash />} />
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Currency
-          </DropdownMenuItem>
+          </MenuItem>
         </>
       );
     },

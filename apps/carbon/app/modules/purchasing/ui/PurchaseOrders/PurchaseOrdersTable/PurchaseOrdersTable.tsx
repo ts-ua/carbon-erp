@@ -1,13 +1,13 @@
 import {
-  DropdownMenuIcon,
-  DropdownMenuItem,
   HStack,
   Hyperlink,
+  MenuIcon,
+  MenuItem,
   useDisclosure,
 } from "@carbon/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { BsPencilSquare, BsStar, BsStarFill } from "react-icons/bs";
+import { BsFillPenFill, BsStar, BsStarFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { MdCallReceived } from "react-icons/md";
 import { Avatar, Table } from "~/components";
@@ -160,22 +160,22 @@ const PurchaseOrdersTable = memo(
       // eslint-disable-next-line react/display-name
       return (row: PurchaseOrder) => (
         <>
-          <DropdownMenuItem
+          <MenuItem
             disabled={!permissions.can("view", "purchasing")}
             onClick={() => edit(row)}
           >
-            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             onClick={() => {
               onFavorite(row);
             }}
           >
-            <DropdownMenuIcon icon={<BsStar />} />
+            <MenuIcon icon={<BsStar />} />
             Favorite
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             disabled={
               !["To Recieve", "To Receive and Invoice"].includes(
                 row.status ?? ""
@@ -185,19 +185,19 @@ const PurchaseOrdersTable = memo(
               receive(row);
             }}
           >
-            <DropdownMenuIcon icon={<MdCallReceived />} />
+            <MenuIcon icon={<MdCallReceived />} />
             Receive
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             disabled={!permissions.can("delete", "purchasing")}
             onClick={() => {
               setSelectedPurchaseOrder(row);
               deletePurchaseOrderModal.onOpen();
             }}
           >
-            <DropdownMenuIcon icon={<IoMdTrash />} />
+            <MenuIcon icon={<IoMdTrash />} />
             Delete
-          </DropdownMenuItem>
+          </MenuItem>
         </>
       );
     }, [deletePurchaseOrderModal, edit, onFavorite, permissions, receive]);

@@ -6,6 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "./Dropdown";
 import { IconButton } from "./IconButton";
+import { Menu } from "./Menu";
 
 type ActionMenuProps = PropsWithChildren<{
   icon?: JSX.Element;
@@ -14,19 +15,21 @@ type ActionMenuProps = PropsWithChildren<{
 
 const ActionMenu = ({ children, ...props }: ActionMenuProps) => {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <IconButton
-          aria-label="Open"
-          variant="secondary"
-          icon={<BsThreeDotsVertical />}
-          {...props}
-        />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
-        {children}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Menu type="dropdown">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <IconButton
+            aria-label="Open"
+            variant="secondary"
+            icon={<BsThreeDotsVertical />}
+            {...props}
+          />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56">
+          {children}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </Menu>
   );
 };
 

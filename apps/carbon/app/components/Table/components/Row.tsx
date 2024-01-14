@@ -1,6 +1,6 @@
 import { Tr, cn } from "@carbon/react";
 import type { Row as RowType } from "@tanstack/react-table";
-import type { MutableRefObject } from "react";
+import type { ComponentProps } from "react";
 import { memo } from "react";
 import type {
   EditableTableCellComponent,
@@ -8,7 +8,7 @@ import type {
 } from "~/components/Editable";
 import Cell from "./Cell";
 
-type RowProps<T> = {
+type RowProps<T> = ComponentProps<typeof Tr> & {
   editableComponents?: Record<string, EditableTableCellComponent<T> | object>;
   editedCells?: string[];
   isEditing: boolean;
@@ -18,13 +18,10 @@ type RowProps<T> = {
   pinnedColumns?: number;
   selectedCell: Position;
   row: RowType<T>;
-  rowIsClickable?: boolean;
   rowIsSelected: boolean;
-  rowRef?: MutableRefObject<HTMLTableRowElement | null>;
   withColumnOrdering: boolean;
   onCellClick: (row: number, column: number) => void;
   onCellUpdate: (row: number) => (columnId: string, value: unknown) => void;
-  onRowClick?: () => void;
 };
 
 const Row = <T extends object>({
@@ -36,25 +33,21 @@ const Row = <T extends object>({
   isRowSelected = false,
   pinnedColumns = 0,
   row,
-  rowIsClickable = false,
   rowIsSelected,
-  rowRef,
   selectedCell,
   withColumnOrdering,
   onCellClick,
   onCellUpdate,
-  onRowClick,
+  ...props
 }: RowProps<T>) => {
   return (
     <Tr
       key={row.id}
       className={cn(
         "hover:bg-background border-b border-border transition-colors",
-        isFrozenColumn && "bg-background",
-        rowIsClickable && "cursor-pointer"
+        isFrozenColumn && "bg-background"
       )}
-      onClick={onRowClick}
-      ref={rowRef}
+      {...props}
     >
       {(isFrozenColumn
         ? row.getLeftVisibleCells()

@@ -1,16 +1,16 @@
 import {
   Badge,
   Button,
-  DropdownMenuIcon,
-  DropdownMenuItem,
   Hyperlink,
+  MenuIcon,
+  MenuItem,
   useDisclosure,
 } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-import { BsListUl, BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill, BsListUl } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -93,7 +93,7 @@ const AttributeCategoriesTable = memo(
       (row: (typeof data)[number]) => {
         return (
           <>
-            <DropdownMenuItem
+            <MenuItem
               onClick={() => {
                 navigate(
                   `${path.to.newAttributeForCategory(
@@ -102,10 +102,10 @@ const AttributeCategoriesTable = memo(
                 );
               }}
             >
-              <DropdownMenuIcon icon={<BiAddToQueue />} />
+              <MenuIcon icon={<BiAddToQueue />} />
               New Attribute
-            </DropdownMenuItem>
-            <DropdownMenuItem
+            </MenuItem>
+            <MenuItem
               onClick={() => {
                 navigate(
                   `${path.to.attributeCategoryList(
@@ -114,24 +114,24 @@ const AttributeCategoriesTable = memo(
                 );
               }}
             >
-              <DropdownMenuIcon icon={<BsListUl />} />
+              <MenuIcon icon={<BsListUl />} />
               View Attributes
-            </DropdownMenuItem>
-            <DropdownMenuItem
+            </MenuItem>
+            <MenuItem
               onClick={() => {
                 navigate(path.to.attributeCategory(row.id));
               }}
             >
-              <DropdownMenuIcon icon={<BsPencilSquare />} />
+              <MenuIcon icon={<BsFillPenFill />} />
               Edit Attribute Category
-            </DropdownMenuItem>
-            <DropdownMenuItem
+            </MenuItem>
+            <MenuItem
               disabled={row.protected || !permissions.can("delete", "users")}
               onClick={() => onDelete(row)}
             >
-              <DropdownMenuIcon icon={<IoMdTrash />} />
+              <MenuIcon icon={<IoMdTrash />} />
               Delete Category
-            </DropdownMenuItem>
+            </MenuItem>
           </>
         );
       },

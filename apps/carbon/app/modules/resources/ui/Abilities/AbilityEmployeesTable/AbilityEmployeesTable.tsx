@@ -1,9 +1,9 @@
-import { DropdownMenuIcon, DropdownMenuItem, HStack } from "@carbon/react";
+import { DropdownMenuIcon, HStack, MenuItem } from "@carbon/react";
 import { Badge, Progress } from "@chakra-ui/react";
 import { useNavigate, useParams } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
 import { usePermissions } from "~/hooks";
@@ -126,16 +126,16 @@ const AbilityEmployeesTable = ({
     (row: (typeof rows)[number]) => {
       return (
         <>
-          <DropdownMenuItem
+          <MenuItem
             disabled={!permissions.can("update", "resources")}
             onClick={() => {
               navigate(path.to.employeeAbility(abilityId, row.id));
             }}
           >
-            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            <DropdownMenuIcon icon={<BsFillPenFill />} />
             Edit Employee Ability
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             disabled={!permissions.can("delete", "resources")}
             onClick={() => {
               navigate(path.to.deleteEmployeeAbility(abilityId, row.id));
@@ -143,7 +143,7 @@ const AbilityEmployeesTable = ({
           >
             <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Employee Ability
-          </DropdownMenuItem>
+          </MenuItem>
         </>
       );
     },

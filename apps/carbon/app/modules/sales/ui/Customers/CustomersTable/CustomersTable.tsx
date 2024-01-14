@@ -1,8 +1,8 @@
-import { DropdownMenuIcon, DropdownMenuItem, Hyperlink } from "@carbon/react";
+import { Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { Table } from "~/components";
 import type { Customer } from "~/modules/sales";
 import { path } from "~/utils/path";
@@ -60,10 +60,10 @@ const CustomersTable = memo(({ data, count }: CustomersTableProps) => {
     // eslint-disable-next-line react/display-name
     () => (row: Customer) =>
       (
-        <DropdownMenuItem onClick={() => navigate(path.to.customer(row.id!))}>
-          <DropdownMenuIcon icon={<BsPencilSquare />} />
+        <MenuItem onClick={() => navigate(path.to.customer(row.id!))}>
+          <MenuIcon icon={<BsFillPenFill />} />
           Edit Customer
-        </DropdownMenuItem>
+        </MenuItem>
       ),
     [navigate]
   );

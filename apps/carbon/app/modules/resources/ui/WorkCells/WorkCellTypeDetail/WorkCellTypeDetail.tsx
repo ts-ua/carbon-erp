@@ -15,7 +15,7 @@ import {
 } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { ConfirmDelete } from "~/components/Modals";
 import { useUrlParams } from "~/hooks";
@@ -52,24 +52,6 @@ const WorkCellTypeDetail = ({
     deleteModal.onClose();
   };
 
-  const renderContextMenu = (workCell: WorkCell) => {
-    if (!workCell || Array.isArray(workCell)) return null;
-    return (
-      <>
-        <DropdownMenuItem asChild>
-          <Link to={workCell.id}>
-            <DropdownMenuIcon icon={<BsPencilSquare />} />
-            Edit Cell
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onDelete(workCell)}>
-          <DropdownMenuIcon icon={<IoMdTrash />} />
-          Delete Cell
-        </DropdownMenuItem>
-      </>
-    );
-  };
-
   return (
     <>
       <Drawer
@@ -102,7 +84,18 @@ const WorkCellTypeDetail = ({
                           {workCell.department?.name}
                         </p>
                       </VStack>
-                      <ActionMenu>{renderContextMenu(workCell)}</ActionMenu>
+                      <ActionMenu>
+                        <DropdownMenuItem asChild>
+                          <Link to={workCell.id}>
+                            <DropdownMenuIcon icon={<BsFillPenFill />} />
+                            Edit Cell
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => onDelete(workCell)}>
+                          <DropdownMenuIcon icon={<IoMdTrash />} />
+                          Delete Cell
+                        </DropdownMenuItem>
+                      </ActionMenu>
                     </HStack>
                   );
                 })}

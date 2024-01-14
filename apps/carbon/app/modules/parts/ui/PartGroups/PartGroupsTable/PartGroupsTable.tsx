@@ -1,8 +1,8 @@
-import { DropdownMenuIcon, DropdownMenuItem, Hyperlink } from "@carbon/react";
+import { Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -45,16 +45,16 @@ const PartGroupsTable = memo(({ data, count }: PartGroupsTableProps) => {
     (row: (typeof rows)[number]) => {
       return (
         <>
-          <DropdownMenuItem
+          <MenuItem
             disabled={!permissions.can("update", "parts")}
             onClick={() => {
               navigate(`${path.to.partGroup(row.id)}?${params.toString()}`);
             }}
           >
-            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Part Group
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             disabled={!permissions.can("delete", "parts")}
             onClick={() => {
               navigate(
@@ -62,9 +62,9 @@ const PartGroupsTable = memo(({ data, count }: PartGroupsTableProps) => {
               );
             }}
           >
-            <DropdownMenuIcon icon={<IoMdTrash />} />
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Part Group
-          </DropdownMenuItem>
+          </MenuItem>
         </>
       );
     },

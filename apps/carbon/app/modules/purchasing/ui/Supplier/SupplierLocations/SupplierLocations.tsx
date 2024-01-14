@@ -11,7 +11,7 @@ import {
 import { List, ListItem } from "@chakra-ui/react";
 import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
 import { useCallback, useState } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdAdd, IoMdTrash } from "react-icons/io";
 import { Address } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -40,7 +40,7 @@ const SupplierLocations = ({ locations }: SupplierLocationsProps) => {
       if (permissions.can("update", "purchasing")) {
         actions.push({
           label: "Edit Location",
-          icon: <BsPencilSquare />,
+          icon: <BsFillPenFill />,
           onClick: () => {
             navigate(location.id);
           },

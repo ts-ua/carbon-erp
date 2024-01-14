@@ -16,7 +16,7 @@ import {
 } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdAdd, IoMdTrash } from "react-icons/io";
 import { ConfirmDelete } from "~/components/Modals";
 
@@ -76,7 +76,7 @@ const AccountCategoryDetail = ({
                     <ActionMenu>
                       <DropdownMenuItem asChild>
                         <Link to={subcategory.id}>
-                          <DropdownMenuIcon icon={<BsPencilSquare />} />
+                          <DropdownMenuIcon icon={<BsFillPenFill />} />
                           Edit Subcategory
                         </Link>
                       </DropdownMenuItem>

@@ -1,8 +1,8 @@
-import { DropdownMenuIcon, DropdownMenuItem, Hyperlink } from "@carbon/react";
+import { Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare, BsPeopleFill } from "react-icons/bs";
+import { BsFillPenFill, BsPeopleFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -48,24 +48,24 @@ const CustomerTypesTable = memo(({ data, count }: CustomerTypesTableProps) => {
     (row: (typeof data)[number]) => {
       return (
         <>
-          <DropdownMenuItem
+          <MenuItem
             onClick={() => {
               navigate(`${path.to.customers}?type=${row.id}`);
             }}
           >
-            <DropdownMenuIcon icon={<BsPeopleFill />} />
+            <MenuIcon icon={<BsPeopleFill />} />
             View Customers
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             disabled={row.protected || !permissions.can("update", "sales")}
             onClick={() => {
               navigate(`${path.to.customerType(row.id)}?${params.toString()}`);
             }}
           >
-            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Customer Type
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             disabled={row.protected || !permissions.can("delete", "sales")}
             onClick={() => {
               navigate(
@@ -73,9 +73,9 @@ const CustomerTypesTable = memo(({ data, count }: CustomerTypesTableProps) => {
               );
             }}
           >
-            <DropdownMenuIcon icon={<IoMdTrash />} />
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Customer Type
-          </DropdownMenuItem>
+          </MenuItem>
         </>
       );
     },

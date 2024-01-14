@@ -1,15 +1,15 @@
 import {
   Button,
-  DropdownMenuIcon,
-  DropdownMenuItem,
   Hyperlink,
+  MenuIcon,
+  MenuItem,
   useDisclosure,
 } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-import { BsListUl, BsPencilFill } from "react-icons/bs";
+import { BsFillPenFill, BsListUl } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -89,7 +89,7 @@ const AccountCategoriesTable = memo(
         if (!row.id) return null;
         return (
           <>
-            <DropdownMenuItem
+            <MenuItem
               onClick={() => {
                 navigate(
                   `${path.to.newAccountingSubcategory(
@@ -98,10 +98,10 @@ const AccountCategoriesTable = memo(
                 );
               }}
             >
-              <DropdownMenuIcon icon={<BiAddToQueue />} />
+              <MenuIcon icon={<BiAddToQueue />} />
               New Subcategory
-            </DropdownMenuItem>
-            <DropdownMenuItem
+            </MenuItem>
+            <MenuItem
               onClick={() => {
                 navigate(
                   `${path.to.accountingCategoryList(
@@ -110,24 +110,24 @@ const AccountCategoriesTable = memo(
                 );
               }}
             >
-              <DropdownMenuIcon icon={<BsListUl />} />
+              <MenuIcon icon={<BsListUl />} />
               View Subcategories
-            </DropdownMenuItem>
-            <DropdownMenuItem
+            </MenuItem>
+            <MenuItem
               onClick={() => {
                 navigate(path.to.accountingCategory(row.id!));
               }}
             >
-              <DropdownMenuIcon icon={<BsPencilFill />} />
+              <MenuIcon icon={<BsFillPenFill />} />
               Edit Account Category
-            </DropdownMenuItem>
-            <DropdownMenuItem
+            </MenuItem>
+            <MenuItem
               disabled={!permissions.can("delete", "users")}
               onClick={() => onDelete(row)}
             >
-              <DropdownMenuIcon icon={<IoMdTrash />} />
+              <MenuIcon icon={<IoMdTrash />} />
               Delete Account Category
-            </DropdownMenuItem>
+            </MenuItem>
           </>
         );
       },

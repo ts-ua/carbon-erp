@@ -81,6 +81,20 @@ const DropdownMenuContent = forwardRef<
 ));
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
 
+export interface DropdownMenuIconProps extends ComponentPropsWithoutRef<"svg"> {
+  icon: ReactElement;
+}
+
+const DropdownMenuIcon = forwardRef<ElementRef<"span">, DropdownMenuIconProps>(
+  ({ className, icon, children, ...props }, ref) => {
+    return cloneElement(icon, {
+      className: cn("mr-2 h-4 w-4", className),
+      ...props,
+    });
+  }
+);
+DropdownMenuIcon.displayName = "DropdownMenuIcon";
+
 const DropdownMenuItem = forwardRef<
   ElementRef<typeof DropdownMenuPrimitive.Item>,
   ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
@@ -187,20 +201,6 @@ const DropdownMenuShortcut = ({
   );
 };
 DropdownMenuShortcut.displayName = "DropdownMenuShortcut";
-
-interface DropdownMenuIconProps extends ComponentPropsWithoutRef<"svg"> {
-  icon: ReactElement;
-}
-
-const DropdownMenuIcon = forwardRef<ElementRef<"span">, DropdownMenuIconProps>(
-  ({ className, icon, children, ...props }, ref) => {
-    return cloneElement(icon, {
-      className: cn("mr-2 h-4 w-4", className),
-      ...props,
-    });
-  }
-);
-DropdownMenuIcon.displayName = "DropdownMenuIcon";
 
 export {
   DropdownMenu,

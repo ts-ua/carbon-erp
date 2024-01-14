@@ -1,13 +1,8 @@
-import {
-  DropdownMenuIcon,
-  DropdownMenuItem,
-  HStack,
-  Hyperlink,
-} from "@carbon/react";
+import { HStack, Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { Avatar, Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
 import type { AttributeCategory, Person } from "~/modules/resources";
@@ -168,16 +163,16 @@ const PeopleTable = memo(
       return permissions.can("update", "resources")
         ? (row: (typeof rows)[number]) => {
             return (
-              <DropdownMenuItem
+              <MenuItem
                 onClick={() =>
                   navigate(
                     `${path.to.person(row.user?.id!)}?${params.toString()}`
                   )
                 }
               >
-                <DropdownMenuIcon icon={<BsPencilSquare />} />
+                <MenuIcon icon={<BsFillPenFill />} />
                 Edit Employee
-              </DropdownMenuItem>
+              </MenuItem>
             );
           }
         : undefined;
