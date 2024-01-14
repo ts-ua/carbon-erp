@@ -1,9 +1,9 @@
 import {
   Button,
-  DropdownMenuIcon,
-  DropdownMenuItem,
   HStack,
   Hyperlink,
+  MenuIcon,
+  MenuItem,
   useDisclosure,
 } from "@carbon/react";
 import { Icon } from "@chakra-ui/react";
@@ -11,11 +11,7 @@ import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-import {
-  BsFillCheckCircleFill,
-  BsListUl,
-  BsPencilSquare,
-} from "react-icons/bs";
+import { BsFillCheckCircleFill, BsFillPenFill, BsListUl } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -116,39 +112,39 @@ const EquipmentTypesTable = memo(
     >(
       (row) => (
         <>
-          <DropdownMenuItem
+          <MenuItem
             onClick={() => {
               navigate(`${path.to.newEquipment(row.id)}?${params?.toString()}`);
             }}
           >
-            <DropdownMenuIcon icon={<BiAddToQueue />} />
+            <MenuIcon icon={<BiAddToQueue />} />
             New Unit
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             onClick={() => {
               navigate(
                 `${path.to.equipmentTypeList(row.id)}?${params?.toString()}`
               );
             }}
           >
-            <DropdownMenuIcon icon={<BsListUl />} />
+            <MenuIcon icon={<BsListUl />} />
             View Equipment
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             onClick={() => {
               navigate(path.to.equipmentType(row.id));
             }}
           >
-            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Equipment Type
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             disabled={!permissions.can("delete", "users")}
             onClick={() => onDelete(row)}
           >
-            <DropdownMenuIcon icon={<IoMdTrash />} />
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Equipment Type
-          </DropdownMenuItem>
+          </MenuItem>
         </>
       ),
       // eslint-disable-next-line react-hooks/exhaustive-deps

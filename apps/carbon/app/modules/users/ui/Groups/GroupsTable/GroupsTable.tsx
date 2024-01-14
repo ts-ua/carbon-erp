@@ -3,12 +3,12 @@ import {
   AvatarGroupList,
   AvatarOverflowIndicator,
   DropdownMenuIcon,
-  DropdownMenuItem,
+  MenuItem,
 } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
 import { usePermissions } from "~/hooks";
@@ -78,7 +78,7 @@ const GroupsTable = memo(({ data, count }: GroupsTableProps) => {
     (row: (typeof rows)[number]) => {
       return (
         <>
-          <DropdownMenuItem
+          <MenuItem
             disabled={
               row.isEmployeeTypeGroup ||
               row.isCustomerTypeGroup ||
@@ -89,10 +89,10 @@ const GroupsTable = memo(({ data, count }: GroupsTableProps) => {
               navigate(path.to.group(row.id));
             }}
           >
-            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            <DropdownMenuIcon icon={<BsFillPenFill />} />
             Edit Group
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             disabled={
               row.isEmployeeTypeGroup ||
               row.isCustomerTypeGroup ||
@@ -105,7 +105,7 @@ const GroupsTable = memo(({ data, count }: GroupsTableProps) => {
           >
             <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Group
-          </DropdownMenuItem>
+          </MenuItem>
         </>
       );
     },

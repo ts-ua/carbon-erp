@@ -15,7 +15,7 @@ import {
 } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdAdd, IoMdTrash } from "react-icons/io";
 import { ConfirmDelete } from "~/components/Modals";
 import { useUrlParams } from "~/hooks";
@@ -53,23 +53,6 @@ const EquipmentTypeDetail = ({
     deleteModal.onClose();
   };
 
-  const renderContextMenu = (equipment: Equipment) => {
-    return (
-      <>
-        <DropdownMenuItem asChild>
-          <Link to={equipment.id}>
-            <DropdownMenuIcon icon={<BsPencilSquare />} />
-            Edit Unit
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onDelete(equipment)}>
-          <DropdownMenuIcon icon={<IoMdTrash />} />
-          Delete Unit
-        </DropdownMenuItem>
-      </>
-    );
-  };
-
   return (
     <>
       <Drawer
@@ -95,7 +78,18 @@ const EquipmentTypeDetail = ({
                           {equipment.location?.name}
                         </span>
                       </VStack>
-                      <ActionMenu>{renderContextMenu(equipment)}</ActionMenu>
+                      <ActionMenu>
+                        <DropdownMenuItem asChild>
+                          <Link to={equipment.id}>
+                            <DropdownMenuIcon icon={<BsFillPenFill />} />
+                            Edit Unit
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => onDelete(equipment)}>
+                          <DropdownMenuIcon icon={<IoMdTrash />} />
+                          Delete Unit
+                        </DropdownMenuItem>
+                      </ActionMenu>
                     </HStack>
                   );
                 })}

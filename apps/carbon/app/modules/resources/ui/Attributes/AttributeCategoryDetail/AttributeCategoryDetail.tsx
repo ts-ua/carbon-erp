@@ -8,10 +8,10 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DropdownMenuIcon,
-  DropdownMenuItem,
   HStack,
   IconButton,
+  MenuIcon,
+  MenuItem,
   useDisclosure,
 } from "@carbon/react";
 import { Link, useFetcher } from "@remix-run/react";
@@ -19,7 +19,7 @@ import { Reorder } from "framer-motion";
 import { useMemo, useState } from "react";
 import { AiOutlineNumber } from "react-icons/ai";
 import { BiText } from "react-icons/bi";
-import { BsCalendarDate, BsPencilSquare, BsToggleOn } from "react-icons/bs";
+import { BsCalendarDate, BsFillPenFill, BsToggleOn } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { IoMdTrash } from "react-icons/io";
 import { MdOutlineDragIndicator } from "react-icons/md";
@@ -104,16 +104,16 @@ const AttributeCategoryDetail = ({
   const renderContextMenu = (attributeId: string) => {
     return (
       <>
-        <DropdownMenuItem asChild>
+        <MenuItem asChild>
           <Link to={attributeId}>
-            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Attribute
           </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onDelete(attributeMap[attributeId])}>
-          <DropdownMenuIcon icon={<IoMdTrash />} />
+        </MenuItem>
+        <MenuItem onClick={() => onDelete(attributeMap[attributeId])}>
+          <MenuIcon icon={<IoMdTrash />} />
           Delete Attribute
-        </DropdownMenuItem>
+        </MenuItem>
       </>
     );
   };

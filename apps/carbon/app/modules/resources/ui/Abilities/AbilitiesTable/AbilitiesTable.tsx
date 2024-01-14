@@ -2,14 +2,14 @@ import {
   AvatarGroup,
   AvatarGroupList,
   AvatarOverflowIndicator,
-  DropdownMenuIcon,
-  DropdownMenuItem,
   Hyperlink,
+  MenuIcon,
+  MenuItem,
 } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
 import { usePermissions } from "~/hooks";
@@ -116,23 +116,23 @@ const AbilitiesTable = memo(({ data, count }: AbilitiesTableProps) => {
     (row: (typeof rows)[number]) => {
       return (
         <>
-          <DropdownMenuItem
+          <MenuItem
             onClick={() => {
               navigate(path.to.ability(row.id));
             }}
           >
-            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Ability
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             disabled={!permissions.can("delete", "resources")}
             onClick={() => {
               navigate(path.to.deleteAbility(row.id));
             }}
           >
-            <DropdownMenuIcon icon={<IoMdTrash />} />
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Ability
-          </DropdownMenuItem>
+          </MenuItem>
         </>
       );
     },

@@ -1,8 +1,8 @@
-import { DropdownMenuIcon, DropdownMenuItem, Hyperlink } from "@carbon/react";
+import { Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -62,15 +62,15 @@ const LocationsTable = memo(({ data, count }: LocationsTableProps) => {
     (row: (typeof data)[number]) => {
       return (
         <>
-          <DropdownMenuItem
+          <MenuItem
             onClick={() => {
               navigate(`${path.to.location(row.id)}?${params.toString()}`);
             }}
           >
-            <DropdownMenuIcon icon={<BsPencilSquare />} />
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Location
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </MenuItem>
+          <MenuItem
             disabled={!permissions.can("delete", "resources")}
             onClick={() => {
               navigate(
@@ -78,9 +78,9 @@ const LocationsTable = memo(({ data, count }: LocationsTableProps) => {
               );
             }}
           >
-            <DropdownMenuIcon icon={<IoMdTrash />} />
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Location
-          </DropdownMenuItem>
+          </MenuItem>
         </>
       );
     },

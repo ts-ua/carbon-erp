@@ -1,11 +1,11 @@
 import {
-  DropdownMenuIcon,
-  DropdownMenuItem,
   HStack,
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
   Hyperlink,
+  MenuIcon,
+  MenuItem,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -16,7 +16,7 @@ import { Tag, TagCloseButton, TagLabel, Text } from "@chakra-ui/react";
 import { useRevalidator } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { BsPencilSquare, BsStar, BsStarFill } from "react-icons/bs";
+import { BsFillPenFill, BsStar, BsStarFill } from "react-icons/bs";
 import { IoMdAdd, IoMdTrash } from "react-icons/io";
 import { VscOpenPreview } from "react-icons/vsc";
 import { Avatar, CreatableCombobox, Table } from "~/components";
@@ -340,32 +340,32 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
     // eslint-disable-next-line react/display-name
     return (row: Document) => (
       <>
-        <DropdownMenuItem disabled={canUpdate(row)} onClick={() => edit(row)}>
-          <DropdownMenuIcon icon={<BsPencilSquare />} />
+        <MenuItem disabled={canUpdate(row)} onClick={() => edit(row)}>
+          <MenuIcon icon={<BsFillPenFill />} />
           Edit
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => download(row)}>
-          <DropdownMenuIcon icon={<VscOpenPreview />} />
+        </MenuItem>
+        <MenuItem onClick={() => download(row)}>
+          <MenuIcon icon={<VscOpenPreview />} />
           Download
-        </DropdownMenuItem>
-        <DropdownMenuItem
+        </MenuItem>
+        <MenuItem
           onClick={() => {
             onFavorite(row);
           }}
         >
-          <DropdownMenuIcon icon={<BsStar />} />
+          <MenuIcon icon={<BsStar />} />
           Favorite
-        </DropdownMenuItem>
-        <DropdownMenuItem
+        </MenuItem>
+        <MenuItem
           disabled={canDelete(row)}
           onClick={() => {
             setSelectedDocument(row);
             deleteDocumentModal.onOpen();
           }}
         >
-          <DropdownMenuIcon icon={<IoMdTrash />} />
+          <MenuIcon icon={<IoMdTrash />} />
           {filter !== "trash" ? "Move to Trash" : "Restore from Trash"}
-        </DropdownMenuItem>
+        </MenuItem>
       </>
     );
   }, [

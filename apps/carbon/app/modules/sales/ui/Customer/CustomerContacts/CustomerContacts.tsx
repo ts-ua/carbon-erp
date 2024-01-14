@@ -9,7 +9,7 @@ import {
 import { Button, List, ListItem, useDisclosure } from "@chakra-ui/react";
 import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
 import { useCallback, useState } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdAdd, IoMdTrash } from "react-icons/io";
 import { Contact } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -40,7 +40,7 @@ const CustomerContacts = ({ contacts }: CustomerContactsProps) => {
         label: permissions.can("update", "sales")
           ? "Edit Contact"
           : "View Contact",
-        icon: <BsPencilSquare />,
+        icon: <BsFillPenFill />,
         onClick: () => {
           navigate(contact.id);
         },

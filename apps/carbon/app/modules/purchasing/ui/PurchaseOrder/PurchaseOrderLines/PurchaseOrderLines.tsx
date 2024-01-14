@@ -17,7 +17,7 @@ import {
 import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { MdMoreHoriz } from "react-icons/md";
 import {
@@ -91,7 +91,7 @@ const PurchaseOrderLines = () => {
                     onClick={() => navigate(row.original.id!)}
                     disabled={!isEditable || !canEdit}
                   >
-                    <DropdownMenuIcon icon={<BsPencilSquare />} />
+                    <DropdownMenuIcon icon={<BsFillPenFill />} />
                     Edit Line
                   </DropdownMenuItem>
                   <DropdownMenuItem

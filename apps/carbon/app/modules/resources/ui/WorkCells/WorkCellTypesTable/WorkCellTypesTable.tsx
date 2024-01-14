@@ -1,20 +1,16 @@
 import {
   Button,
-  DropdownMenuIcon,
-  DropdownMenuItem,
   HStack,
   Hyperlink,
+  MenuIcon,
+  MenuItem,
   useDisclosure,
 } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-import {
-  BsFillCheckCircleFill,
-  BsListUl,
-  BsPencilSquare,
-} from "react-icons/bs";
+import { BsFillCheckCircleFill, BsFillPenFill, BsListUl } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -112,41 +108,41 @@ const WorkCellTypesTable = memo(({ data, count }: WorkCellTypesTableProps) => {
   >(
     (row) => (
       <>
-        <DropdownMenuItem
+        <MenuItem
           onClick={() => {
             navigate(
               `${path.to.newWorkCellUnit(row.id)}?${params?.toString()}`
             );
           }}
         >
-          <DropdownMenuIcon icon={<BiAddToQueue />} />
+          <MenuIcon icon={<BiAddToQueue />} />
           New Unit
-        </DropdownMenuItem>
-        <DropdownMenuItem
+        </MenuItem>
+        <MenuItem
           onClick={() => {
             navigate(
               `${path.to.workCellTypeList(row.id)}?${params?.toString()}`
             );
           }}
         >
-          <DropdownMenuIcon icon={<BsListUl />} />
+          <MenuIcon icon={<BsListUl />} />
           Edit Work Cells
-        </DropdownMenuItem>
-        <DropdownMenuItem
+        </MenuItem>
+        <MenuItem
           onClick={() => {
             navigate(path.to.workCellType(row.id));
           }}
         >
-          <DropdownMenuIcon icon={<BsPencilSquare />} />
+          <MenuIcon icon={<BsFillPenFill />} />
           Edit Work Cell Type
-        </DropdownMenuItem>
-        <DropdownMenuItem
+        </MenuItem>
+        <MenuItem
           disabled={!permissions.can("delete", "users")}
           onClick={() => onDelete(row)}
         >
-          <DropdownMenuIcon icon={<IoMdTrash />} />
+          <MenuIcon icon={<IoMdTrash />} />
           Delete Work Cell Type
-        </DropdownMenuItem>
+        </MenuItem>
       </>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps

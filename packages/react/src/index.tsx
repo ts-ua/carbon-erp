@@ -33,7 +33,23 @@ import {
   CommandTrigger,
   multiSelectTriggerVariants,
 } from "./Command";
-import { ContextMenu } from "./ContextMenu";
+import {
+  ContextMenu,
+  ContextMenuCheckboxItem,
+  ContextMenuContent,
+  ContextMenuGroup,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuPortal,
+  ContextMenuRadioGroup,
+  ContextMenuRadioItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from "./Context";
 import { Count } from "./Count";
 import DataTable, { DataTableColumnHeader } from "./DataTable";
 import {
@@ -96,6 +112,20 @@ import {
   InputRightElement,
 } from "./Input";
 import { Loading } from "./Loading";
+import {
+  Menu,
+  MenuCheckboxItem,
+  MenuGroup,
+  MenuIcon,
+  MenuItem,
+  MenuLabel,
+  MenuRadioGroup,
+  MenuRadioItem,
+  MenuSeparator,
+  MenuShortcut,
+  MenuSub,
+  MenuSubContent,
+} from "./Menu";
 import { Menubar, MenubarItem, MenubarTrigger } from "./Menubar";
 import {
   Modal,
@@ -184,6 +214,20 @@ export {
   CommandShortcut,
   CommandTrigger,
   ContextMenu,
+  ContextMenuCheckboxItem,
+  ContextMenuContent,
+  ContextMenuGroup,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuPortal,
+  ContextMenuRadioGroup,
+  ContextMenuRadioItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
   Count,
   DataTable,
   DataTableColumnHeader,
@@ -237,6 +281,18 @@ export {
   InputRightAddon,
   InputRightElement,
   Loading,
+  Menu,
+  MenuCheckboxItem,
+  MenuGroup,
+  MenuIcon,
+  MenuItem,
+  MenuLabel,
+  MenuRadioGroup,
+  MenuRadioItem,
+  MenuSeparator,
+  MenuShortcut,
+  MenuSub,
+  MenuSubContent,
   Menubar,
   MenubarItem,
   MenubarTrigger,

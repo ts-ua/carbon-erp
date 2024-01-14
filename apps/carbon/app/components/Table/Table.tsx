@@ -1,6 +1,9 @@
 import {
   ActionMenu,
   ContextMenu,
+  ContextMenuContent,
+  ContextMenuTrigger,
+  Menu,
   Table as TableBase,
   Tbody,
   Th,
@@ -12,8 +15,6 @@ import {
   useMount,
 } from "@carbon/react";
 import { clip } from "@carbon/utils";
-import type { ThemeTypings } from "@chakra-ui/react";
-import { MenuList } from "@chakra-ui/react";
 import type {
   ColumnDef,
   ColumnOrderState,
@@ -47,7 +48,6 @@ interface TableProps<T extends object> {
   data: T[];
   actions?: TableAction<T>[];
   count?: number;
-  colorScheme?: ThemeTypings["colorSchemes"];
   defaultColumnOrder?: string[];
   defaultColumnPinning?: ColumnPinningState;
   defaultColumnVisibility?: Record<string, boolean>;
@@ -58,7 +58,6 @@ interface TableProps<T extends object> {
   withPagination?: boolean;
   withSelectableRows?: boolean;
   withSimpleSorting?: boolean;
-  onRowClick?: (row: T) => void;
   onSelectedRowsChange?: (selectedRows: T[]) => void;
   renderContextMenu?: (row: T) => JSX.Element | null;
 }
@@ -68,7 +67,6 @@ const Table = <T extends object>({
   columns,
   actions = [],
   count = 0,
-  colorScheme = "blackAlpha",
   editableComponents,
   defaultColumnOrder,
   defaultColumnPinning = {
@@ -81,7 +79,6 @@ const Table = <T extends object>({
   withPagination = true,
   withSelectableRows = false,
   withSimpleSorting = true,
-  onRowClick,
   onSelectedRowsChange,
   renderContextMenu,
 }: TableProps<T>) => {
@@ -414,7 +411,6 @@ const Table = <T extends object>({
   });
 
   const rows = table.getRowModel().rows;
-  const rowsAreClickable = !editMode && typeof onRowClick === "function";
 
   return (
     <VStack spacing={0} className="h-full">
@@ -512,38 +508,31 @@ const Table = <T extends object>({
               <Tbody>
                 {rows.map((row) => {
                   return renderContextMenu ? (
-                    <ContextMenu<HTMLTableRowElement>
-                      key={row.id}
-                      renderMenu={() => (
-                        <MenuList>{renderContextMenu(row.original)}</MenuList>
-                      )}
-                    >
-                      {(ref) => (
-                        <Row
-                          editableComponents={editableComponents}
-                          isEditing={isEditing}
-                          isEditMode={editMode}
-                          isFrozenColumn
-                          isRowSelected={
-                            row.index in rowSelection &&
-                            !!rowSelection[row.index]
-                          }
-                          selectedCell={selectedCell}
-                          // @ts-ignore
-                          row={row}
-                          rowRef={ref}
-                          rowIsSelected={selectedCell?.row === row.index}
-                          withColumnOrdering={withColumnOrdering}
-                          onCellClick={onCellClick}
-                          onCellUpdate={onCellUpdate}
-                          onRowClick={
-                            rowsAreClickable
-                              ? () => onRowClick(row.original)
-                              : undefined
-                          }
-                        />
-                      )}
-                    </ContextMenu>
+                    <Menu type="context" key={row.index}>
+                      <ContextMenu>
+                        <ContextMenuTrigger asChild>
+                          <Row
+                            editableComponents={editableComponents}
+                            isEditing={isEditing}
+                            isEditMode={editMode}
+                            isFrozenColumn
+                            isRowSelected={
+                              row.index in rowSelection &&
+                              !!rowSelection[row.index]
+                            }
+                            selectedCell={selectedCell}
+                            row={row}
+                            rowIsSelected={selectedCell?.row === row.index}
+                            withColumnOrdering={withColumnOrdering}
+                            onCellClick={onCellClick}
+                            onCellUpdate={onCellUpdate}
+                          />
+                        </ContextMenuTrigger>
+                        <ContextMenuContent className="w-128">
+                          {renderContextMenu(row.original)}
+                        </ContextMenuContent>
+                      </ContextMenu>
+                    </Menu>
                   ) : (
                     <Row
                       key={row.id}
@@ -555,17 +544,11 @@ const Table = <T extends object>({
                         row.index in rowSelection && !!rowSelection[row.index]
                       }
                       selectedCell={selectedCell}
-                      // @ts-ignore
                       row={row}
                       rowIsSelected={selectedCell?.row === row.index}
                       withColumnOrdering={withColumnOrdering}
                       onCellClick={onCellClick}
                       onCellUpdate={onCellUpdate}
-                      onRowClick={
-                        rowsAreClickable
-                          ? () => onRowClick(row.original)
-                          : undefined
-                      }
                     />
                   );
                 })}
@@ -638,48 +621,39 @@ const Table = <T extends object>({
             <Tbody>
               {rows.map((row) => {
                 return renderContextMenu ? (
-                  <ContextMenu<HTMLTableRowElement>
-                    key={row.id}
-                    renderMenu={() => (
-                      <MenuList>{renderContextMenu(row.original)}</MenuList>
-                    )}
-                  >
-                    {(ref) => (
-                      <Row
-                        // @ts-ignore
-                        editableComponents={editableComponents}
-                        isEditing={isEditing}
-                        isEditMode={editMode}
-                        isRowSelected={
-                          row.index in rowSelection && !!rowSelection[row.index]
-                        }
-                        pinnedColumns={
-                          columnPinning?.left
-                            ? columnPinning.left?.length -
-                              (withSelectableRows ? 1 : 0)
-                            : 0
-                        }
-                        selectedCell={selectedCell}
-                        // @ts-ignore
-                        row={row}
-                        rowIsClickable={rowsAreClickable}
-                        rowIsSelected={selectedCell?.row === row.index}
-                        rowRef={ref}
-                        withColumnOrdering={withColumnOrdering}
-                        onCellClick={onCellClick}
-                        onCellUpdate={onCellUpdate}
-                        onRowClick={
-                          rowsAreClickable
-                            ? () => onRowClick(row.original)
-                            : undefined
-                        }
-                      />
-                    )}
-                  </ContextMenu>
+                  <Menu type="context" key={row.index}>
+                    <ContextMenu>
+                      <ContextMenuTrigger asChild>
+                        <Row
+                          editableComponents={editableComponents}
+                          isEditing={isEditing}
+                          isEditMode={editMode}
+                          isRowSelected={
+                            row.index in rowSelection &&
+                            !!rowSelection[row.index]
+                          }
+                          pinnedColumns={
+                            columnPinning?.left
+                              ? columnPinning.left?.length -
+                                (withSelectableRows ? 1 : 0)
+                              : 0
+                          }
+                          selectedCell={selectedCell}
+                          row={row}
+                          rowIsSelected={selectedCell?.row === row.index}
+                          withColumnOrdering={withColumnOrdering}
+                          onCellClick={onCellClick}
+                          onCellUpdate={onCellUpdate}
+                        />
+                      </ContextMenuTrigger>
+                      <ContextMenuContent className="w-128">
+                        {renderContextMenu(row.original)}
+                      </ContextMenuContent>
+                    </ContextMenu>
+                  </Menu>
                 ) : (
                   <Row
                     key={row.id}
-                    // @ts-ignore
                     editableComponents={editableComponents}
                     isEditing={isEditing}
                     isEditMode={editMode}
@@ -693,18 +667,11 @@ const Table = <T extends object>({
                         : 0
                     }
                     selectedCell={selectedCell}
-                    // @ts-ignore
                     row={row}
-                    rowIsClickable={rowsAreClickable}
                     rowIsSelected={selectedCell?.row === row.index}
                     withColumnOrdering={withColumnOrdering}
                     onCellClick={onCellClick}
                     onCellUpdate={onCellUpdate}
-                    onRowClick={
-                      rowsAreClickable
-                        ? () => onRowClick(row.original)
-                        : undefined
-                    }
                   />
                 );
               })}
@@ -712,9 +679,7 @@ const Table = <T extends object>({
           </TableBase>
         </div>
       </div>
-      {withPagination && (
-        <Pagination {...pagination} colorScheme={colorScheme} />
-      )}
+      {withPagination && <Pagination {...pagination} />}
     </VStack>
   );
 };

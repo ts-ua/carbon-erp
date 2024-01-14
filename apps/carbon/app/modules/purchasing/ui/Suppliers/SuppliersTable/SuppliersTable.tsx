@@ -1,13 +1,8 @@
-import {
-  Button,
-  DropdownMenuIcon,
-  DropdownMenuItem,
-  Hyperlink,
-} from "@carbon/react";
+import { Button, Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { Table } from "~/components";
 import type { Supplier } from "~/modules/purchasing";
 import { path } from "~/utils/path";
@@ -80,10 +75,10 @@ const SuppliersTable = memo(({ data, count }: SuppliersTableProps) => {
     // eslint-disable-next-line react/display-name
     () => (row: Supplier) =>
       (
-        <DropdownMenuItem onClick={() => navigate(path.to.supplier(row.id!))}>
-          <DropdownMenuIcon icon={<BsPencilSquare />} />
+        <MenuItem onClick={() => navigate(path.to.supplier(row.id!))}>
+          <MenuIcon icon={<BsFillPenFill />} />
           Edit Supplier
-        </DropdownMenuItem>
+        </MenuItem>
       ),
     [navigate]
   );

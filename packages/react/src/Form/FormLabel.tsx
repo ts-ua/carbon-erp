@@ -9,12 +9,22 @@ import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 
 const labelVariants = cva(
-  "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground"
+  "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground",
+  {
+    variants: {
+      isInvalid: {
+        true: "text-destructive",
+      },
+    },
+    defaultVariants: {
+      isInvalid: false,
+    },
+  }
 );
 
 export interface FormLabelProps
   extends ComponentPropsWithoutRef<typeof LabelPrimitive.Root>,
-    VariantProps<typeof labelVariants>,
+    Omit<VariantProps<typeof labelVariants>, "isInvalid">,
     FormControlOptions {}
 
 export const FormLabel = forwardRef<
@@ -30,7 +40,7 @@ export const FormLabel = forwardRef<
     <LabelPrimitive.Root
       {...labelProps}
       ref={ref}
-      className={cn(labelVariants(), className)}
+      className={cn(labelVariants({ isInvalid: field?.isInvalid }), className)}
       {...props}
     >
       {children}
