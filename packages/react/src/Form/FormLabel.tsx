@@ -4,9 +4,9 @@ import { cn } from "~/utils/cn";
 import type { FormControlOptions } from "./FormControl";
 import { useFormControlContext } from "./FormControl";
 
-import * as LabelPrimitive from "@radix-ui/react-label";
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
+import * as ReactAria from "react-aria-components";
 
 const labelVariants = cva(
   "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground",
@@ -23,12 +23,12 @@ const labelVariants = cva(
 );
 
 export interface FormLabelProps
-  extends ComponentPropsWithoutRef<typeof LabelPrimitive.Root>,
+  extends ComponentPropsWithoutRef<typeof ReactAria.Label>,
     Omit<VariantProps<typeof labelVariants>, "isInvalid">,
     FormControlOptions {}
 
 export const FormLabel = forwardRef<
-  ElementRef<typeof LabelPrimitive.Root>,
+  ElementRef<typeof ReactAria.Label>,
   FormLabelProps
 >((props, ref) => {
   const { className, children, ...rest } = props;
@@ -37,7 +37,7 @@ export const FormLabel = forwardRef<
   const labelProps = field?.getLabelProps(rest, ref) ?? { ref, ...rest };
 
   return (
-    <LabelPrimitive.Root
+    <ReactAria.Label
       {...labelProps}
       ref={ref}
       className={cn(labelVariants({ isInvalid: field?.isInvalid }), className)}
@@ -45,7 +45,7 @@ export const FormLabel = forwardRef<
     >
       {children}
       {field?.isRequired && <span className="text-destructive"> *</span>}
-    </LabelPrimitive.Root>
+    </ReactAria.Label>
   );
 });
 

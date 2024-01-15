@@ -19,6 +19,16 @@ type AbilityChartProps = {
   onDataChange?: (data: AbilityDatum[]) => void;
 };
 
+const green = {
+  300: "rgb(134 239 172)",
+  500: "rgb(34 197 94)",
+};
+
+const zinc = {
+  500: "rgb(113 113 122)",
+  600: "rgb(82 82 91)",
+};
+
 const AbilityChart = ({
   data,
   shadowWeeks,
@@ -105,8 +115,8 @@ const AbilityChart = ({
 
             <LinearGradient
               id="fill"
-              from="rgb(217 249 157)"
-              to="rgb(82 82 91)"
+              from={green[300]}
+              to={zinc[500]}
               fromOpacity={0.2}
               toOpacity={0}
             />
@@ -115,7 +125,7 @@ const AbilityChart = ({
               id="diagonalLines"
               height={6}
               width={6}
-              stroke="rgb(82 82 91)"
+              stroke={zinc[600]}
               strokeWidth={1}
               orientation={["diagonal"]}
             />
@@ -149,7 +159,7 @@ const AbilityChart = ({
           data={data}
           y={(d) => yScale(y(d))}
           x={(d) => xScale(x(d))}
-          stroke="rgb(77 124 15)"
+          stroke={green[500]}
           strokeOpacity="0.8"
           strokeWidth={2}
           curve={curveNatural}
@@ -205,10 +215,8 @@ const AbilityChart = ({
                   cx={x}
                   cy={y}
                   r={isDragging ? 10 : 6}
-                  fill="rgb(132 204 22)"
                   transform={`translate(${dx}, ${dy})`}
                   fillOpacity={0.9}
-                  stroke="rgb(101 163 13)"
                   strokeWidth={2}
                   onMouseMove={dragMove}
                   onMouseUp={dragEnd}
@@ -216,6 +224,7 @@ const AbilityChart = ({
                   onTouchStart={dragStart}
                   onTouchMove={dragMove}
                   onTouchEnd={dragEnd}
+                  className="fill-green-400 stroke-green-600"
                 />
               )}
             </Drag>

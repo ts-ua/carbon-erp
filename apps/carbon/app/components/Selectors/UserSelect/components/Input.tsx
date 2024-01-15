@@ -27,49 +27,48 @@ const Input = () => {
 
   return (
     <InputGroup>
-      {isMulti ? (
-        <InputLeftElement>
-          <AvatarGroup size="xs" limit={2}>
+      {!readOnly &&
+        (isMulti ? (
+          <InputLeftElement>
+            <AvatarGroup size="xs" limit={2}>
+              <Avatar size="xs" />
+              <Avatar size="xs" />
+            </AvatarGroup>
+          </InputLeftElement>
+        ) : (
+          <InputLeftElement>
             <Avatar size="xs" />
-            <Avatar size="xs" />
-          </AvatarGroup>
-        </InputLeftElement>
-      ) : (
-        <InputLeftElement>
-          <Avatar size="xs" />
-        </InputLeftElement>
-      )}
+          </InputLeftElement>
+        ))}
 
       <InputBase
         {...inputProps}
-        readOnly={disabled || readOnly}
+        isReadOnly={disabled || readOnly}
         isDisabled={disabled || readOnly}
         onBlur={onInputBlur}
         onChange={onInputChange}
-        onFocus={onInputFocus}
+        onFocus={readOnly || disabled ? undefined : onInputFocus}
         placeholder={placeholder}
         spellCheck="false"
         ref={inputRef}
         type="text"
         value={inputValue}
-
-        // pl={isMulti ? "3.175rem" : undefined}
-        // pr="2.5rem"
       />
-
-      <InputRightElement>
-        <HStack spacing={1}>
-          {loading && <Spinner size="sm" />}
-          {!loading && !disabled && inputValue.length > 0 && (
-            <IconButton
-              aria-label="Clear search query"
-              icon={<MdOutlineClear />}
-              onClick={onClearInput}
-              variant="ghost"
-            />
-          )}
-        </HStack>
-      </InputRightElement>
+      {!readOnly && !disabled && (
+        <InputRightElement>
+          <HStack spacing={1}>
+            {loading && <Spinner size="sm" />}
+            {!loading && !disabled && inputValue.length > 0 && (
+              <IconButton
+                aria-label="Clear search query"
+                icon={<MdOutlineClear />}
+                onClick={onClearInput}
+                variant="ghost"
+              />
+            )}
+          </HStack>
+        </InputRightElement>
+      )}
     </InputGroup>
   );
 };

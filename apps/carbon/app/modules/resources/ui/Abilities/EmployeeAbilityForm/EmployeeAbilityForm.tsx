@@ -13,7 +13,7 @@ import {
 import { useParams } from "@remix-run/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
-import { Employee, Hidden, Select, Slider, Submit } from "~/components/Form";
+import { Employee, Hidden, Number, Select, Submit } from "~/components/Form";
 import { usePermissions } from "~/hooks";
 import type { Ability } from "~/modules/resources";
 import {
@@ -30,7 +30,7 @@ type EmployeeAbilityFormProps = {
   onClose: () => void;
 };
 
-const defaultPercent = 50;
+const defaultPercent = 0.5;
 
 const EmployeeAbilityForm = ({
   ability,
@@ -45,7 +45,7 @@ const EmployeeAbilityForm = ({
     ? !permissions.can("update", "resources")
     : !permissions.can("create", "resources");
 
-  const days = (percent: number) => weeks * 5 * (percent / 100);
+  const days = (percent: number) => weeks * 5 * percent;
   const [trainingDays, setTrainingDays] = useState(
     days(initialValues.trainingPercent ?? defaultPercent)
   );
@@ -113,14 +113,14 @@ const EmployeeAbilityForm = ({
               />
               {inProgress && (
                 <>
-                  <Slider
+                  <Number
                     name="trainingPercent"
                     label="Training Percent"
                     onChange={(value) => updateTrainingDays(value)}
                     defaultValue={defaultPercent}
-                    min={0}
-                    max={100}
-                    step={10}
+                    formatOptions={{ style: "percent" }}
+                    minValue={0}
+                    maxValue={1}
                   />
                   <Hidden name="trainingDays" value={trainingDays} />
                 </>
