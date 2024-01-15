@@ -64,8 +64,8 @@ const LocationForm = ({ initialValues }: LocationFormProps) => {
               <Input name="postalCode" label="Postal Code" />
               {/* <Country name="country" label="Country" /> */}
               <Timezone name="timezone" label="Timezone" />
-              {/* <Number name="latitude" label="Latitude" min={-90} max={90} />
-              <Number name="longitude" label="Longitude" min={-180} max={180} /> */}
+              {/* <Number name="latitude" label="Latitude" minValue={-90} maxValue={90} />
+              <Number name="longitude" label="Longitude" minVale={-180} maxValue={180} /> */}
             </VStack>
           </DrawerBody>
           <DrawerFooter>

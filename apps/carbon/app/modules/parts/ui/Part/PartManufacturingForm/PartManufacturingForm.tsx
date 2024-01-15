@@ -57,7 +57,11 @@ const PartManufacturingForm = ({
             </VStack>
             <VStack>
               <Number name="manufacturingLeadTime" label="Lead Time (Days)" />
-              <Number name="scrapPercentage" label="Scrap Percentage" />
+              <Number
+                name="scrapPercentage"
+                label="Scrap Percentage"
+                formatOptions={{ style: "percent" }}
+              />
               <Number name="lotSize" label="Lot Size" />
             </VStack>
             <VStack>

@@ -1,18 +1,23 @@
-import { Button, HStack, Heading, useDisclosure } from "@carbon/react";
 import {
+  Button,
+  HStack,
+  Heading,
   IconButton,
   NumberDecrementStepper,
+  NumberField,
   NumberIncrementStepper,
   NumberInput,
-  NumberInputField,
+  NumberInputGroup,
   NumberInputStepper,
-} from "@chakra-ui/react";
+  useDisclosure,
+} from "@carbon/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Link, Outlet, useLoaderData, useNavigate } from "@remix-run/react";
 import { ParentSize } from "@visx/responsive";
 import { useState } from "react";
 import { IoMdAdd, IoMdClose } from "react-icons/io";
+import { LuChevronDown, LuChevronUp } from "react-icons/lu";
 import { MdEdit, MdOutlineArrowBackIos } from "react-icons/md";
 import { ValidatedForm, validationError } from "remix-validated-form";
 import { Hidden, Input, Submit } from "~/components/Form";
@@ -141,7 +146,7 @@ export default function AbilitiesRoute() {
     ability.shadowWeeks ?? 0
   );
 
-  const updateWeeks = (_: string, newWeeks: number) => {
+  const updateWeeks = (newWeeks: number) => {
     const scale = 1 + (newWeeks - time) / time;
     setData((prevData) =>
       prevData.map((datum) => ({
@@ -152,7 +157,7 @@ export default function AbilitiesRoute() {
     setTime(newWeeks);
   };
 
-  const updateShadowTime = (_: string, newShadowTime: number) => {
+  const updateShadowTime = (newShadowTime: number) => {
     setControlledShadowWeeks(newShadowTime);
   };
 
@@ -212,34 +217,48 @@ export default function AbilitiesRoute() {
 
           <HStack>
             <span className="text-sm">Weeks Shadowing:</span>
-            <NumberInput
-              maxW="100px"
-              size="sm"
-              min={0}
-              max={time}
+            <NumberField
+              name="unitPrice"
               value={controlledShadowWeeks}
               onChange={updateShadowTime}
+              minValue={0}
+              maxValue={time}
+              className="max-w-[100px]"
             >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
+              <NumberInputGroup className="relative">
+                <NumberInput size="sm" />
+                <NumberInputStepper>
+                  <NumberIncrementStepper>
+                    <LuChevronUp size="0.75em" strokeWidth="3" />
+                  </NumberIncrementStepper>
+                  <NumberDecrementStepper>
+                    <LuChevronDown size="0.75em" strokeWidth="3" />
+                  </NumberDecrementStepper>
+                </NumberInputStepper>
+              </NumberInputGroup>
+            </NumberField>
+
             <span className="text-sm">Weeks to Learn:</span>
-            <NumberInput
-              maxW="100px"
-              size="sm"
-              min={1}
+            <NumberField
+              name="unitPrice"
               value={time}
               onChange={updateWeeks}
+              minValue={1}
+              className="max-w-[100px]"
             >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
+              <NumberInputGroup className="relative">
+                <NumberInput size="sm" />
+                <NumberInputStepper>
+                  <NumberIncrementStepper>
+                    <LuChevronUp size="0.75em" strokeWidth="3" />
+                  </NumberIncrementStepper>
+                  <NumberDecrementStepper>
+                    <LuChevronDown size="0.75em" strokeWidth="3" />
+                  </NumberDecrementStepper>
+                </NumberInputStepper>
+              </NumberInputGroup>
+            </NumberField>
+
             <ValidatedForm
               validator={abilityCurveValidator}
               method="post"
@@ -274,7 +293,6 @@ export default function AbilitiesRoute() {
       <AbilityEmployeesTable
         employees={ability.employeeAbility ?? []}
         weeks={weeks}
-        shadowWeeks={ability.shadowWeeks}
       />
       <Outlet />
     </>

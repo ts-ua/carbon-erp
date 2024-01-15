@@ -1,4 +1,3 @@
-import { Td } from "@chakra-ui/react";
 import type { CalendarDate } from "@internationalized/date";
 import { isSameMonth } from "@internationalized/date";
 import { useCalendarCell } from "@react-aria/calendar";
@@ -9,6 +8,7 @@ import type {
 import clsx from "clsx";
 import { useRef } from "react";
 import { Button } from "~/Button";
+import { Td } from "~/Table";
 
 export const CalendarCell = ({
   state,
@@ -34,7 +34,7 @@ export const CalendarCell = ({
   const isOutsideMonth = !isSameMonth(currentMonth, date);
 
   return (
-    <Td {...cellProps} textAlign="center" p={1} border="none">
+    <Td {...cellProps} className="border-none text-center p-1">
       <Button
         {...buttonProps}
         ref={ref}

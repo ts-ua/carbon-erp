@@ -16,6 +16,8 @@ type PartCostingFormProps = {
   initialValues: TypeOfValidator<typeof partCostValidator>;
 };
 
+const currency = "USD"; // TODO: get from settings
+
 const PartCostingForm = ({ initialValues }: PartCostingFormProps) => {
   const permissions = usePermissions();
 
@@ -45,20 +47,40 @@ const PartCostingForm = ({ initialValues }: PartCostingFormProps) => {
                 label="Part Costing Method"
                 options={partCostingMethodOptions}
               />
-              <Number name="standardCost" label="Standard Cost" precision={2} />
-              <Number name="unitCost" label="Unit Cost" precision={2} />
+              <Number
+                name="standardCost"
+                label="Standard Cost"
+                formatOptions={{
+                  style: "currency",
+                  currency,
+                }}
+              />
+
+              <Number
+                name="unitCost"
+                label="Unit Cost"
+                formatOptions={{
+                  style: "currency",
+                  currency,
+                }}
+              />
             </VStack>
             <VStack>
               <Number
                 name="salesHistory"
                 label="Sales History"
-                precision={2}
+                formatOptions={{
+                  style: "currency",
+                  currency,
+                }}
                 isReadOnly
               />
               <Number
                 name="salesHistoryQty"
                 label="Sales History Qty"
-                precision={2}
+                formatOptions={{
+                  maximumSignificantDigits: 3,
+                }}
                 isReadOnly
               />
               <Boolean name="costIsAdjusted" label="Cost Is Adjusted" />

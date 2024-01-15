@@ -2,6 +2,7 @@ import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import type { HTMLAttributes, InputHTMLAttributes } from "react";
 import { cloneElement, createContext, forwardRef, useContext } from "react";
+import * as ReactAria from "react-aria-components";
 
 import { cn } from "~/utils/cn";
 import { getValidChildren } from "~/utils/react";
@@ -91,7 +92,7 @@ const InputGroup = forwardRef<HTMLDivElement, InputGroupProps>(
 );
 InputGroup.displayName = "InputGroup";
 
-const inputVariants = cva(
+export const inputVariants = cva(
   "flex w-full px-3 py-1 bg-background text-foreground transition-colors placeholder:text-muted-foreground disabled:opacity-50 rounded-md ",
   {
     variants: {
@@ -182,7 +183,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const isInputGroup = useContext(InputGroupContext) ?? false;
 
     return (
-      <input
+      <ReactAria.Input
         className={cn(
           inputVariants({
             size,

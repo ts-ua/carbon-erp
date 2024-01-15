@@ -83,20 +83,20 @@ const PaymentTermForm = ({ initialValues }: PaymentTermFormProps) => {
               <Number
                 name="daysDue"
                 label={`Due Days after ${selectedCalculationMethod}`}
-                min={0}
+                minValue={0}
                 helperText="The amount of days after the calculation method that the payment is due"
               />
               <Number
                 name="daysDiscount"
                 label={`Discount Days after ${selectedCalculationMethod}`}
-                min={0}
+                minValue={0}
                 helperText="The amount of days after the calculation method that the cash discount is available"
               />
               <Number
                 name="discountPercentage"
                 label="Discount Percent"
-                min={0}
-                max={100}
+                minValue={0}
+                maxValue={100}
                 helperText="The percentage of the cash discount. Use 0 for no discount."
               />
             </VStack>

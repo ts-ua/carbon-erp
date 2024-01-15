@@ -1,21 +1,22 @@
+import type { NumberFieldProps } from "@carbon/react";
 import {
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-} from "@carbon/react";
-import type { NumberInputProps } from "@chakra-ui/react";
-import {
   NumberDecrementStepper,
+  NumberField,
   NumberIncrementStepper,
   NumberInput,
-  NumberInputField,
+  NumberInputGroup,
   NumberInputStepper,
-} from "@chakra-ui/react";
+} from "@carbon/react";
+
 import { forwardRef } from "react";
+import { LuChevronDown, LuChevronUp } from "react-icons/lu";
 import { useField } from "remix-validated-form";
 
-type FormNumberProps = NumberInputProps & {
+type FormNumberProps = NumberFieldProps & {
   name: string;
   label?: string;
   isRequired?: boolean;
@@ -23,24 +24,33 @@ type FormNumberProps = NumberInputProps & {
 };
 
 const Number = forwardRef<HTMLInputElement, FormNumberProps>(
-  ({ name, label, isRequired, helperText, ...rest }, ref) => {
+  ({ name, label, isRequired, isReadOnly, helperText, ...rest }, ref) => {
     const { getInputProps, error } = useField(name);
 
     return (
       <FormControl isInvalid={!!error} isRequired={isRequired}>
         {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-        <NumberInput
+
+        <NumberField
           {...getInputProps({
             id: name,
             ...rest,
           })}
         >
-          <NumberInputField ref={ref} />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
+          <NumberInputGroup className="relative">
+            <NumberInput isReadOnly={isReadOnly} />
+            {!isReadOnly && (
+              <NumberInputStepper>
+                <NumberIncrementStepper>
+                  <LuChevronUp size="1em" strokeWidth="3" />
+                </NumberIncrementStepper>
+                <NumberDecrementStepper>
+                  <LuChevronDown size="1em" strokeWidth="3" />
+                </NumberDecrementStepper>
+              </NumberInputStepper>
+            )}
+          </NumberInputGroup>
+        </NumberField>
         {helperText && <FormHelperText>{helperText}</FormHelperText>}
         {error && <FormErrorMessage>{error}</FormErrorMessage>}
       </FormControl>

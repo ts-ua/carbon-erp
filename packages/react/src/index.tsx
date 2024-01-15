@@ -140,6 +140,15 @@ import {
   ModalTitle,
   ModalTrigger,
 } from "./Modal";
+import type { NumberFieldProps } from "./Number";
+import {
+  NumberDecrementStepper,
+  NumberField,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputGroup,
+  NumberInputStepper,
+} from "./Number";
 import {
   Popover,
   PopoverContent,
@@ -307,6 +316,12 @@ export {
   ModalPortal,
   ModalTitle,
   ModalTrigger,
+  NumberDecrementStepper,
+  NumberField,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputGroup,
+  NumberInputStepper,
   Popover,
   PopoverContent,
   PopoverFooter,
@@ -359,4 +374,4 @@ export {
   useNotification,
   useOutsideClick,
 };
-export type { AvatarProps, ButtonProps, InputProps };
+export type { AvatarProps, ButtonProps, InputProps, NumberFieldProps };

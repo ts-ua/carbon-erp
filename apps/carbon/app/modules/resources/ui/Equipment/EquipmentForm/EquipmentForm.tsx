@@ -63,7 +63,7 @@ const EquipmentForm = ({
     initialValues.locationId ?? null
   );
 
-  const onLocationChange = (location: { value: string | number } | null) => {
+  const onLocationChange = (location: { value: string } | null) => {
     setLocation((location?.value as string) ?? null);
   };
 
@@ -127,14 +127,14 @@ const EquipmentForm = ({
               <Number
                 name="setupHours"
                 label="Setup Hours"
-                min={0}
-                max={100} // this seems like a reasonable max?
+                minValue={0}
+                maxValue={100} // this seems like a reasonable max?
               />
               <Number
                 name="operatorsRequired"
                 label="Operators Required"
-                min={0}
-                max={100} // this seems like a reasonable max?
+                minValue={0}
+                maxValue={100} // this seems like a reasonable max?
               />
             </VStack>
           </DrawerBody>
@@ -158,20 +158,21 @@ const WorkCellsByLocation = ({
   workCells,
   initialWorkCell,
 }: {
-  workCells: { value: string | number; label: string }[];
+  workCells: { value: string; label: string }[];
   initialWorkCell?: string;
 }) => {
-  const { error, getInputProps } = useField(WORK_CELL_FIELD);
+  const { error } = useField(WORK_CELL_FIELD);
 
-  const [workCell, setWorkCell] = useControlField<{
-    value: string | number;
-    label: string;
-  } | null>(WORK_CELL_FIELD);
+  const [workCell, setWorkCell] = useControlField<string | null>(
+    WORK_CELL_FIELD
+  );
 
   useEffect(() => {
     // if the initial value is in the options, set it, otherwise set to null
     if (workCells) {
-      setWorkCell(workCells.find((s) => s.value === initialWorkCell) ?? null);
+      setWorkCell(
+        workCells.find((s) => s.value === initialWorkCell)?.value ?? null
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workCells, initialWorkCell]);
@@ -180,15 +181,18 @@ const WorkCellsByLocation = ({
     <FormControl isInvalid={!!error}>
       <FormLabel htmlFor={WORK_CELL_FIELD}>Work Cell</FormLabel>
       <Select
-        {...getInputProps({
-          // @ts-ignore
-          id: WORK_CELL_FIELD,
-        })}
+        id={WORK_CELL_FIELD}
+        name={WORK_CELL_FIELD}
         options={workCells}
-        // @ts-ignore
-        value={workCell}
-        onChange={setWorkCell}
-        w="full"
+        value={workCell ?? undefined}
+        onChange={(newValue) => {
+          if (newValue) {
+            setWorkCell(newValue.value);
+          } else {
+            setWorkCell(null);
+          }
+        }}
+        className="w-full"
       />
       {error && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>

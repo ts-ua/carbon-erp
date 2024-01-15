@@ -62,7 +62,7 @@ const PartPurchasingForm = ({
               <Number
                 name="conversionFactor"
                 label="Conversion Factor"
-                min={0}
+                minValue={0}
               />
             </VStack>
             <VStack>

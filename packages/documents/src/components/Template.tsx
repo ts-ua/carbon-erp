@@ -17,12 +17,6 @@ const Template = ({ title, meta, children }: TemplateProps) => {
     ],
   });
 
-  Font.register({
-    family: "Inter",
-    format: "truetype",
-    src: "https://bradbarb.in/fonts/Inter-V.ttf",
-  });
-
   const styles = StyleSheet.create({
     body: {
       fontFamily: "Satoshi",

@@ -6,6 +6,7 @@ import {
   CardTitle,
   VStack,
 } from "@carbon/react";
+import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Boolean,
@@ -30,6 +31,7 @@ const PartSalePriceForm = ({
   unitOfMeasures,
 }: PartSalePriceFormProps) => {
   const permissions = usePermissions();
+  const [currency, setCurrency] = useState(initialValues.currencyCode);
 
   const unitOfMeasureOptions = unitOfMeasures.map((unitOfMeasure) => ({
     label: unitOfMeasure.name,
@@ -50,8 +52,22 @@ const PartSalePriceForm = ({
           <Hidden name="partId" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
             <VStack>
-              <Number name="unitSalePrice" label="Unit Sale Price" />
-              <Currency name="currencyCode" label="Currency" />
+              <Number
+                name="unitSalePrice"
+                label="Unit Sale Price"
+                minValue={0}
+                formatOptions={{
+                  style: "currency",
+                  currency,
+                }}
+              />
+              <Currency
+                name="currencyCode"
+                label="Currency"
+                onChange={(newValue) => {
+                  if (newValue) setCurrency(newValue?.value);
+                }}
+              />
             </VStack>
             <VStack>
               <Combobox

@@ -14,7 +14,6 @@ import { path } from "~/utils/path";
 type AbilityEmployeeTableProps = {
   employees: AbilityEmployees;
   weeks: number;
-  shadowWeeks: number;
 };
 
 const AbilityEmployeesTable = ({

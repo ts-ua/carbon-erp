@@ -84,8 +84,8 @@ const ContractorForm = ({ initialValues }: ContractorFormProps) => {
                 name="hoursPerWeek"
                 label="Hours per Week"
                 helperText="The number of hours per week the supplier is available to work."
-                min={0}
-                max={10000}
+                minValue={0}
+                maxValue={10000}
               />
             </VStack>
           </DrawerBody>
