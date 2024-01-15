@@ -1,6 +1,10 @@
-import { FormControl, FormErrorMessage, FormLabel } from "@carbon/react";
-import type { TextareaProps } from "@chakra-ui/react";
-import { Textarea as TextAreaBase } from "@chakra-ui/react";
+import type { TextareaProps } from "@carbon/react";
+import {
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Textarea as TextAreaBase,
+} from "@carbon/react";
 import type { ChangeEvent } from "react";
 import { forwardRef, useState } from "react";
 import { useField } from "remix-validated-form";
@@ -32,7 +36,6 @@ const TextArea = forwardRef<HTMLTextAreaElement, FormTextArea>(
             id: name,
             ...rest,
           })}
-          className="bg-input border-input-border"
           maxLength={characterLimit}
           onChange={onChange}
         />

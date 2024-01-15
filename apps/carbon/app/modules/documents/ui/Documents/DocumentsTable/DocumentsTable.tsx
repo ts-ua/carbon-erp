@@ -12,7 +12,7 @@ import {
   useDisclosure,
 } from "@carbon/react";
 import { convertKbToString } from "@carbon/utils";
-import { Tag, TagCloseButton, TagLabel, Text } from "@chakra-ui/react";
+import { Tag, TagCloseButton, TagLabel } from "@chakra-ui/react";
 import { useRevalidator } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
@@ -250,7 +250,7 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
                 size="sm"
                 path={row.original.createdByAvatar ?? undefined}
               />
-              <Text>{row.original.createdByFullName}</Text>
+              <span>{row.original.createdByFullName}</span>
             </HStack>
           );
         },
@@ -267,7 +267,7 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
           return row.original.updatedByFullName ? (
             <HStack>
               <Avatar size="sm" path={row.original.updatedByAvatar ?? null} />
-              <Text>{row.original.updatedByFullName}</Text>
+              <span>{row.original.updatedByFullName}</span>
             </HStack>
           ) : null;
         },

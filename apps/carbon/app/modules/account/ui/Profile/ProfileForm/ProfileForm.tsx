@@ -39,7 +39,12 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
               <Input name="firstName" label="First Name" />
               <Input name="lastName" label="Last Name" />
             </div>
-            <TextArea name="about" label="About" characterLimit={160} my={2} />
+            <TextArea
+              name="about"
+              label="About"
+              characterLimit={160}
+              className="my-2"
+            />
             <Hidden name="intent" value="about" />
           </VStack>
         </CardContent>
