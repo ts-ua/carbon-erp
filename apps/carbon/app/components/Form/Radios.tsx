@@ -2,27 +2,27 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  HStack,
-  VStack,
+  RadioGroup,
+  RadioGroupItem,
 } from "@carbon/react";
-import { Radio, RadioGroup } from "@chakra-ui/react";
+import { useId } from "react";
 import { useField } from "remix-validated-form";
 
 type RadiosProps = {
   name: string;
   label?: string;
   options: { label: string; value: string }[];
-  direction?: "column" | "row";
+  orientation?: "horizontal" | "vertical";
 };
 
 const Radios = ({
   name,
   label,
   options,
-  direction = "column",
+  orientation = "vertical",
 }: RadiosProps) => {
   const { getInputProps, error } = useField(name);
-  const Stack = direction === "column" ? VStack : HStack;
+  const id = useId();
 
   return (
     <FormControl isInvalid={!!error}>
@@ -33,14 +33,14 @@ const Radios = ({
           id: name,
         })}
         name={name}
+        orientation={orientation}
       >
-        <Stack className="items-start">
-          {options.map(({ label, value }) => (
-            <Radio key={value} value={value}>
-              {label}
-            </Radio>
-          ))}
-        </Stack>
+        {options.map(({ label, value }) => (
+          <div key={value} className="flex items-center space-x-2">
+            <RadioGroupItem value={value} id={`${id}:${value}`} />
+            <label htmlFor={`${id}:${value}`}>{label}</label>
+          </div>
+        ))}
       </RadioGroup>
       {error && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>
