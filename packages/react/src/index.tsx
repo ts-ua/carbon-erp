@@ -155,6 +155,7 @@ import {
   PopoverHeader,
   PopoverTrigger,
 } from "./Popover";
+import { RadioGroup, RadioGroupItem } from "./Radio";
 import {
   Select,
   SelectContent,
@@ -324,6 +325,8 @@ export {
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
+  RadioGroup,
+  RadioGroupItem,
   Select,
   SelectContent,
   SelectGroup,
