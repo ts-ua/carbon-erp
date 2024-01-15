@@ -4,6 +4,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Kbd,
   Modal,
   ModalBody,
   ModalContent,
@@ -13,7 +14,6 @@ import {
   useKeyboardShortcuts,
 } from "@carbon/react";
 import { clip } from "@carbon/utils";
-import { Kbd } from "@chakra-ui/react";
 import { Link, useNavigate } from "@remix-run/react";
 import clsx from "clsx";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -374,12 +374,12 @@ const SearchButton = () => {
       <Button
         leftIcon={<RxMagnifyingGlass />}
         variant="secondary"
-        className="text-muted-foreground w-[200px]"
+        className="text-muted-foreground w-[200px] px-2"
         onClick={searchModal.onOpen}
       >
         <HStack className="w-full">
           <div className="flex flex-grow">Search</div>
-          <Kbd size="lg">/</Kbd>
+          <Kbd>/</Kbd>
         </HStack>
       </Button>
       <SearchModal isOpen={searchModal.isOpen} onClose={searchModal.onClose} />

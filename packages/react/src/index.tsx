@@ -110,6 +110,7 @@ import {
   InputRightAddon,
   InputRightElement,
 } from "./Input";
+import { Kbd } from "./Kbd";
 import { Loading } from "./Loading";
 import {
   Menu,
@@ -172,8 +173,8 @@ import { Status } from "./Status";
 import { Switch } from "./Switch";
 import { Table, TableCaption, Tbody, Td, Tfoot, Th, Thead, Tr } from "./Table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./Tabs";
-import type { TextareaProps } from "./TextArea";
-import { Textarea } from "./TextArea";
+import type { TextareaProps } from "./Textarea";
+import { Textarea } from "./Textarea";
 import ThemeProvider, { theme } from "./Theme";
 import {
   Tooltip,
@@ -289,6 +290,7 @@ export {
   InputLeftElement,
   InputRightAddon,
   InputRightElement,
+  Kbd,
   Loading,
   Menu,
   MenuCheckboxItem,
