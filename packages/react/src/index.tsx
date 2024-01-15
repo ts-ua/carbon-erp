@@ -196,6 +196,7 @@ import {
   useOutsideClick,
 } from "./hooks";
 import { cn } from "./utils/cn";
+import { getValidChildren } from "./utils/react";
 
 export {
   ActionMenu,
@@ -364,6 +365,7 @@ export {
   Tr,
   VStack,
   cn,
+  getValidChildren,
   multiSelectTriggerVariants,
   theme,
   useColor,
