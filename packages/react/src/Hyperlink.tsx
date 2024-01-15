@@ -3,14 +3,27 @@ import { forwardRef } from "react";
 import { cn } from "./utils/cn";
 
 const Hyperlink = forwardRef<ElementRef<"a">, ComponentPropsWithoutRef<"a">>(
-  ({ className, ...props }, ref) => (
-    // eslint-disable-next-line jsx-a11y/anchor-has-content
-    <a
-      {...props}
-      ref={ref}
-      className={cn("text-primary hover:underline cursor-pointer", className)}
-    />
-  )
+  ({ className, href, children, ...props }, ref) => {
+    const hasHref = !!href;
+    return hasHref ? (
+      <a
+        {...props}
+        href={href}
+        ref={ref}
+        className={cn("text-primary hover:underline cursor-pointer", className)}
+      >
+        {children}
+      </a>
+    ) : (
+      <span
+        {...props}
+        ref={ref}
+        className={cn("text-primary hover:underline cursor-pointer", className)}
+      >
+        {children}
+      </span>
+    );
+  }
 );
 Hyperlink.displayName = "Hyperlink";
 

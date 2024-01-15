@@ -6,6 +6,8 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
+  FormControl,
+  FormLabel,
   HStack,
   VStack,
   useMount,
@@ -154,13 +156,16 @@ const SupplierLocationsBySupplier = ({
   };
 
   return (
-    <SelectControlled
-      name="id"
-      options={supplierLocations}
-      value={supplierLocation ?? undefined}
-      onChange={onChange}
-      isReadOnly={isReadOnly}
-    />
+    <FormControl>
+      <FormLabel>Supplier Location</FormLabel>
+      <SelectControlled
+        name="id"
+        options={supplierLocations}
+        value={supplierLocation ?? undefined}
+        onChange={onChange}
+        isReadOnly={isReadOnly}
+      />
+    </FormControl>
   );
 };
 

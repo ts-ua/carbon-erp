@@ -30,7 +30,6 @@ const Number = forwardRef<HTMLInputElement, FormNumberProps>(
     return (
       <FormControl isInvalid={!!error} isRequired={isRequired}>
         {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-
         <NumberField
           {...getInputProps({
             id: name,

@@ -1,7 +1,6 @@
 import {
   ActionMenu,
   Avatar,
-  Dot,
   DropdownMenuIcon,
   DropdownMenuItem,
   HStack,
@@ -52,10 +51,16 @@ const Contact = ({ contact, url, user, actions }: ContactProps) => {
           )}
 
           {userStatus === UserStatus.Active && (
-            <Dot color="green.400" title="Active" />
+            <span
+              title="Active"
+              className="inline-block green-400 rounded-full w-3 h-3 ml-1.5"
+            />
           )}
           {userStatus === UserStatus.Inactive && (
-            <Dot color="red.400" title="Inactive" />
+            <span
+              title="Inctive"
+              className="inline-block red-400 rounded-full w-3 h-3 ml-1.5"
+            />
           )}
         </HStack>
 

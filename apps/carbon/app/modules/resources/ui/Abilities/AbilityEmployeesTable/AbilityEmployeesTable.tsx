@@ -1,5 +1,5 @@
-import { DropdownMenuIcon, HStack, MenuItem } from "@carbon/react";
-import { Badge, Progress } from "@chakra-ui/react";
+import { Badge, DropdownMenuIcon, HStack, MenuItem } from "@carbon/react";
+import { Progress } from "@chakra-ui/react";
 import { useNavigate, useParams } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useCallback, useMemo } from "react";
@@ -79,18 +79,12 @@ const AbilityEmployeesTable = ({
           const status = row.original.status;
           return (
             <Badge
-              size="sm"
               variant={
                 status === AbilityEmployeeStatus.Complete
-                  ? undefined
-                  : "outline"
-              }
-              colorScheme={
-                status === AbilityEmployeeStatus.Complete
-                  ? "green"
+                  ? "default"
                   : status === AbilityEmployeeStatus.InProgress
-                  ? "yellow"
-                  : "gray"
+                  ? "outline"
+                  : "secondary"
               }
             >
               {status}

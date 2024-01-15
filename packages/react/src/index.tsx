@@ -58,7 +58,6 @@ import {
   DateTimePicker,
   TimePicker,
 } from "./Date";
-import { Dot } from "./Dot";
 import {
   Drawer,
   DrawerBody,
@@ -169,7 +168,6 @@ import {
   SelectValue,
 } from "./Select";
 import { Status } from "./Status";
-import Submit from "./Submit";
 import { Switch } from "./Switch";
 import { Table, TableCaption, Tbody, Td, Tfoot, Th, Thead, Tr } from "./Table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./Tabs";
@@ -243,7 +241,6 @@ export {
   DatePicker,
   DateRangePicker,
   DateTimePicker,
-  Dot,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -338,7 +335,6 @@ export {
   SelectTrigger,
   SelectValue,
   Status,
-  Submit,
   Switch,
   Table,
   TableCaption,
