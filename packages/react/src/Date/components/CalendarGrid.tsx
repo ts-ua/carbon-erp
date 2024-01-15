@@ -1,4 +1,3 @@
-import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import type { DateDuration } from "@internationalized/date";
 import { endOfMonth, getWeeksInMonth } from "@internationalized/date";
 import { useCalendarGrid } from "@react-aria/calendar";
@@ -6,6 +5,7 @@ import type {
   CalendarState,
   RangeCalendarState,
 } from "@react-stately/calendar";
+import { Table, Tbody, Td, Th, Thead, Tr } from "~/Table";
 import { CalendarCell } from "./CalendarCell";
 
 const locale = "en-US"; // TODO use user's locale
@@ -36,11 +36,8 @@ export const CalendarGrid = ({
         <Tr>
           {weekDays.map((day, index) => (
             <Th
-              color="gray.500"
-              fontSize="sm"
               key={index}
-              textAlign="center"
-              px={0}
+              className="text-muted-foreground text-sm text-center px-0"
             >
               {day}
             </Th>
@@ -49,7 +46,7 @@ export const CalendarGrid = ({
       </Thead>
       <Tbody>
         {[...new Array(weeksInMonth).keys()].map((weekIndex) => (
-          <Tr key={weekIndex} border="none">
+          <Tr key={weekIndex} className="border-none">
             {state
               .getDatesInWeek(weekIndex, startDate)
               .map((date, i) =>

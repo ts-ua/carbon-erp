@@ -77,8 +77,8 @@ const CurrencyForm = ({ initialValues }: CurrencyFormProps) => {
               <Number
                 name="exchangeRate"
                 label="Exchange Rate"
-                min={isBaseCurrency ? 1 : 0}
-                max={isBaseCurrency ? 1 : undefined}
+                minValue={isBaseCurrency ? 1 : 0}
+                maxValue={isBaseCurrency ? 1 : undefined}
                 helperText={exchnageRateHelperText}
               />
               <Boolean name="isBaseCurrency" label="Base Currency" />

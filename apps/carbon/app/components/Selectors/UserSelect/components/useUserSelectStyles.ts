@@ -1,10 +1,9 @@
 import { useColor } from "@carbon/react";
 import type { SystemStyleObject } from "@chakra-ui/react";
 import { useMultiStyleConfig } from "@chakra-ui/react";
-import type { ThemeObject } from "~/types/chakra";
 
 export const useGroupStyles = (isFocused: boolean, isSticky: boolean) => {
-  const menuItemStyles = useMultiStyleConfig("Menu").item as ThemeObject;
+  const menuItemStyles = useMultiStyleConfig("Menu").item;
   const selectedBg = useColor("gray.200");
   const selectedColor = useColor("black");
 
@@ -47,7 +46,7 @@ export const useOptionStyles = (
   isSelected?: boolean,
   isDisabled?: boolean
 ) => {
-  const menuItemStyles = useMultiStyleConfig("Menu").item as ThemeObject;
+  const menuItemStyles = useMultiStyleConfig("Menu").item;
   const selectedBg = useColor("gray.700");
   const selectedColor = useColor("white");
 

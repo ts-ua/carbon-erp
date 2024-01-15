@@ -89,21 +89,29 @@ const PartPlanningForm = ({
               <Number
                 name="minimumOrderQuantity"
                 label="Minimum Order Quantity"
+                minValue={0}
               />
               <Number
                 name="maximumOrderQuantity"
                 label="Maximum Order Quantity"
+                minValue={0}
               />
-              <Number name="orderMultiple" label="Order Multiple" />
+              <Number
+                name="orderMultiple"
+                label="Order Multiple"
+                minValue={0}
+              />
             </VStack>
             <VStack>
               <Number
                 name="demandAccumulationPeriod"
                 label="Demand Accumulation Period (Days)"
+                minValue={0}
               />
               <Number
                 name="demandReschedulingPeriod"
                 label="Rescheduling Period (Days)"
+                minValue={0}
               />
               <Boolean
                 name="demandAccumulationIncludesInventory"
@@ -112,10 +120,15 @@ const PartPlanningForm = ({
             </VStack>
             <VStack>
               <Number name="reorderPoint" label="Reorder Point" />
-              <Number name="reorderQuantity" label="Reorder Quantity" />
+              <Number
+                name="reorderQuantity"
+                label="Reorder Quantity"
+                minValue={0}
+              />
               <Number
                 name="reorderMaximumInventory"
                 label="Reorder Maximum Inventory"
+                minValue={0}
               />
             </VStack>
           </div>

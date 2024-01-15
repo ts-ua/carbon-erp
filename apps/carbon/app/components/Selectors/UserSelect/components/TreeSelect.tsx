@@ -22,11 +22,7 @@ const UserTreeSelect = () => {
       aria-multiselectable={isMulti}
       ref={listBoxRef}
       onMouseOver={onMouseOver}
-      overflow="auto"
-      maxH={300}
-      my="1"
-      display="flex"
-      flexDirection="column"
+      className="overflow-auto max-h-[300px] my-1 flex flex-col"
     >
       {loading ? (
         <Loading />
@@ -65,14 +61,11 @@ const Group = ({ group }: { group: OptionGroup }) => {
   const sx = useGroupStyles(isFocused, isExpanded);
 
   return (
-    <ListItem
-      as="li"
+    <div
       id={group.uid}
       tabIndex={0}
-      role="treeitem"
+      className="rounded-md outline-none"
       aria-expanded={isExpanded}
-      borderRadius="md"
-      outline="none"
     >
       <Box
         role="treeitem"
@@ -86,7 +79,7 @@ const Group = ({ group }: { group: OptionGroup }) => {
         <MoreIcon isExpanded={isExpanded} />
       </Box>
       {isExpanded && (
-        <List role="group" display="flex" flexDirection="column">
+        <ul role="group" className="flex flex-col">
           {group.items.map((item) => {
             const isDisabled = item.id in []; // TODO
             const isFocused = item.uid === focusedId;
@@ -108,9 +101,9 @@ const Group = ({ group }: { group: OptionGroup }) => {
               />
             );
           })}
-        </List>
+        </ul>
       )}
-    </ListItem>
+    </div>
   );
 };
 
@@ -136,7 +129,6 @@ const Option = ({
     <ListItem
       as="li"
       id={id}
-      background={"red.100"}
       tabIndex={0}
       aria-selected={isSelected}
       role="treeitem"

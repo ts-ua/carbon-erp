@@ -10,17 +10,18 @@ import {
   FormLabel,
   HStack,
   Input,
-  VStack,
-} from "@carbon/react";
-import {
   NumberDecrementStepper,
+  NumberField,
   NumberIncrementStepper,
   NumberInput,
-  NumberInputField,
+  NumberInputGroup,
   NumberInputStepper,
-} from "@chakra-ui/react";
+  VStack,
+} from "@carbon/react";
+
 import { useFetcher, useNavigate, useParams } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
+import { LuChevronDown, LuChevronUp } from "react-icons/lu";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Account,
@@ -82,13 +83,13 @@ const PurchaseOrderLineForm = ({
   const [partData, setPartData] = useState<{
     partId: string;
     description: string;
-    unitPrice: string;
+    unitPrice: number;
     uom: string;
     shelfId: string;
   }>({
     partId: initialValues.partId ?? "",
     description: initialValues.description ?? "",
-    unitPrice: initialValues.unitPrice?.toString() ?? "0",
+    unitPrice: initialValues.unitPrice ?? 0,
     uom: initialValues.unitOfMeasureCode ?? "",
     shelfId: initialValues.shelfId ?? "",
   });
@@ -130,7 +131,7 @@ const PurchaseOrderLineForm = ({
     setPartData({
       partId: "",
       description: "",
-      unitPrice: "0",
+      unitPrice: 0,
       uom: "EA",
       shelfId: "",
     });
@@ -160,7 +161,7 @@ const PurchaseOrderLineForm = ({
     setPartData({
       partId,
       description: part.data?.name ?? "",
-      unitPrice: cost.data?.unitCost?.toString() ?? "0",
+      unitPrice: cost.data?.unitCost ?? 0,
       uom: part.data?.unitOfMeasureCode ?? "EA",
       shelfId: shelf.data?.defaultShelfId ?? "",
     });
@@ -177,7 +178,7 @@ const PurchaseOrderLineForm = ({
     setPartData({
       partId: "",
       description: service.data?.name ?? "",
-      unitPrice: "0",
+      unitPrice: 0,
       uom: "EA",
       shelfId: "",
     });
@@ -271,7 +272,7 @@ const PurchaseOrderLineForm = ({
                     setPartData({
                       partId: "",
                       description: value?.label ?? "",
-                      unitPrice: "0",
+                      unitPrice: 0,
                       uom: "EA",
                       shelfId: "",
                     });
@@ -299,7 +300,7 @@ const PurchaseOrderLineForm = ({
                   {/* <UnitOfMeasure name="unitOfMeasureCode" label="Unit of Measure" value={uom} /> */}
                   <FormControl>
                     <FormLabel htmlFor="unitPrice">Unit Cost</FormLabel>
-                    <NumberInput
+                    <NumberField
                       name="unitPrice"
                       value={partData.unitPrice}
                       onChange={(value) =>
@@ -309,12 +310,18 @@ const PurchaseOrderLineForm = ({
                         }))
                       }
                     >
-                      <NumberInputField />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
+                      <NumberInputGroup className="relative">
+                        <NumberInput />
+                        <NumberInputStepper>
+                          <NumberIncrementStepper>
+                            <LuChevronUp size="1em" strokeWidth="3" />
+                          </NumberIncrementStepper>
+                          <NumberDecrementStepper>
+                            <LuChevronDown size="1em" strokeWidth="3" />
+                          </NumberDecrementStepper>
+                        </NumberInputStepper>
+                      </NumberInputGroup>
+                    </NumberField>
                   </FormControl>
                   {["Part", "Service"].includes(type) && (
                     <SelectControlled

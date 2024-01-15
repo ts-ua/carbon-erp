@@ -96,8 +96,13 @@ const PartSupplierForm = ({ initialValues }: PartSupplierFormProps) => {
               <Number
                 name="minimumOrderQuantity"
                 label="Minimum Order Quantity"
+                minValue={0}
               />
-              <Number name="conversionFactor" label="Conversion Factor" />
+              <Number
+                name="conversionFactor"
+                label="Conversion Factor"
+                minValue={0}
+              />
             </VStack>
           </DrawerBody>
           <DrawerFooter>

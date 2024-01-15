@@ -37,7 +37,7 @@ const AbilityForm = ({ initialValues }: AbilityFormProps) => {
   const [maxShadowWeeks, setMaxShadowWeeks] = useState(initialValues.weeks);
   // const [equipmentRequired, setEquipmentRequired] = useState(initialValues.equipmentType !== undefined);
 
-  const onWeekChange = (_: string, value: number) => {
+  const onWeekChange = (value: number) => {
     setMaxShadowWeeks(value);
   };
 
@@ -75,24 +75,24 @@ const AbilityForm = ({ initialValues }: AbilityFormProps) => {
                 name="startingPoint"
                 label="Learning Curve"
                 options={[
-                  { value: 85, label: "Easy" },
-                  { value: 70, label: "Medium" },
-                  { value: 50, label: "Hard" },
+                  { value: "85", label: "Easy" },
+                  { value: "70", label: "Medium" },
+                  { value: "50", label: "Hard" },
                 ]}
               />
               <Number
                 name="weeks"
                 label="Time to Efficiency (Weeks)"
                 onChange={onWeekChange}
-                min={0}
-                max={52}
+                minValue={0}
+                maxValue={52}
               />
               <Number
                 name="shadowWeeks"
                 label="Time Shadowing (Weeks)"
                 helperText="Non-productive time spent shadowing another employee"
-                min={0}
-                max={maxShadowWeeks}
+                minValue={0}
+                maxValue={maxShadowWeeks}
               />
               <Employees
                 name="employees"

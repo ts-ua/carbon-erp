@@ -1,5 +1,4 @@
-import { Button, File, VStack, useNotification } from "@carbon/react";
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, Button, File, VStack, useNotification } from "@carbon/react";
 import { useSubmit } from "@remix-run/react";
 import type { ChangeEvent } from "react";
 import { useSupabase } from "~/lib/supabase";

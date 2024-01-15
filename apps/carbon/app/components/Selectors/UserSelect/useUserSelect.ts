@@ -68,7 +68,7 @@ export default function useUserSelect(props: UserSelectProps) {
   /* Refs */
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const listBoxRef = useRef<HTMLUListElement>(null);
+  const listBoxRef = useRef<HTMLDivElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<Element>(null);
   const focusableNodes = useRef<Record<string, TreeNode>>({});

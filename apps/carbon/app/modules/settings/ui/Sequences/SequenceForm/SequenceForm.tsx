@@ -75,18 +75,18 @@ const SequenceForm = ({ initialValues }: SequenceFormProps) => {
               />
               <Number
                 name="next"
-                min={0}
+                minValue={0}
                 label="Next"
-                onChange={(_, val) => setNext(val)}
+                onChange={setNext}
               />
               <Number
                 name="size"
-                min={0}
-                max={30}
+                minValue={0}
+                maxValue={30}
                 label="Size"
-                onChange={(_, val) => setSize(val)}
+                onChange={setSize}
               />
-              <Number name="step" min={0} max={10000} label="Step" />
+              <Number name="step" minValue={0} maxValue={10000} label="Step" />
               <Input
                 name="suffix"
                 label="Suffix"

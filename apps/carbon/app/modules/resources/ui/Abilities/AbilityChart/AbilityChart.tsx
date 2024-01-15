@@ -105,8 +105,8 @@ const AbilityChart = ({
 
             <LinearGradient
               id="fill"
-              from="var(--chakra-colors-lime-200)"
-              to="var(--chakra-colors-zinc-500)"
+              from="rgb(217 249 157)"
+              to="rgb(82 82 91)"
               fromOpacity={0.2}
               toOpacity={0}
             />
@@ -115,7 +115,7 @@ const AbilityChart = ({
               id="diagonalLines"
               height={6}
               width={6}
-              stroke="var(--chakra-colors-zinc-500)"
+              stroke="rgb(82 82 91)"
               strokeWidth={1}
               orientation={["diagonal"]}
             />
@@ -149,20 +149,12 @@ const AbilityChart = ({
           data={data}
           y={(d) => yScale(y(d))}
           x={(d) => xScale(x(d))}
-          stroke="var(--chakra-colors-lime-700)"
+          stroke="rgb(77 124 15)"
           strokeOpacity="0.8"
           strokeWidth={2}
           curve={curveNatural}
         />
-        <LinePath
-          data={shadowData}
-          y={(d) => yScale(y(d))}
-          x={(d) => xScale(x(d))}
-          stroke="var(--chakra-colors-zinc-900)"
-          strokeOpacity="0.5"
-          strokeWidth={2}
-          curve={curveNatural}
-        />
+
         {!condensed &&
           data.map((d, index) => (
             <Drag
@@ -213,10 +205,10 @@ const AbilityChart = ({
                   cx={x}
                   cy={y}
                   r={isDragging ? 10 : 6}
-                  fill={"var(--chakra-colors-lime-700)"}
+                  fill="rgb(132 204 22)"
                   transform={`translate(${dx}, ${dy})`}
                   fillOpacity={0.9}
-                  stroke="var(--chakra-colors-lime-900)"
+                  stroke="rgb(101 163 13)"
                   strokeWidth={2}
                   onMouseMove={dragMove}
                   onMouseUp={dragEnd}
