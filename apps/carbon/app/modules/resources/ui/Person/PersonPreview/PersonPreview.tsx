@@ -24,7 +24,7 @@ const PartPreview = () => {
   return (
     <Card>
       <HStack className="justify-between items-center p-6 pl-0">
-        <CardHeader>
+        <CardHeader className="pt-0">
           <CardTitle>{routeData?.employeeSummary?.name}</CardTitle>
           <CardDescription>{routeData?.employeeSummary?.title}</CardDescription>
         </CardHeader>
