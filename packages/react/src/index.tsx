@@ -172,6 +172,8 @@ import { Status } from "./Status";
 import { Switch } from "./Switch";
 import { Table, TableCaption, Tbody, Td, Tfoot, Th, Thead, Tr } from "./Table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./Tabs";
+import type { TextareaProps } from "./TextArea";
+import { Textarea } from "./TextArea";
 import ThemeProvider, { theme } from "./Theme";
 import {
   Tooltip,
@@ -347,6 +349,7 @@ export {
   TabsTrigger,
   Tbody,
   Td,
+  Textarea,
   Tfoot,
   Th,
   Thead,
@@ -373,4 +376,10 @@ export {
   useNotification,
   useOutsideClick,
 };
-export type { AvatarProps, ButtonProps, InputProps, NumberFieldProps };
+export type {
+  AvatarProps,
+  ButtonProps,
+  InputProps,
+  NumberFieldProps,
+  TextareaProps,
+};

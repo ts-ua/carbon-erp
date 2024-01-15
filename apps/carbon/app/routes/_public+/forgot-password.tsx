@@ -5,7 +5,6 @@ import {
   AlertIcon,
   AlertTitle,
   Image,
-  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 import type {
@@ -104,9 +103,7 @@ export default function ForgotPasswordRoute() {
         <div className="rounded-lg bg-background shadow-lg p-8 w-[380px]">
           <ValidatedForm validator={forgotPasswordValidator} method="post">
             <VStack spacing={4}>
-              <Text>
-                Please enter your email address to search for your account.
-              </Text>
+              <p>Please enter your email address to search for your account.</p>
               {actionData?.success === false && (
                 <Alert status="error">
                   <AlertIcon />

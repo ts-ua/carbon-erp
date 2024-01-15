@@ -132,7 +132,7 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
                     <TextArea
                       name="notes"
                       label="Notes"
-                      isReadOnly={isSupplier}
+                      readOnly={isSupplier}
                     />
                   </>
                 )}
