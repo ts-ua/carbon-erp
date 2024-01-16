@@ -1,5 +1,9 @@
-import { DatePicker as CarbonDatePicker } from "@carbon/react";
-import { FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react";
+import {
+  DatePicker as DatePickerBase,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+} from "@carbon/react";
 import type { CalendarDate } from "@internationalized/date";
 import { parseDate } from "@internationalized/date";
 import { useState } from "react";
@@ -22,7 +26,7 @@ const DatePicker = ({ name, label, isDisabled = false }: DatePickerProps) => {
     <FormControl isInvalid={!!error}>
       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
       <input type="hidden" name={name} value={date?.toString()} />
-      <CarbonDatePicker
+      <DatePickerBase
         value={date}
         //@ts-ignore
         onChange={onChange}

@@ -2,14 +2,13 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
   HStack,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Hidden, Input, Submit, TextArea } from "~/components/Form";
@@ -33,43 +32,44 @@ const PartGroupForm = ({ initialValues }: PartGroupFormProps) => {
     : !permissions.can("create", "parts");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={partGroupValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.partGroup(initialValues.id!)
-            : path.to.newPartGroup
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{isEditing ? "Edit" : "New"} Part Group</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={partGroupValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.partGroup(initialValues.id!)
+              : path.to.newPartGroup
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{isEditing ? "Edit" : "New"} Part Group</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <Hidden name="id" />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Input name="name" label="Part Group" />
               <TextArea name="description" label="Description" />
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

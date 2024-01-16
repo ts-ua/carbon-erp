@@ -1,17 +1,16 @@
 import {
   Badge,
   Button,
-  ButtonGroup,
-  IconButton,
-  Link,
+  Hyperlink,
+  MenuIcon,
   MenuItem,
   useDisclosure,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-import { BsListUl, BsPencilSquare, BsPlus } from "react-icons/bs";
+import { BsFillPenFill, BsListUl } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -50,41 +49,29 @@ const AttributeCategoriesTable = memo(
           accessorKey: "name",
           header: "Category",
           cell: ({ row }) => (
-            <Link onClick={() => navigate(row.original.id)}>
+            <Hyperlink onClick={() => navigate(row.original.id)}>
               {row.original.name}
-            </Link>
+            </Hyperlink>
           ),
         },
         {
           header: "Attributes",
           cell: ({ row }) => (
-            <ButtonGroup size="sm" isAttached variant="outline">
-              <Button
-                onClick={() => {
-                  navigate(
-                    `${path.to.attributeCategoryList(
-                      row.original.id
-                    )}?${params?.toString()}`
-                  );
-                }}
-              >
-                {Array.isArray(row.original.userAttribute)
-                  ? row.original.userAttribute?.length ?? 0
-                  : 0}{" "}
-                Attributes
-              </Button>
-              <IconButton
-                aria-label="Add attribute"
-                icon={<BsPlus />}
-                onClick={() => {
-                  navigate(
-                    `${path.to.newAttributeForCategory(
-                      row.original.id
-                    )}?${params?.toString()}`
-                  );
-                }}
-              />
-            </ButtonGroup>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                navigate(
+                  `${path.to.attributeCategoryList(
+                    row.original.id
+                  )}?${params?.toString()}`
+                );
+              }}
+            >
+              {Array.isArray(row.original.userAttribute)
+                ? row.original.userAttribute?.length ?? 0
+                : 0}{" "}
+              Attributes
+            </Button>
           ),
         },
         {
@@ -93,11 +80,7 @@ const AttributeCategoriesTable = memo(
           cell: (item) => {
             const isPublic = item.getValue<boolean>()?.toString() === "true";
             return (
-              <Badge
-                size="sm"
-                variant={isPublic ? undefined : "outline"}
-                colorScheme={isPublic ? "green" : "gray "}
-              >
+              <Badge variant={isPublic ? undefined : "outline"}>
                 {isPublic ? "Public" : "Private"}
               </Badge>
             );
@@ -111,7 +94,6 @@ const AttributeCategoriesTable = memo(
         return (
           <>
             <MenuItem
-              icon={<BiAddToQueue />}
               onClick={() => {
                 navigate(
                   `${path.to.newAttributeForCategory(
@@ -120,10 +102,10 @@ const AttributeCategoriesTable = memo(
                 );
               }}
             >
+              <MenuIcon icon={<BiAddToQueue />} />
               New Attribute
             </MenuItem>
             <MenuItem
-              icon={<BsListUl />}
               onClick={() => {
                 navigate(
                   `${path.to.attributeCategoryList(
@@ -132,21 +114,22 @@ const AttributeCategoriesTable = memo(
                 );
               }}
             >
+              <MenuIcon icon={<BsListUl />} />
               View Attributes
             </MenuItem>
             <MenuItem
-              icon={<BsPencilSquare />}
               onClick={() => {
                 navigate(path.to.attributeCategory(row.id));
               }}
             >
+              <MenuIcon icon={<BsFillPenFill />} />
               Edit Attribute Category
             </MenuItem>
             <MenuItem
-              isDisabled={row.protected || !permissions.can("delete", "users")}
-              icon={<IoMdTrash />}
+              disabled={row.protected || !permissions.can("delete", "users")}
               onClick={() => onDelete(row)}
             >
+              <MenuIcon icon={<IoMdTrash />} />
               Delete Category
             </MenuItem>
           </>

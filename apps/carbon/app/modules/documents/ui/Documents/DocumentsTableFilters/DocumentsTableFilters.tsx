@@ -1,5 +1,6 @@
-import { Select, useColor } from "@carbon/react";
-import { HStack } from "@chakra-ui/react";
+import { HStack } from "@carbon/react";
+import { Combobox, Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 import type { DocumentLabel } from "~/modules/documents/types";
@@ -27,65 +28,44 @@ const DocumentsTableFilters = ({ labels }: DocumentTableFiltersProps) => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
 
-  const borderColor = useColor("gray.200");
-
-  const labelOptions = labels.map((l) => ({
-    value: l.label,
-    label: l.label,
+  const labelOptions = labels.map<{ label: string; value: string }>((l) => ({
+    value: l.label!,
+    label: l.label!,
   }));
 
   return (
-    <HStack
-      px={4}
-      py={3}
-      justifyContent="space-between"
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      w="full"
-    >
-      <HStack spacing={2}>
-        <DebouncedInput
-          param="search"
-          size="sm"
-          minW={180}
-          placeholder="Search"
-        />
+    <TableFilters>
+      <HStack>
+        <DebouncedInput param="search" size="sm" placeholder="Search" />
         <Select
           size="sm"
-          value={documentTypeOptions.find(
-            (type) => type.value === params.get("type")
-          )}
+          value={params.get("type") ?? ""}
           isClearable
           options={documentTypeOptions}
           onChange={(selected) => {
-            setParams({ type: selected?.value });
+            setParams({ type: selected });
           }}
           aria-label="Document Type"
           placeholder="Document Type"
         />
         {labels.length > 0 && (
-          <Select
+          <Combobox
             size="sm"
-            value={labelOptions.find(
-              (label) =>
-                params.getAll("labels").includes(label.value as string) ||
-                label.value === params.get("label")
-            )}
+            value={params.get("label") ?? ""}
             isClearable
             options={labelOptions}
             onChange={(selected) => {
-              setParams({ label: selected?.label });
+              setParams({ label: selected });
             }}
             aria-label="Label"
             placeholder="Label"
           />
         )}
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "documents") && <DocumentCreateForm />}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

@@ -1,10 +1,15 @@
-import { Box, Grid } from "@chakra-ui/react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  VStack,
+} from "@carbon/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
-import { PageTitle, SectionTitle } from "~/components/Layout";
-import type { PublicAttributes } from "~/modules/account";
+import { PageTitle } from "~/components/Layout";
 import {
   ProfileForm,
   ProfilePhotoForm,
@@ -105,11 +110,7 @@ export async function action({ request }: ActionFunctionArgs) {
         path.to.profile,
         await flash(
           request,
-          success(
-            photoPath === null
-              ? "Removed avatar. Please refresh the page."
-              : "Updated avatar. Please refresh the page."
-          )
+          success(photoPath === null ? "Removed avatar" : "Updated avatar")
         )
       );
     } else {
@@ -133,21 +134,32 @@ export default function AccountProfile() {
         subtitle="This information will be displayed publicly so be careful what you
         share."
       />
-      <Grid
-        gridTemplateColumns={["1fr", "1fr auto"]}
-        w="full"
-        gridColumnGap={8}
-      >
-        <ProfileForm user={user} />
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 w-full">
+        <VStack spacing={8}>
+          <ProfileForm user={user} />
+          {attributes.length ? (
+            <>
+              {attributes.map((category) => (
+                <Card key={category.id}>
+                  <CardHeader>
+                    <CardTitle>{category.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <UserAttributesForm attributeCategory={category} />
+                  </CardContent>
+                </Card>
+              ))}
+            </>
+          ) : (
+            <Card>
+              <CardContent className="text-muted-foreground w-full text-center py-8">
+                No public attributes
+              </CardContent>
+            </Card>
+          )}
+        </VStack>
         <ProfilePhotoForm user={user} />
-      </Grid>
-      {attributes.map((category: PublicAttributes) => (
-        <Box key={category.id} mb={8} w="full">
-          <SectionTitle title={category.name} />
-
-          <UserAttributesForm attributeCategory={category} />
-        </Box>
-      ))}
+      </div>
     </>
   );
 }

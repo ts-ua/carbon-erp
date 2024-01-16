@@ -1,12 +1,11 @@
-import { useColor } from "@carbon/react";
+import { HStack } from "@carbon/react";
+import { useMatches } from "@remix-run/react";
+import { z } from "zod";
 import {
-  Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  HStack,
-} from "@chakra-ui/react";
-import { Link, useMatches } from "@remix-run/react";
-import { z } from "zod";
+  Breadcrumbs as BreadcrumbsBase,
+} from "~/components";
 
 export const BreadcrumbHandle = z.object({
   breadcrumb: z.any(),
@@ -20,7 +19,6 @@ const BreadcrumbHandleMatch = z.object({
 
 const Breadcrumbs = () => {
   const matches = useMatches();
-  const linkColor = useColor("gray.800");
 
   const breadcrumbs = matches
     .map((m) => {
@@ -35,22 +33,19 @@ const Breadcrumbs = () => {
     .filter(Boolean);
 
   return (
-    <HStack>
-      <Breadcrumb noOfLines={1}>
+    <HStack className="items-center h-full" spacing={0}>
+      <BreadcrumbsBase className="line-clamp-1">
         {breadcrumbs.map((breadcrumb, i) => (
           <BreadcrumbItem key={i}>
             <BreadcrumbLink
-              fontSize="sm"
-              fontWeight={500}
-              color={linkColor}
-              as={Link}
-              to={breadcrumb?.to}
+              isCurrentPage={!breadcrumb?.to}
+              to={breadcrumb?.to ?? ""}
             >
               {breadcrumb?.breadcrumb}
             </BreadcrumbLink>
           </BreadcrumbItem>
         ))}
-      </Breadcrumb>
+      </BreadcrumbsBase>
     </HStack>
   );
 };

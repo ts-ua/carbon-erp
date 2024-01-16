@@ -153,7 +153,7 @@ export async function getAccountsList(
     query = query.eq("incomeBalance", args.incomeBalance);
   }
 
-  if (args?.classes) {
+  if (args?.classes && args.classes.length > 0) {
     query = query.in("class", args.classes);
   }
 

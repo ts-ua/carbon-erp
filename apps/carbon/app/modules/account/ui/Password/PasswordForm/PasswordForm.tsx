@@ -1,4 +1,4 @@
-import { Box, VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
 import { useRef, useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import { Password, Submit } from "~/components/Form";
@@ -21,13 +21,13 @@ const PasswordForm = () => {
   };
 
   return (
-    <Box w="full">
+    <div className="w-full">
       <ValidatedForm
         method="post"
         action={path.to.accountPassword}
         validator={accountPasswordValidator}
       >
-        <VStack spacing={4} my={4} w="full" alignItems="start" maxW={440}>
+        <VStack spacing={4} className="my-4 max-w-[440px]">
           <Password name="currentPassword" label="Current Password" />
           <Password
             ref={passwordRef}
@@ -44,7 +44,7 @@ const PasswordForm = () => {
           <Submit isDisabled={!passwordsMatch}>Update Password</Submit>
         </VStack>
       </ValidatedForm>
-    </Box>
+    </div>
   );
 };
 

@@ -1,6 +1,4 @@
-import { Image, Text, useColorModeValue, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { Background } from "~/components/Layout";
 import { useSupabase } from "~/lib/supabase";
 import { useCustomers, useParts, useSuppliers } from "~/stores";
 
@@ -205,27 +203,18 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
 
 function Loading() {
   return (
-    <VStack
-      h="100vh"
-      w="100vw"
-      alignItems="center"
-      justifyContent="center"
-      spacing={4}
-    >
-      <Image
-        src={useColorModeValue(
-          "/carbon-logo-dark.png",
-          "/carbon-logo-light.png"
-        )}
+    <div className="flex flex-col h-screen w-screen items-center justify-center">
+      <img
+        src="/carbon-logo-dark.png"
         alt="Carbon Logo"
-        maxW={100}
-        marginBottom={3}
+        className="block dark:hidden max-w-[100px]"
       />
-      <Text letterSpacing={-1} textTransform="uppercase" fontWeight={700}>
-        Loading...
-      </Text>
-      <Background />
-    </VStack>
+      <img
+        src="/carbon-logo-light.png"
+        alt="Carbon Logo"
+        className="hidden dark:block max-w-[100px]"
+      />
+    </div>
   );
 }
 

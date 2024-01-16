@@ -1,12 +1,11 @@
 import {
   Card,
-  CardBody,
+  CardContent,
   CardFooter,
   CardHeader,
-  Grid,
-  Heading,
+  CardTitle,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -50,23 +49,18 @@ const PurchaseOrderPaymentForm = ({
       validator={purchaseOrderPaymentValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card>
         <CardHeader>
-          <Heading size="md">Payment</Heading>
+          <CardTitle>Payment</CardTitle>
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="id" />
-          <Grid
-            gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
-          >
-            <VStack alignItems="start" spacing={2} w="full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
+            <VStack>
               <Supplier
                 name="invoiceSupplierId"
                 label="Invoice Supplier"
-                onChange={({ value }) => setSupplier(value as string)}
+                onChange={(value) => setSupplier(value?.value as string)}
               />
               <SupplierLocation
                 name="invoiceSupplierLocationId"
@@ -79,7 +73,7 @@ const PurchaseOrderPaymentForm = ({
                 supplier={supplier}
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Select
                 name="paymentTermId"
                 label="Payment Terms"
@@ -87,11 +81,11 @@ const PurchaseOrderPaymentForm = ({
               />
               <Currency name="currencyCode" label="Currency" />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Boolean name="paymentComplete" label="Payment Complete" />
             </VStack>
-          </Grid>
-        </CardBody>
+          </div>
+        </CardContent>
         <CardFooter>
           <Submit isDisabled={!permissions.can("update", "purchasing")}>
             Save

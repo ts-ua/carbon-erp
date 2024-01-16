@@ -1,19 +1,19 @@
-import { Select } from "@carbon/react";
 import {
-  Box,
   Card,
-  CardBody,
+  CardAction,
+  CardContent,
   CardFooter,
   CardHeader,
-  Grid,
-  Heading,
+  CardTitle,
   HStack,
   VStack,
-} from "@chakra-ui/react";
-import { useState } from "react";
+} from "@carbon/react";
+import { useRevalidator } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
-import { CreatableSelect, Hidden, Number, Submit } from "~/components/Form";
-import { usePermissions } from "~/hooks";
+import { Combobox } from "~/components";
+import { CreatableCombobox, Hidden, Number, Submit } from "~/components/Form";
+import { usePermissions, useUser } from "~/hooks";
+import { useSupabase } from "~/lib/supabase";
 import type { PartQuantities } from "~/modules/parts";
 import { partInventoryValidator } from "~/modules/parts";
 import type { ListItem } from "~/types";
@@ -21,10 +21,7 @@ import type { TypeOfValidator } from "~/types/validators";
 import { path } from "~/utils/path";
 
 type PartInventoryFormProps = {
-  initialValues: Omit<
-    TypeOfValidator<typeof partInventoryValidator>,
-    "hasNewShelf"
-  >;
+  initialValues: TypeOfValidator<typeof partInventoryValidator>;
   quantities: PartQuantities;
   locations: ListItem[];
   shelves: string[];
@@ -37,7 +34,10 @@ const PartInventoryForm = ({
   shelves,
 }: PartInventoryFormProps) => {
   const permissions = usePermissions();
-  const [hasNewShelf, setHasNewShelf] = useState(false);
+  const { supabase } = useSupabase();
+  const user = useUser();
+  const revalidator = useRevalidator();
+
   const shelfOptions = shelves.map((shelf) => ({ value: shelf, label: shelf }));
   const locationOptions = locations.map((location) => ({
     label: location.name,
@@ -50,54 +50,55 @@ const PartInventoryForm = ({
       validator={partInventoryValidator}
       defaultValues={{ ...quantities, ...initialValues }}
     >
-      <Card w="full">
-        <CardHeader>
-          <HStack w="full" justifyContent="space-between">
-            <Heading size="md">Inventory</Heading>
-            <Box w={180}>
-              <Select
-                // @ts-ignore
-                size="sm"
-                value={locationOptions.find(
-                  (location) => location.value === initialValues.locationId
-                )}
-                options={locationOptions}
-                onChange={(selected) => {
-                  // hard refresh because initialValues update has no effect otherwise
-                  window.location.href = `${path.to.partInventory(
-                    initialValues.partId
-                  )}?location=${selected?.value}`;
-                }}
-              />
-            </Box>
-          </HStack>
-        </CardHeader>
-        <CardBody>
+      <Card>
+        <HStack className="w-full justify-between items-start">
+          <CardHeader>
+            <CardTitle>Inventory</CardTitle>
+          </CardHeader>
+
+          <CardAction>
+            <Combobox
+              size="sm"
+              value={initialValues.locationId}
+              options={locationOptions}
+              onChange={(selected) => {
+                // hard refresh because initialValues update has no effect otherwise
+                window.location.href = `${path.to.partInventory(
+                  initialValues.partId
+                )}?location=${selected}`;
+              }}
+            />
+          </CardAction>
+        </HStack>
+
+        <CardContent>
           <Hidden name="partId" />
           <Hidden name="locationId" />
-          <Hidden name="hasNewShelf" value={hasNewShelf.toString()} />
-          <Grid
-            gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
-          >
-            <VStack alignItems="start" spacing={2} w="full">
-              <CreatableSelect
-                options={shelfOptions}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
+            <VStack>
+              <CreatableCombobox
                 name="defaultShelfId"
                 label="Default Shelf"
-                onUsingCreatedChanged={setHasNewShelf}
-                // @ts-ignore
-                w="full"
+                options={shelfOptions}
+                onCreateOption={async (option) => {
+                  const response = await supabase?.from("shelf").insert({
+                    id: option,
+                    locationId: initialValues.locationId,
+                    createdBy: user.id,
+                  });
+                  if (response && response.error === null)
+                    revalidator.revalidate();
+                }}
+                className="w-full"
               />
+
               <Number
                 name="quantityOnHand"
                 label="Quantity On Hand"
                 isReadOnly
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Number
                 name="quantityAvailable"
                 label="Quantity Available"
@@ -109,7 +110,7 @@ const PartInventoryForm = ({
                 isReadOnly
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Number
                 name="quantityOnProdOrder"
                 label="Quantity On Prod Order"
@@ -121,8 +122,8 @@ const PartInventoryForm = ({
                 isReadOnly
               />
             </VStack>
-          </Grid>
-        </CardBody>
+          </div>
+        </CardContent>
         <CardFooter>
           <Submit isDisabled={!permissions.can("update", "parts")}>Save</Submit>
         </CardFooter>

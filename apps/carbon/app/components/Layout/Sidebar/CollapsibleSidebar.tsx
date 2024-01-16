@@ -1,18 +1,22 @@
-import { useColor } from "@carbon/react";
-import { Box, IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
+import {
+  IconButton,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+  useDisclosure,
+} from "@carbon/react";
 import { motion } from "framer-motion";
 import type { PropsWithChildren } from "react";
 import { TbArrowBarLeft, TbArrowBarRight } from "react-icons/tb";
 
-const MotionBox = motion(Box);
 const variants = {
   visible: {
     width: 180,
   },
   hidden: {
-    width: 15,
+    width: 4,
   },
-  transition: { duration: 0.5 },
 };
 
 export const CollapsibleSidebar = ({ children }: PropsWithChildren<{}>) => {
@@ -21,43 +25,31 @@ export const CollapsibleSidebar = ({ children }: PropsWithChildren<{}>) => {
   });
 
   return (
-    <MotionBox
-      animate={sidebar.isOpen ? "visible" : "hidden"}
-      initial={variants.visible}
-      variants={variants}
-      bg={useColor("white")}
-      borderRight={1}
-      borderRightColor={useColor("gray.300")}
-      borderRightStyle="solid"
-      h="calc(100vh - 50px)"
-      position="sticky"
-      top={50}
-      zIndex={3}
-    >
-      <Tooltip label={sidebar.isOpen ? "Collapse" : "Expand"} placement="right">
-        <IconButton
-          onClick={sidebar.onToggle}
-          icon={sidebar.isOpen ? <TbArrowBarLeft /> : <TbArrowBarRight />}
-          aria-label="Toggle sidebar"
-          display="inline-block"
-          borderWidth="1px 1px 1px 0px"
-          borderStyle="solid"
-          borderColor={useColor("gray.200")}
-          position="absolute"
-          pl={2}
-          top="calc(100vh - 135px)"
-          color={useColor("gray.700")}
-          right="-32px"
-          left="auto"
-          backgroundColor={useColor("white")}
-          borderRadius="0px 4px 4px 0px"
-          zIndex={3}
-          _hover={{
-            backgroundColor: useColor("white"),
-          }}
-        />
-      </Tooltip>
-      {sidebar.isOpen ? children : null}
-    </MotionBox>
+    <TooltipProvider>
+      <motion.div
+        animate={sidebar.isOpen ? "visible" : "hidden"}
+        initial={variants.visible}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
+        variants={variants}
+        className="bg-popover text-popover-foreground border-r border-border h-full min-h-[calc(100vh-50px)] sticky top-50 z-[3]"
+      >
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <IconButton
+              onClick={sidebar.onToggle}
+              icon={sidebar.isOpen ? <TbArrowBarLeft /> : <TbArrowBarRight />}
+              aria-label="Toggle sidebar"
+              className="inline-block border border-border border-l-0 absolute pl-2 top-[calc(100vh-135px)] text-muted-foreground right-[-32px] left-auto bg-background rounded-l-none z-[3] hover:bg-background p-0"
+            />
+          </TooltipTrigger>
+
+          <TooltipContent side="right">
+            {<span>{sidebar.isOpen ? "Collapse" : "Expand"}</span>}
+          </TooltipContent>
+        </Tooltip>
+
+        {sidebar.isOpen ? children : null}
+      </motion.div>
+    </TooltipProvider>
   );
 };

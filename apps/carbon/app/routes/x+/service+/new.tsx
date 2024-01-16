@@ -1,4 +1,3 @@
-import { Box } from "@chakra-ui/react";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
@@ -64,9 +63,9 @@ export default function ServiceNewRoute() {
   };
 
   return (
-    <Box w="50%" maxW={720} minW={420}>
+    <div className="w-1/2 max-w-[720px] min-w-[420px] mx-auto">
       {/* @ts-ignore */}
       <ServiceForm initialValues={initialValues} />
-    </Box>
+    </div>
   );
 }

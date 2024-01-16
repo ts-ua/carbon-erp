@@ -1,14 +1,13 @@
 import {
   HStack,
-  Icon,
-  Link,
+  Hyperlink,
+  MenuIcon,
   MenuItem,
-  Text,
   useDisclosure,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { BsPencilSquare, BsStar, BsStarFill } from "react-icons/bs";
+import { BsFillPenFill, BsStar, BsStarFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { MdCallReceived } from "react-icons/md";
 import { Avatar, Table } from "~/components";
@@ -70,18 +69,21 @@ const PurchaseOrdersTable = memo(
           header: "PO Number",
           cell: ({ row }) => (
             <HStack>
-              <Icon
-                color={row.original.favorite ? "yellow.400" : "gray.300"}
-                cursor="pointer"
-                h={4}
-                w={4}
-                as={row.original.favorite ? BsStarFill : BsStar}
-                onClick={() => onFavorite(row.original)}
-              />
+              {row.original.favorite ? (
+                <BsStarFill
+                  className="text-yellow-400 cursor-pointer h-4 w-4"
+                  onClick={() => onFavorite(row.original)}
+                />
+              ) : (
+                <BsStar
+                  className="text-muted-foreground cursor-pointer h-4 w-4"
+                  onClick={() => onFavorite(row.original)}
+                />
+              )}
 
-              <Link onClick={() => edit(row.original)}>
+              <Hyperlink onClick={() => edit(row.original)}>
                 {row.original.purchaseOrderId}
-              </Link>
+              </Hyperlink>
             </HStack>
           ),
         },
@@ -116,7 +118,7 @@ const PurchaseOrdersTable = memo(
             return (
               <HStack>
                 <Avatar size="sm" path={row.original.createdByAvatar} />
-                <Text>{row.original.createdByFullName}</Text>
+                <p>{row.original.createdByFullName}</p>
               </HStack>
             );
           },
@@ -133,7 +135,7 @@ const PurchaseOrdersTable = memo(
             return row.original.updatedByFullName ? (
               <HStack>
                 <Avatar size="sm" path={row.original.updatedByAvatar ?? null} />
-                <Text>{row.original.updatedByFullName}</Text>
+                <p>{row.original.updatedByFullName}</p>
               </HStack>
             ) : null;
           },
@@ -159,40 +161,41 @@ const PurchaseOrdersTable = memo(
       return (row: PurchaseOrder) => (
         <>
           <MenuItem
-            icon={<BsPencilSquare />}
-            isDisabled={!permissions.can("view", "purchasing")}
+            disabled={!permissions.can("view", "purchasing")}
             onClick={() => edit(row)}
           >
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit
           </MenuItem>
           <MenuItem
-            icon={<BsStar />}
             onClick={() => {
               onFavorite(row);
             }}
           >
+            <MenuIcon icon={<BsStar />} />
             Favorite
           </MenuItem>
           <MenuItem
-            icon={<MdCallReceived />}
-            isDisabled={
-              !["Draft", "Approved"].includes(row.status ?? "") ||
-              !permissions.can("update", "inventory")
+            disabled={
+              !["To Recieve", "To Receive and Invoice"].includes(
+                row.status ?? ""
+              ) || !permissions.can("update", "inventory")
             }
             onClick={() => {
               receive(row);
             }}
           >
+            <MenuIcon icon={<MdCallReceived />} />
             Receive
           </MenuItem>
           <MenuItem
-            icon={<IoMdTrash />}
-            isDisabled={!permissions.can("delete", "purchasing")}
+            disabled={!permissions.can("delete", "purchasing")}
             onClick={() => {
               setSelectedPurchaseOrder(row);
               deletePurchaseOrderModal.onOpen();
             }}
           >
+            <MenuIcon icon={<IoMdTrash />} />
             Delete
           </MenuItem>
         </>

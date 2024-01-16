@@ -1,8 +1,8 @@
-import { Link, MenuItem } from "@chakra-ui/react";
+import { Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -25,9 +25,9 @@ const PaymentTermsTable = memo(({ data, count }: PaymentTermsTableProps) => {
         accessorKey: "name",
         header: "Name",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(row.original.id)}>
+          <Hyperlink onClick={() => navigate(row.original.id)}>
             {row.original.name}
-          </Link>
+          </Hyperlink>
         ),
       },
       {
@@ -58,23 +58,23 @@ const PaymentTermsTable = memo(({ data, count }: PaymentTermsTableProps) => {
       return (
         <>
           <MenuItem
-            isDisabled={!permissions.can("update", "accounting")}
-            icon={<BsPencilSquare />}
+            disabled={!permissions.can("update", "accounting")}
             onClick={() => {
               navigate(`${path.to.paymentTerm(row.id)}?${params.toString()}`);
             }}
           >
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Payment Term
           </MenuItem>
           <MenuItem
-            isDisabled={!permissions.can("delete", "accounting")}
-            icon={<IoMdTrash />}
+            disabled={!permissions.can("delete", "accounting")}
             onClick={() => {
               navigate(
                 `${path.to.deletePaymentTerm(row.id)}?${params.toString()}`
               );
             }}
           >
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Payment Term
           </MenuItem>
         </>

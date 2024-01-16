@@ -1,7 +1,8 @@
-import { Select, useColor } from "@carbon/react";
-import { Button, HStack } from "@chakra-ui/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 
@@ -12,63 +13,35 @@ type HolidaysTableFiltersProps = {
 const HolidaysTableFilters = ({ years }: HolidaysTableFiltersProps) => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
-  const borderColor = useColor("gray.200");
 
-  const yearsOptions = years.map((year) => ({
+  const yearsOptions = years.map<{ label: string; value: string }>((year) => ({
     label: year.toString(),
-    value: year,
+    value: year.toString(),
   }));
 
   return (
-    <HStack
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      justifyContent="space-between"
-      px={4}
-      py={3}
-      w="full"
-    >
-      <HStack spacing={2}>
-        <DebouncedInput
-          param="name"
+    <TableFilters>
+      <HStack>
+        <DebouncedInput param="name" size="sm" placeholder="Search" />
+        <Combobox
           size="sm"
-          minW={180}
-          placeholder="Search"
-        />
-        <Select
-          size="sm"
-          value={
-            params.get("year")
-              ? yearsOptions.find(
-                  (year) => year.value.toString() === params.get("year")
-                )
-              : {
-                  label: new Date().getFullYear().toString(),
-                  value: new Date().getFullYear(),
-                }
-          }
+          value={params.get("year") ?? ""}
           options={yearsOptions}
+          isClearable
           onChange={(selected) => {
-            setParams({ year: selected?.value });
+            setParams({ year: selected });
           }}
-          aria-label="Year"
           placeholder="Year"
         />
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "resources") && (
-          <Button
-            as={Link}
-            to={`new?${params.toString()}`}
-            colorScheme="brand"
-            leftIcon={<IoMdAdd />}
-          >
-            New Holiday
+          <Button asChild leftIcon={<IoMdAdd />}>
+            <Link to={`new?${params.toString()}`}>New Holiday</Link>
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

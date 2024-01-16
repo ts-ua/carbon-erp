@@ -25,12 +25,10 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const { id, hoursPerWeek, abilities } = validation.data;
+  const { supplierId, ...data } = validation.data;
 
   const createPartner = await upsertPartner(client, {
-    id,
-    hoursPerWeek,
-    abilities,
+    ...data,
     createdBy: userId,
   });
 
@@ -39,7 +37,7 @@ export async function action({ request }: ActionFunctionArgs) {
       path.to.partners,
       await flash(
         request,
-        error(createPartner.error, "Failed to create partner.")
+        error(createPartner.error, "Failed to create partner")
       )
     );
   }
@@ -56,7 +54,7 @@ export default function NewPartnerRoute() {
     id: params.get("id") ?? "",
     supplierId: params.get("supplierId") ?? "",
     hoursPerWeek: 0,
-    abilities: [] as string[],
+    abilityId: "",
   };
 
   return <PartnerForm initialValues={initialValues} />;

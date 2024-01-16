@@ -1,5 +1,4 @@
-import { File, useNotification } from "@carbon/react";
-import { Avatar, Button, VStack } from "@chakra-ui/react";
+import { Avatar, Button, File, VStack, toast } from "@carbon/react";
 import { useSubmit } from "@remix-run/react";
 import type { ChangeEvent } from "react";
 import { useSupabase } from "~/lib/supabase";
@@ -12,7 +11,6 @@ type CompanyLogoFormProps = {
 
 const CompanyLogoForm = ({ company }: CompanyLogoFormProps) => {
   const { supabase } = useSupabase();
-  const notification = useNotification();
   const submit = useSubmit();
 
   const logoPath = company?.logo
@@ -32,7 +30,7 @@ const CompanyLogoForm = ({ company }: CompanyLogoFormProps) => {
         });
 
       if (imageUpload.error) {
-        notification.copyableError(imageUpload.error, "Failed to upload logo");
+        toast.error("Failed to upload logo");
       }
 
       if (imageUpload.data?.path) {
@@ -48,7 +46,7 @@ const CompanyLogoForm = ({ company }: CompanyLogoFormProps) => {
         .remove([logoPath]);
 
       if (imageDelete.error) {
-        notification.copyableError(imageDelete.error, "Failed to remove image");
+        toast.error("Failed to remove image");
       }
 
       submitLogoUrl(null);
@@ -66,18 +64,18 @@ const CompanyLogoForm = ({ company }: CompanyLogoFormProps) => {
   };
 
   return (
-    <VStack w="full" spacing={2} px={8}>
+    <VStack className="items-center p-8">
       <Avatar
         size="2xl"
         src={company?.logo ?? undefined}
-        title={company?.name ?? ""}
+        name={company?.name}
       />
       <File accept="image/*" onChange={uploadImage}>
         {company.logo ? "Change" : "Upload"}
       </File>
 
       {company.logo && (
-        <Button variant="outline" onClick={deleteImage}>
+        <Button variant="secondary" onClick={deleteImage}>
           Remove
         </Button>
       )}

@@ -1,9 +1,8 @@
-import { HStack, MenuItem, useDisclosure } from "@chakra-ui/react";
+import { HStack, MenuIcon, MenuItem, useDisclosure } from "@carbon/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BsEnvelope } from "react-icons/bs";
 import { FaBan } from "react-icons/fa";
-import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
 import { usePermissions } from "~/hooks";
 import type { Customer } from "~/modules/users";
@@ -53,7 +52,7 @@ const CustomerAccountsTable = memo(
         {
           header: "User",
           cell: ({ row }) => (
-            <HStack spacing={2}>
+            <HStack>
               <Avatar
                 size="sm"
                 // @ts-ignore
@@ -141,14 +140,6 @@ const CustomerAccountsTable = memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // const editableComponents = useMemo(
-    //   () => ({
-    //     "user.firstName": EditableName,
-    //     "user.lastName": EditableName,
-    //   }),
-    //   []
-    // );
-
     const renderContextMenu = useCallback(
       (row: (typeof data)[number]) => {
         if (Array.isArray(row.user) || !row.user) {
@@ -158,22 +149,22 @@ const CustomerAccountsTable = memo(
         return (
           <>
             <MenuItem
-              icon={<BsEnvelope />}
               onClick={() => {
                 setSelectedUserIds([userId]);
                 resendInviteModal.onOpen();
               }}
             >
+              <MenuIcon icon={<BsEnvelope />} />
               Send Account Invite
             </MenuItem>
             {row.user?.active === true && (
               <MenuItem
-                icon={<IoMdTrash />}
                 onClick={(e) => {
                   setSelectedUserIds([userId]);
                   deactivateCustomerModal.onOpen();
                 }}
               >
+                <MenuIcon icon={<FaBan />} />
                 Deactivate Customer
               </MenuItem>
             )}

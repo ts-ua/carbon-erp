@@ -2,22 +2,21 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
   HStack,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useNavigate, useParams } from "@remix-run/react";
 import { useMemo } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
+  Combobox,
   Hidden,
   Input,
   Number,
-  Select,
   Submit,
   Supplier,
 } from "~/components/Form";
@@ -45,7 +44,7 @@ const PartSupplierForm = ({ initialValues }: PartSupplierFormProps) => {
   const unitOfMeasureOptions = useMemo(() => {
     return (
       sharedPartData?.unitOfMeasures.map((unitOfMeasure) => ({
-        label: unitOfMeasure.code,
+        label: unitOfMeasure.name,
         value: unitOfMeasure.code,
       })) ?? []
     );
@@ -59,31 +58,37 @@ const PartSupplierForm = ({ initialValues }: PartSupplierFormProps) => {
   const onClose = () => navigate(-1);
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        defaultValues={initialValues}
-        validator={partSupplierValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.partSupplier(partId, initialValues.id!)
-            : path.to.newPartSupplier(partId)
-        }
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          defaultValues={initialValues}
+          validator={partSupplierValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.partSupplier(partId, initialValues.id!)
+              : path.to.newPartSupplier(partId)
+          }
+          className="flex flex-col h-full"
+        >
           <DrawerHeader>
-            {isEditing ? "Edit" : "New"} Part Supplier
+            <DrawerTitle>
+              {isEditing ? "Edit" : "New"} Part Supplier
+            </DrawerTitle>
           </DrawerHeader>
-          <DrawerBody pb={8}>
+          <DrawerBody>
             <Hidden name="id" />
             <Hidden name="partId" />
 
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Supplier name="supplierId" label="Supplier" />
               <Input name="supplierPartId" label="Supplier Part ID" />
-              <Select
+              <Combobox
                 name="supplierUnitOfMeasureCode"
                 label="Unit of Measure"
                 options={unitOfMeasureOptions}
@@ -91,20 +96,25 @@ const PartSupplierForm = ({ initialValues }: PartSupplierFormProps) => {
               <Number
                 name="minimumOrderQuantity"
                 label="Minimum Order Quantity"
+                minValue={0}
               />
-              <Number name="conversionFactor" label="Conversion Factor" />
+              <Number
+                name="conversionFactor"
+                label="Conversion Factor"
+                minValue={0}
+              />
             </VStack>
           </DrawerBody>
           <DrawerFooter>
             <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button size="md" variant="ghost" onClick={onClose}>
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

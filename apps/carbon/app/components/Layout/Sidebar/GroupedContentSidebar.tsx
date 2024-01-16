@@ -1,65 +1,46 @@
-import { useColor } from "@carbon/react";
-import { Box, Button, Text, VStack } from "@chakra-ui/react";
+import { Button, VStack } from "@carbon/react";
 import { Link, useMatches } from "@remix-run/react";
 import type { RouteGroup } from "~/types";
 import { CollapsibleSidebar } from "./CollapsibleSidebar";
 
 const GroupedContentSidebar = ({ groups }: { groups: RouteGroup[] }) => {
   const matches = useMatches();
-  const borderColor = useColor("gray.200");
-  const labelColor = useColor("gray.400");
 
   return (
     <CollapsibleSidebar>
-      <VStack h="full" alignItems="start">
-        <Box overflowY="auto" w="full" h="full" pb={8}>
-          <VStack spacing={2}>
-            {groups.map((group) => (
-              <VStack
-                key={group.name}
-                spacing={1}
-                alignItems="start"
-                borderBottomStyle={"solid"}
-                borderBottomWidth={1}
-                borderBottomColor={borderColor}
-                p={2}
-                w="full"
-              >
-                <Text
-                  color={labelColor}
-                  fontSize="xs"
-                  fontWeight="bold"
-                  pl={3}
-                  py={1}
-                  textTransform="uppercase"
-                >
-                  {group.name}
-                </Text>
-                {group.routes.map((route) => {
-                  const isActive = matches.some((match) =>
-                    match.pathname.includes(route.to)
-                  );
-                  return (
-                    <Button
-                      key={route.name}
-                      as={Link}
-                      to={route.to}
-                      variant={isActive ? "solid" : "ghost"}
-                      border="none"
-                      fontWeight={isActive ? "bold" : "normal"}
-                      leftIcon={route.icon}
-                      justifyContent="start"
-                      w="full"
-                    >
+      <div className="overflow-y-auto h-full w-full pb-8">
+        <VStack>
+          {groups.map((group) => (
+            <VStack
+              key={group.name}
+              spacing={1}
+              className="border-b border-border p-2"
+            >
+              <h4 className="text-xs text-muted-foreground font-bold pl-4 py-1 uppercase">
+                {group.name}
+              </h4>
+              {group.routes.map((route) => {
+                const isActive = matches.some((match) =>
+                  match.pathname.includes(route.to)
+                );
+                return (
+                  <Button
+                    key={route.name}
+                    asChild
+                    leftIcon={route.icon}
+                    variant={isActive ? "solid" : "ghost"}
+                    className="w-full justify-start"
+                  >
+                    <Link to={route.to + (route.q ? `?q=${route.q}` : "")}>
                       {route.name}
-                    </Button>
-                  );
-                })}
-              </VStack>
-            ))}
-          </VStack>
-        </Box>
-      </VStack>
+                    </Link>
+                  </Button>
+                );
+              })}
+            </VStack>
+          ))}
+        </VStack>
+      </div>
     </CollapsibleSidebar>
   );
 };

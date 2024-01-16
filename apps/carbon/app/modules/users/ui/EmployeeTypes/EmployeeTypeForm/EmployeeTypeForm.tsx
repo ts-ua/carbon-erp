@@ -1,17 +1,14 @@
 import {
-  Box,
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-  FormLabel,
+  DrawerTitle,
   HStack,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -57,26 +54,32 @@ const EmployeeTypeForm = ({ initialValues }: EmployeeTypeFormProps) => {
     : !userPermissions.can("create", "users");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={employeeTypeValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.employeeType(initialValues.id!)
-            : path.to.newEmployeeType
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={employeeTypeValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.employeeType(initialValues.id!)
+              : path.to.newEmployeeType
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
           <DrawerHeader>
-            {isEditing ? "Edit" : "New"} Employee Type
+            <DrawerTitle>
+              {isEditing ? "Edit" : "New"} Employee Type
+            </DrawerTitle>
           </DrawerHeader>
-          <DrawerBody pb={8}>
+          <DrawerBody>
             <Hidden name="id" />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Input name="name" label="Employee Type" />
               <Color name="color" label="Color" />
               <Hidden
@@ -84,36 +87,35 @@ const EmployeeTypeForm = ({ initialValues }: EmployeeTypeFormProps) => {
                 value={JSON.stringify(Object.values(permissions))}
               />
             </VStack>
-            <VStack spacing={2} alignItems="start">
-              <FormLabel>Default Permissions</FormLabel>
-              {Object.entries(permissions)
-                .sort((a, b) => a[0].localeCompare(b[0]))
-                .map(([module, data], index) => (
-                  <Box key={index}>
-                    <PermissionCheckboxes
-                      module={module}
-                      permissions={data.permission}
-                      updatePermissions={updatePermissions}
-                    />
-                  </Box>
-                ))}
+            <VStack>
+              <label className="block text-sm font-medium leading-none">
+                Default Permissions
+              </label>
+              <VStack spacing={8}>
+                {Object.entries(permissions)
+                  .sort((a, b) => a[0].localeCompare(b[0]))
+                  .map(([module, data], index) => (
+                    <div key={index}>
+                      <PermissionCheckboxes
+                        module={module}
+                        permissions={data.permission}
+                        updatePermissions={updatePermissions}
+                      />
+                    </div>
+                  ))}
+              </VStack>
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

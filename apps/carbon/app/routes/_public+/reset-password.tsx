@@ -1,13 +1,5 @@
-import { useColor } from "@carbon/react";
-import {
-  Box,
-  Button,
-  HStack,
-  Image,
-  Text,
-  useColorModeValue,
-  VStack,
-} from "@chakra-ui/react";
+import { Button, HStack, VStack } from "@carbon/react";
+
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
@@ -57,35 +49,35 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function ResetPasswordRoute() {
-  const boxBackground = useColor("white");
   const navigate = useNavigate();
 
   return (
     <>
-      <Image
-        src={useColorModeValue(
-          "/carbon-logo-dark.png",
-          "/carbon-logo-light.png"
-        )}
+      <img
+        src="/carbon-logo-dark.png"
         alt="Carbon Logo"
-        maxW={100}
-        marginBottom={3}
+        className="block dark:hidden max-w-[100px] mb-3"
+      />
+      <img
+        src="/carbon-logo-light.png"
+        alt="Carbon Logo"
+        className="hidden dark:block max-w-[100px] mb-3"
       />
 
-      <Box rounded="lg" bg={boxBackground} boxShadow="lg" w={380} p={8}>
+      <div className="rounded-lg bg-background shadow-lg p-8 w-[380px]">
         <ValidatedForm
           method="post"
           action={path.to.resetPassord}
           validator={resetPasswordValidator}
         >
-          <VStack spacing={4} alignItems="start">
-            <Text>Please select a new password.</Text>
+          <VStack spacing={4}>
+            <p>Please select a new password.</p>
 
             <Password name="password" label="New Password" />
             <HStack spacing={4}>
-              <Submit w="full">Reset Password</Submit>
+              <Submit>Reset Password</Submit>
               <Button
-                size="md"
+                variant="secondary"
                 onClick={() => navigate(path.to.authenticatedRoot)}
               >
                 Skip
@@ -93,7 +85,7 @@ export default function ResetPasswordRoute() {
             </HStack>
           </VStack>
         </ValidatedForm>
-      </Box>
+      </div>
     </>
   );
 }

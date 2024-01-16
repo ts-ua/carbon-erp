@@ -1,8 +1,8 @@
-import { Link, MenuItem } from "@chakra-ui/react";
+import { Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
 import type { Sequence } from "~/modules/settings";
@@ -24,9 +24,9 @@ const SequencesTable = memo(({ data, count }: SequencesTableProps) => {
         accessorKey: "name",
         header: "Name",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(row.original.table)}>
+          <Hyperlink onClick={() => navigate(row.original.table)}>
             {row.original.name}
-          </Link>
+          </Hyperlink>
         ),
       },
       {
@@ -62,14 +62,14 @@ const SequencesTable = memo(({ data, count }: SequencesTableProps) => {
       return (
         <>
           <MenuItem
-            isDisabled={!permissions.can("update", "settings")}
-            icon={<BsPencilSquare />}
+            disabled={!permissions.can("update", "settings")}
             onClick={() => {
               navigate(
                 `${path.to.tableSequence(row.table)}?${params.toString()}`
               );
             }}
           >
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Sequence
           </MenuItem>
         </>

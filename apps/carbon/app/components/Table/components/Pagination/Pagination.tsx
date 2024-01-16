@@ -1,15 +1,15 @@
-import { useColor } from "@carbon/react";
-import type { ThemeTypings } from "@chakra-ui/react";
 import {
   Button,
-  Flex,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
   HStack,
   IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
 export type PaginationProps = {
@@ -24,7 +24,6 @@ export type PaginationProps = {
   nextPage: () => void;
   previousPage: () => void;
   setPageSize: (size: number) => void;
-  colorScheme?: ThemeTypings["colorSchemes"];
 };
 
 const Pagination = (props: PaginationProps) => {
@@ -37,40 +36,36 @@ const Pagination = (props: PaginationProps) => {
     pageSizes.sort();
   }
 
-  const borderColor = useColor("gray.200");
-
   return (
     <HStack
-      align="center"
-      bg={useColor("white")}
-      borderTopColor={borderColor}
-      borderTopWidth={1}
-      borderTopStyle="solid"
-      justify="space-between"
-      px={4}
-      py={2}
-      spacing="6"
-      w="full"
-      zIndex={1}
+      className="text-center bg-background border-t border-border justify-between px-4 py-2 w-full z-[1]"
+      spacing={6}
     >
-      <Menu>
-        <MenuButton as={Button} variant="ghost">
-          {pageSize} {pageSizeLabel}
-        </MenuButton>
-        <MenuList fontSize="sm" boxShadow="xl" minW={48}>
-          {pageSizes.map((size) => (
-            <MenuItem
-              key={`${size}`}
-              onClick={() => {
-                setPageSize(size);
-              }}
-            >
-              {size} {pageSizeLabel}
-            </MenuItem>
-          ))}
-        </MenuList>
-      </Menu>
-      <HStack spacing={2}>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost">
+            {pageSize} {pageSizeLabel}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" className="w-48">
+          <DropdownMenuLabel>Results per page</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuRadioGroup value={`${pageSize}`}>
+            {pageSizes.map((size) => (
+              <DropdownMenuRadioItem
+                key={`${size}`}
+                value={`${size}`}
+                onClick={() => {
+                  setPageSize(size);
+                }}
+              >
+                {size} {pageSizeLabel}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <HStack>
         <PaginationButtons {...props} />
       </HStack>
     </HStack>
@@ -96,21 +91,24 @@ export const PaginationButtons = ({
             icon={<BsChevronLeft />}
             isDisabled={!canPreviousPage}
             onClick={previousPage}
+            variant="secondary"
           />
           <IconButton
             aria-label="Next"
             icon={<BsChevronRight />}
             isDisabled={!canNextPage}
             onClick={nextPage}
+            variant="secondary"
           />
         </>
       ) : (
         <>
-          <Flex fontSize="sm" h={8} fontWeight="medium" alignItems="center">
+          <div className="text-foreground flex text-sm font-medium align-center">
             {count > 0 ? offset + 1 : 0} - {Math.min(offset + pageSize, count)}{" "}
             of {count}
-          </Flex>
+          </div>
           <Button
+            variant="secondary"
             isDisabled={!canPreviousPage}
             onClick={previousPage}
             leftIcon={<BsChevronLeft />}
@@ -118,6 +116,7 @@ export const PaginationButtons = ({
             Previous
           </Button>
           <Button
+            variant="secondary"
             isDisabled={!canNextPage}
             onClick={nextPage}
             rightIcon={<BsChevronRight />}

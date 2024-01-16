@@ -1,16 +1,23 @@
 import {
   Card,
-  CardBody,
+  CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
-  Grid,
-  Heading,
+  CardTitle,
   HStack,
-  Text,
   VStack,
-} from "@chakra-ui/react";
+  cn,
+} from "@carbon/react";
 import { ValidatedForm } from "remix-validated-form";
-import { Employee, Hidden, Input, Select, Submit } from "~/components/Form";
+import {
+  Combobox,
+  Employee,
+  Hidden,
+  Input,
+  Select,
+  Submit,
+} from "~/components/Form";
 import { usePermissions, useRouteData } from "~/hooks";
 import type { CustomerStatus, CustomerType } from "~/modules/sales";
 import { customerValidator } from "~/modules/sales";
@@ -52,34 +59,32 @@ const CustomerForm = ({ initialValues }: CustomerFormProps) => {
       validator={customerValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card>
         <CardHeader>
-          <Heading size="md">
+          <CardTitle>
             {isEditing ? "Customer Overview" : "New Customer"}
-          </Heading>
+          </CardTitle>
           {!isEditing && (
-            <Text color="gray.500" fontWeight="normal">
+            <CardDescription>
               A customer is a business or person who buys your parts or
               services.
-            </Text>
+            </CardDescription>
           )}
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="id" />
-          <Grid
-            gridTemplateColumns={
-              isEditing ? ["1fr", "1fr", "1fr 1fr 1fr"] : "1fr"
-            }
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
+          <div
+            className={cn(
+              "grid w-full gap-x-8 gap-y-2",
+              isEditing ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1"
+            )}
           >
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Input name="name" label="Name" />
               <Input name="taxId" label="Tax ID" />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
-              <Select
+            <VStack>
+              <Combobox
                 name="customerTypeId"
                 label="Customer Type"
                 options={customerTypeOptions}
@@ -94,15 +99,15 @@ const CustomerForm = ({ initialValues }: CustomerFormProps) => {
             </VStack>
             {isEditing && (
               <>
-                <VStack alignItems="start" spacing={2} w="full">
+                <VStack>
                   <Employee name="accountManagerId" label="Account Manager" />
                 </VStack>
               </>
             )}
-          </Grid>
-        </CardBody>
+          </div>
+        </CardContent>
         <CardFooter>
-          <HStack spacing={2}>
+          <HStack>
             <Submit isDisabled={isDisabled}>Save</Submit>
           </HStack>
         </CardFooter>

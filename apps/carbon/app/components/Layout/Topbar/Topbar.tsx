@@ -1,5 +1,4 @@
-import { useColor } from "@carbon/react";
-import { Button, GridItem, HStack } from "@chakra-ui/react";
+import { Button, HStack } from "@carbon/react";
 import { BiHelpCircle } from "react-icons/bi";
 import { BsChatSquare } from "react-icons/bs";
 import { Search } from "~/components/Search";
@@ -8,55 +7,33 @@ import Breadcrumbs from "./Breadcrumbs";
 import Create from "./Create";
 
 const Topbar = () => {
-  const borderColor = useColor("gray.200");
-
   return (
-    <GridItem
-      bg={useColor("white")}
-      borderBottom={1}
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      display="grid"
-      gap={4}
-      gridTemplateColumns="1fr auto 1fr"
-      position="sticky"
-      px={4}
-      top={0}
-      zIndex={1}
-    >
+    <div className="grid bg-background text-foreground border-b border-border px-4 top-0 sticky z-10 space-x-4 grid-cols-[1fr_auto_1fr] items-center">
       <Breadcrumbs />
       <Search />
-      <HStack py={2} justifyContent="end" spacing={1}>
+      <HStack spacing={1} className="justify-end py-2">
         <Create />
-        <a
-          target="_blank"
-          href="https://github.com/barbinbrad/carbon/issues/new/choose"
-          rel="noreferrer"
-        >
-          <Button
-            colorScheme="gray"
-            leftIcon={<BiHelpCircle />}
-            variant="outline"
+        <Button asChild leftIcon={<BiHelpCircle />} variant="secondary">
+          <a
+            target="_blank"
+            href="https://github.com/barbinbrad/carbon/issues/new/choose"
+            rel="noreferrer"
           >
             Help
-          </Button>
-        </a>
-        <a
-          target="_blank"
-          href="https://github.com/barbinbrad/carbon/discussions/new/choose"
-          rel="noreferrer"
-        >
-          <Button
-            colorScheme="gray"
-            leftIcon={<BsChatSquare />}
-            variant="outline"
+          </a>
+        </Button>
+        <Button asChild leftIcon={<BsChatSquare />} variant="secondary">
+          <a
+            target="_blank"
+            href="https://github.com/barbinbrad/carbon/discussions/new/choose"
+            rel="noreferrer"
           >
             Feedback
-          </Button>
-        </a>
+          </a>
+        </Button>
         <AvatarMenu />
       </HStack>
-    </GridItem>
+    </div>
   );
 };
 

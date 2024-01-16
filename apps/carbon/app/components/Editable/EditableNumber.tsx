@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import { NumberInput, NumberInputField } from "@chakra-ui/react";
+import { Input, NumberField } from "@carbon/react";
 import type { PostgrestSingleResponse } from "@supabase/supabase-js";
 import type { FocusEvent, KeyboardEvent } from "react";
 import type { EditableTableCellComponentProps } from "~/components/Editable";
@@ -55,16 +55,16 @@ const EditableNumber =
       }
     };
 
-    // eslint-disable-next-line jsx-a11y/no-autofocus
     return (
-      <NumberInput
-        defaultValue={value as number}
-        size="sm"
-        w="full"
-        borderRadius="none"
-      >
-        <NumberInputField autoFocus onKeyDown={onKeyDown} onBlur={onBlur} />
-      </NumberInput>
+      <NumberField defaultValue={value as number}>
+        <Input
+          size="sm"
+          className="w-full rounded-none"
+          autoFocus
+          onKeyDown={onKeyDown}
+          onBlur={onBlur}
+        />
+      </NumberField>
     );
   };
 

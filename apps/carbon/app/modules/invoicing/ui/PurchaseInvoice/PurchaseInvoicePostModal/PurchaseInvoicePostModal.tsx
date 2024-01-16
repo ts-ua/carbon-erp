@@ -1,16 +1,14 @@
 import {
   Button,
   HStack,
-  ListItem,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
-  UnorderedList,
-} from "@chakra-ui/react";
+  ModalTitle,
+} from "@carbon/react";
+
 import { Form } from "@remix-run/react";
 import { path } from "~/utils/path";
 
@@ -18,7 +16,7 @@ type PurchaseInvoicePostModalProps = {
   isOpen: boolean;
   onClose: () => void;
   invoiceId: string;
-  linesToReceive: { partId: string; quantity: number }[];
+  linesToReceive: { partId: string | null; quantity: number }[];
 };
 
 const PurchaseInvoicePostModal = ({
@@ -30,11 +28,16 @@ const PurchaseInvoicePostModal = ({
   const hasLinesToReceive = linesToReceive.length > 0;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
+    <Modal
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
       <ModalContent>
-        <ModalHeader>Post Invoice</ModalHeader>
-        <ModalCloseButton />
+        <ModalHeader>
+          <ModalTitle>Post Invoice</ModalTitle>
+        </ModalHeader>
         <ModalBody>
           {hasLinesToReceive ? (
             <>
@@ -42,26 +45,25 @@ const PurchaseInvoicePostModal = ({
                 Are you sure you want to post this invoice? A receipt will be
                 automatically created and posted for:
               </p>
-              <UnorderedList mt={2}>
+              <ul className="mt-2">
                 {linesToReceive.map((line) => (
-                  <ListItem key={line.partId}>
+                  <li key={line.partId}>
                     {`${line.partId} (${line.quantity})`}
-                  </ListItem>
+                  </li>
                 ))}
-              </UnorderedList>
+              </ul>
             </>
           ) : (
             <p>Are you sure you want to post this invoice?</p>
           )}
         </ModalBody>
-
         <ModalFooter>
-          <HStack spacing={2}>
-            <Button colorScheme="gray" onClick={onClose}>
+          <HStack>
+            <Button variant="solid" onClick={onClose}>
               Cancel
             </Button>
             <Form method="post" action={path.to.purchaseInvoicePost(invoiceId)}>
-              <Button colorScheme="brand" type="submit">
+              <Button type="submit">
                 {hasLinesToReceive
                   ? "Post and Receive Invoice"
                   : "Post Invoice"}

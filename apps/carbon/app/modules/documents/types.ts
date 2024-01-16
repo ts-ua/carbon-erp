@@ -7,6 +7,8 @@ export type Document = Omit<
 > & {
   favorite: boolean;
   labels: string[];
+  readGroups: string[];
+  writeGroups: string[];
   createdByAvatar: string;
   createdByFullName: string;
   updatedByAvatar?: string | null;

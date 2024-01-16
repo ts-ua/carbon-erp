@@ -1,7 +1,8 @@
-import { Select, useColor } from "@carbon/react";
-import { Button, HStack } from "@chakra-ui/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox, Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 import { purchaseOrderStatusType } from "~/modules/purchasing";
@@ -12,8 +13,6 @@ const PurchaseOrdersTableFilters = () => {
   const [suppliers] = useSuppliers();
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
-
-  const borderColor = useColor("gray.200");
 
   const supplierOptions = suppliers
     .filter((supplier) => supplier.id && supplier.name)
@@ -28,62 +27,40 @@ const PurchaseOrdersTableFilters = () => {
   }));
 
   return (
-    <HStack
-      px={4}
-      py={3}
-      justifyContent="space-between"
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      w="full"
-    >
-      <HStack spacing={2}>
-        <DebouncedInput
-          param="search"
-          size="sm"
-          minW={180}
-          placeholder="Search"
-        />
+    <TableFilters>
+      <HStack>
+        <DebouncedInput param="search" size="sm" placeholder="Search" />
         <Select
           size="sm"
-          value={purchaseOrderStatusOptions.find(
-            (type) => type.value === params.get("status")
-          )}
+          value={params.get("status") ?? ""}
           isClearable
           options={purchaseOrderStatusOptions}
           onChange={(selected) => {
-            setParams({ status: selected?.value });
+            setParams({ status: selected });
           }}
           aria-label="Status"
           placeholder="Status"
         />
-        <Select
+        <Combobox
           size="sm"
-          value={supplierOptions.find(
-            (supplier) => supplier.value === params.get("supplierId")
-          )}
+          value={params.get("supplierId") ?? ""}
           isClearable
           options={supplierOptions}
           onChange={(selected) => {
-            setParams({ supplierId: selected?.value });
+            setParams({ supplierId: selected });
           }}
           aria-label="Supplier"
           placeholder="Supplier"
         />
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "purchasing") && (
-          <Button
-            as={Link}
-            to={path.to.newPurchaseOrder}
-            colorScheme="brand"
-            leftIcon={<IoMdAdd />}
-          >
-            New Purchase Order
+          <Button asChild leftIcon={<IoMdAdd />}>
+            <Link to={path.to.newPurchaseOrder}>New Purchase Order</Link>
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

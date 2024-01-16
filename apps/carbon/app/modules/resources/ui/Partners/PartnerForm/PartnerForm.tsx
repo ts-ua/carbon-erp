@@ -1,23 +1,27 @@
-import { Select, useMount } from "@carbon/react";
 import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
   FormControl,
-  FormErrorMessage,
   FormLabel,
   HStack,
   VStack,
-} from "@chakra-ui/react";
+  useMount,
+} from "@carbon/react";
 import { useFetcher, useNavigate } from "@remix-run/react";
 import { useEffect, useMemo } from "react";
-import { useControlField, useField, ValidatedForm } from "remix-validated-form";
-import { Abilities, Number, Submit, Supplier } from "~/components/Form";
+import { ValidatedForm, useControlField } from "remix-validated-form";
+import {
+  Ability,
+  Number,
+  SelectControlled,
+  Submit,
+  Supplier,
+} from "~/components/Form";
 import { usePermissions } from "~/hooks";
 import type { getSupplierLocations } from "~/modules/purchasing";
 import { partnerValidator } from "~/modules/resources";
@@ -41,9 +45,11 @@ const PartnerForm = ({ initialValues }: PartnerFormProps) => {
   const supplierLocationFetcher =
     useFetcher<Awaited<ReturnType<typeof getSupplierLocations>>>();
 
-  const onSupplierChange = ({ value }: { value: string | number }) => {
-    if (value)
-      supplierLocationFetcher.load(path.to.api.supplierLocations(`${value}`));
+  const onSupplierChange = (newValue: { value: string | number } | null) => {
+    if (newValue)
+      supplierLocationFetcher.load(
+        path.to.api.supplierLocations(`${newValue.value}`)
+      );
   };
 
   useMount(() => {
@@ -63,21 +69,29 @@ const PartnerForm = ({ initialValues }: PartnerFormProps) => {
   );
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={partnerValidator}
-        method="post"
-        action={
-          isEditing ? path.to.partner(initialValues.id) : path.to.newPartner
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{isEditing ? "Edit" : "New"} Partner</DrawerHeader>
-          <DrawerBody pb={8}>
-            <VStack spacing={4} alignItems="start">
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={partnerValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.partner(initialValues.id, initialValues.abilityId)
+              : path.to.newPartner
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{isEditing ? "Edit" : "New"} Partner</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
+            <VStack spacing={4}>
               <Supplier
                 name="supplierId"
                 label="Supplier"
@@ -89,77 +103,68 @@ const PartnerForm = ({ initialValues }: PartnerFormProps) => {
                 initialLocation={initialValues.id}
                 isReadOnly={isEditing}
               />
-              <Abilities name="abilities" label="Abilities" />
+              <Ability name="abilityId" label="Ability" />
               <Number
                 name="hoursPerWeek"
                 label="Hours per Week"
                 helperText="The number of hours per week the supplier is available to work."
-                min={0}
-                max={10000}
+                minValue={0}
+                maxValue={10000}
               />
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };
-
-const SUPPLIER_LOCATION_FIELD = "id";
 
 const SupplierLocationsBySupplier = ({
   supplierLocations,
   initialLocation,
   isReadOnly,
 }: {
-  supplierLocations: { value: string | number; label: string }[];
+  supplierLocations: { value: string; label: string }[];
   initialLocation?: string;
   isReadOnly: boolean;
 }) => {
-  const { error, getInputProps } = useField(SUPPLIER_LOCATION_FIELD);
-
-  const [supplierLocation, setSupplierLocation] = useControlField<{
-    value: string | number;
-    label: string;
-  } | null>(SUPPLIER_LOCATION_FIELD);
+  const [supplierLocation, setSupplierLocation] = useControlField<
+    string | null
+  >("id");
 
   useEffect(() => {
     // if the initial value is in the options, set it, otherwise set to null
     if (supplierLocations) {
       setSupplierLocation(
-        supplierLocations.find((s) => s.value === initialLocation) ?? null
+        supplierLocations.find((s) => s.value === initialLocation)?.value ??
+          null
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [supplierLocations, initialLocation]);
 
+  const onChange = (newValue: { value: string } | null) => {
+    setSupplierLocation(newValue?.value ?? null);
+  };
+
   return (
-    <FormControl isInvalid={!!error}>
-      <FormLabel htmlFor={SUPPLIER_LOCATION_FIELD}>Supplier Location</FormLabel>
-      <Select
-        {...getInputProps({
-          // @ts-ignore
-          id: SUPPLIER_LOCATION_FIELD,
-        })}
+    <FormControl>
+      <FormLabel>Supplier Location</FormLabel>
+      <SelectControlled
+        name="id"
         options={supplierLocations}
-        value={supplierLocation}
-        onChange={setSupplierLocation}
+        value={supplierLocation ?? undefined}
+        onChange={onChange}
         isReadOnly={isReadOnly}
       />
-      {error && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>
   );
 };

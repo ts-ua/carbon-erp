@@ -2,15 +2,14 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-  Grid,
+  DrawerTitle,
   HStack,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
 
@@ -65,7 +64,7 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
     ? !permissions.can("update", "accounting")
     : !permissions.can("create", "accounting");
 
-  const onAccountCategoryChange = (category?: AccountCategoryType) => {
+  const onAccountCategoryChange = (category: AccountCategoryType | null) => {
     if (category) {
       setAccountCategoryId(category.id ?? "");
       setIncomeBalance(category.incomeBalance ?? "Income Statement");
@@ -74,35 +73,37 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
   };
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="full">
-      <ValidatedForm
-        validator={accountValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.chartOfAccount(initialValues.id!)
-            : path.to.newChartOfAccount
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent size="full">
+        <ValidatedForm
+          validator={accountValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.chartOfAccount(initialValues.id!)
+              : path.to.newChartOfAccount
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
           <DrawerHeader>
-            {isEditing
-              ? `${initialValues.number} - ${initialValues.name}`
-              : "New Account"}
+            <DrawerTitle>
+              {isEditing ? `${initialValues.number}` : "New Account"}
+            </DrawerTitle>
+            {isEditing && (
+              <DrawerDescription>{initialValues.name}</DrawerDescription>
+            )}
           </DrawerHeader>
-          <DrawerBody pb={8}>
+          <DrawerBody>
             <Hidden name="id" />
 
-            <Grid
-              gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
-              gridColumnGap={8}
-              gridRowGap={2}
-              w="full"
-            >
-              <VStack spacing={4} alignItems="start">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
+              <VStack spacing={4}>
                 <Input name="number" label="Account Number" />
                 <Input name="name" label="Name" />
                 <Select
@@ -114,7 +115,7 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
                   }))}
                 />
               </VStack>
-              <VStack spacing={4} alignItems="start">
+              <VStack spacing={4}>
                 <AccountCategory
                   name="accountCategoryId"
                   onChange={onAccountCategoryChange}
@@ -133,11 +134,11 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
                   value={incomeBalance}
                   onChange={(newValue) => {
                     if (newValue)
-                      setIncomeBalance(newValue as AccountIncomeBalance);
+                      setIncomeBalance(newValue.value as AccountIncomeBalance);
                   }}
                 />
               </VStack>
-              <VStack spacing={4} alignItems="start">
+              <VStack spacing={4}>
                 <SelectControlled
                   name="class"
                   label="Class"
@@ -147,7 +148,8 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
                   }))}
                   value={accountClass}
                   onChange={(newValue) => {
-                    if (newValue) setAccountClass(newValue as AccountClass);
+                    if (newValue)
+                      setAccountClass(newValue.value as AccountClass);
                   }}
                 />
                 <Select
@@ -162,23 +164,18 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
                 />
                 <Boolean name="directPosting" label="Direct Posting" />
               </VStack>
-            </Grid>
+            </div>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

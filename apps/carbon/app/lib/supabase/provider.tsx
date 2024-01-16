@@ -49,7 +49,7 @@ import { getSupabase } from "./client";
  * const { env } = useLoaderData<typeof loader>();
  *
  * return (
- *   <html lang="en" className="h-screen bg-neutral-50 text-gray-900">
+ *   <html lang="en" className="h-screen bg-neutral-50 text-zinc-900">
  *     <head>
  *       <Meta />
  *       <Links />

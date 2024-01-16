@@ -10,8 +10,7 @@
  * @see WAI-ARIA Tree View https://www.w3.org/WAI/ARIA/apg/patterns/treeview/
  */
 
-import { Select } from "@carbon/react";
-import { FormLabel } from "@chakra-ui/react";
+import { FormLabel } from "@carbon/react";
 import { usePermissions } from "~/hooks";
 import Combobox from "./components/Combobox";
 import Container from "./components/Container";
@@ -26,8 +25,7 @@ import useUserSelect from "./useUserSelect";
 export default function Component(props: UserSelectProps) {
   const permissions = usePermissions();
 
-  if (!permissions.is("employee"))
-    return <Select options={[]} isDisabled placeholder="Select..." />;
+  if (!permissions.is("employee")) return null;
   return <UserSelect {...props} />;
 }
 
@@ -35,7 +33,7 @@ const UserSelect = (props: UserSelectProps) => {
   const state = useUserSelect(props);
   const {
     dropdown,
-    innerProps: { hideSelections, isMulti, label, readOnly, testID, width },
+    innerProps: { hideSelections, isMulti, label, readOnly, width },
     refs: { containerRef },
     selectionItemsById,
   } = state;
@@ -43,7 +41,7 @@ const UserSelect = (props: UserSelectProps) => {
   return (
     <UserSelectContext.Provider value={state}>
       {label && <FormLabel>{label}</FormLabel>}
-      <Container ref={containerRef} width={width} testID={testID}>
+      <Container ref={containerRef} width={width}>
         {!(readOnly && isMulti) && (
           <Combobox>
             <Input />

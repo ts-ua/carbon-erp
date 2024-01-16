@@ -1,10 +1,17 @@
-import { useDisclosure, useId, useOutsideClick } from "@chakra-ui/react";
+import { useDisclosure, useOutsideClick } from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
 import type { PostgrestError } from "@supabase/supabase-js";
 import debounce from "lodash/debounce";
 import words from "lodash/words";
 import type { AriaAttributes, ChangeEvent, KeyboardEvent } from "react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { Group } from "~/modules/users";
 import { path } from "~/utils/path";
 
@@ -33,7 +40,6 @@ const defaultProps = {
   selections: [] as IndividualOrGroup[],
   selectionsMaxHeight: 400,
   showAvatars: false,
-  testID: "UserSelect",
   usersOnly: false,
   onCancel: () => {},
 };
@@ -62,7 +68,7 @@ export default function useUserSelect(props: UserSelectProps) {
   /* Refs */
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const listBoxRef = useRef<HTMLUListElement>(null);
+  const listBoxRef = useRef<HTMLDivElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<Element>(null);
   const focusableNodes = useRef<Record<string, TreeNode>>({});
@@ -142,7 +148,7 @@ export default function useUserSelect(props: UserSelectProps) {
             return acc.concat({
               uid,
               expanded: false,
-              items: makeGroupItems(group, uid),
+              items: makeGroupItems(group as Group, uid),
               name: group.data.name || "",
             });
           }

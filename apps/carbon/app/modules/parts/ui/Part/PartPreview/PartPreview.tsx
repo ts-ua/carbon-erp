@@ -1,13 +1,18 @@
 import {
   Button,
   Card,
-  CardBody,
+  CardAction,
+  CardAttribute,
+  CardAttributeLabel,
+  CardAttributeValue,
+  CardAttributes,
+  CardContent,
+  CardDescription,
   CardHeader,
-  Heading,
+  CardTitle,
   HStack,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+} from "@carbon/react";
+
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -23,50 +28,44 @@ const PartPreview = () => {
   );
 
   return (
-    <Card w="full">
-      <CardHeader>
-        <HStack justifyContent="space-between" alignItems="start">
-          <Stack direction={["column", "column", "row"]} spacing={2}>
-            <Heading size="md">{routeData?.partSummary?.id}</Heading>
-            <Text color="gray.500">{routeData?.partSummary?.name}</Text>
-          </Stack>
-          <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
+    <Card>
+      <HStack className="justify-between items-start">
+        <CardHeader>
+          <CardTitle>{routeData?.partSummary?.id}</CardTitle>
+          <CardDescription>{routeData?.partSummary?.name}</CardDescription>
+        </CardHeader>
+        <CardAction>
+          <Button
+            variant="secondary"
+            onClick={() => alert("TODO")}
+            leftIcon={<FaHistory />}
+          >
             View History
           </Button>
-        </HStack>
-      </CardHeader>
-      <CardBody>
-        <Stack direction={["column", "column", "row"]} spacing={8}>
-          <Stack
-            direction={["row", "row", "column"]}
-            alignItems="start"
-            justifyContent="space-between"
-          >
-            <Text color="gray.500">Replenishment System</Text>
-            <Text fontWeight="bold">
+        </CardAction>
+      </HStack>
+      <CardContent>
+        <CardAttributes>
+          <CardAttribute>
+            <CardAttributeLabel>Replenishment System</CardAttributeLabel>
+            <CardAttributeValue>
               {routeData?.partSummary?.replenishmentSystem}
-            </Text>
-          </Stack>
-          <Stack
-            direction={["row", "row", "column"]}
-            alignItems="start"
-            justifyContent="space-between"
-          >
-            <Text color="gray.500">Part Type</Text>
-            <Text fontWeight="bold">{routeData?.partSummary?.partType}</Text>
-          </Stack>
-          <Stack
-            direction={["row", "row", "column"]}
-            alignItems="start"
-            justifyContent="space-between"
-          >
-            <Text color="gray.500">Unit of Measure</Text>
-            <Text fontWeight="bold">
+            </CardAttributeValue>
+          </CardAttribute>
+          <CardAttribute>
+            <CardAttributeLabel>Part Type</CardAttributeLabel>
+            <CardAttributeValue>
+              {routeData?.partSummary?.partType}
+            </CardAttributeValue>
+          </CardAttribute>
+          <CardAttribute>
+            <CardAttributeLabel>Unit of Measure</CardAttributeLabel>
+            <CardAttributeValue>
               {routeData?.partSummary?.unitOfMeasureCode}
-            </Text>
-          </Stack>
-        </Stack>
-      </CardBody>
+            </CardAttributeValue>
+          </CardAttribute>
+        </CardAttributes>
+      </CardContent>
     </Card>
   );
 };

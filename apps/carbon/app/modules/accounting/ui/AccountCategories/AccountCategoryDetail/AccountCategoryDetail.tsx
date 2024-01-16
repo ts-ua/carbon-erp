@@ -1,26 +1,23 @@
 import {
+  ActionMenu,
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
+  DropdownMenuIcon,
+  DropdownMenuItem,
   HStack,
-  IconButton,
-  List,
-  ListItem,
-  Tag,
-  TagLabel,
-  Text,
-  useDisclosure,
   VStack,
-} from "@chakra-ui/react";
+  useDisclosure,
+} from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
-import { BsPencilSquare } from "react-icons/bs";
-import { IoMdTrash } from "react-icons/io";
+import { BsFillPenFill } from "react-icons/bs";
+import { IoMdAdd, IoMdTrash } from "react-icons/io";
 import { ConfirmDelete } from "~/components/Modals";
 
 import { useUrlParams } from "~/hooks";
@@ -57,67 +54,45 @@ const AccountCategoryDetail = ({
 
   return (
     <>
-      <Drawer onClose={onClose} isOpen={true} size="sm">
-        <DrawerOverlay />
+      <Drawer
+        open
+        onOpenChange={(open) => {
+          if (!open) onClose();
+        }}
+      >
         <DrawerContent>
-          <DrawerCloseButton />
           <DrawerHeader>
-            <VStack spacing={2} w="full" alignItems="start">
-              <HStack justifyContent="space-between" w="full" pr={8}>
-                <span>{accountCategory.category}</span>
-                <Tag
-                  borderRadius="full"
-                  variant="outline"
-                  colorScheme={
-                    accountCategory.incomeBalance === "Income Statement"
-                      ? "green"
-                      : "gray"
-                  }
-                >
-                  <TagLabel>{accountCategory.incomeBalance}</TagLabel>
-                </Tag>
-              </HStack>
-              <Text fontSize="sm" fontWeight="normal" color="gray.500">
-                A list of subcategories in the {accountCategory.category}{" "}
-                category.
-              </Text>
-            </VStack>
+            <DrawerTitle>{accountCategory.category}</DrawerTitle>
+            <DrawerDescription>
+              {accountCategory.incomeBalance}
+            </DrawerDescription>
           </DrawerHeader>
           <DrawerBody>
-            <List spacing={2}>
+            <VStack>
               {accountSubcategories.map((subcategory) => {
                 return (
-                  <ListItem key={subcategory.id} rounded="lg">
-                    <HStack>
-                      <Text flexGrow={1}>{subcategory.name}</Text>
-
-                      <IconButton
-                        as={Link}
-                        to={subcategory.id}
-                        aria-label="Edit"
-                        icon={<BsPencilSquare />}
-                        variant="outline"
-                      />
-                      <IconButton
-                        aria-label="Delete"
-                        icon={<IoMdTrash />}
-                        variant="outline"
-                        onClick={() => onDelete(subcategory)}
-                      />
-                    </HStack>
-                  </ListItem>
+                  <HStack spacing={1} key={subcategory.id} className="w-full">
+                    <p className="flex-grow">{subcategory.name}</p>
+                    <ActionMenu>
+                      <DropdownMenuItem asChild>
+                        <Link to={subcategory.id}>
+                          <DropdownMenuIcon icon={<BsFillPenFill />} />
+                          Edit Subcategory
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => onDelete(subcategory)}>
+                        <DropdownMenuIcon icon={<IoMdTrash />} />
+                        Delete Subcategory
+                      </DropdownMenuItem>
+                    </ActionMenu>
+                  </HStack>
                 );
               })}
-            </List>
+            </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <Button
-              as={Link}
-              to={`new?${params.toString()}`}
-              colorScheme="brand"
-              size="md"
-            >
-              New Subcategory
+            <Button asChild leftIcon={<IoMdAdd />}>
+              <Link to={`new?${params.toString()}`}>New Subcategory</Link>
             </Button>
           </DrawerFooter>
         </DrawerContent>

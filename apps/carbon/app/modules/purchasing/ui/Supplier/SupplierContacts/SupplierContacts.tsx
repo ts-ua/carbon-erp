@@ -1,18 +1,16 @@
 import {
-  Box,
   Button,
   Card,
-  CardBody,
+  CardAction,
+  CardContent,
   CardHeader,
-  Heading,
-  List,
-  ListItem,
-  Text,
+  CardTitle,
+  HStack,
   useDisclosure,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
 import { useCallback, useState } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdAdd, IoMdTrash } from "react-icons/io";
 import { Contact } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -42,7 +40,7 @@ const SupplierContacts = ({ contacts }: SupplierContactsProps) => {
         label: permissions.can("update", "purchasing")
           ? "Edit Contact"
           : "View Contact",
-        icon: <BsPencilSquare />,
+        icon: <BsFillPenFill />,
         onClick: () => {
           navigate(contact.id);
         },
@@ -90,28 +88,30 @@ const SupplierContacts = ({ contacts }: SupplierContactsProps) => {
 
   return (
     <>
-      <Card w="full">
-        <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="md" display="inline-flex">
-            Contacts
-          </Heading>
-          {canEdit && (
-            <Button colorScheme="brand" as={Link} to="new">
-              New
-            </Button>
-          )}
-        </CardHeader>
-        <CardBody>
+      <Card>
+        <HStack className="justify-between items-start">
+          <CardHeader>
+            <CardTitle>Contacts</CardTitle>
+          </CardHeader>
+          <CardAction>
+            {canEdit && (
+              <Button asChild>
+                <Link to="new">New</Link>
+              </Button>
+            )}
+          </CardAction>
+        </HStack>
+        <CardContent>
           {isEmpty ? (
-            <Box w="full" my={8} textAlign="center">
-              <Text color="gray.500" fontSize="sm">
+            <div className="my-8 text-center w-full">
+              <p className="text-muted-foreground text-sm">
                 You haven't created any contacts yet.
-              </Text>
-            </Box>
+              </p>
+            </div>
           ) : (
-            <List w="full" spacing={4}>
+            <ul className="flex flex-col w-full gap-4">
               {contacts?.map((contact) => (
-                <ListItem key={contact.id}>
+                <li key={contact.id}>
                   {contact.contact &&
                   !Array.isArray(contact.contact) &&
                   !Array.isArray(contact.user) ? (
@@ -122,11 +122,11 @@ const SupplierContacts = ({ contacts }: SupplierContactsProps) => {
                       actions={getActions(contact)}
                     />
                   ) : null}
-                </ListItem>
+                </li>
               ))}
-            </List>
+            </ul>
           )}
-        </CardBody>
+        </CardContent>
       </Card>
 
       {selectedContact && selectedContact.id && (

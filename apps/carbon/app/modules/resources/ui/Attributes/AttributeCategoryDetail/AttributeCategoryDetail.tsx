@@ -1,27 +1,25 @@
 import {
+  ActionMenu,
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
   HStack,
   IconButton,
-  List,
-  ListItem,
-  Tag,
-  TagLabel,
-  Text,
+  MenuIcon,
+  MenuItem,
   useDisclosure,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { Link, useFetcher } from "@remix-run/react";
 import { Reorder } from "framer-motion";
 import { useMemo, useState } from "react";
 import { AiOutlineNumber } from "react-icons/ai";
 import { BiText } from "react-icons/bi";
-import { BsCalendarDate, BsPencilSquare, BsToggleOn } from "react-icons/bs";
+import { BsCalendarDate, BsFillPenFill, BsToggleOn } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { IoMdTrash } from "react-icons/io";
 import { MdOutlineDragIndicator } from "react-icons/md";
@@ -45,17 +43,20 @@ const AttributeCategoryDetail = ({
   const [params] = useUrlParams();
   const sortOrderFetcher = useFetcher();
 
-  const attributeMap = useMemo(
+  const attributeMap: Record<string, Attribute> = useMemo(
     () =>
       Array.isArray(attributeCategory.userAttribute)
-        ? attributeCategory.userAttribute.reduce<
-            Record<string, AttributeCategoryDetailType["userAttribute"]>
-          >((acc, attribute) => {
-            return {
-              ...acc,
-              [attribute.id]: attribute,
-            };
-          }, {})
+        ? attributeCategory.userAttribute.reduce<Record<string, Attribute>>(
+            // @ts-ignore
+            (acc, attribute) => {
+              if (!attribute) return acc;
+              return {
+                ...acc,
+                [attribute.id]: attribute,
+              };
+            },
+            {}
+          )
         : {},
     [attributeCategory]
   );
@@ -100,43 +101,52 @@ const AttributeCategoryDetail = ({
     deleteModal.onClose();
   };
 
+  const renderContextMenu = (attributeId: string) => {
+    return (
+      <>
+        <MenuItem asChild>
+          <Link to={attributeId}>
+            <MenuIcon icon={<BsFillPenFill />} />
+            Edit Attribute
+          </Link>
+        </MenuItem>
+        <MenuItem onClick={() => onDelete(attributeMap[attributeId])}>
+          <MenuIcon icon={<IoMdTrash />} />
+          Delete Attribute
+        </MenuItem>
+      </>
+    );
+  };
+
   return (
     <>
-      <Drawer onClose={onClose} isOpen={true} size="sm">
-        <DrawerOverlay />
+      <Drawer
+        open
+        onOpenChange={(open) => {
+          if (!open) onClose();
+        }}
+      >
         <DrawerContent>
-          <DrawerCloseButton />
           <DrawerHeader>
-            <HStack justifyContent="space-between" w="full" pr={8}>
-              <span>{attributeCategory.name}</span>
-              <Tag
-                size="lg"
-                borderRadius="full"
-                variant={attributeCategory.public ? "solid" : "outline"}
-                colorScheme={attributeCategory.public ? "green" : "gray"}
-              >
-                <TagLabel>
-                  {attributeCategory.public ? "Public" : "Private"}
-                </TagLabel>
-              </Tag>
-            </HStack>
+            <DrawerTitle>{attributeCategory.name}</DrawerTitle>
+            <DrawerDescription>
+              {attributeCategory.public ? "Public" : "Private"}
+            </DrawerDescription>
           </DrawerHeader>
           <DrawerBody>
             {Array.isArray(attributeCategory?.userAttribute) && (
-              <List
-                as={Reorder.Group}
+              <Reorder.Group
                 axis="y"
                 values={sortOrder}
                 onReorder={onReorder}
-                spacing={2}
+                className="space-y-2 w-full"
               >
                 {sortOrder.map((sortId) => {
                   return (
-                    <ListItem
+                    <Reorder.Item
                       key={sortId}
-                      as={Reorder.Item}
                       value={sortId}
-                      rounded="lg"
+                      className="rounded-lg w-full"
                     >
                       <HStack>
                         <IconButton
@@ -144,12 +154,12 @@ const AttributeCategoryDetail = ({
                           icon={<MdOutlineDragIndicator />}
                           variant="ghost"
                         />
-                        <Text flexGrow={1}>
+                        <p className="flex-grow text-foreground">
                           {
                             // @ts-ignore
                             attributeMap[sortId]?.name
                           }
-                        </Text>
+                        </p>
                         <Button
                           isDisabled
                           leftIcon={getIcon(
@@ -164,39 +174,17 @@ const AttributeCategoryDetail = ({
                               "Unknown"
                           }
                         </Button>
-
-                        <IconButton
-                          as={Link}
-                          // @ts-ignore
-                          to={sortId.toString()}
-                          aria-label="Edit"
-                          icon={<BsPencilSquare />}
-                          variant="outline"
-                        />
-                        <IconButton
-                          aria-label="Delete"
-                          icon={<IoMdTrash />}
-                          variant="outline"
-                          onClick={() =>
-                            // @ts-ignore
-                            onDelete(attributeMap[sortId])
-                          }
-                        />
+                        <ActionMenu>{renderContextMenu(sortId)}</ActionMenu>
                       </HStack>
-                    </ListItem>
+                    </Reorder.Item>
                   );
                 })}
-              </List>
+              </Reorder.Group>
             )}
           </DrawerBody>
           <DrawerFooter>
-            <Button
-              as={Link}
-              to={`new?${params.toString()}`}
-              colorScheme="brand"
-              size="md"
-            >
-              New Attribute
+            <Button asChild size="md">
+              <Link to={`new?${params.toString()}`}>New Attribute</Link>
             </Button>
           </DrawerFooter>
         </DrawerContent>

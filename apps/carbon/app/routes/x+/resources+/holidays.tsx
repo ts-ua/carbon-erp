@@ -1,4 +1,4 @@
-import { VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
@@ -35,7 +35,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const [holidays, years] = await Promise.all([
     getHolidays(client, {
       name,
-      year: year ? parseInt(year) : new Date().getFullYear(),
+      year: year ? parseInt(year) : null,
       limit,
       offset,
       sorts,
@@ -62,7 +62,7 @@ export default function Route() {
   const { holidays, years, count } = useLoaderData<typeof loader>();
 
   return (
-    <VStack w="full" h="full" spacing={0}>
+    <VStack spacing={0} className="h-full">
       <HolidaysTableFilters years={years} />
       <HolidaysTable data={holidays} count={count} />
       <Outlet />

@@ -1,12 +1,4 @@
-import { useColor } from "@carbon/react";
-import {
-  Avatar,
-  Box,
-  Grid,
-  GridItem,
-  HStack,
-  IconButton,
-} from "@chakra-ui/react";
+import { Avatar, ClientOnly, HStack, IconButton } from "@carbon/react";
 import { redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 import { BsFillHexagonFill } from "react-icons/bs";
@@ -53,62 +45,44 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function OnboardingLayout() {
-  // const { currentIndex, onboardingSteps } = useOnboarding();
-
   return (
-    <Grid h="100vh" w="100vw" templateColumns="auto 1fr">
-      <SidebarPlaceholder />
-      <Grid templateRows="auto 1fr" h="full" w="full">
-        <TopbarPlaceholder />
-        <div>
-          <Outlet />
+    // not sure why we need this ClientOnly, but things break without it
+    <ClientOnly fallback={null}>
+      {() => (
+        <div className="grid grid-cols-[auto_1fr] h-screen w-screen">
+          <SidebarPlaceholder />
+          <div className="gri grid-rows-[auto_1fr] h-full w-full">
+            <TopbarPlaceholder />
+            <div>
+              <Outlet />
+            </div>
+          </div>
         </div>
-      </Grid>
-    </Grid>
+      )}
+    </ClientOnly>
   );
 }
 
 function TopbarPlaceholder() {
   return (
-    <GridItem
-      bg={useColor("white")}
-      borderBottom={1}
-      borderBottomColor={useColor("gray.200")}
-      borderBottomStyle="solid"
-      display="grid"
-      gap={4}
-      gridTemplateColumns="1fr"
-      position="sticky"
-      px={4}
-      top={0}
-      zIndex={1}
-    >
-      <HStack py={2} justifyContent="end" spacing={1}>
+    <div className="grid bg-background border-b border-border gap-4 grid-cols-1 sticky px-4 top-0 z-1">
+      <HStack className="justify-end py-2" spacing={1}>
         <Avatar size="sm" />
       </HStack>
-    </GridItem>
+    </div>
   );
 }
 
 function SidebarPlaceholder() {
   return (
-    <Box
-      h="full"
-      borderRight={1}
-      borderRightColor={useColor("gray.200")}
-      borderRightStyle="solid"
-      background={useColor("white")}
-      zIndex={1}
-    >
+    <div className="h-full border-r border-border bg-background z-1">
       <IconButton
         aria-label="Home"
+        icon={<BsFillHexagonFill />}
         variant="ghost"
         size="lg"
-        icon={<BsFillHexagonFill />}
-        position="sticky"
-        top={0}
-        mb={4}
+        className="rounded-none"
       />
-    </Box>
+    </div>
   );
 }

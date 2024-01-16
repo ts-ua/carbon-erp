@@ -1,16 +1,15 @@
-import { Select } from "@carbon/react";
 import {
-  Box,
   Card,
-  CardBody,
+  CardAction,
+  CardContent,
   CardFooter,
   CardHeader,
-  Grid,
-  Heading,
+  CardTitle,
   HStack,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { ValidatedForm } from "remix-validated-form";
+import { Combobox } from "~/components";
 import {
   Boolean,
   Hidden,
@@ -46,38 +45,30 @@ const PartPlanningForm = ({
       validator={partPlanningValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
-        <CardHeader>
-          <HStack w="full" justifyContent="space-between">
-            <Heading size="md">Planning</Heading>
-            <Box w={180}>
-              <Select
-                // @ts-ignore
-                size="sm"
-                value={locationOptions.find(
-                  (location) => location.value === initialValues.locationId
-                )}
-                options={locationOptions}
-                onChange={(selected) => {
-                  // hard refresh because initialValues update has no effect otherwise
-                  window.location.href = `${path.to.partPlanning(
-                    initialValues.partId
-                  )}?location=${selected?.value}`;
-                }}
-              />
-            </Box>
-          </HStack>
-        </CardHeader>
-        <CardBody>
+      <Card>
+        <HStack className="w-full justify-between items-start">
+          <CardHeader>
+            <CardTitle>Planning</CardTitle>
+          </CardHeader>
+          <CardAction>
+            <Combobox
+              size="sm"
+              value={initialValues.locationId}
+              options={locationOptions}
+              onChange={(selected) => {
+                // hard refresh because initialValues update has no effect otherwise
+                window.location.href = `${path.to.partPlanning(
+                  initialValues.partId
+                )}?location=${selected}`;
+              }}
+            />
+          </CardAction>
+        </HStack>
+        <CardContent>
           <Hidden name="partId" />
           <Hidden name="locationId" />
-          <Grid
-            gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
-          >
-            <VStack alignItems="start" spacing={2} w="full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
+            <VStack>
               <SelectForm
                 name="reorderingPolicy"
                 label="Reordering Policy"
@@ -98,37 +89,50 @@ const PartPlanningForm = ({
               <Number
                 name="minimumOrderQuantity"
                 label="Minimum Order Quantity"
+                minValue={0}
               />
               <Number
                 name="maximumOrderQuantity"
                 label="Maximum Order Quantity"
+                minValue={0}
               />
-              <Number name="orderMultiple" label="Order Multiple" />
+              <Number
+                name="orderMultiple"
+                label="Order Multiple"
+                minValue={0}
+              />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Number
                 name="demandAccumulationPeriod"
                 label="Demand Accumulation Period (Days)"
+                minValue={0}
               />
               <Number
                 name="demandReschedulingPeriod"
                 label="Rescheduling Period (Days)"
+                minValue={0}
               />
               <Boolean
                 name="demandAccumulationIncludesInventory"
                 label="Demand Includes Inventory"
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Number name="reorderPoint" label="Reorder Point" />
-              <Number name="reorderQuantity" label="Reorder Quantity" />
+              <Number
+                name="reorderQuantity"
+                label="Reorder Quantity"
+                minValue={0}
+              />
               <Number
                 name="reorderMaximumInventory"
                 label="Reorder Maximum Inventory"
+                minValue={0}
               />
             </VStack>
-          </Grid>
-        </CardBody>
+          </div>
+        </CardContent>
         <CardFooter>
           <Submit isDisabled={!permissions.can("update", "parts")}>Save</Submit>
         </CardFooter>

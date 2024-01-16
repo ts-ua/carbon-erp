@@ -1,15 +1,20 @@
-import { Menubar, MenubarItem } from "@carbon/react";
 import {
   Button,
   Card,
-  CardBody,
+  CardAction,
+  CardAttribute,
+  CardAttributeLabel,
+  CardAttributeValue,
+  CardAttributes,
+  CardContent,
+  CardDescription,
   CardHeader,
+  CardTitle,
   HStack,
-  Heading,
-  Stack,
-  Text,
+  Menubar,
+  MenubarItem,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useParams } from "@remix-run/react";
 import { useMemo } from "react";
 import { FaHistory } from "react-icons/fa";
@@ -40,7 +45,7 @@ const PurchaseOrderHeader = () => {
   const { receive, release, invoice } = usePurchaseOrder();
 
   return (
-    <VStack w="full" alignItems="start" spacing={2}>
+    <VStack>
       {permissions.is("employee") && (
         <Menubar>
           <MenubarItem
@@ -86,88 +91,58 @@ const PurchaseOrderHeader = () => {
         </Menubar>
       )}
 
-      <Card w="full">
-        <CardHeader>
-          <HStack justifyContent="space-between" alignItems="start">
-            <Stack direction="column" spacing={2}>
-              <Heading size="md">
-                {routeData?.purchaseOrder?.purchaseOrderId}
-              </Heading>
-              <Text color="gray.500" fontWeight="normal">
-                {routeData?.purchaseOrder?.supplierName}
-              </Text>
-            </Stack>
-            <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
+      <Card>
+        <HStack className="justify-between items-start">
+          <CardHeader>
+            <CardTitle>{routeData?.purchaseOrder?.purchaseOrderId}</CardTitle>
+            <CardDescription>
+              {routeData?.purchaseOrder?.supplierName}
+            </CardDescription>
+          </CardHeader>
+          <CardAction>
+            <Button
+              variant="secondary"
+              onClick={() => alert("TODO")}
+              leftIcon={<FaHistory />}
+            >
               Supplier Details
             </Button>
-          </HStack>
-        </CardHeader>
-        <CardBody>
-          <Stack direction={["column", "column", "row"]} spacing={8}>
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <Text color="gray.500">Total</Text>
-              <Text fontWeight="bold">
+          </CardAction>
+        </HStack>
+        <CardContent>
+          <CardAttributes>
+            <CardAttribute>
+              <CardAttributeLabel>Total</CardAttributeLabel>
+              <CardAttributeValue>
                 {formatter.format(purchaseOrderTotals?.total ?? 0)}
-              </Text>
-            </Stack>
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <Text color="gray.500">Order Date</Text>
-              <Text fontWeight="bold">
+              </CardAttributeValue>
+            </CardAttribute>
+            <CardAttribute>
+              <CardAttributeLabel>Order Date</CardAttributeLabel>
+              <CardAttributeValue>
                 {routeData?.purchaseOrder?.orderDate}
-              </Text>
-            </Stack>
+              </CardAttributeValue>
+            </CardAttribute>
 
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <Text color="gray.500">Promised Date</Text>
-              <Text fontWeight="bold">
+            <CardAttribute>
+              <CardAttributeLabel>Promised Date</CardAttributeLabel>
+              <CardAttributeValue>
                 {routeData?.purchaseOrder?.receiptPromisedDate}
-              </Text>
-            </Stack>
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <Text color="gray.500">Type</Text>
-              <Text fontWeight="bold">{routeData?.purchaseOrder?.type}</Text>
-            </Stack>
-            {/* 
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <Text color="gray.500">Subtotal</Text>
-              <Text fontWeight="bold">
-                // TODO: this doesn't update when client-side lines are updated
-                {currencyFormatter.format(
-                  routeData?.purchaseOrder?.subtotal ?? 0
-                )}
-              </Text>
-            </Stack> 
-            */}
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <Text color="gray.500">Status</Text>
+              </CardAttributeValue>
+            </CardAttribute>
+            <CardAttribute>
+              <CardAttributeLabel>Type</CardAttributeLabel>
+              <CardAttributeValue>
+                {routeData?.purchaseOrder?.type}
+              </CardAttributeValue>
+            </CardAttribute>
+
+            <CardAttribute>
+              <CardAttributeLabel>Status</CardAttributeLabel>
               <PurchasingStatus status={routeData?.purchaseOrder?.status} />
-            </Stack>
-          </Stack>
-        </CardBody>
+            </CardAttribute>
+          </CardAttributes>
+        </CardContent>
       </Card>
     </VStack>
   );

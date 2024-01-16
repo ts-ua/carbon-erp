@@ -8,7 +8,7 @@ import type {
   RefObject,
 } from "react";
 
-import type { User, Group } from "~/modules/users";
+import type { Group, User } from "~/modules/users";
 
 export type ComboBoxRefs = {
   containerRef: RefObject<HTMLDivElement>;
@@ -40,7 +40,6 @@ export interface UserSelectProps {
   resetAfterSelection?: boolean;
   selections?: IndividualOrGroup[];
   selectionsMaxHeight?: string | number;
-  testID?: string;
   type?: "employee" | "supplier" | "customer";
   usersOnly?: boolean;
   value?: string[] | string; // Will be set when used as a controlled input

@@ -1,9 +1,9 @@
+import { Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
-import { Link, MenuItem } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { usePermissions, useRealtime, useUrlParams } from "~/hooks";
@@ -31,9 +31,9 @@ const ReceiptsTable = memo(({ data, count }: ReceiptsTableProps) => {
         accessorKey: "receiptId",
         header: "Receipt ID",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(row.original.id)}>
+          <Hyperlink onClick={() => navigate(row.original.id)}>
             {row.original.receiptId}
-          </Link>
+          </Hyperlink>
         ),
       },
       {
@@ -49,7 +49,7 @@ const ReceiptsTable = memo(({ data, count }: ReceiptsTableProps) => {
           switch (row.original.sourceDocument) {
             case "Purchase Order":
               return (
-                <Link
+                <Hyperlink
                   onClick={() =>
                     navigate(
                       path.to.purchaseOrder(row.original.sourceDocumentId!)
@@ -57,11 +57,11 @@ const ReceiptsTable = memo(({ data, count }: ReceiptsTableProps) => {
                   }
                 >
                   {row.original.sourceDocumentReadableId}
-                </Link>
+                </Hyperlink>
               );
             case "Purchase Invoice":
               return (
-                <Link
+                <Hyperlink
                   onClick={() =>
                     navigate(
                       path.to.purchaseInvoice(row.original.sourceDocumentId!)
@@ -69,7 +69,7 @@ const ReceiptsTable = memo(({ data, count }: ReceiptsTableProps) => {
                   }
                 >
                   {row.original.sourceDocumentReadableId}
-                </Link>
+                </Hyperlink>
               );
             default:
               return null;
@@ -104,25 +104,25 @@ const ReceiptsTable = memo(({ data, count }: ReceiptsTableProps) => {
       return (
         <>
           <MenuItem
-            isDisabled={!permissions.can("update", "inventory")}
-            icon={<BsPencilSquare />}
+            disabled={!permissions.can("update", "inventory")}
             onClick={() => {
               navigate(`${path.to.receipt(row.id)}?${params.toString()}`);
             }}
           >
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Receipt
           </MenuItem>
           <MenuItem
-            isDisabled={
+            disabled={
               !permissions.can("delete", "inventory") ||
               !!row.postingDate ||
               row.status === "Pending"
             }
-            icon={<IoMdTrash />}
             onClick={() => {
               navigate(`${path.to.deleteReceipt(row.id)}?${params.toString()}`);
             }}
           >
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Receipt
           </MenuItem>
         </>

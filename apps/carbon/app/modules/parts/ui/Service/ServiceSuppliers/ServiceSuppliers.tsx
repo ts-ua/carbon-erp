@@ -1,17 +1,15 @@
 import {
-  Box,
   Button,
   Card,
-  CardBody,
+  CardAction,
+  CardContent,
   CardHeader,
-  Heading,
+  CardTitle,
   HStack,
-  IconButton,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { Link, Outlet, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
-import { MdMoreHoriz } from "react-icons/md";
 import { EditableText } from "~/components/Editable";
 import Grid from "~/components/Grid";
 import type { ServiceSupplier } from "~/modules/parts";
@@ -31,25 +29,25 @@ const ServiceSuppliers = ({ serviceSuppliers }: ServiceSuppliersProps) => {
         accessorKey: "supplier.id",
         header: "Supplier",
         cell: ({ row }) => (
-          <HStack justify="space-between">
+          <HStack className="justify-between">
             {/* @ts-ignore */}
             <span>{row.original.supplier.name}</span>
-            {canEdit && (
-              <Box position="relative" w={6} h={5}>
-                <IconButton
-                  aria-label="Edit service supplier"
-                  as={Link}
-                  icon={<MdMoreHoriz />}
-                  size="sm"
-                  position="absolute"
-                  right={-1}
-                  top={-1}
-                  to={`${row.original.id}`}
-                  onClick={(e) => e.stopPropagation()}
+            {/* {canEdit && (
+              <div className="relative w-6 h-5">
+                <Button
+                  asChild
+                  isIcon
                   variant="ghost"
-                />
-              </Box>
-            )}
+                  className="absolute right-[-3px] top-[-5px] outline-none border-none active:outline-none focus-visible:outline-none"
+                  aria-label="Edit service supplier"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Link to={`${row.original.id}`}>
+                    <MdMoreHoriz />
+                  </Link>
+                </Button>
+              </div>
+            )} */}
           </HStack>
         ),
       },
@@ -59,7 +57,7 @@ const ServiceSuppliers = ({ serviceSuppliers }: ServiceSuppliersProps) => {
         cell: (item) => item.getValue(),
       },
     ];
-  }, [canEdit]);
+  }, []);
 
   const editableComponents = useMemo(
     () => ({
@@ -70,18 +68,20 @@ const ServiceSuppliers = ({ serviceSuppliers }: ServiceSuppliersProps) => {
 
   return (
     <>
-      <Card w="full">
-        <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="md" display="inline-flex">
-            Suppliers
-          </Heading>
-          {canEdit && (
-            <Button colorScheme="brand" as={Link} to="new">
-              New
-            </Button>
-          )}
-        </CardHeader>
-        <CardBody>
+      <Card>
+        <HStack className="justify-between items-start">
+          <CardHeader>
+            <CardTitle>Suppliers</CardTitle>
+          </CardHeader>
+          <CardAction>
+            {canEdit && (
+              <Button asChild>
+                <Link to="new">New</Link>
+              </Button>
+            )}
+          </CardAction>
+        </HStack>
+        <CardContent>
           <Grid<ServiceSupplier>
             data={serviceSuppliers}
             columns={columns}
@@ -89,7 +89,7 @@ const ServiceSuppliers = ({ serviceSuppliers }: ServiceSuppliersProps) => {
             editableComponents={editableComponents}
             onNewRow={canEdit ? () => navigate("new") : undefined}
           />
-        </CardBody>
+        </CardContent>
       </Card>
       <Outlet />
     </>

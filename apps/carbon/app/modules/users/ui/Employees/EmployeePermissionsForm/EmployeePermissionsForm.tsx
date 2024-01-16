@@ -1,17 +1,14 @@
 import {
-  Box,
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-  FormLabel,
+  DrawerTitle,
   HStack,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -54,56 +51,61 @@ const EmployeePermissionsForm = ({
   };
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={employeeValidator}
-        method="post"
-        action={path.to.employeeAccount(initialValues.id)}
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{name}</DrawerHeader>
-          <DrawerBody pb={8}>
-            <VStack spacing={4} alignItems="start">
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={employeeValidator}
+          method="post"
+          action={path.to.employeeAccount(initialValues.id)}
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{name}</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
+            <VStack spacing={4}>
               <Select
                 name="employeeType"
                 label="Employee Type"
                 options={employeeTypeOptions}
                 placeholder="Select Employee Type"
               />
-              <FormLabel>Permissions</FormLabel>
-              {Object.entries(permissions)
-                .sort((a, b) => a[0].localeCompare(b[0]))
-                .map(([module, data], index) => (
-                  <Box key={index}>
-                    <PermissionCheckboxes
-                      module={module}
-                      permissions={data}
-                      updatePermissions={updatePermissions}
-                    />
-                  </Box>
-                ))}
+              <label className="block text-sm font-medium leading-none">
+                Permissions
+              </label>
+              <VStack spacing={8}>
+                {Object.entries(permissions)
+                  .sort((a, b) => a[0].localeCompare(b[0]))
+                  .map(([module, data], index) => (
+                    <div key={index}>
+                      <PermissionCheckboxes
+                        module={module}
+                        permissions={data}
+                        updatePermissions={updatePermissions}
+                      />
+                    </div>
+                  ))}
+              </VStack>
               <Hidden name="id" />
               <Hidden name="data" value={JSON.stringify(permissions)} />
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

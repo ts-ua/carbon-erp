@@ -2,16 +2,15 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
   FormControl,
   FormLabel,
   HStack,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -42,20 +41,28 @@ const ShiftForm = ({ initialValues }: ShiftFormProps) => {
     : !permissions.can("create", "resources");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={shiftValidator}
-        method="post"
-        action={isEditing ? path.to.shift(initialValues.id!) : path.to.newShift}
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{isEditing ? "Edit" : "New"} Shift</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={shiftValidator}
+          method="post"
+          action={
+            isEditing ? path.to.shift(initialValues.id!) : path.to.newShift
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{isEditing ? "Edit" : "New"} Shift</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <Hidden name="id" />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Input name="name" label="Shift Name" />
               <Location name="locationId" label="Location" />
               <TimePicker name="startTime" label="Start Time" />
@@ -63,7 +70,7 @@ const ShiftForm = ({ initialValues }: ShiftFormProps) => {
 
               <FormControl>
                 <FormLabel>Days</FormLabel>
-                <VStack w="full" alignItems="start">
+                <VStack>
                   <Boolean name="monday" description="Monday" />
                   <Boolean name="tuesday" description="Tuesday" />
                   <Boolean name="wednesday" description="Wednesday" />
@@ -76,20 +83,15 @@ const ShiftForm = ({ initialValues }: ShiftFormProps) => {
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

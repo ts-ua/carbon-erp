@@ -1,7 +1,7 @@
-import { Grid, VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
 import type { MetaFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
-import { GroupedContentSidebar } from "~/components/Layout/Sidebar";
+import { GroupedContentSidebar } from "~/components/Layout";
 import { useSalesSidebar } from "~/modules/sales";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
@@ -16,15 +16,15 @@ export const handle: Handle = {
   module: "sales",
 };
 
-export default function UsersRoute() {
+export default function SalesRoute() {
   const { groups } = useSalesSidebar();
 
   return (
-    <Grid w="full" h="full" templateColumns="auto 1fr">
+    <div className="grid grid-cols-[auto_1fr] w-full h-full">
       <GroupedContentSidebar groups={groups} />
-      <VStack w="full" h="full" spacing={0}>
+      <VStack spacing={0} className="h-full">
         <Outlet />
       </VStack>
-    </Grid>
+    </div>
   );
 }

@@ -1,8 +1,8 @@
-import { Link, MenuItem } from "@chakra-ui/react";
+import { Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -27,9 +27,9 @@ const HolidaysTable = memo(({ data, count }: HolidaysTableProps) => {
         accessorKey: "name",
         header: "Holiday",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(row.original.id)}>
+          <Hyperlink onClick={() => navigate(row.original.id)}>
             {`${row.original.name} (${row.original.year})`}
-          </Link>
+          </Hyperlink>
         ),
       },
       {
@@ -45,20 +45,20 @@ const HolidaysTable = memo(({ data, count }: HolidaysTableProps) => {
       return (
         <>
           <MenuItem
-            icon={<BsPencilSquare />}
             onClick={() => {
               navigate(`${path.to.holiday(row.id)}?${params.toString()}`);
             }}
           >
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Holiday
           </MenuItem>
           <MenuItem
-            isDisabled={!permissions.can("delete", "resources")}
-            icon={<IoMdTrash />}
+            disabled={!permissions.can("delete", "resources")}
             onClick={() => {
               navigate(`${path.to.deleteHoliday(row.id)}?${params.toString()}`);
             }}
           >
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Holiday
           </MenuItem>
         </>

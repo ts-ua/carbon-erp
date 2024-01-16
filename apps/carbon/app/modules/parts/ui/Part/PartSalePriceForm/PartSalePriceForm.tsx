@@ -1,19 +1,19 @@
 import {
   Card,
-  CardBody,
+  CardContent,
   CardFooter,
   CardHeader,
-  Grid,
-  Heading,
+  CardTitle,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
+import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Boolean,
+  Combobox,
   Currency,
   Hidden,
   Number,
-  Select,
   Submit,
 } from "~/components/Form";
 import { usePermissions } from "~/hooks";
@@ -31,6 +31,7 @@ const PartSalePriceForm = ({
   unitOfMeasures,
 }: PartSalePriceFormProps) => {
   const permissions = usePermissions();
+  const [currency, setCurrency] = useState(initialValues.currencyCode);
 
   const unitOfMeasureOptions = unitOfMeasures.map((unitOfMeasure) => ({
     label: unitOfMeasure.name,
@@ -43,30 +44,39 @@ const PartSalePriceForm = ({
       validator={partUnitSalePriceValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card>
         <CardHeader>
-          <Heading size="md">Sale Price</Heading>
+          <CardTitle>Sale Price</CardTitle>
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="partId" />
-          <Grid
-            gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
-          >
-            <VStack alignItems="start" spacing={2} w="full">
-              <Number name="unitSalePrice" label="Unit Sale Price" />
-              <Currency name="currencyCode" label="Currency" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
+            <VStack>
+              <Number
+                name="unitSalePrice"
+                label="Unit Sale Price"
+                minValue={0}
+                formatOptions={{
+                  style: "currency",
+                  currency,
+                }}
+              />
+              <Currency
+                name="currencyCode"
+                label="Currency"
+                onChange={(newValue) => {
+                  if (newValue) setCurrency(newValue?.value);
+                }}
+              />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
-              <Select
+            <VStack>
+              <Combobox
                 name="salesUnitOfMeasureCode"
                 label="Sales Unit of Measure"
                 options={unitOfMeasureOptions}
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Boolean name="salesBlocked" label="Sales Blocked" />
               <Boolean name="priceIncludesTax" label="Price Includes Tax" />
               <Boolean
@@ -74,8 +84,8 @@ const PartSalePriceForm = ({
                 label="Allow Invoice Discount"
               />
             </VStack>
-          </Grid>
-        </CardBody>
+          </div>
+        </CardContent>
         <CardFooter>
           <Submit isDisabled={!permissions.can("update", "parts")}>Save</Submit>
         </CardFooter>

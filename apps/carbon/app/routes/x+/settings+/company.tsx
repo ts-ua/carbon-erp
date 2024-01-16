@@ -1,5 +1,4 @@
-import { useColor } from "@carbon/react";
-import { Grid, VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -82,8 +81,8 @@ export async function action({ request }: ActionFunctionArgs) {
           request,
           success(
             logoPath === null
-              ? "Removed logo. Please refresh the page."
-              : "Updated logo. Please refresh the page."
+              ? "Removed logo. Please refresh the page"
+              : "Updated logo"
           )
         )
       );
@@ -116,15 +115,15 @@ export default function Company() {
   };
 
   return (
-    <VStack w="full" h="full" spacing={0} p={8} bg={useColor("white")}>
+    <VStack spacing={0} className="bg-background p-8 h-full">
       <PageTitle
         title="Company"
         subtitle="This information will be displayed on document headers."
       />
-      <Grid gridTemplateColumns={["1fr", "1fr auto"]} w="full" gridGap={8}>
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 w-full">
         <CompanyForm company={initialValues} />
         <CompanyLogoForm company={company} />
-      </Grid>
+      </div>
     </VStack>
   );
 }

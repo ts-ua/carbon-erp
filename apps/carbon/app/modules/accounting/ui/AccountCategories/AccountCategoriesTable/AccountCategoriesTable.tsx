@@ -1,16 +1,15 @@
 import {
   Button,
-  ButtonGroup,
-  IconButton,
-  Link,
+  Hyperlink,
+  MenuIcon,
   MenuItem,
   useDisclosure,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-import { BsListUl, BsPencilSquare, BsPlus } from "react-icons/bs";
+import { BsFillPenFill, BsListUl } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -49,9 +48,9 @@ const AccountCategoriesTable = memo(
           accessorKey: "category",
           header: "Category",
           cell: ({ row }) => (
-            <Link onClick={() => navigate(row.original.id as string)}>
+            <Hyperlink onClick={() => navigate(row.original.id as string)}>
               {row.original.category}
-            </Link>
+            </Hyperlink>
           ),
         },
         {
@@ -68,30 +67,18 @@ const AccountCategoriesTable = memo(
         {
           header: "Subcategories",
           cell: ({ row }) => (
-            <ButtonGroup size="sm" isAttached variant="outline">
-              <Button
-                onClick={() => {
-                  navigate(
-                    `${path.to.accountingCategoryList(
-                      row.original.id!
-                    )}?${params?.toString()}`
-                  );
-                }}
-              >
-                {row.original.subCategoriesCount ?? 0} Subcategories
-              </Button>
-              <IconButton
-                aria-label="Add subcategory"
-                icon={<BsPlus />}
-                onClick={() => {
-                  navigate(
-                    `${path.to.newAccountingSubcategory(
-                      row.original.id!
-                    )}?${params?.toString()}`
-                  );
-                }}
-              />
-            </ButtonGroup>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                navigate(
+                  `${path.to.accountingCategoryList(
+                    row.original.id!
+                  )}?${params?.toString()}`
+                );
+              }}
+            >
+              {row.original.subCategoriesCount ?? 0} Subcategories
+            </Button>
           ),
         },
       ];
@@ -103,7 +90,6 @@ const AccountCategoriesTable = memo(
         return (
           <>
             <MenuItem
-              icon={<BiAddToQueue />}
               onClick={() => {
                 navigate(
                   `${path.to.newAccountingSubcategory(
@@ -112,10 +98,10 @@ const AccountCategoriesTable = memo(
                 );
               }}
             >
+              <MenuIcon icon={<BiAddToQueue />} />
               New Subcategory
             </MenuItem>
             <MenuItem
-              icon={<BsListUl />}
               onClick={() => {
                 navigate(
                   `${path.to.accountingCategoryList(
@@ -124,21 +110,22 @@ const AccountCategoriesTable = memo(
                 );
               }}
             >
+              <MenuIcon icon={<BsListUl />} />
               View Subcategories
             </MenuItem>
             <MenuItem
-              icon={<BsPencilSquare />}
               onClick={() => {
                 navigate(path.to.accountingCategory(row.id!));
               }}
             >
+              <MenuIcon icon={<BsFillPenFill />} />
               Edit Account Category
             </MenuItem>
             <MenuItem
-              isDisabled={!permissions.can("delete", "users")}
-              icon={<IoMdTrash />}
+              disabled={!permissions.can("delete", "users")}
               onClick={() => onDelete(row)}
             >
+              <MenuIcon icon={<IoMdTrash />} />
               Delete Account Category
             </MenuItem>
           </>

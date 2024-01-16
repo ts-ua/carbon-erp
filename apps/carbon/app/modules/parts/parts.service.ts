@@ -400,7 +400,7 @@ export async function upsertPartInventory(
         locationId: string;
         createdBy: string;
       }
-    | (Omit<TypeOfValidator<typeof partInventoryValidator>, "hasNewShelf"> & {
+    | (TypeOfValidator<typeof partInventoryValidator> & {
         updatedBy: string;
       })
 ) {

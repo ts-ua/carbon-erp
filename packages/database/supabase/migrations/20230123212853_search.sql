@@ -25,7 +25,7 @@ DECLARE
 BEGIN
   employee := (SELECT u."fullName" FROM public.user u WHERE u.id = new.id);
   INSERT INTO public.search(name, entity, uuid, link)
-  VALUES (employee, 'Person', new.id, '/x/resources/person/' || new.id);
+  VALUES (employee, 'Person', new.id, '/x/person/' || new.id);
   RETURN new;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

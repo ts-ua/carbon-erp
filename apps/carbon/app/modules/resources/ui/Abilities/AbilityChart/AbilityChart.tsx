@@ -1,8 +1,8 @@
-import { AxisLeft, AxisBottom } from "@visx/axis";
+import { AxisBottom, AxisLeft } from "@visx/axis";
 import { curveNatural } from "@visx/curve";
 import { Drag } from "@visx/drag";
 import { LinearGradient } from "@visx/gradient";
-import { GridRows, GridColumns } from "@visx/grid";
+import { GridColumns, GridRows } from "@visx/grid";
 import { Group } from "@visx/group";
 import { PatternLines } from "@visx/pattern";
 import { scaleLinear } from "@visx/scale";
@@ -17,6 +17,16 @@ type AbilityChartProps = {
   parentWidth: number;
   margin?: { top: number; right: number; bottom: number; left: number };
   onDataChange?: (data: AbilityDatum[]) => void;
+};
+
+const green = {
+  300: "rgb(134 239 172)",
+  500: "rgb(34 197 94)",
+};
+
+const zinc = {
+  500: "rgb(113 113 122)",
+  600: "rgb(82 82 91)",
 };
 
 const AbilityChart = ({
@@ -105,8 +115,8 @@ const AbilityChart = ({
 
             <LinearGradient
               id="fill"
-              from="var(--chakra-colors-lime-200)"
-              to="var(--chakra-colors-gray-500)"
+              from={green[300]}
+              to={zinc[500]}
               fromOpacity={0.2}
               toOpacity={0}
             />
@@ -115,7 +125,7 @@ const AbilityChart = ({
               id="diagonalLines"
               height={6}
               width={6}
-              stroke="var(--chakra-colors-gray-500)"
+              stroke={zinc[600]}
               strokeWidth={1}
               orientation={["diagonal"]}
             />
@@ -149,20 +159,12 @@ const AbilityChart = ({
           data={data}
           y={(d) => yScale(y(d))}
           x={(d) => xScale(x(d))}
-          stroke="var(--chakra-colors-lime-700)"
+          stroke={green[500]}
           strokeOpacity="0.8"
           strokeWidth={2}
           curve={curveNatural}
         />
-        <LinePath
-          data={shadowData}
-          y={(d) => yScale(y(d))}
-          x={(d) => xScale(x(d))}
-          stroke="var(--chakra-colors-gray-900)"
-          strokeOpacity="0.5"
-          strokeWidth={2}
-          curve={curveNatural}
-        />
+
         {!condensed &&
           data.map((d, index) => (
             <Drag
@@ -213,10 +215,8 @@ const AbilityChart = ({
                   cx={x}
                   cy={y}
                   r={isDragging ? 10 : 6}
-                  fill={"var(--chakra-colors-lime-700)"}
                   transform={`translate(${dx}, ${dy})`}
                   fillOpacity={0.9}
-                  stroke="var(--chakra-colors-lime-900)"
                   strokeWidth={2}
                   onMouseMove={dragMove}
                   onMouseUp={dragEnd}
@@ -224,6 +224,7 @@ const AbilityChart = ({
                   onTouchStart={dragStart}
                   onTouchMove={dragMove}
                   onTouchEnd={dragEnd}
+                  className="fill-green-400 stroke-green-600"
                 />
               )}
             </Drag>

@@ -26,12 +26,10 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const { name, color, parentDepartmentId } = validation.data;
+  const { id, ...data } = validation.data;
 
   const createDepartment = await upsertDepartment(client, {
-    name,
-    color,
-    parentDepartmentId,
+    ...data,
     createdBy: userId,
   });
 

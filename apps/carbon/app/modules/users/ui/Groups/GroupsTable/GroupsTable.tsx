@@ -1,8 +1,14 @@
-import { AvatarGroup, MenuItem } from "@chakra-ui/react";
+import {
+  AvatarGroup,
+  AvatarGroupList,
+  AvatarOverflowIndicator,
+  DropdownMenuIcon,
+  MenuItem,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
 import { usePermissions } from "~/hooks";
@@ -45,20 +51,23 @@ const GroupsTable = memo(({ data, count }: GroupsTableProps) => {
         header: "Members",
         // accessorKey: undefined, // makes the column unsortable
         cell: ({ row }) => (
-          <AvatarGroup max={5} size="sm" spacing={-2}>
-            {row.original.members.map(
-              (
-                member: { name: string | null; avatar: string | null },
-                index: number
-              ) => (
-                <Avatar
-                  key={index}
-                  name={member.name ?? undefined}
-                  title={member.name ?? undefined}
-                  path={member.avatar}
-                />
-              )
-            )}
+          <AvatarGroup limit={3}>
+            <AvatarGroupList>
+              {row.original.members.map(
+                (
+                  member: { name: string | null; avatar: string | null },
+                  index: number
+                ) => (
+                  <Avatar
+                    key={index}
+                    name={member.name ?? undefined}
+                    title={member.name ?? undefined}
+                    path={member.avatar}
+                  />
+                )
+              )}
+            </AvatarGroupList>
+            <AvatarOverflowIndicator />
           </AvatarGroup>
         ),
       },
@@ -70,31 +79,31 @@ const GroupsTable = memo(({ data, count }: GroupsTableProps) => {
       return (
         <>
           <MenuItem
-            isDisabled={
+            disabled={
               row.isEmployeeTypeGroup ||
               row.isCustomerTypeGroup ||
               row.isSupplierTypeGroup ||
               !permissions.can("update", "users")
             }
-            icon={<BsPencilSquare />}
             onClick={() => {
               navigate(path.to.group(row.id));
             }}
           >
+            <DropdownMenuIcon icon={<BsFillPenFill />} />
             Edit Group
           </MenuItem>
           <MenuItem
-            isDisabled={
+            disabled={
               row.isEmployeeTypeGroup ||
               row.isCustomerTypeGroup ||
               row.isSupplierTypeGroup ||
               !permissions.can("delete", "users")
             }
-            icon={<IoMdTrash />}
             onClick={() => {
               navigate(path.to.deleteGroup(row.id));
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Group
           </MenuItem>
         </>

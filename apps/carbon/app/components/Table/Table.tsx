@@ -1,26 +1,20 @@
 import {
   ActionMenu,
   ContextMenu,
-  useColor,
-  useEscape,
-  useMount,
-} from "@carbon/react";
-import { clip } from "@carbon/utils";
-import type { ThemeTypings } from "@chakra-ui/react";
-import {
-  Box,
-  chakra,
-  Flex,
-  Grid,
-  MenuList,
-  Table as ChakraTable,
+  ContextMenuContent,
+  ContextMenuTrigger,
+  Menu,
+  Table as TableBase,
   Tbody,
   Th,
   Thead,
   Tr,
-  VisuallyHidden,
   VStack,
-} from "@chakra-ui/react";
+  cn,
+  useEscape,
+  useMount,
+} from "@carbon/react";
+import { clip } from "@carbon/utils";
 import type {
   ColumnDef,
   ColumnOrderState,
@@ -54,7 +48,6 @@ interface TableProps<T extends object> {
   data: T[];
   actions?: TableAction<T>[];
   count?: number;
-  colorScheme?: ThemeTypings["colorSchemes"];
   defaultColumnOrder?: string[];
   defaultColumnPinning?: ColumnPinningState;
   defaultColumnVisibility?: Record<string, boolean>;
@@ -65,7 +58,6 @@ interface TableProps<T extends object> {
   withPagination?: boolean;
   withSelectableRows?: boolean;
   withSimpleSorting?: boolean;
-  onRowClick?: (row: T) => void;
   onSelectedRowsChange?: (selectedRows: T[]) => void;
   renderContextMenu?: (row: T) => JSX.Element | null;
 }
@@ -75,7 +67,6 @@ const Table = <T extends object>({
   columns,
   actions = [],
   count = 0,
-  colorScheme = "blackAlpha",
   editableComponents,
   defaultColumnOrder,
   defaultColumnPinning = {
@@ -88,7 +79,6 @@ const Table = <T extends object>({
   withPagination = true,
   withSelectableRows = false,
   withSimpleSorting = true,
-  onRowClick,
   onSelectedRowsChange,
   renderContextMenu,
 }: TableProps<T>) => {
@@ -421,14 +411,9 @@ const Table = <T extends object>({
   });
 
   const rows = table.getRowModel().rows;
-  const rowsAreClickable = !editMode && typeof onRowClick === "function";
-
-  const defaultBackground = useColor("white");
-  const borderColor = useColor("gray.200");
-  const rowBackground = useColor("gray.50");
 
   return (
-    <VStack w="full" h="full" spacing={0}>
+    <VStack spacing={0} className="h-full">
       {(withColumnOrdering ||
         withFilters ||
         withSelectableRows ||
@@ -450,33 +435,24 @@ const Table = <T extends object>({
           withSelectableRows={withSelectableRows}
         />
       )}
-      <Box
-        w="full"
-        h="full"
-        bg={useColor("white")}
-        overflow="scroll"
+      <div
+        className="w-full h-full bg-background overflow-scroll"
         style={{ contain: "strict" }}
         ref={tableContainerRef}
         onKeyDown={editMode ? onKeyDown : undefined}
       >
-        <Grid
-          w="full"
-          gridTemplateColumns={withColumnOrdering ? "auto 1fr" : "1fr"}
+        <div
+          className={cn(
+            "grid w-full",
+            withColumnOrdering ? "grid-cols-[auto_1fr]" : "grid-cols-1"
+          )}
         >
           {/* Pinned left columns */}
           {withColumnOrdering ? (
-            <ChakraTable
-              bg={defaultBackground}
-              borderRightColor={borderColor}
-              borderRightStyle="solid"
-              borderRightWidth={4}
-              position="sticky"
-              left={0}
-              zIndex={50}
-            >
+            <TableBase className="bg-background border-r-4 border-border sticky left-0 z-50">
               <Thead>
                 {table.getLeftHeaderGroups().map((headerGroup) => (
-                  <Tr key={headerGroup.id} h={10}>
+                  <Tr key={headerGroup.id} className="h-10">
                     {headerGroup.headers.map((header) => {
                       const accessorKey = getAccessorKey(
                         header.column.columnDef
@@ -498,24 +474,19 @@ const Table = <T extends object>({
                               ? () => toggleSortBy(accessorKey ?? "")
                               : undefined
                           }
-                          cursor={sortable ? "pointer" : undefined}
+                          className={cn(
+                            "px-4 py-2 whitespace-nowrap",
+                            editMode && "cursor-pointer border-r border-border"
+                          )}
                           colSpan={header.colSpan}
-                          px={4}
-                          py={2}
-                          whiteSpace="nowrap"
                         >
                           {header.isPlaceholder ? null : (
-                            <Flex
-                              justify="flex-start"
-                              align="center"
-                              fontSize="xs"
-                              color="gray.500"
-                            >
+                            <div className="flex justify-start items-center text-xs text-muted-foreground">
                               {flexRender(
                                 header.column.columnDef.header,
                                 header.getContext()
                               )}
-                              <chakra.span pl="4">
+                              <span className="pl-4">
                                 {sorted ? (
                                   sorted === -1 ? (
                                     <FaSortDown aria-label="sorted descending" />
@@ -525,8 +496,8 @@ const Table = <T extends object>({
                                 ) : sortable ? (
                                   <FaSort aria-label="sort" />
                                 ) : null}
-                              </chakra.span>
-                            </Flex>
+                              </span>
+                            </div>
                           )}
                         </Th>
                       );
@@ -537,45 +508,34 @@ const Table = <T extends object>({
               <Tbody>
                 {rows.map((row) => {
                   return renderContextMenu ? (
-                    <ContextMenu<HTMLTableRowElement>
-                      key={row.id}
-                      renderMenu={() => (
-                        <MenuList>{renderContextMenu(row.original)}</MenuList>
-                      )}
-                    >
-                      {(ref) => (
-                        <Row
-                          borderColor={borderColor}
-                          backgroundColor={rowBackground}
-                          editableComponents={editableComponents}
-                          isEditing={isEditing}
-                          isEditMode={editMode}
-                          isFrozenColumn
-                          isRowSelected={
-                            row.index in rowSelection &&
-                            !!rowSelection[row.index]
-                          }
-                          selectedCell={selectedCell}
-                          // @ts-ignore
-                          row={row}
-                          rowRef={ref}
-                          rowIsSelected={selectedCell?.row === row.index}
-                          withColumnOrdering={withColumnOrdering}
-                          onCellClick={onCellClick}
-                          onCellUpdate={onCellUpdate}
-                          onRowClick={
-                            rowsAreClickable
-                              ? () => onRowClick(row.original)
-                              : undefined
-                          }
-                        />
-                      )}
-                    </ContextMenu>
+                    <Menu type="context" key={row.index}>
+                      <ContextMenu>
+                        <ContextMenuTrigger asChild>
+                          <Row
+                            editableComponents={editableComponents}
+                            isEditing={isEditing}
+                            isEditMode={editMode}
+                            isFrozenColumn
+                            isRowSelected={
+                              row.index in rowSelection &&
+                              !!rowSelection[row.index]
+                            }
+                            selectedCell={selectedCell}
+                            row={row}
+                            rowIsSelected={selectedCell?.row === row.index}
+                            withColumnOrdering={withColumnOrdering}
+                            onCellClick={onCellClick}
+                            onCellUpdate={onCellUpdate}
+                          />
+                        </ContextMenuTrigger>
+                        <ContextMenuContent className="w-128">
+                          {renderContextMenu(row.original)}
+                        </ContextMenuContent>
+                      </ContextMenu>
+                    </Menu>
                   ) : (
                     <Row
                       key={row.id}
-                      borderColor={borderColor}
-                      backgroundColor={rowBackground}
                       editableComponents={editableComponents}
                       isEditing={isEditing}
                       isEditMode={editMode}
@@ -584,32 +544,26 @@ const Table = <T extends object>({
                         row.index in rowSelection && !!rowSelection[row.index]
                       }
                       selectedCell={selectedCell}
-                      // @ts-ignore
                       row={row}
                       rowIsSelected={selectedCell?.row === row.index}
                       withColumnOrdering={withColumnOrdering}
                       onCellClick={onCellClick}
                       onCellUpdate={onCellUpdate}
-                      onRowClick={
-                        rowsAreClickable
-                          ? () => onRowClick(row.original)
-                          : undefined
-                      }
                     />
                   );
                 })}
               </Tbody>
-            </ChakraTable>
+            </TableBase>
           ) : null}
 
           {/* Unpinned columns */}
-          <ChakraTable>
+          <TableBase>
             <Thead>
               {(withColumnOrdering
                 ? table.getCenterHeaderGroups()
                 : table.getHeaderGroups()
               ).map((headerGroup) => (
-                <Tr key={headerGroup.id} h={10}>
+                <Tr key={headerGroup.id} className="h-10">
                   {headerGroup.headers.map((header) => {
                     const accessorKey = getAccessorKey(header.column.columnDef);
 
@@ -629,27 +583,20 @@ const Table = <T extends object>({
                             ? () => toggleSortBy(accessorKey ?? "")
                             : undefined
                         }
-                        borderRightColor={borderColor}
-                        borderRightStyle="solid"
-                        borderRightWidth={editMode ? 1 : undefined}
-                        cursor={sortable ? "pointer" : undefined}
-                        px={4}
-                        py={3}
-                        w={header.getSize()}
-                        whiteSpace="nowrap"
+                        className={cn(
+                          "px-4 py-3 whitespace-nowrap",
+                          editMode && "border-r-1 border-border",
+                          sortable && "cursor-pointer"
+                        )}
+                        style={{ width: header.getSize() }}
                       >
                         {header.isPlaceholder ? null : (
-                          <Flex
-                            justify="flex-start"
-                            align="center"
-                            fontSize="xs"
-                            color="gray.500"
-                          >
+                          <div className="flex justify-start items-center text-xs text-muted-foreground">
                             {flexRender(
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                            <chakra.span pl="4">
+                            <span className="pl-4">
                               {sorted ? (
                                 sorted === -1 ? (
                                   <FaSortDown aria-label="sorted descending" />
@@ -662,8 +609,8 @@ const Table = <T extends object>({
                                   style={{ opacity: 0.4 }}
                                 />
                               ) : null}
-                            </chakra.span>
-                          </Flex>
+                            </span>
+                          </div>
                         )}
                       </Th>
                     );
@@ -674,52 +621,39 @@ const Table = <T extends object>({
             <Tbody>
               {rows.map((row) => {
                 return renderContextMenu ? (
-                  <ContextMenu<HTMLTableRowElement>
-                    key={row.id}
-                    renderMenu={() => (
-                      <MenuList>{renderContextMenu(row.original)}</MenuList>
-                    )}
-                  >
-                    {(ref) => (
-                      <Row
-                        borderColor={borderColor}
-                        backgroundColor={rowBackground}
-                        // @ts-ignore
-                        editableComponents={editableComponents}
-                        isEditing={isEditing}
-                        isEditMode={editMode}
-                        isRowSelected={
-                          row.index in rowSelection && !!rowSelection[row.index]
-                        }
-                        pinnedColumns={
-                          columnPinning?.left
-                            ? columnPinning.left?.length -
-                              (withSelectableRows ? 1 : 0)
-                            : 0
-                        }
-                        selectedCell={selectedCell}
-                        // @ts-ignore
-                        row={row}
-                        rowIsClickable={rowsAreClickable}
-                        rowIsSelected={selectedCell?.row === row.index}
-                        rowRef={ref}
-                        withColumnOrdering={withColumnOrdering}
-                        onCellClick={onCellClick}
-                        onCellUpdate={onCellUpdate}
-                        onRowClick={
-                          rowsAreClickable
-                            ? () => onRowClick(row.original)
-                            : undefined
-                        }
-                      />
-                    )}
-                  </ContextMenu>
+                  <Menu type="context" key={row.index}>
+                    <ContextMenu>
+                      <ContextMenuTrigger asChild>
+                        <Row
+                          editableComponents={editableComponents}
+                          isEditing={isEditing}
+                          isEditMode={editMode}
+                          isRowSelected={
+                            row.index in rowSelection &&
+                            !!rowSelection[row.index]
+                          }
+                          pinnedColumns={
+                            columnPinning?.left
+                              ? columnPinning.left?.length -
+                                (withSelectableRows ? 1 : 0)
+                              : 0
+                          }
+                          selectedCell={selectedCell}
+                          row={row}
+                          rowIsSelected={selectedCell?.row === row.index}
+                          withColumnOrdering={withColumnOrdering}
+                          onCellClick={onCellClick}
+                          onCellUpdate={onCellUpdate}
+                        />
+                      </ContextMenuTrigger>
+                      <ContextMenuContent className="w-128">
+                        {renderContextMenu(row.original)}
+                      </ContextMenuContent>
+                    </ContextMenu>
+                  </Menu>
                 ) : (
                   <Row
                     key={row.id}
-                    borderColor={borderColor}
-                    backgroundColor={rowBackground}
-                    // @ts-ignore
                     editableComponents={editableComponents}
                     isEditing={isEditing}
                     isEditMode={editMode}
@@ -733,28 +667,19 @@ const Table = <T extends object>({
                         : 0
                     }
                     selectedCell={selectedCell}
-                    // @ts-ignore
                     row={row}
-                    rowIsClickable={rowsAreClickable}
                     rowIsSelected={selectedCell?.row === row.index}
                     withColumnOrdering={withColumnOrdering}
                     onCellClick={onCellClick}
                     onCellUpdate={onCellUpdate}
-                    onRowClick={
-                      rowsAreClickable
-                        ? () => onRowClick(row.original)
-                        : undefined
-                    }
                   />
                 );
               })}
             </Tbody>
-          </ChakraTable>
-        </Grid>
-      </Box>
-      {withPagination && (
-        <Pagination {...pagination} colorScheme={colorScheme} />
-      )}
+          </TableBase>
+        </div>
+      </div>
+      {withPagination && <Pagination {...pagination} />}
     </VStack>
   );
 };
@@ -792,11 +717,11 @@ function getActionColumn<T>(
   return [
     {
       id: "Actions",
-      header: () => <VisuallyHidden>Actions</VisuallyHidden>,
+      header: () => <span className="sr-only">Actions</span>,
       cell: (item) => (
-        <Flex justifyContent="end">
+        <div className="flex justify-end">
           <ActionMenu>{renderContextMenu(item.row.original)}</ActionMenu>
-        </Flex>
+        </div>
       ),
     },
   ];

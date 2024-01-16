@@ -49,5 +49,9 @@ export default function SuppliersNewRoute() {
   const initialValues = {
     name: "",
   };
-  return <SupplierForm initialValues={initialValues} />;
+  return (
+    <div className="w-1/2 max-w-[720px] min-w-[420px] mx-auto">
+      <SupplierForm initialValues={initialValues} />
+    </div>
+  );
 }

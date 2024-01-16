@@ -1,13 +1,15 @@
 import {
   Button,
+  HStack,
   Modal,
   ModalBody,
   ModalContent,
+  ModalDescription,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
+  ModalTitle,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { getLocalTimeZone } from "@internationalized/date";
 import { json, redirect, type ActionFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -130,20 +132,22 @@ export default function OnboardingUser() {
   };
 
   return (
-    <Modal size="lg" isOpen onClose={() => 0}>
-      <ModalOverlay />
+    <Modal open>
       <ModalContent>
         <ValidatedForm
-          autoComplete="off"
           validator={onboardingCompanyValidator}
           defaultValues={initialValues}
           method="post"
         >
-          <ModalHeader>Now let's setup your company</ModalHeader>
-
+          <ModalHeader>
+            <ModalTitle>Now let's setup your company</ModalTitle>
+            <ModalDescription>
+              You can always change this later
+            </ModalDescription>
+          </ModalHeader>
           <ModalBody>
             <Hidden name="next" value={next} />
-            <VStack w="full" spacing={4}>
+            <VStack spacing={4}>
               <Input name="name" label="Company Name" />
               <Input name="addressLine1" label="Address" />
               <Input name="city" label="City" />
@@ -152,16 +156,21 @@ export default function OnboardingUser() {
             </VStack>
           </ModalBody>
 
-          <ModalFooter justifyContent="space-between">
-            <Button
-              isDisabled={!previous}
-              size="md"
-              disabled
-              onClick={onPrevious}
-            >
-              Previous
-            </Button>
-            <Submit>Next</Submit>
+          <ModalFooter>
+            <HStack>
+              <Button
+                variant="solid"
+                isDisabled={!previous}
+                size="md"
+                onClick={() => {
+                  onPrevious?.();
+                }}
+                tabIndex={-1}
+              >
+                Previous
+              </Button>
+              <Submit>Next</Submit>
+            </HStack>
           </ModalFooter>
         </ValidatedForm>
       </ModalContent>

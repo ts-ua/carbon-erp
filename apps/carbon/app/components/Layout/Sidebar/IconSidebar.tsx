@@ -1,5 +1,11 @@
-import { useColor } from "@carbon/react";
-import { Box, IconButton, Tooltip, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+  VStack,
+} from "@carbon/react";
 import { Link, useMatches } from "@remix-run/react";
 import { BsFillHexagonFill } from "react-icons/bs";
 import { z } from "zod";
@@ -23,51 +29,49 @@ const IconSidebar = () => {
   }, new Set<string>());
 
   return (
-    <Box
-      h="full"
-      borderRight={1}
-      borderRightColor={useColor("gray.200")}
-      borderRightStyle="solid"
-      background={useColor("white")}
-      zIndex={1}
-    >
-      <IconButton
-        aria-label="Home"
-        as={Link}
-        to="/"
-        variant="ghost"
-        size="lg"
-        icon={<BsFillHexagonFill />}
-        position="sticky"
-        top={0}
-        mb={4}
-      />
+    <div className="h-full border-r border-border bg-background z-10">
+      <div>
+        <TooltipProvider>
+          <VStack spacing={0} className="self-start sticky">
+            <Button
+              isIcon
+              asChild
+              variant="ghost"
+              size="lg"
+              className="rounded-none"
+            >
+              <Link to="/">
+                <BsFillHexagonFill />
+              </Link>
+            </Button>
+            {links.map((link) => {
+              const module = link.to.split("/")[2]; // link.to is "/x/parts" -- this returns "parts"
 
-      <VStack spacing={0} top={50} position="sticky">
-        {links.map((link) => {
-          const module = link.to.split("/")[2]; // link.to is "/x/parts" -- this returns "parts"
-
-          const isActive = matchedModules.has(module);
-          return (
-            <Tooltip key={link.to} label={link.name} placement="right">
-              <IconButton
-                as={Link}
-                to={link.to}
-                prefetch="intent"
-                colorScheme={isActive ? link.color ?? "brand" : undefined}
-                variant={isActive ? "solid" : "outline"}
-                size="lg"
-                borderRadius={0}
-                borderWidth={1}
-                borderColor={isActive ? "gray.200" : "transparent"}
-                aria-label={link.name}
-                icon={link.icon}
-              />
-            </Tooltip>
-          );
-        })}
-      </VStack>
-    </Box>
+              const isActive = matchedModules.has(module);
+              return (
+                <Tooltip key={link.to}>
+                  <TooltipTrigger asChild>
+                    <Button
+                      asChild
+                      isIcon
+                      aria-label={link.name}
+                      variant={isActive ? "primary" : "ghost"}
+                      size="lg"
+                      className="rounded-none"
+                    >
+                      <Link to={link.to} prefetch="intent">
+                        <link.icon />
+                      </Link>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">{link.name}</TooltipContent>
+                </Tooltip>
+              );
+            })}
+          </VStack>
+        </TooltipProvider>
+      </div>
+    </div>
   );
 };
 

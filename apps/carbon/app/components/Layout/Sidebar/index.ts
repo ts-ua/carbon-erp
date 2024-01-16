@@ -1,6 +1,6 @@
 import ContentSidebar from "./ContentSidebar";
+import DetailSidebar from "./DetailSidebar";
 import GroupedContentSidebar from "./GroupedContentSidebar";
 import IconSidebar from "./IconSidebar";
-import MultiTabSidebar from "./MultiTabSidebar";
 
-export { ContentSidebar, GroupedContentSidebar, IconSidebar, MultiTabSidebar };
+export { ContentSidebar, DetailSidebar, GroupedContentSidebar, IconSidebar };

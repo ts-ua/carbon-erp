@@ -1,19 +1,17 @@
-import {
-  Flex,
-  HStack,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  chakra,
-} from "@chakra-ui/react";
 import type { Column } from "@tanstack/react-table";
-import { FaSortDown, FaSortUp, FaSort } from "react-icons/fa";
+import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 import {
   MdDisabledVisible,
-  MdKeyboardArrowUp,
   MdKeyboardArrowDown,
+  MdKeyboardArrowUp,
 } from "react-icons/md";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../Dropdown";
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -30,16 +28,11 @@ export function DataTableColumnHeader<TData, TValue>({
   }
 
   return (
-    <Menu>
-      <MenuButton as={HStack} cursor="pointer" justifyContent="space-between">
-        <Flex
-          justify="flex-start"
-          align="center"
-          fontSize="xs"
-          color="gray.500"
-        >
+    <DropdownMenu>
+      <DropdownMenuTrigger className="flex items-center justify-between cursor-pointer">
+        <div className="flex flex-start items-center text-xs text-muted-foreground">
           {title}
-          <chakra.span pl="4">
+          <span className="pl-4">
             {column.getIsSorted() === "desc" ? (
               <FaSortDown aria-label="sorted descending" />
             ) : column.getIsSorted() === "asc" ? (
@@ -47,30 +40,26 @@ export function DataTableColumnHeader<TData, TValue>({
             ) : (
               <FaSort aria-label="sort" />
             )}
-          </chakra.span>
-        </Flex>
-      </MenuButton>
-      <MenuList>
-        <MenuItem
-          icon={<MdKeyboardArrowUp />}
-          onClick={() => column.toggleSorting(false)}
-        >
+          </span>
+        </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-96">
+        <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
+          <DropdownMenuIcon icon={<MdKeyboardArrowUp />} />
           Asc
-        </MenuItem>
-        <MenuItem
-          icon={<MdKeyboardArrowDown />}
-          onClick={() => column.toggleSorting(true)}
-        >
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
+          <DropdownMenuIcon icon={<MdKeyboardArrowDown />} />
           Desc
-        </MenuItem>
-        <MenuItem
-          icon={<MdDisabledVisible />}
+        </DropdownMenuItem>
+        <DropdownMenuItem
           disabled={!column.getCanHide()}
           onClick={() => column.toggleVisibility(false)}
         >
+          <DropdownMenuIcon icon={<MdDisabledVisible />} />
           Hide
-        </MenuItem>
-      </MenuList>
-    </Menu>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

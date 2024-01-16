@@ -1,6 +1,6 @@
-import { Icon } from "@chakra-ui/react";
 import {
   BsFileEarmarkFill,
+  BsFileEarmarkPlayFill,
   BsFileExcelFill,
   BsFileImageFill,
   BsFilePdfFill,
@@ -8,16 +8,10 @@ import {
   BsFileTextFill,
   BsFileWordFill,
   BsFileZipFill,
-  BsFileEarmarkPlayFill,
 } from "react-icons/bs";
 
 type DocumentIconProps = {
   fileName: string;
-};
-
-const iconSize = {
-  h: 6,
-  w: 6,
 };
 
 const DocumentIcon = ({ fileName }: DocumentIconProps) => {
@@ -26,45 +20,44 @@ const DocumentIcon = ({ fileName }: DocumentIconProps) => {
   switch (fileExtension) {
     case "doc":
     case "docx":
-      return <Icon color="blue.500" {...iconSize} as={BsFileWordFill} />;
+      return <BsFileWordFill className="w-6 h-6 color-blue-500" />;
     case "xls":
     case "xlsx":
-      return <Icon color="green.700" {...iconSize} as={BsFileExcelFill} />;
+      return <BsFileExcelFill className="w-6 h-6 text-green-700" />;
     case "ppt":
     case "pptx":
-      return <Icon color="orange.400" {...iconSize} as={BsFilePptFill} />;
+      return <BsFilePptFill className="w-6 h-6 text-orange-400" />;
     case "pdf":
-      return <Icon color="red.600" {...iconSize} as={BsFilePdfFill} />;
+      return <BsFilePdfFill className="w-6 h-6 text-red-600" />;
     case "zip":
     case "rar":
-      return <Icon {...iconSize} as={BsFileZipFill} />;
+      return <BsFileZipFill className="w-6 h-6" />;
     case "txt":
-      return <Icon {...iconSize} as={BsFileTextFill} />;
+      return <BsFileTextFill className="w-6 h-6" />;
     case "png":
     case "jpg":
     case "jpeg":
     case "gif":
     case "svg":
     case "avif":
-      return <Icon color="yellow.400" {...iconSize} as={BsFileImageFill} />;
+    case "webp":
+      return <BsFileImageFill className="w-6 h-6 text-yellow-400" />;
     case "mp4":
     case "avi":
     case "mov":
     case "wmv":
     case "flv":
     case "mkv":
-      return (
-        <Icon color="purple.500" {...iconSize} as={BsFileEarmarkPlayFill} />
-      );
+      return <BsFileEarmarkPlayFill className="w-6 h-6 text-purple-500" />;
     case "mp3":
     case "wav":
     case "wma":
     case "aac":
     case "ogg":
     case "m4a":
-      return <Icon color="cyan.400" {...iconSize} as={BsFileEarmarkPlayFill} />;
+      return <BsFileEarmarkPlayFill className="w-6 h-6 text-cyan-400" />;
     default:
-      return <Icon {...iconSize} as={BsFileEarmarkFill} />;
+      return <BsFileEarmarkFill className="w-6 h-6" />;
   }
 };
 

@@ -59,8 +59,6 @@ export default function NewPurchaseOrderLineRoute() {
 
   if (!orderId) throw new Error("Could not find purchase order id");
 
-  console.log({ orderId });
-
   const initialValues = {
     purchaseOrderId: orderId,
     purchaseOrderLineType: "Part" as PurchaseOrderLineType,

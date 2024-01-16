@@ -1,8 +1,8 @@
-import { Box, Link, MenuItem } from "@chakra-ui/react";
+import { Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare, BsPeopleFill } from "react-icons/bs";
+import { BsFillPenFill, BsPeopleFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -25,22 +25,19 @@ const CustomerTypesTable = memo(({ data, count }: CustomerTypesTableProps) => {
         accessorKey: "name",
         header: "Customer Type",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(row.original.id)}>
+          <Hyperlink onClick={() => navigate(row.original.id)}>
             {row.original.name}
-          </Link>
+          </Hyperlink>
         ),
       },
       {
         accessorKey: "color",
         header: "Color",
         cell: (item) => (
-          <Box
+          <div
             aria-label="Color"
-            w={6}
-            h={6}
-            borderRadius="md"
-            bg={item.getValue() ?? "#000000"}
-            role="img"
+            className="w-6 h-6 rounded-md bg-zinc-500"
+            style={{ background: item.getValue<string>() ?? "#000000" }}
           />
         ),
       },
@@ -52,31 +49,31 @@ const CustomerTypesTable = memo(({ data, count }: CustomerTypesTableProps) => {
       return (
         <>
           <MenuItem
-            icon={<BsPeopleFill />}
             onClick={() => {
               navigate(`${path.to.customers}?type=${row.id}`);
             }}
           >
+            <MenuIcon icon={<BsPeopleFill />} />
             View Customers
           </MenuItem>
           <MenuItem
-            isDisabled={row.protected || !permissions.can("update", "sales")}
-            icon={<BsPencilSquare />}
+            disabled={row.protected || !permissions.can("update", "sales")}
             onClick={() => {
               navigate(`${path.to.customerType(row.id)}?${params.toString()}`);
             }}
           >
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Customer Type
           </MenuItem>
           <MenuItem
-            isDisabled={row.protected || !permissions.can("delete", "sales")}
-            icon={<IoMdTrash />}
+            disabled={row.protected || !permissions.can("delete", "sales")}
             onClick={() => {
               navigate(
                 `${path.to.deleteCustomerType(row.id)}?${params.toString()}`
               );
             }}
           >
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Customer Type
           </MenuItem>
         </>

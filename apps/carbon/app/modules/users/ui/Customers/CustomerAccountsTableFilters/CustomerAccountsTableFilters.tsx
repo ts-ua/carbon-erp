@@ -1,13 +1,14 @@
-import { Select, useColor } from "@carbon/react";
-import { Button, HStack } from "@chakra-ui/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox, Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
-import type { CustomerType } from "~/modules/sales";
+import type { ListItem } from "~/types";
 
 type CustomerAccountsTableFiltersProps = {
-  customerTypes: Partial<CustomerType>[];
+  customerTypes: ListItem[];
 };
 
 const CustomerAccountsTableFilters = ({
@@ -17,50 +18,28 @@ const CustomerAccountsTableFilters = ({
   const permissions = usePermissions();
 
   const customerTypeOptions =
-    customerTypes?.map((type) => ({
-      value: type.id,
-      label: type.name,
+    customerTypes?.map<{ value: string; label: string }>((type) => ({
+      value: type.id!,
+      label: type.name!,
     })) ?? [];
 
-  const borderColor = useColor("gray.200");
-
   return (
-    <HStack
-      px={4}
-      py={3}
-      justifyContent="space-between"
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      w="full"
-    >
-      <HStack spacing={2}>
-        <DebouncedInput
-          param="name"
+    <TableFilters>
+      <HStack>
+        <DebouncedInput param="name" size="sm" placeholder="Search" />
+        <Combobox
           size="sm"
-          minW={180}
-          placeholder="Search"
-        />
-        <Select
-          size="sm"
-          value={customerTypeOptions.find(
-            (type) => type.value === params.get("type")
-          )}
+          value={params.get("type") ?? ""}
           isClearable
           options={customerTypeOptions}
           onChange={(selected) => {
-            setParams({ type: selected?.value });
+            setParams({ type: selected });
           }}
-          aria-label="Customer Type"
           placeholder="Customer Type"
         />
         <Select
           size="sm"
-          value={
-            params.get("active") === "false"
-              ? { value: "false", label: "Inactive" }
-              : { value: "true", label: "Active" }
-          }
+          value={params.get("active") === "false" ? "false" : "true"}
           options={[
             {
               value: "true",
@@ -72,24 +51,18 @@ const CustomerAccountsTableFilters = ({
             },
           ]}
           onChange={(selected) => {
-            setParams({ active: selected?.value });
+            setParams({ active: selected });
           }}
-          aria-label="Active"
         />
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "users") && (
-          <Button
-            as={Link}
-            to={`new?${params.toString()}`}
-            colorScheme="brand"
-            leftIcon={<IoMdAdd />}
-          >
-            New Customer
+          <Button asChild leftIcon={<IoMdAdd />}>
+            <Link to={`new?${params.toString()}`}>New Customer</Link>
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

@@ -228,7 +228,9 @@ export const currencyValidator = withZod(
         .max(1, { message: "Symbol can only be one character" })
         .optional()
     ),
-    exchangeRate: zfd.numeric(),
+    exchangeRate: zfd.numeric(
+      z.number().min(0, { message: "Rate is required" })
+    ),
     isBaseCurrency: zfd.checkbox(),
   })
 );

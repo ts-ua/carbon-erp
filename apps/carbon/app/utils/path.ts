@@ -1,4 +1,5 @@
 import { generatePath } from "@remix-run/react";
+import { SUPABASE_API_URL } from "~/config/env";
 
 const x = "/x"; // from ~/routes/x+ folder
 const api = "/api"; // from ~/routes/api+ folder
@@ -42,6 +43,9 @@ export const path = {
         generatePath(`${api}/resources/work-cells?location=${id}`),
     },
     file: {
+      previewImage: (bucket: string, path: string) =>
+        generatePath(`${file}/preview/image?file=${bucket}/${path}`),
+      previewFile: (path: string) => generatePath(`${file}/preview/${path}`),
       purchaseOrder: (id: string) =>
         generatePath(`${file}/pdf/purchase-order/${id}`),
     },
@@ -106,7 +110,7 @@ export const path = {
     customerShipping: (id: string) =>
       generatePath(`${x}/customer/${id}/shipping`),
     customerType: (id: string) =>
-      generatePath(`${x}/sales/customer-types/delete/${id}`),
+      generatePath(`${x}/sales/customer-types/${id}`),
     customerTypes: `${x}/sales/customer-types`,
     deactivateUsers: `${x}/users/deactivate`,
     deleteAbility: (id: string) =>
@@ -281,7 +285,7 @@ export const path = {
     newWorkCellType: `${x}/resources/work-cells/new`,
     part: (id: string) => generatePath(`${x}/part/${id}`),
     partCosting: (id: string) => generatePath(`${x}/part/${id}/costing`),
-    partGroup: (id: string) => generatePath(`${x}/parts/groups/delete/${id}`),
+    partGroup: (id: string) => generatePath(`${x}/parts/groups/${id}`),
     partGroups: `${x}/parts/groups`,
     partInventory: (id: string) => generatePath(`${x}/part/${id}/inventory`),
     partInventoryLocation: (id: string, locationId: string) =>
@@ -300,13 +304,15 @@ export const path = {
     partSuppliers: (id: string) => generatePath(`${x}/part/${id}/suppliers`),
     parts: `${x}/parts`,
     partsSearch: `${x}/parts/search`,
-    partner: (id: string) => generatePath(`${x}/resources/partners/${id}`),
+    partner: (id: string, abilityId: string) =>
+      generatePath(`${x}/resources/partners/${id}/${abilityId}`),
     partners: `${x}/resources/partners`,
     paymentTerm: (id: string) =>
       generatePath(`${x}/accounting/payment-terms/${id}`),
     paymentTerms: `${x}/accounting/payment-terms`,
     people: `${x}/resources/people`,
-    person: (id: string) => generatePath(`${x}/resources/person/${id}`),
+    person: (id: string) => generatePath(`${x}/person/${id}`),
+    personJob: (id: string) => generatePath(`${x}/person/${id}/job`),
     profile: `${x}/account/profile`,
     purchaseInvoice: (id: string) =>
       generatePath(`${x}/purchase-invoice/${id}`),
@@ -379,7 +385,7 @@ export const path = {
       generatePath(`${x}/supplier/${id}/shipping`),
     supplierRoot: `${x}/supplier`,
     supplierType: (id: string) =>
-      generatePath(`${x}/purchasing/supplier-types/delete/${id}`),
+      generatePath(`${x}/purchasing/supplier-types/${id}`),
     supplierTypes: `${x}/purchasing/supplier-types`,
     tableSequence: (id: string) =>
       generatePath(`${x}/settings/sequences/${id}`),
@@ -402,3 +408,7 @@ export const onboardingSequence = [
   path.to.onboarding.user,
   path.to.onboarding.company,
 ] as const;
+
+export const getStoragePath = (bucket: string, path: string) => {
+  return `${SUPABASE_API_URL}/storage/v1/object/public/${bucket}/${path}`;
+};

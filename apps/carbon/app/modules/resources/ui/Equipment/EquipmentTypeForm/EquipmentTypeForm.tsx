@@ -2,14 +2,13 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
   HStack,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Ability,
@@ -40,47 +39,52 @@ const EquipmentTypeForm = ({
     : !permissions.can("create", "resources");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={equipmentTypeValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.equipmentType(initialValues.id!)
-            : path.to.newEquipmentType
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={equipmentTypeValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.equipmentType(initialValues.id!)
+              : path.to.newEquipmentType
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
           <DrawerHeader>
-            {isEditing ? "Edit" : "New"} Equipment Type
+            <DrawerTitle>
+              {isEditing ? "Edit" : "New"} Equipment Type
+            </DrawerTitle>
           </DrawerHeader>
-          <DrawerBody pb={8}>
+          <DrawerBody>
             <Hidden name="id" />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Input name="name" label="Name" />
               <TextArea name="description" label="Description" />
               <Color name="color" label="Color" />
-              <Ability name="requiredAbility" label="Required Ability" />
+              <Ability
+                name="requiredAbility"
+                label="Required Ability"
+                isClearable
+              />
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

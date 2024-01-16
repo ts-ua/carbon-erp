@@ -1,12 +1,11 @@
 import {
   Card,
-  CardBody,
+  CardContent,
   CardFooter,
   CardHeader,
-  Grid,
-  Heading,
+  CardTitle,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -62,19 +61,14 @@ const PurchaseOrderDeliveryForm = ({
       validator={purchaseOrderDeliveryValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card>
         <CardHeader>
-          <Heading size="md">Delivery</Heading>
+          <CardTitle>Delivery</CardTitle>
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="id" />
-          <Grid
-            gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
-          >
-            <VStack alignItems="start" spacing={2} w="full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
+            <VStack>
               <Location
                 name="locationId"
                 label="Delivery Location"
@@ -93,12 +87,12 @@ const PurchaseOrderDeliveryForm = ({
                 options={shippingTermOptions}
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <DatePicker name="receiptRequestedDate" label="Requested Date" />
               <DatePicker name="receiptPromisedDate" label="Promised Date" />
               <DatePicker name="deliveryDate" label="Delivery Date" />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Input name="trackingNumber" label="Tracking Number" />
               {/* <TextArea name="notes" label="Shipping Notes" /> */}
               <Boolean
@@ -111,7 +105,7 @@ const PurchaseOrderDeliveryForm = ({
                   <Customer
                     name="customerId"
                     label="Customer"
-                    onChange={({ value }) => setCustomer(value as string)}
+                    onChange={(value) => setCustomer(value?.value as string)}
                   />
                   <CustomerLocation
                     name="customerLocationId"
@@ -121,8 +115,8 @@ const PurchaseOrderDeliveryForm = ({
                 </>
               )}
             </VStack>
-          </Grid>
-        </CardBody>
+          </div>
+        </CardContent>
         <CardFooter>
           <Submit isDisabled={!permissions.can("update", "purchasing")}>
             Save

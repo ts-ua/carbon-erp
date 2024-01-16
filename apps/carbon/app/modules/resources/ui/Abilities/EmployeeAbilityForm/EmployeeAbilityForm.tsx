@@ -2,18 +2,18 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
   HStack,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
+
 import { useParams } from "@remix-run/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
-import { Employee, Hidden, Select, Slider, Submit } from "~/components/Form";
+import { Employee, Hidden, Number, Select, Submit } from "~/components/Form";
 import { usePermissions } from "~/hooks";
 import type { Ability } from "~/modules/resources";
 import {
@@ -30,7 +30,7 @@ type EmployeeAbilityFormProps = {
   onClose: () => void;
 };
 
-const defaultPercent = 50;
+const defaultPercent = 0.5;
 
 const EmployeeAbilityForm = ({
   ability,
@@ -45,7 +45,7 @@ const EmployeeAbilityForm = ({
     ? !permissions.can("update", "resources")
     : !permissions.can("create", "resources");
 
-  const days = (percent: number) => weeks * 5 * (percent / 100);
+  const days = (percent: number) => weeks * 5 * percent;
   const [trainingDays, setTrainingDays] = useState(
     days(initialValues.trainingPercent ?? defaultPercent)
   );
@@ -60,23 +60,29 @@ const EmployeeAbilityForm = ({
   if (!ability) return null;
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={employeeAbilityValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.employeeAbility(ability.id, id!)
-            : path.to.newEmployeeAbility(ability.id)
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{isEditing ? "Edit" : "New"} Employee</DrawerHeader>
-          <DrawerBody pb={8}>
-            <VStack spacing={4} alignItems="start">
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={employeeAbilityValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.employeeAbility(ability.id, id!)
+              : path.to.newEmployeeAbility(ability.id)
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{isEditing ? "Edit" : "New"} Employee</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
+            <VStack spacing={4}>
               <Employee
                 name="employeeId"
                 label="Employee"
@@ -85,8 +91,10 @@ const EmployeeAbilityForm = ({
               <Select
                 name="trainingStatus"
                 label="Training Status"
-                onChange={({ value }) => {
-                  setInProgress(value === AbilityEmployeeStatus.InProgress);
+                onChange={(value) => {
+                  setInProgress(
+                    value?.value === AbilityEmployeeStatus.InProgress
+                  );
                 }}
                 options={[
                   {
@@ -105,14 +113,14 @@ const EmployeeAbilityForm = ({
               />
               {inProgress && (
                 <>
-                  <Slider
+                  <Number
                     name="trainingPercent"
                     label="Training Percent"
                     onChange={(value) => updateTrainingDays(value)}
                     defaultValue={defaultPercent}
-                    min={0}
-                    max={100}
-                    step={10}
+                    formatOptions={{ style: "percent" }}
+                    minValue={0}
+                    maxValue={1}
                   />
                   <Hidden name="trainingDays" value={trainingDays} />
                 </>
@@ -120,20 +128,15 @@ const EmployeeAbilityForm = ({
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

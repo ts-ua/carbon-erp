@@ -1,8 +1,8 @@
-import { Avatar, HStack, Link, MenuItem } from "@chakra-ui/react";
+import { Avatar, HStack, Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -25,16 +25,15 @@ const ContractorsTable = memo(({ data, count }: ContractorsTableProps) => {
         accessorKey: "supplier",
         header: "Supplier",
         cell: ({ row }) => (
-          <HStack spacing={2}>
+          <HStack>
             <Avatar size="sm" name={row.original.supplierName ?? ""} />
-
-            <Link
+            <Hyperlink
               onClick={() => {
                 navigate(path.to.supplier(row.original.supplierId!));
               }}
             >
               {row.original.supplierName}
-            </Link>
+            </Hyperlink>
           </HStack>
         ),
       },
@@ -57,7 +56,6 @@ const ContractorsTable = memo(({ data, count }: ContractorsTableProps) => {
       return (
         <>
           <MenuItem
-            icon={<BsPencilSquare />}
             onClick={() => {
               navigate(
                 `${path.to.contractor(
@@ -66,11 +64,11 @@ const ContractorsTable = memo(({ data, count }: ContractorsTableProps) => {
               );
             }}
           >
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Contractor
           </MenuItem>
           <MenuItem
-            isDisabled={!permissions.can("delete", "resources")}
-            icon={<IoMdTrash />}
+            disabled={!permissions.can("delete", "resources")}
             onClick={() => {
               navigate(
                 `${path.to.deleteContractor(
@@ -79,6 +77,7 @@ const ContractorsTable = memo(({ data, count }: ContractorsTableProps) => {
               );
             }}
           >
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Contractor
           </MenuItem>
         </>

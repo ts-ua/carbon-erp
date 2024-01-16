@@ -6,7 +6,12 @@ import type { TypeOfValidator } from "~/types/validators";
 import type { GenericQueryFilters } from "~/utils/query";
 import { setGenericQueryFilters } from "~/utils/query";
 import { sanitize } from "~/utils/supabase";
-import type { locationValidator } from "./resources.models";
+import type {
+  employeeJobValidator,
+  equipmentValidator,
+  locationValidator,
+  partnerValidator,
+} from "./resources.models";
 
 export async function deleteAbility(
   client: SupabaseClient<Database>,
@@ -283,7 +288,7 @@ export async function getContractors(
   }
 
   if (args?.ability) {
-    query.contains("abilityIds", [args.ability]);
+    query.eq("abilityId", args?.ability);
   }
 
   if (args) {
@@ -365,6 +370,17 @@ export async function getEmployeeJob(
   return client
     .from("employeeJob")
     .select("title, locationId, shiftId, managerId, startDate")
+    .eq("id", employeeId)
+    .single();
+}
+
+export async function getEmployeeSummary(
+  client: SupabaseClient<Database>,
+  employeeId: string
+) {
+  return client
+    .from("employeeSummary")
+    .select("*")
     .eq("id", employeeId)
     .single();
 }
@@ -491,12 +507,14 @@ export async function getLocationsList(client: SupabaseClient<Database>) {
 
 export async function getPartner(
   client: SupabaseClient<Database>,
-  partnerId: string
+  partnerId: string,
+  abilityId: string
 ) {
   return client
     .from("partners")
     .select("*")
     .eq("supplierLocationId", partnerId)
+    .eq("abilityId", abilityId)
     .single();
 }
 
@@ -511,7 +529,7 @@ export async function getPartners(
   }
 
   if (args?.ability) {
-    query.contains("abilityIds", [args.ability]);
+    query.eq("abilityId", args.ability);
   }
 
   if (args) {
@@ -614,6 +632,7 @@ export async function getPeople(
   const userIds = employees.data.map((employee) => {
     if (!employee.user || Array.isArray(employee.user))
       throw new Error("employee.user is an array");
+    // @ts-ignore
     return employee.user?.id;
   });
 
@@ -623,7 +642,7 @@ export async function getPeople(
   const people: Person[] = employees.data.map((employee) => {
     if (!employee.user || Array.isArray(employee.user))
       throw new Error("employee.user is an array");
-
+    // @ts-ignore
     const userId = employee.user?.id;
 
     const employeeAttributes =
@@ -651,6 +670,7 @@ export async function getPeople(
             if (value && userAttributeValue?.id) {
               acc[userAttributeId] = {
                 userAttributeValueId: userAttributeValue.id,
+                // @ts-ignore
                 dataType: attribute.attributeDataType?.id as DataType,
                 value,
                 user: !Array.isArray(userAttributeValue.user)
@@ -1027,47 +1047,29 @@ export async function upsertEmployeeAbility(
 export async function upsertEmployeeJob(
   client: SupabaseClient<Database>,
   employeeId: string,
-  employeeJob: {
-    title: string | null;
-    startDate: string | null;
-    locationId: string | null;
-    shiftId: string | null;
-    managerId: string | null;
-  }
+  employeeJob: TypeOfValidator<typeof employeeJobValidator>
 ) {
   return client
     .from("employeeJob")
-    .upsert([{ id: employeeId, ...employeeJob }]);
+    .upsert([{ id: employeeId, ...sanitize(employeeJob) }]);
 }
 
 export async function upsertEquipment(
   client: SupabaseClient<Database>,
   equipment:
-    | {
-        name: string;
-        description: string;
-        equipmentTypeId: string;
-        locationId: string;
-        operatorsRequired?: number;
-        setupHours?: number;
-        workCellId?: string;
+    | (Omit<TypeOfValidator<typeof equipmentValidator>, "id"> & {
         createdBy: string;
-      }
-    | {
+      })
+    | (Omit<TypeOfValidator<typeof equipmentValidator>, "id"> & {
         id: string;
-        name: string;
-        description: string;
-        equipmentTypeId: string;
-        locationId: string;
-        operatorsRequired?: number;
-        workCellId?: string;
         updatedBy: string;
-      }
+      })
 ) {
   if ("id" in equipment) {
     const { id, ...update } = equipment;
     return client.from("equipment").update(sanitize(update)).eq("id", id);
   }
+
   return client.from("equipment").insert([equipment]).select("id").single();
 }
 
@@ -1147,52 +1149,23 @@ export async function upsertLocation(
 
 export async function upsertPartner(
   client: SupabaseClient<Database>,
-  partnerWithAbilities:
-    | {
-        id: string;
-        hoursPerWeek?: number;
-        abilities: string[];
+  partner:
+    | (Omit<TypeOfValidator<typeof partnerValidator>, "supplierId"> & {
         createdBy: string;
-      }
-    | {
-        id: string;
-        hoursPerWeek?: number;
-        abilities: string[];
+      })
+    | (Omit<TypeOfValidator<typeof partnerValidator>, "supplierId"> & {
         updatedBy: string;
-      }
+      })
 ) {
-  const { abilities, ...partner } = partnerWithAbilities;
   if ("updatedBy" in partner) {
-    const updatePartner = await client
+    return client
       .from("partner")
       .update(sanitize(partner))
-      .eq("id", partner.id);
-    if (updatePartner.error) {
-      return updatePartner;
-    }
-    const deletePartnerAbilities = await client
-      .from("partnerAbility")
-      .delete()
-      .eq("partnerId", partner.id);
-    if (deletePartnerAbilities.error) {
-      return deletePartnerAbilities;
-    }
+      .eq("id", partner.id)
+      .eq("abilityId", partner.abilityId);
   } else {
-    const createPartner = await client.from("partner").insert([partner]);
-    if (createPartner.error) {
-      return createPartner;
-    }
+    return await client.from("partner").insert([partner]);
   }
-
-  const partnerAbilities = abilities.map((ability) => {
-    return {
-      partnerId: partner.id,
-      abilityId: ability,
-      createdBy: "createdBy" in partner ? partner.createdBy : partner.updatedBy,
-    };
-  });
-
-  return client.from("partnerAbility").insert(partnerAbilities);
 }
 
 export async function upsertShift(

@@ -1,13 +1,13 @@
 import {
   Card,
-  CardBody,
+  CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
-  Grid,
-  Heading,
-  Text,
+  CardTitle,
   VStack,
-} from "@chakra-ui/react";
+  cn,
+} from "@carbon/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -15,7 +15,6 @@ import {
   Hidden,
   Input,
   Select,
-  SelectControlled,
   Submit,
   Supplier,
   SupplierContact,
@@ -60,30 +59,28 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
       validator={purchaseOrderValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card>
         <CardHeader>
-          <Heading size="md">
+          <CardTitle>
             {isEditing ? "Purchase Order" : "New Purchase Order"}
-          </Heading>
+          </CardTitle>
           {!isEditing && (
-            <Text color="gray.500" fontWeight="normal">
+            <CardDescription>
               A purchase order contains information about the agreement between
               the company and a specific supplier for parts and services.
-            </Text>
+            </CardDescription>
           )}
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="purchaseOrderId" />
-          <VStack spacing={2} w="full" alignItems="start">
-            <Grid
-              gridTemplateColumns={
-                isEditing ? ["1fr", "1fr", "1fr 1fr 1fr"] : "1fr"
-              }
-              gridColumnGap={8}
-              gridRowGap={2}
-              w="full"
+          <VStack>
+            <div
+              className={cn(
+                "grid w-full gap-x-8 gap-y-2",
+                isEditing ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1"
+              )}
             >
-              <VStack alignItems="start" spacing={2} w="full">
+              <VStack>
                 <Supplier
                   name="supplierId"
                   label="Supplier"
@@ -106,7 +103,7 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
                   </>
                 )}
               </VStack>
-              <VStack alignItems="start" spacing={2} w="full">
+              <VStack>
                 <Input name="supplierReference" label="Supplier Order Number" />
                 <DatePicker
                   name="orderDate"
@@ -120,11 +117,11 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
                   isReadOnly={isSupplier}
                 />
               </VStack>
-              <VStack alignItems="start" spacing={2} w="full">
+              <VStack>
                 {isEditing && (
                   <>
                     {permissions.can("delete", "purchasing") && (
-                      <SelectControlled
+                      <Select
                         name="status"
                         label="Status"
                         value={initialValues.status}
@@ -135,14 +132,14 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
                     <TextArea
                       name="notes"
                       label="Notes"
-                      isReadOnly={isSupplier}
+                      readOnly={isSupplier}
                     />
                   </>
                 )}
               </VStack>
-            </Grid>
+            </div>
           </VStack>
-        </CardBody>
+        </CardContent>
         <CardFooter>
           <Submit
             isDisabled={

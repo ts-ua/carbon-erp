@@ -1,15 +1,11 @@
-import { useColor } from "@carbon/react";
 import {
-  Box,
-  Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
   HStack,
   useDisclosure,
   useOutsideClick,
-} from "@chakra-ui/react";
-
+} from "@carbon/react";
 import { useRef } from "react";
 import { HexColorInput, HexColorPicker } from "react-colorful";
 import { useControlField, useField } from "remix-validated-form";
@@ -30,53 +26,29 @@ const ColorPicker = ({ name, label }: ColorFieldProps) => {
     handler: () => disclosure.onClose(),
   });
 
-  const borderColor = useColor("var(--chakra-colors-gray-200)");
-
   return (
     <FormControl>
       <FormLabel>{label}</FormLabel>
       <input type="hidden" name={name} value={value} />
-      <Box position="relative" ref={containerRef}>
+      <div className="relative" ref={containerRef}>
         <HStack>
-          <Box
-            as={Button}
-            bg={value}
-            h={8}
-            w={8}
-            border="1px solid"
-            borderColor={borderColor}
-            borderRadius="md"
-            boxShadow="md"
-            cursor="pointer"
+          <button
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-8 w-8 border border-border"
+            style={{ background: value }}
             onClick={disclosure.onToggle}
-            tabIndex={0}
-            _hover={{
-              bg: value,
-            }}
           />
           <HexColorInput
             color={value}
             onChange={setValue}
-            style={{
-              padding: "0 0.5rem",
-              height: "2.25rem",
-              borderRadius: "0.275rem",
-              outline: "2px solid transparent",
-              outlineOffset: "2px",
-              border: `1px solid ${borderColor}`,
-            }}
+            className="py-0 px-2 h-9 rounded-md outline-2 outline-offset-2 outline-transparent border border-border z-50"
           />
         </HStack>
-        <Box
-          position="absolute"
-          marginTop={1}
-          top={10}
-          zIndex={3}
-          hidden={!disclosure.isOpen}
-        >
-          <HexColorPicker color={value} onChange={setValue} />
-        </Box>
-      </Box>
+        {disclosure.isOpen && (
+          <div className="absolute mt-1 top-10 z-50">
+            <HexColorPicker color={value} onChange={setValue} />
+          </div>
+        )}
+      </div>
       {error && <FormErrorMessage>{error}</FormErrorMessage>}
     </FormControl>
   );

@@ -3,21 +3,20 @@ import {
   AvatarGroup,
   HStack,
   IconButton,
-  Input,
+  Input as InputBase,
   InputGroup,
   InputLeftElement,
   InputRightElement,
   Spinner,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { MdOutlineClear } from "react-icons/md";
 import useUserSelectContext from "../provider";
 
-const SelectInput = () => {
+const Input = () => {
   const {
     aria: { inputProps },
-    innerProps: { disabled, isMulti, placeholder, readOnly, testID },
+    innerProps: { disabled, isMulti, placeholder, readOnly },
     inputValue,
-    instanceId,
     loading,
     refs: { inputRef },
     onClearInput,
@@ -28,57 +27,50 @@ const SelectInput = () => {
 
   return (
     <InputGroup>
-      {isMulti ? (
-        <InputLeftElement left={2}>
-          <AvatarGroup size="xs" max={2}>
-            <Avatar />
-            <Avatar />
-          </AvatarGroup>
-        </InputLeftElement>
-      ) : (
-        <InputLeftElement>
-          <Avatar size="xs" />
-        </InputLeftElement>
-      )}
+      {!readOnly &&
+        (isMulti ? (
+          <InputLeftElement>
+            <AvatarGroup size="xs" limit={2}>
+              <Avatar size="xs" />
+              <Avatar size="xs" />
+            </AvatarGroup>
+          </InputLeftElement>
+        ) : (
+          <InputLeftElement>
+            <Avatar size="xs" />
+          </InputLeftElement>
+        ))}
 
-      <Input
+      <InputBase
         {...inputProps}
-        id={`${instanceId}:UserSelectionInput:searchInput:${testID}`}
-        data-testid={`UserSelectionInput:searchInput:${testID}`}
-        readOnly={disabled || readOnly}
+        isReadOnly={disabled || readOnly}
         isDisabled={disabled || readOnly}
         onBlur={onInputBlur}
         onChange={onInputChange}
-        onFocus={onInputFocus}
+        onFocus={readOnly || disabled ? undefined : onInputFocus}
         placeholder={placeholder}
         spellCheck="false"
         ref={inputRef}
         type="text"
         value={inputValue}
-        pl={isMulti ? "3.175rem" : undefined}
-        pr="2.5rem"
       />
-
-      <InputRightElement w="auto">
-        <HStack spacing={1} mr={2}>
-          {loading && <Spinner size="sm" />}
-          {!loading && !disabled && inputValue.length > 0 && (
-            <IconButton
-              aria-label="Clear search query"
-              icon={<MdOutlineClear />}
-              onClick={onClearInput}
-              colorScheme="gray"
-              h={8}
-              w={8}
-              borderRadius={4}
-              size="sm"
-              variant="ghost"
-            />
-          )}
-        </HStack>
-      </InputRightElement>
+      {!readOnly && !disabled && (
+        <InputRightElement>
+          <HStack spacing={1}>
+            {loading && <Spinner />}
+            {!loading && !disabled && inputValue.length > 0 && (
+              <IconButton
+                aria-label="Clear search query"
+                icon={<MdOutlineClear />}
+                onClick={onClearInput}
+                variant="ghost"
+              />
+            )}
+          </HStack>
+        </InputRightElement>
+      )}
     </InputGroup>
   );
 };
 
-export default SelectInput;
+export default Input;

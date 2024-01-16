@@ -1,8 +1,15 @@
-import { AvatarGroup, Link, MenuItem } from "@chakra-ui/react";
+import {
+  AvatarGroup,
+  AvatarGroupList,
+  AvatarOverflowIndicator,
+  Hyperlink,
+  MenuIcon,
+  MenuItem,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
 import { usePermissions } from "~/hooks";
@@ -61,24 +68,27 @@ const AbilitiesTable = memo(({ data, count }: AbilitiesTableProps) => {
         accessorKey: "name",
         header: "Ability",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(path.to.ability(row.original.id))}>
+          <Hyperlink onClick={() => navigate(path.to.ability(row.original.id))}>
             {row.original.name}
-          </Link>
+          </Hyperlink>
         ),
       },
       {
         header: "Employees",
         // accessorKey: undefined, // makes the column unsortable
         cell: ({ row }) => (
-          <AvatarGroup max={5} size="sm" spacing={-2}>
-            {row.original.employees.map((employee, index: number) => (
-              <Avatar
-                key={index}
-                name={employee.name ?? undefined}
-                title={employee.name ?? undefined}
-                path={employee.avatarUrl}
-              />
-            ))}
+          <AvatarGroup limit={5}>
+            <AvatarGroupList>
+              {row.original.employees.map((employee, index: number) => (
+                <Avatar
+                  key={index}
+                  name={employee.name ?? undefined}
+                  title={employee.name ?? undefined}
+                  path={employee.avatarUrl}
+                />
+              ))}
+            </AvatarGroupList>
+            <AvatarOverflowIndicator />
           </AvatarGroup>
         ),
       },
@@ -107,20 +117,20 @@ const AbilitiesTable = memo(({ data, count }: AbilitiesTableProps) => {
       return (
         <>
           <MenuItem
-            icon={<BsPencilSquare />}
             onClick={() => {
               navigate(path.to.ability(row.id));
             }}
           >
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Ability
           </MenuItem>
           <MenuItem
-            isDisabled={!permissions.can("delete", "resources")}
-            icon={<IoMdTrash />}
+            disabled={!permissions.can("delete", "resources")}
             onClick={() => {
               navigate(path.to.deleteAbility(row.id));
             }}
           >
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Ability
           </MenuItem>
         </>

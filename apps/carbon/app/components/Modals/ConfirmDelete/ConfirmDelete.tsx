@@ -2,12 +2,12 @@ import {
   Button,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-} from "@chakra-ui/react";
+  ModalTitle,
+} from "@carbon/react";
 import { Form } from "@remix-run/react";
 
 type ConfirmDeleteProps = {
@@ -28,19 +28,26 @@ const ConfirmDelete = ({
   onSubmit,
 }: ConfirmDeleteProps) => {
   return (
-    <Modal isOpen={isOpen} onClose={onCancel}>
+    <Modal
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onCancel();
+      }}
+    >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Delete {name}</ModalHeader>
-        <ModalCloseButton />
+        <ModalHeader>
+          <ModalTitle>Delete {name}</ModalTitle>
+        </ModalHeader>
+
         <ModalBody>{text}</ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="gray" mr={3} onClick={onCancel}>
+          <Button variant="secondary" className="mr-3" onClick={onCancel}>
             Cancel
           </Button>
           <Form method="post" action={action} onSubmit={onSubmit}>
-            <Button colorScheme="red" type="submit">
+            <Button variant="destructive" type="submit">
               Delete
             </Button>
           </Form>

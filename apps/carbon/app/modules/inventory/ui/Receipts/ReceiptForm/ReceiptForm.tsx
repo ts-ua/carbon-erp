@@ -1,18 +1,17 @@
-import { Menubar, MenubarItem } from "@carbon/react";
 import {
-  Box,
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
-  Grid,
+  DrawerTitle,
   HStack,
+  Menubar,
+  MenubarItem,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { Outlet } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -24,8 +23,13 @@ import {
 } from "~/components/Form";
 import DataGrid from "~/components/Grid";
 import { SectionTitle } from "~/components/Layout";
-import type { ReceiptLine, ReceiptSourceDocument } from "~/modules/inventory";
+import type {
+  ReceiptLine,
+  ReceiptSourceDocument,
+  receiptStatusType,
+} from "~/modules/inventory";
 import {
+  ReceiptStatus,
   receiptSourceDocumentType,
   receiptValidator,
 } from "~/modules/inventory";
@@ -37,7 +41,7 @@ import useReceiptForm from "./useReceiptForm";
 
 type ReceiptFormProps = {
   initialValues: TypeOfValidator<typeof receiptValidator>;
-  isPosted: boolean;
+  status: (typeof receiptStatusType)[number];
   notes: Note[];
   receiptLines?: ReceiptLine[];
 };
@@ -46,7 +50,7 @@ const formId = "receipt-form";
 
 const ReceiptForm = ({
   initialValues,
-  isPosted,
+  status,
   notes,
   receiptLines,
 }: ReceiptFormProps) => {
@@ -72,22 +76,32 @@ const ReceiptForm = ({
     receiptLines: receiptLines ?? [],
   });
 
+  const isPosted = status === "Posted";
+
   return (
     <>
-      <Drawer onClose={onClose} isOpen={true} size="full">
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{initialValues.receiptId}</DrawerHeader>
-          <DrawerBody pb={8}>
-            <VStack spacing={4} w="full" alignItems="start">
-              <Menubar mb={2} mt={-2}>
+      <Drawer
+        open
+        onOpenChange={(open) => {
+          if (!open) onClose();
+        }}
+      >
+        <DrawerContent size="full">
+          <DrawerHeader>
+            <DrawerTitle>{initialValues.receiptId}</DrawerTitle>
+            <DrawerDescription>
+              <ReceiptStatus status={status} />
+            </DrawerDescription>
+          </DrawerHeader>
+          <DrawerBody>
+            <VStack spacing={4}>
+              <Menubar className="mb-2 mt--2">
                 <MenubarItem isDisabled={!canPost || isPosted} onClick={onPost}>
                   Post
                 </MenubarItem>
               </Menubar>
 
-              <Box w="full">
+              <div className="w-full">
                 <ValidatedForm
                   id={formId}
                   validator={receiptValidator}
@@ -105,13 +119,8 @@ const ReceiptForm = ({
                     }
                   />
                   <Hidden name="supplierId" value={supplierId ?? ""} />
-                  <VStack spacing={4} w="full" alignItems="start" minH="full">
-                    <Grid
-                      gridTemplateColumns={["1fr", "1fr", "1fr 1fr"]}
-                      gridColumnGap={8}
-                      gridRowGap={4}
-                      w="full"
-                    >
+                  <VStack spacing={4} className="min-h-full">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 w-full">
                       <Input name="receiptId" label="Receipt ID" isReadOnly />
                       <SelectControlled
                         name="locationId"
@@ -123,9 +132,9 @@ const ReceiptForm = ({
                           })) ?? []
                         }
                         value={locationId ?? undefined}
-                        onChange={(newValue) =>
-                          setLocationId(newValue as string)
-                        }
+                        onChange={(newValue) => {
+                          if (newValue) setLocationId(newValue.value as string);
+                        }}
                         isReadOnly={isPosted}
                       />
                       <Select
@@ -136,10 +145,12 @@ const ReceiptForm = ({
                           value: v,
                         }))}
                         onChange={(newValue) => {
-                          setSourceDocument(
-                            newValue.value as ReceiptSourceDocument
-                          );
-                          setSourceDocumentId(null);
+                          if (newValue) {
+                            setSourceDocument(
+                              newValue.value as ReceiptSourceDocument
+                            );
+                            setSourceDocumentId(null);
+                          }
                         }}
                         isReadOnly={isPosted}
                       />
@@ -152,7 +163,9 @@ const ReceiptForm = ({
                         }))}
                         value={sourceDocumentId ?? undefined}
                         onChange={(newValue) => {
-                          setSourceDocumentId(newValue as string);
+                          if (newValue) {
+                            setSourceDocumentId(newValue.value as string);
+                          }
                         }}
                         isReadOnly={isPosted}
                       />
@@ -160,12 +173,12 @@ const ReceiptForm = ({
                         name="externalDocumentId"
                         label="External Reference"
                       />
-                    </Grid>
+                    </div>
                   </VStack>
                 </ValidatedForm>
-              </Box>
+              </div>
 
-              <VStack w="full" alignItems="start">
+              <VStack>
                 <SectionTitle>Receipt Lines</SectionTitle>
                 <DataGrid<ReceiptLine>
                   data={internalReceiptLines}
@@ -176,21 +189,16 @@ const ReceiptForm = ({
                   onDataChange={setReceiptLines}
                 />
               </VStack>
-
+              <SectionTitle>Notes</SectionTitle>
               <Notes notes={notes} documentId={initialValues.id} />
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit formId={formId} isDisabled={isDisabled}>
                 Save
               </Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>

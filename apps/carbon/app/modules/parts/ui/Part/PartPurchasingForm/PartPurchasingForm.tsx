@@ -1,18 +1,17 @@
 import {
   Card,
-  CardBody,
+  CardContent,
   CardFooter,
   CardHeader,
-  Grid,
-  Heading,
+  CardTitle,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Boolean,
+  Combobox,
   Hidden,
   Number,
-  Select,
   Submit,
   Supplier,
 } from "~/components/Form";
@@ -43,24 +42,19 @@ const PartPurchasingForm = ({
       validator={partPurchasingValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card>
         <CardHeader>
-          <Heading size="md">Purchasing</Heading>
+          <CardTitle>Purchasing</CardTitle>
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="partId" />
-          <Grid
-            gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
-          >
-            <VStack alignItems="start" spacing={2} w="full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
+            <VStack>
               <Supplier name="preferredSupplierId" label="Preferred Supplier" />
               <Number name="purchasingLeadTime" label="Lead Time (Days)" />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
-              <Select
+            <VStack>
+              <Combobox
                 name="purchasingUnitOfMeasureCode"
                 label="Purchasing Unit of Measure"
                 options={unitOfMeasureOptions}
@@ -68,14 +62,14 @@ const PartPurchasingForm = ({
               <Number
                 name="conversionFactor"
                 label="Conversion Factor"
-                min={0}
+                minValue={0}
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Boolean name="purchasingBlocked" label="Purchasing Blocked" />
             </VStack>
-          </Grid>
-        </CardBody>
+          </div>
+        </CardContent>
         <CardFooter>
           <Submit isDisabled={!permissions.can("update", "parts")}>Save</Submit>
         </CardFooter>

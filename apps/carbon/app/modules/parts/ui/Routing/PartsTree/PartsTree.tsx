@@ -1,5 +1,4 @@
-import { useMount } from "@carbon/react";
-import { Box, Button, HStack, Icon } from "@chakra-ui/react";
+import { Button, HStack, useMount } from "@carbon/react";
 import { useState } from "react";
 import { AiOutlineCodeSandbox } from "react-icons/ai";
 import { BsCaretDownFill } from "react-icons/bs";
@@ -57,44 +56,35 @@ const PartsTreeExplorer = () => {
   const renderPartsTree = (data: PartsTreeNode[], level: number = 0) => {
     return data.map((node) => {
       return (
-        <Box display="block" p={0} role="group" key={node.id}>
+        <div className="block p-0" role="group" key={node.id}>
           <HStack
-            alignItems="stretch"
-            pl={`calc(${1.5 * level}rem)`}
-            borderWidth={2}
-            borderStyle="solid"
-            borderColor="transparent"
-            _active={{
-              borderColor: "blue.200",
+            className="items-stretch border-2 border-transparent :active:border-blue-200"
+            style={{
+              paddingLeft: `calc(${1.5 * level}rem)`,
             }}
           >
             <Button
               variant="ghost"
               aria-label="Expand"
-              borderRadius={0}
-              size="sm"
+              className="rounded-none"
               onClick={() => toggleNode(node.id)}
               isDisabled={!node.children}
             >
-              <Icon
-                as={BsCaretDownFill}
-                w={4}
-                h={4}
-                transition="transform .25s ease"
-                transform={
-                  expandedNodes[node.id] || !node.children
-                    ? undefined
-                    : "rotate(-0.25turn)"
-                }
+              <BsCaretDownFill
+                className="w-4 h-4"
+                style={{
+                  transition: "transform .25s ease",
+                  transform:
+                    expandedNodes[node.id] || !node.children
+                      ? undefined
+                      : "rotate(-0.25turn)",
+                }}
               />
             </Button>
             <Button
-              size="sm"
               variant="ghost"
               leftIcon={<AiOutlineCodeSandbox />}
-              borderRadius={0}
-              justifyContent="start"
-              flex="1 1 0%"
+              className="rounded-none flex-1 justify-start"
             >
               {node.id}
             </Button>
@@ -102,7 +92,7 @@ const PartsTreeExplorer = () => {
           {node.children &&
             expandedNodes[node.id] &&
             renderPartsTree(node.children, level + 1)}
-        </Box>
+        </div>
       );
     });
   };

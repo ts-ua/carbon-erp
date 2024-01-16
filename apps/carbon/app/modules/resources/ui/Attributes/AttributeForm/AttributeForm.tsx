@@ -2,14 +2,14 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
   HStack,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
+
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -49,7 +49,7 @@ const AttributeForm = ({
 
   const options =
     dataTypes?.map((dt) => ({
-      value: dt.id,
+      value: dt.id.toString(),
       label: dt.label,
     })) ?? [];
 
@@ -63,31 +63,37 @@ const AttributeForm = ({
   );
 
   const onChangeCheckForListType = (selected: {
-    value: string | number;
+    value: string;
     label: string;
   }) => {
     setIsList(Number(selected.value) === DataType.List);
   };
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={attributeValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.attribute(initialValues.id!)
-            : path.to.newAttribute
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{isEditing ? "Edit" : "New"} Attribute</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={attributeValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.attribute(initialValues.id!)
+              : path.to.newAttribute
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{isEditing ? "Edit" : "New"} Attribute</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <Hidden name="id" />
-            <VStack spacing={2} alignItems="start">
+            <VStack spacing={4}>
               <Input name="name" label="Name" />
               <Hidden name="userAttributeCategoryId" />
 
@@ -110,20 +116,15 @@ const AttributeForm = ({
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

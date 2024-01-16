@@ -1,12 +1,11 @@
 import {
   Card,
-  CardBody,
+  CardContent,
   CardFooter,
   CardHeader,
-  Grid,
-  Heading,
+  CardTitle,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Boolean, Hidden, Number, Select, Submit } from "~/components/Form";
 import { usePermissions } from "~/hooks";
@@ -16,6 +15,8 @@ import type { TypeOfValidator } from "~/types/validators";
 type PartCostingFormProps = {
   initialValues: TypeOfValidator<typeof partCostValidator>;
 };
+
+const currency = "USD"; // TODO: get from settings
 
 const PartCostingForm = ({ initialValues }: PartCostingFormProps) => {
   const permissions = usePermissions();
@@ -33,44 +34,59 @@ const PartCostingForm = ({ initialValues }: PartCostingFormProps) => {
       validator={partCostValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card>
         <CardHeader>
-          <Heading size="md">Costing & Posting</Heading>
+          <CardTitle>Costing & Posting</CardTitle>
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="partId" />
-          <Grid
-            gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
-          >
-            <VStack alignItems="start" spacing={2} w="full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
+            <VStack>
               <Select
                 name="costingMethod"
                 label="Part Costing Method"
                 options={partCostingMethodOptions}
               />
-              <Number name="standardCost" label="Standard Cost" precision={2} />
-              <Number name="unitCost" label="Unit Cost" precision={2} />
+              <Number
+                name="standardCost"
+                label="Standard Cost"
+                formatOptions={{
+                  style: "currency",
+                  currency,
+                }}
+              />
+
+              <Number
+                name="unitCost"
+                label="Unit Cost"
+                formatOptions={{
+                  style: "currency",
+                  currency,
+                }}
+              />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Number
                 name="salesHistory"
                 label="Sales History"
-                precision={2}
+                formatOptions={{
+                  style: "currency",
+                  currency,
+                }}
                 isReadOnly
               />
               <Number
                 name="salesHistoryQty"
                 label="Sales History Qty"
-                precision={2}
+                formatOptions={{
+                  maximumSignificantDigits: 3,
+                }}
                 isReadOnly
               />
               <Boolean name="costIsAdjusted" label="Cost Is Adjusted" />
             </VStack>
-          </Grid>
-        </CardBody>
+          </div>
+        </CardContent>
         <CardFooter>
           <Submit isDisabled={!permissions.can("update", "parts")}>Save</Submit>
         </CardFooter>

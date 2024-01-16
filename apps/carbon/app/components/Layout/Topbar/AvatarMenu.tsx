@@ -1,10 +1,12 @@
 import {
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/react";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@carbon/react";
 import { Form, Link } from "@remix-run/react";
 import { BiLogOut } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
@@ -17,29 +19,29 @@ const AvatarMenu = () => {
   const name = `${user.firstName} ${user.lastName}`;
 
   return (
-    <Menu>
-      <MenuButton
-        arial-label="User Menu"
-        as={Avatar}
-        path={user.avatarUrl}
-        title={name}
-        role="button"
-        size="sm"
-        cursor="pointer"
-      />
-      <MenuList fontSize="sm" boxShadow="xl" minW={48}>
-        <MenuItem>Signed in as {name}</MenuItem>
-        <MenuDivider />
-        <MenuItem as={Link} to={path.to.profile} icon={<CgProfile />}>
-          My Profile
-        </MenuItem>
+    <DropdownMenu>
+      <DropdownMenuTrigger className="outline-none focus-visible:outline-none">
+        <Avatar path={user.avatarUrl} name={name} />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel>Signed in as {name}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link to={path.to.profile}>
+            <DropdownMenuIcon icon={<CgProfile />} />
+            My Profile
+          </Link>
+        </DropdownMenuItem>
         <Form method="post" action={path.to.logout}>
-          <MenuItem type="submit" icon={<BiLogOut />}>
-            Sign Out
-          </MenuItem>
+          <DropdownMenuItem asChild>
+            <button type="submit" className="w-full">
+              <DropdownMenuIcon icon={<BiLogOut />} />
+              <span>Sign Out</span>
+            </button>
+          </DropdownMenuItem>
         </Form>
-      </MenuList>
-    </Menu>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

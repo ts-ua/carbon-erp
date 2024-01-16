@@ -1,13 +1,13 @@
-import type { InputProps } from "@chakra-ui/react";
-import { IconButton } from "@chakra-ui/react";
+import type { InputProps } from "@carbon/react";
 import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  IconButton,
   Input,
   InputGroup,
   InputRightElement,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { forwardRef, useState } from "react";
 import { BiHide, BiShowAlt } from "react-icons/bi";
 import { useField } from "remix-validated-form";
@@ -26,7 +26,7 @@ const Password = forwardRef<HTMLInputElement, FormPasswordProps>(
     return (
       <FormControl isInvalid={!!error} isRequired={isRequired}>
         {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-        <InputGroup size="md">
+        <InputGroup>
           <Input
             {...getInputProps({
               id: name,
@@ -35,13 +35,11 @@ const Password = forwardRef<HTMLInputElement, FormPasswordProps>(
             ref={ref}
             type={passwordVisible ? "text" : "password"}
           />
-          <InputRightElement width="2.75rem">
+          <InputRightElement className="w-[2.75rem]">
             <IconButton
               aria-label={passwordVisible ? "Show password" : "Hide password"}
               icon={passwordVisible ? <BiShowAlt /> : <BiHide />}
-              h="1.75rem"
-              size="sm"
-              variant="outline"
+              variant="ghost"
               tabIndex={-1}
               onClick={() => setPasswordVisible(!passwordVisible)}
             />

@@ -1,14 +1,14 @@
-import type { InputProps } from "@chakra-ui/react";
-import { Button } from "@chakra-ui/react";
-import { VStack } from "@chakra-ui/react";
-import { IconButton } from "@chakra-ui/react";
-import { HStack } from "@chakra-ui/react";
+import type { InputProps } from "@carbon/react";
 import {
+  Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Input as ChakraInput,
-} from "@chakra-ui/react";
+  HStack,
+  IconButton,
+  Input as InputBase,
+  VStack,
+} from "@carbon/react";
 import { forwardRef } from "react";
 import { IoMdAdd, IoMdClose } from "react-icons/io";
 import { useField, useFieldArray } from "remix-validated-form";
@@ -26,7 +26,7 @@ const Array = forwardRef<HTMLInputElement, FormArrayProps>(
     return (
       <FormControl isInvalid={!!error} isRequired={isRequired}>
         {label && <FormLabel htmlFor={`${name}`}>{label}</FormLabel>}
-        <VStack alignItems="start" spacing={2} w="full" mb={4}>
+        <VStack className="mb-4">
           {items.map((item, index) => (
             <ArrayInput
               key={`${item}-${index}`}
@@ -37,7 +37,11 @@ const Array = forwardRef<HTMLInputElement, FormArrayProps>(
               {...rest}
             />
           ))}
-          <Button leftIcon={<IoMdAdd />} onClick={() => push("")}>
+          <Button
+            variant="secondary"
+            leftIcon={<IoMdAdd />}
+            onClick={() => push("")}
+          >
             New Option
           </Button>
         </VStack>
@@ -60,8 +64,8 @@ const ArrayInput = forwardRef<HTMLInputElement, ArrayInputProps>(
 
     return (
       <FormControl isInvalid={!!error} isRequired>
-        <HStack w="full" alignContent="space-between">
-          <ChakraInput
+        <HStack className="w-full content-between">
+          <InputBase
             ref={ref}
             {...getInputProps({
               id: name,
@@ -69,10 +73,10 @@ const ArrayInput = forwardRef<HTMLInputElement, ArrayInputProps>(
             })}
           />
           <IconButton
+            variant="ghost"
             aria-label="Remove item"
             icon={<IoMdClose />}
             onClick={onRemove}
-            variant="ghost"
           />
         </HStack>
 

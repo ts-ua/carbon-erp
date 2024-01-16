@@ -8,7 +8,6 @@ import {
   getPartInventory,
   getPartQuantities,
   getShelvesList,
-  insertShelf,
   partInventoryValidator,
   upsertPartInventory,
 } from "~/modules/parts";
@@ -136,25 +135,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const { hasNewShelf, ...update } = validation.data;
-
-  if (hasNewShelf === "true" && update.defaultShelfId) {
-    const createShelf = await insertShelf(
-      client,
-      update.defaultShelfId,
-      update.locationId,
-      userId
-    );
-    if (createShelf.error) {
-      return redirect(
-        path.to.partInventory(partId),
-        await flash(
-          request,
-          error(createShelf.error, "Failed to create new shelf")
-        )
-      );
-    }
-  }
+  const { ...update } = validation.data;
 
   const updatePartInventory = await upsertPartInventory(client, {
     ...update,

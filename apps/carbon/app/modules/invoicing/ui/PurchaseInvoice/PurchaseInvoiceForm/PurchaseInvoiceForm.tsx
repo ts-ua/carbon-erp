@@ -1,13 +1,13 @@
 import {
   Card,
-  CardBody,
+  CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
-  Grid,
-  Heading,
-  Text,
+  CardTitle,
   VStack,
-} from "@chakra-ui/react";
+  cn,
+} from "@carbon/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -16,7 +16,6 @@ import {
   Hidden,
   Input,
   Select,
-  SelectControlled,
   Submit,
   Supplier,
   SupplierContact,
@@ -66,31 +65,29 @@ const PurchaseInvoiceForm = ({
       validator={purchaseInvoiceValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card>
         <CardHeader>
-          <Heading size="md">
+          <CardTitle>
             {isEditing ? "Purchase Invoice" : "New Purchase Invoice"}
-          </Heading>
+          </CardTitle>
           {!isEditing && (
-            <Text color="gray.500" fontWeight="normal">
+            <CardDescription>
               A purchase invoice is a document that specifies the products or
               services purchased by a customer and the corresponding cost.
-            </Text>
+            </CardDescription>
           )}
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="id" />
           <Hidden name="invoiceId" />
-          <VStack spacing={2} w="full" alignItems="start">
-            <Grid
-              gridTemplateColumns={
-                isEditing ? ["1fr", "1fr", "1fr 1fr 1fr"] : "1fr"
-              }
-              gridColumnGap={8}
-              gridRowGap={2}
-              w="full"
+          <VStack>
+            <div
+              className={cn(
+                "grid w-full gap-x-8 gap-y-2",
+                isEditing ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1"
+              )}
             >
-              <VStack alignItems="start" spacing={2} w="full">
+              <VStack>
                 <Supplier
                   name="supplierId"
                   label="Supplier"
@@ -118,7 +115,7 @@ const PurchaseInvoiceForm = ({
                   </>
                 )}
               </VStack>
-              <VStack alignItems="start" spacing={2} w="full">
+              <VStack>
                 <Input
                   name="supplierReference"
                   label="Supplier Invoice Number"
@@ -126,7 +123,7 @@ const PurchaseInvoiceForm = ({
                 <DatePicker name="dateIssued" label="Date Issued" />
                 <DatePicker name="dateDue" label="Due Date" />
                 {isEditing && (
-                  <SelectControlled
+                  <Select
                     name="status"
                     label="Status"
                     value={initialValues.status}
@@ -135,7 +132,7 @@ const PurchaseInvoiceForm = ({
                   />
                 )}
               </VStack>
-              <VStack alignItems="start" spacing={2} w="full">
+              <VStack>
                 {isEditing && (
                   <>
                     <Select
@@ -147,9 +144,9 @@ const PurchaseInvoiceForm = ({
                   </>
                 )}
               </VStack>
-            </Grid>
+            </div>
           </VStack>
-        </CardBody>
+        </CardContent>
         <CardFooter>
           <Submit
             isDisabled={
