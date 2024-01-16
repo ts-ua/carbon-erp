@@ -1,5 +1,5 @@
 // root.tsx
-import { Heading, ThemeProvider } from "@carbon/react";
+import { Heading } from "@carbon/react";
 import type { MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
@@ -84,9 +84,7 @@ export default function App() {
 
   return (
     <Document>
-      <ThemeProvider>
-        <Outlet />
-      </ThemeProvider>
+      <Outlet />
       <script
         dangerouslySetInnerHTML={{
           __html: `window.env = ${JSON.stringify(env)}`,
@@ -107,14 +105,12 @@ export function ErrorBoundary() {
 
   return (
     <Document title="Error!">
-      <ThemeProvider>
-        <div className="dark">
-          <div className="flex flex-col w-full h-screen bg-zinc-900 items-center justify-center space-y-4">
-            <Heading size="display">Something went wrong</Heading>
-            <p className="text-foreground">{message}</p>
-          </div>
+      <div className="dark">
+        <div className="flex flex-col w-full h-screen bg-zinc-900 items-center justify-center space-y-4">
+          <Heading size="display">Something went wrong</Heading>
+          <p className="text-foreground">{message}</p>
         </div>
-      </ThemeProvider>
+      </div>
     </Document>
   );
 }

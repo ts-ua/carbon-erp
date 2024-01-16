@@ -1,13 +1,18 @@
 import {
+  Button,
   Card,
   CardAction,
+  CardAttribute,
+  CardAttributeLabel,
+  CardAttributeValue,
+  CardAttributes,
   CardContent,
   CardHeader,
   CardTitle,
   HStack,
   VStack,
 } from "@carbon/react";
-import { Button, Stack } from "@chakra-ui/react";
+
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -45,48 +50,34 @@ const CustomerHeader = () => {
           </CardAction>
         </HStack>
         <CardContent>
-          <Stack direction={["column", "column", "row"]} spacing={8}>
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <span className="text-sm text-muted-foreground">Type</span>
-              <span className="font-bold">
+          <CardAttributes>
+            <CardAttribute>
+              <CardAttributeLabel>Type</CardAttributeLabel>
+              <CardAttributeValue>
                 {sharedCustomerData?.customerTypes?.find(
                   (type) => type.id === routeData?.customer?.customerTypeId
                 )?.name ?? "--"}
-              </span>
-            </Stack>
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <span className="text-sm text-muted-foreground">Status</span>
-              <span className="font-bold">
+              </CardAttributeValue>
+            </CardAttribute>
+            <CardAttribute>
+              <CardAttributeLabel>Status</CardAttributeLabel>
+              <CardAttributeValue>
                 {sharedCustomerData?.customerStatuses?.find(
                   (status) =>
                     status.id === routeData?.customer?.customerStatusId
                 )?.name ?? "--"}
-              </span>
-            </Stack>
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <span className="text-sm text-muted-foreground">
-                Payment Terms
-              </span>
-              <span className="font-bold">
+              </CardAttributeValue>
+            </CardAttribute>
+            <CardAttribute>
+              <CardAttributeLabel>Payment Terms</CardAttributeLabel>
+              <CardAttributeValue>
                 {sharedCustomerData?.paymentTerms?.find(
                   (term) =>
                     term.id === routeData?.customer?.defaultPaymentTermId
                 )?.name ?? "--"}
-              </span>
-            </Stack>
-          </Stack>
+              </CardAttributeValue>
+            </CardAttribute>
+          </CardAttributes>
         </CardContent>
       </Card>
     </VStack>

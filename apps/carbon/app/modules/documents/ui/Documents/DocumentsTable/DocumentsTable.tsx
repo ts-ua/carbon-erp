@@ -1,4 +1,10 @@
 import {
+  Badge,
+  BadgeCloseButton,
+  Command,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
   HStack,
   HoverCard,
   HoverCardContent,
@@ -9,17 +15,18 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  cn,
   useDisclosure,
 } from "@carbon/react";
 import { convertKbToString } from "@carbon/utils";
-import { Tag, TagCloseButton, TagLabel } from "@chakra-ui/react";
 import { useRevalidator } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { BsFillPenFill, BsStar, BsStarFill } from "react-icons/bs";
 import { IoMdAdd, IoMdTrash } from "react-icons/io";
+import { RxCheck } from "react-icons/rx";
 import { VscOpenPreview } from "react-icons/vsc";
-import { Avatar, CreatableCombobox, Table } from "~/components";
+import { Avatar, Table } from "~/components";
 import { Confirm, ConfirmDelete } from "~/components/Modals";
 import { useUrlParams } from "~/hooks";
 import type { Document, DocumentLabel } from "~/modules/documents";
@@ -199,24 +206,28 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
         cell: ({ row }) => (
           <HStack spacing={1}>
             {row.original.labels.map((label) => (
-              <Tag key={label} cursor="pointer" onClick={() => setLabel(label)}>
-                <TagLabel>{label}</TagLabel>
-                <TagCloseButton
+              <Badge
+                key={label}
+                variant="secondary"
+                className="cursor-pointer"
+                onClick={() => setLabel(label)}
+              >
+                {label}
+                <BadgeCloseButton
                   onClick={(e) => onDeleteLabel(e, row.original, label)}
                 />
-              </Tag>
+              </Badge>
             ))}
             <Popover>
-              <PopoverTrigger asChild>
-                <Tag cursor="pointer">
-                  <TagLabel>
-                    <IoMdAdd />
-                  </TagLabel>
-                </Tag>
+              <PopoverTrigger>
+                <Badge variant="secondary" className="cursor-pointer px-1">
+                  <IoMdAdd />
+                </Badge>
               </PopoverTrigger>
               <PopoverContent className="w-[300px] p-0">
                 {/* TODO: we should have a CreateableMultiSelect component for this */}
-                <CreatableCombobox
+
+                <CreatableCommand
                   options={labelOptions}
                   selected={row.original.labels}
                   onChange={(newValue) =>
@@ -430,6 +441,71 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
     </>
   );
 });
+
+type CreatableCommandProps = {
+  options: {
+    label: string;
+    value: string;
+  }[];
+  selected: string[];
+  onChange: (selected: string) => void;
+  onCreateOption: (inputValue: string) => void;
+};
+
+const CreatableCommand = ({
+  options,
+  selected,
+  onChange,
+  onCreateOption,
+}: CreatableCommandProps) => {
+  const [search, setSearch] = useState("");
+  const isExactMatch = options.some(
+    (option) => option.value.toLowerCase() === search.toLowerCase()
+  );
+
+  return (
+    <Command>
+      <CommandInput
+        value={search}
+        onValueChange={setSearch}
+        placeholder="Search..."
+        className="h-9"
+      />
+      <CommandGroup>
+        {options.map((option) => {
+          const isSelected = !!selected?.includes(option.value);
+          return (
+            <CommandItem
+              value={option.label}
+              key={option.value}
+              onSelect={() => {
+                if (!isSelected) onChange(option.value);
+              }}
+            >
+              {option.label}
+              <RxCheck
+                className={cn(
+                  "ml-auto h-4 w-4",
+                  isSelected ? "opacity-100" : "opacity-0"
+                )}
+              />
+            </CommandItem>
+          );
+        })}
+        {!isExactMatch && !!search && (
+          <CommandItem
+            onSelect={() => {
+              onCreateOption(search);
+            }}
+          >
+            <span>Create</span>
+            <span className="ml-1 font-bold">{search}</span>
+          </CommandItem>
+        )}
+      </CommandGroup>
+    </Command>
+  );
+};
 
 DocumentsTable.displayName = "DocumentsTable";
 

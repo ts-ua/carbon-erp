@@ -1,5 +1,9 @@
 import {
   Card,
+  CardAttribute,
+  CardAttributeLabel,
+  CardAttributeValue,
+  CardAttributes,
   CardContent,
   CardDescription,
   CardHeader,
@@ -9,7 +13,6 @@ import {
   VStack,
   useDisclosure,
 } from "@carbon/react";
-import { Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { useMemo, useState } from "react";
 import { usePermissions, useRouteData } from "~/hooks";
@@ -91,37 +94,25 @@ const PurchaseInvoiceHeader = () => {
           </CardHeader>
 
           <CardContent>
-            <Stack direction={["column", "column", "row"]} spacing={8}>
-              <Stack
-                direction={["row", "row", "column"]}
-                alignItems="start"
-                justifyContent="space-between"
-              >
-                <span className="text-sm text-muted-foreground">Total</span>
-                <span className="font-bold">
+            <CardAttributes>
+              <CardAttribute>
+                <CardAttributeLabel>Total</CardAttributeLabel>
+                <CardAttributeValue>
                   {formatter.format(purchaseInvoiceTotals?.total ?? 0)}
-                </span>
-              </Stack>
-              <Stack
-                direction={["row", "row", "column"]}
-                alignItems="start"
-                justifyContent="space-between"
-              >
-                <span className="text-sm text-muted-foreground">
-                  Date Issued
-                </span>
-                <span className="font-bold">{purchaseInvoice.dateIssued}</span>
-              </Stack>
+                </CardAttributeValue>
+              </CardAttribute>
+              <CardAttribute>
+                <CardAttributeLabel>Date Issued</CardAttributeLabel>
+                <CardAttributeValue>
+                  {purchaseInvoice.dateIssued}
+                </CardAttributeValue>
+              </CardAttribute>
 
-              <Stack
-                direction={["row", "row", "column"]}
-                alignItems="start"
-                justifyContent="space-between"
-              >
-                <span className="text-sm text-muted-foreground">Status</span>
+              <CardAttribute>
+                <CardAttributeLabel>Status</CardAttributeLabel>
                 <PurchaseInvoicingStatus status={purchaseInvoice.status} />
-              </Stack>
-            </Stack>
+              </CardAttribute>
+            </CardAttributes>
           </CardContent>
         </Card>
       </VStack>

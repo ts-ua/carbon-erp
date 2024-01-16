@@ -1,4 +1,3 @@
-import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import type {
   ColumnDef,
   ColumnFiltersState,
@@ -16,6 +15,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
+import { Table, Tbody, Td, Th, Thead, Tr } from "~/Table";
 import { VStack } from "~/VStack";
 
 import { DataTablePagination } from "./DataTablePagination";
@@ -76,9 +76,7 @@ const DataTable = <TData, TValue>({
                       <Th
                         key={header.id}
                         colSpan={header.colSpan}
-                        px={4}
-                        py={2}
-                        whiteSpace="nowrap"
+                        className="px-4 py-2 whitespace-nowrap"
                       >
                         {header.isPlaceholder
                           ? null
@@ -102,11 +100,7 @@ const DataTable = <TData, TValue>({
                     {row.getVisibleCells().map((cell) => (
                       <Td
                         key={cell.id}
-                        fontSize="sm"
-                        outline="none"
-                        px={4}
-                        py={2}
-                        whiteSpace="nowrap"
+                        className="text-sm outline-none px-4 py-2 whitespace-nowrap"
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
@@ -118,7 +112,7 @@ const DataTable = <TData, TValue>({
                 ))
               ) : (
                 <Tr>
-                  <Td colSpan={columns.length} textAlign="center" h={24}>
+                  <Td colSpan={columns.length} className="text-center h-24">
                     No results.
                   </Td>
                 </Tr>

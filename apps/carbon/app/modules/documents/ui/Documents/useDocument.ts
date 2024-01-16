@@ -1,4 +1,4 @@
-import { useNotification } from "@carbon/react";
+import { toast } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import { useCallback } from "react";
 import { usePermissions, useUrlParams, useUser } from "~/hooks";
@@ -11,7 +11,6 @@ import { path } from "~/utils/path";
 
 export const useDocument = () => {
   const navigate = useNavigate();
-  const notification = useNotification();
   const permissions = usePermissions();
   const { supabase } = useSupabase();
   const [params, setParams] = useUrlParams();
@@ -66,7 +65,7 @@ export const useDocument = () => {
       const result = await supabase?.storage.from("private").download(doc.path);
 
       if (!result || result.error) {
-        notification.error(result?.error?.message || "Error downloading file");
+        toast.error(result?.error?.message || "Error downloading file");
         return;
       }
 
@@ -84,7 +83,7 @@ export const useDocument = () => {
 
       await insertTransaction(doc, "Download");
     },
-    [supabase, notification, insertTransaction]
+    [supabase, insertTransaction]
   );
 
   const edit = useCallback(
@@ -150,13 +149,13 @@ export const useDocument = () => {
       const result = await supabase?.storage.from("private").download(doc.path);
 
       if (!result || result.error) {
-        notification.error(result?.error?.message || "Error previewing file");
+        toast.error(result?.error?.message || "Error previewing file");
         return null;
       }
 
       return window.URL.createObjectURL(result.data);
     },
-    [notification, supabase]
+    [supabase]
   );
 
   const removeLabel = useCallback(

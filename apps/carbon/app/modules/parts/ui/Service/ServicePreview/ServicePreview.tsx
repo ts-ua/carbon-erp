@@ -2,13 +2,16 @@ import {
   Button,
   Card,
   CardAction,
+  CardAttribute,
+  CardAttributeLabel,
+  CardAttributeValue,
+  CardAttributes,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
   HStack,
 } from "@carbon/react";
-import { Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -41,24 +44,20 @@ const ServicePreview = () => {
         </CardAction>
       </HStack>
       <CardContent>
-        <Stack direction={["column", "column", "row"]} spacing={8}>
-          <Stack
-            direction={["row", "row", "column"]}
-            alignItems="start"
-            justifyContent="space-between"
-          >
-            <span className="text-sm text-muted-foreground">Type</span>
-            <span className="font-bold">{routeData?.service?.serviceType}</span>
-          </Stack>
-          <Stack
-            direction={["row", "row", "column"]}
-            alignItems="start"
-            justifyContent="space-between"
-          >
-            <span className="text-sm text-muted-foreground">Part Group</span>
-            <span className="font-bold">{routeData?.service?.partGroup}</span>
-          </Stack>
-        </Stack>
+        <CardAttributes>
+          <CardAttribute>
+            <CardAttributeLabel>Type</CardAttributeLabel>
+            <CardAttributeValue>
+              {routeData?.service?.serviceType}
+            </CardAttributeValue>
+          </CardAttribute>
+          <CardAttribute>
+            <CardAttributeLabel>Part Group</CardAttributeLabel>
+            <CardAttributeValue>
+              {routeData?.service?.partGroup}
+            </CardAttributeValue>
+          </CardAttribute>
+        </CardAttributes>
       </CardContent>
     </Card>
   );

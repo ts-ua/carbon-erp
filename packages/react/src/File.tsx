@@ -1,13 +1,20 @@
-import type { ChangeEvent, ComponentPropsWithoutRef } from "react";
+import type { ChangeEvent } from "react";
 import { useRef } from "react";
+import type { ButtonProps } from "~/Button";
 import { Button } from "~/Button";
 
-type FileProps = ComponentPropsWithoutRef<"div"> & {
+type FileProps = Omit<ButtonProps, "onChange"> & {
   accept?: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => Promise<void>;
 };
 
-const File = ({ accept, className, children, onChange }: FileProps) => {
+const File = ({
+  accept,
+  className,
+  children,
+  onChange,
+  ...props
+}: FileProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -21,6 +28,7 @@ const File = ({ accept, className, children, onChange }: FileProps) => {
       />
       <Button
         className={className}
+        {...props}
         onClick={() => {
           if (fileInputRef.current) fileInputRef.current.click();
         }}

@@ -1,5 +1,10 @@
-import { Badge, DropdownMenuIcon, HStack, MenuItem } from "@carbon/react";
-import { Progress } from "@chakra-ui/react";
+import {
+  Badge,
+  DropdownMenuIcon,
+  HStack,
+  MenuItem,
+  Progress,
+} from "@carbon/react";
 import { useNavigate, useParams } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useCallback, useMemo } from "react";

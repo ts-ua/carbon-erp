@@ -1,27 +1,13 @@
-import createEmotionCache from "@emotion/cache";
-import { CacheProvider } from "@emotion/react";
 import { RemixBrowser } from "@remix-run/react";
-import { startTransition } from "react";
 import { hydrateRoot } from "react-dom/client";
 
-const hydrate = () => {
-  const emotionCache = createEmotionCache({ key: "css" });
-
-  startTransition(() => {
-    hydrateRoot(
-      document,
-
-      <CacheProvider value={emotionCache}>
-        <RemixBrowser />
-      </CacheProvider>
-    );
-  });
-};
-
-if (typeof requestIdleCallback === "function") {
-  requestIdleCallback(hydrate);
-} else {
-  // Safari doesn't support requestIdleCallback
-  // https://caniuse.com/requestidlecallback
-  setTimeout(hydrate, 1);
-}
+hydrateRoot(
+  document,
+  // <OperatingSystemContextProvider
+  //   platform={window.navigator.userAgent.includes("Mac") ? "mac" : "windows"}
+  // >
+  //   <LocaleContextProvider locales={window.navigator.languages as string[]}>
+  <RemixBrowser />
+  //   </LocaleContextProvider>
+  // </OperatingSystemContextProvider>
+);

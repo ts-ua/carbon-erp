@@ -1,3 +1,6 @@
+/*
+  Menu components are an abstraction over ContextMenu and DropdownMenu components.
+*/
 import type {
   ComponentPropsWithoutRef,
   ElementRef,

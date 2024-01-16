@@ -1,12 +1,15 @@
 import {
   Card,
+  CardAttribute,
+  CardAttributeLabel,
+  CardAttributeValue,
+  CardAttributes,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
   HStack,
 } from "@carbon/react";
-import { Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { Avatar } from "~/components";
 import { useRouteData } from "~/hooks";
@@ -35,48 +38,32 @@ const PartPreview = () => {
         />
       </HStack>
       <CardContent>
-        <Stack direction={["column", "column", "row"]} spacing={8}>
-          <Stack
-            direction={["row", "row", "column"]}
-            alignItems="start"
-            justifyContent="space-between"
-          >
-            <span className="text-sm text-muted-foreground">Department</span>
-            <span className="font-bold">
+        <CardAttributes>
+          <CardAttribute>
+            <CardAttributeLabel>Department</CardAttributeLabel>
+            <CardAttributeValue>
               {routeData?.employeeSummary?.departmentName}
-            </span>
-          </Stack>
-          <Stack
-            direction={["row", "row", "column"]}
-            alignItems="start"
-            justifyContent="space-between"
-          >
-            <span className="text-sm text-muted-foreground">Location</span>
-            <span className="font-bold">
+            </CardAttributeValue>
+          </CardAttribute>
+          <CardAttribute>
+            <CardAttributeLabel>Location</CardAttributeLabel>
+            <CardAttributeValue>
               {routeData?.employeeSummary?.locationName}
-            </span>
-          </Stack>
-          <Stack
-            direction={["row", "row", "column"]}
-            alignItems="start"
-            justifyContent="space-between"
-          >
-            <span className="text-sm text-muted-foreground">Manager</span>
-            <span className="font-bold">
+            </CardAttributeValue>
+          </CardAttribute>
+          <CardAttribute>
+            <CardAttributeLabel>Manager</CardAttributeLabel>
+            <CardAttributeValue>
               {routeData?.employeeSummary?.managerName}
-            </span>
-          </Stack>
-          <Stack
-            direction={["row", "row", "column"]}
-            alignItems="start"
-            justifyContent="space-between"
-          >
-            <span className="text-sm text-muted-foreground">Start Date</span>
-            <span className="font-bold">
+            </CardAttributeValue>
+          </CardAttribute>
+          <CardAttribute>
+            <CardAttributeLabel>Start Date</CardAttributeLabel>
+            <CardAttributeValue>
               {routeData?.employeeSummary?.startDate}
-            </span>
-          </Stack>
-        </Stack>
+            </CardAttributeValue>
+          </CardAttribute>
+        </CardAttributes>
       </CardContent>
     </Card>
   );

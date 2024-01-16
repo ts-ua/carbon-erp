@@ -48,7 +48,7 @@ const Filter = ({ columnAccessors }: FilterProps) => {
           {filters.length === 0 ? "Filter" : "Filtered"}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[480px]">
+      <PopoverContent className="w-[520px]">
         {filters.length === 0 && (
           <PopoverHeader>
             <p className="text-sm">No filters applied to this view</p>

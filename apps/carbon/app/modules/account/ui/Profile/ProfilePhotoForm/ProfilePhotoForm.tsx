@@ -1,4 +1,4 @@
-import { Button, File, VStack, useNotification } from "@carbon/react";
+import { Button, File, VStack, toast } from "@carbon/react";
 import { useSubmit } from "@remix-run/react";
 import type { ChangeEvent } from "react";
 import { Avatar } from "~/components";
@@ -12,7 +12,6 @@ type ProfilePhotoFormProps = {
 
 const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
   const { supabase } = useSupabase();
-  const notification = useNotification();
   const submit = useSubmit();
 
   const uploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +29,7 @@ const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
         });
 
       if (imageUpload.error) {
-        notification.copyableError(imageUpload.error, "Failed to upload image");
+        toast.error("Failed to upload image");
       }
 
       if (imageUpload.data?.path) {
@@ -46,7 +45,7 @@ const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
         .remove([user.avatarUrl]);
 
       if (imageDelete.error) {
-        notification.copyableError(imageDelete.error, "Failed to remove image");
+        toast.error("Failed to remove image");
       }
 
       submitAvatarUrl(null);

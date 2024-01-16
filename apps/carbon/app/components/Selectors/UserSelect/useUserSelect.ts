@@ -148,7 +148,7 @@ export default function useUserSelect(props: UserSelectProps) {
             return acc.concat({
               uid,
               expanded: false,
-              items: makeGroupItems(group, uid),
+              items: makeGroupItems(group as Group, uid),
               name: group.data.name || "",
             });
           }

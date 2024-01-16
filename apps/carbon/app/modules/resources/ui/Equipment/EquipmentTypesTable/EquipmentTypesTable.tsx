@@ -6,7 +6,6 @@ import {
   MenuItem,
   useDisclosure,
 } from "@carbon/react";
-import { Icon } from "@chakra-ui/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
@@ -55,9 +54,8 @@ const EquipmentTypesTable = memo(
                 {row.original.name}
               </Hyperlink>
               {row.original.requiredAbility && (
-                <Icon
-                  as={BsFillCheckCircleFill}
-                  color="green.500"
+                <BsFillCheckCircleFill
+                  className="text-green-500"
                   title="Requires ability"
                 />
               )}
