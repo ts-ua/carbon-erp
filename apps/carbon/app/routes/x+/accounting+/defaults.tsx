@@ -1,5 +1,4 @@
-import { useColor } from "@carbon/react";
-import { VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -89,7 +88,7 @@ export default function AccountDefaultsRoute() {
   }>(path.to.accounting);
 
   return (
-    <VStack bg={useColor("white")} w="full" h="full" p={8} overflowY="auto">
+    <VStack className="bg-background h-full p-8 overflow-y-auto">
       <PageTitle
         title="Account Defaults"
         subtitle="These accounts will be used to prepopulate posting grous when a new customer type, supplier type, part group, or location is created."

@@ -3,12 +3,12 @@ import {
   HStack,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-} from "@chakra-ui/react";
+  ModalTitle,
+} from "@carbon/react";
 import { Form, useNavigate } from "@remix-run/react";
 
 type ReceiptPostModalProps = {};
@@ -19,22 +19,25 @@ const ReceiptPostModal = (props: ReceiptPostModalProps) => {
   const onCancel = () => navigate(-1);
 
   return (
-    <Modal isOpen={true} onClose={onCancel}>
+    <Modal
+      open={true}
+      onOpenChange={(open) => {
+        if (!open) onCancel();
+      }}
+    >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Post Receipt</ModalHeader>
-        <ModalCloseButton />
+        <ModalHeader>
+          <ModalTitle>Post Receipt</ModalTitle>
+        </ModalHeader>
         <ModalBody>Are you sure you want to post this receipt?</ModalBody>
-
         <ModalFooter>
-          <HStack spacing={2}>
-            <Button colorScheme="gray" onClick={onCancel}>
+          <HStack>
+            <Button variant="solid" onClick={onCancel}>
               Cancel
             </Button>
             <Form method="post">
-              <Button colorScheme="brand" type="submit">
-                Post Receipt
-              </Button>
+              <Button type="submit">Post Receipt</Button>
             </Form>
           </HStack>
         </ModalFooter>

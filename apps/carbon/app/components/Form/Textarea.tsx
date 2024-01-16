@@ -1,12 +1,10 @@
-import { useColor } from "@carbon/react";
-import type { TextareaProps } from "@chakra-ui/react";
+import type { TextareaProps } from "@carbon/react";
 import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Text,
-  Textarea as ChakraTextArea,
-} from "@chakra-ui/react";
+  Textarea as TextAreaBase,
+} from "@carbon/react";
 import type { ChangeEvent } from "react";
 import { forwardRef, useState } from "react";
 import { useField } from "remix-validated-form";
@@ -32,20 +30,19 @@ const TextArea = forwardRef<HTMLTextAreaElement, FormTextArea>(
     return (
       <FormControl isInvalid={!!error} isRequired={isRequired}>
         {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-        <ChakraTextArea
+        <TextAreaBase
           ref={ref}
           {...getInputProps({
             id: name,
             ...rest,
           })}
-          bg={useColor("white")}
           maxLength={characterLimit}
           onChange={onChange}
         />
         {characterLimit && (
-          <Text fontSize="sm" color="gray.500">
+          <p className="text-sm text-muted-foreground">
             {characterCount} of {characterLimit}
-          </Text>
+          </p>
         )}
         {error && <FormErrorMessage>{error}</FormErrorMessage>}
       </FormControl>

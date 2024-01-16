@@ -1,13 +1,4 @@
-import { useColor } from "@carbon/react";
-import {
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  Box,
-  Image,
-  useColorModeValue,
-  VStack,
-} from "@chakra-ui/react";
+import { Alert, AlertTitle, Button, VStack } from "@carbon/react";
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -15,9 +6,10 @@ import type {
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Link, useActionData, useSearchParams } from "@remix-run/react";
+import { LuAlertCircle } from "react-icons/lu";
 import { ValidatedForm, validationError } from "remix-validated-form";
 
-import { Input, Password, Submit } from "~/components/Form";
+import { Hidden, Input, Password, Submit } from "~/components/Form";
 import {
   loginValidator,
   signInWithEmail,
@@ -76,39 +68,43 @@ export default function LoginRoute() {
 
   return (
     <>
-      <Image
-        src={useColorModeValue(
-          "/carbon-logo-dark.png",
-          "/carbon-logo-light.png"
-        )}
+      <img
+        src="/carbon-logo-dark.png"
         alt="Carbon Logo"
-        maxW={100}
-        marginBottom={3}
+        className="block dark:hidden max-w-[100px] mb-3"
+      />
+      <img
+        src="/carbon-logo-light.png"
+        alt="Carbon Logo"
+        className="hidden dark:block max-w-[100px] mb-3"
       />
 
-      <Box rounded="lg" bg={useColor("white")} boxShadow="lg" w={380} p={8}>
+      <div className="rounded-lg bg-card shadow-lg p-8 w-[380px]">
         <ValidatedForm
           validator={loginValidator}
           defaultValues={{ redirectTo }}
           method="post"
         >
-          <VStack spacing={4} alignItems="start">
+          <VStack spacing={4}>
             {result && result?.message && (
-              <Alert status="error">
-                <AlertIcon />
+              <Alert variant="destructive">
+                <LuAlertCircle className="w-4 h-4" />
                 <AlertTitle>{result?.message}</AlertTitle>
               </Alert>
             )}
+
             <Input name="email" label="Email" />
             <Password name="password" label="Password" type="password" />
-            <Input name="redirectTo" value={redirectTo} type="hidden" />
-            <Submit w="full">Sign in</Submit>
-            <Link to={path.to.forgotPassword} color={useColor("black")}>
-              Forgot password?
-            </Link>
+            <Hidden name="redirectTo" value={redirectTo} type="hidden" />
+            <Submit size="lg" className="w-full">
+              Sign In
+            </Submit>
+            <Button variant="link" asChild className="w-full">
+              <Link to={path.to.forgotPassword}>Forgot Password</Link>
+            </Button>
           </VStack>
         </ValidatedForm>
-      </Box>
+      </div>
     </>
   );
 }

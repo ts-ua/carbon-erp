@@ -1,20 +1,10 @@
-import { HTML, useColor } from "@carbon/react";
+import { Button, HStack, HTML, VStack } from "@carbon/react";
 import { formatTimeAgo } from "@carbon/utils";
-import {
-  Box,
-  Button,
-  Flex,
-  Grid,
-  HStack,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
 import { Form } from "@remix-run/react";
 import { Fragment } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import { Avatar } from "~/components";
 import { Hidden, RichText, Submit } from "~/components/Form";
-import { SectionTitle } from "~/components/Layout";
 import { usePermissions, useUser } from "~/hooks";
 import type { Note } from "~/modules/shared";
 import { noteValidator } from "~/modules/shared";
@@ -30,45 +20,31 @@ const Notes = ({ documentId, notes }: NotesProps) => {
   const permissions = usePermissions();
   const isEmployee = permissions.is("employee");
 
-  const borderColor = useColor("gray.200");
-
   if (!isEmployee) return null;
 
   return (
-    <Box w="full">
-      <SectionTitle>Notes</SectionTitle>
-
+    <>
       {notes.length > 0 ? (
-        <Grid
-          gridTemplateColumns="auto 1fr"
-          gridColumnGap={4}
-          gridRowGap={8}
-          w="full"
-        >
+        <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-8 w-full">
           {notes.map((note) => {
             if (!note.user || Array.isArray(note.user))
               throw new Error("Invalid user");
             return (
               <Fragment key={note.id}>
                 {/* @ts-ignore */}
-                <Avatar path={note.user.avatarUrl} />
-                <VStack spacing={1} w="full" alignItems="start">
+                <Avatar path={note.user.avatarUrl} name={note.user?.fullName} />
+                <VStack spacing={1}>
                   {/* @ts-ignore */}
-                  <Text fontWeight="bold">{note.user?.fullName!}</Text>
+                  <p className="font-bold">{note.user?.fullName!}</p>
                   <HTML text={note.note} />
                   <HStack spacing={4}>
-                    <Text color="gray.500">
+                    <span className="text-sm text-muted-foreground">
                       {formatTimeAgo(note.createdAt)}
-                    </Text>
+                    </span>
                     {/* @ts-ignore */}
                     {user.id === note.user.id && (
                       <Form method="post" action={path.to.deleteNote(note.id)}>
-                        <Button
-                          type="submit"
-                          variant="link"
-                          fontWeight="normal"
-                          size="md"
-                        >
+                        <Button type="submit" variant="link" size="md">
                           Delete
                         </Button>
                       </Form>
@@ -78,14 +54,14 @@ const Notes = ({ documentId, notes }: NotesProps) => {
               </Fragment>
             );
           })}
-        </Grid>
+        </div>
       ) : (
-        <Box color="gray.500" p={4} w="full" textAlign="center">
+        <div className="text-muted-foreground p-4 w-full text-center">
           No notes
-        </Box>
+        </div>
       )}
 
-      <Box pt={8} w="full">
+      <div className="pt-8 w-full">
         <ValidatedForm
           method="post"
           action={path.to.newNote}
@@ -93,23 +69,17 @@ const Notes = ({ documentId, notes }: NotesProps) => {
           validator={noteValidator}
         >
           <Hidden name="documentId" value={documentId} />
-          <VStack spacing={3} w="full">
-            <Box
-              w="full"
-              borderColor={borderColor}
-              borderWidth={1}
-              borderStyle="solid"
-              borderRadius="md"
-            >
+          <VStack spacing={3}>
+            <div className="w-full border border-border rounded-md">
               <RichText name="note" minH={160} />
-            </Box>
-            <Flex justifyContent="flex-end" w="full">
+            </div>
+            <div className="flex justify-end w-full">
               <Submit>Add Note</Submit>
-            </Flex>
+            </div>
           </VStack>
         </ValidatedForm>
-      </Box>
-    </Box>
+      </div>
+    </>
   );
 };
 

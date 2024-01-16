@@ -1,40 +1,45 @@
-import { useColor } from "@carbon/react";
 import {
-  Box,
   Button,
-  Heading,
   HStack,
+  Heading,
   IconButton,
   NumberDecrementStepper,
+  NumberField,
   NumberIncrementStepper,
   NumberInput,
-  NumberInputField,
+  NumberInputGroup,
   NumberInputStepper,
-  Text,
   useDisclosure,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Link, Outlet, useLoaderData, useNavigate } from "@remix-run/react";
 import { ParentSize } from "@visx/responsive";
 import { useState } from "react";
 import { IoMdAdd, IoMdClose } from "react-icons/io";
+import { LuChevronDown, LuChevronUp } from "react-icons/lu";
 import { MdEdit, MdOutlineArrowBackIos } from "react-icons/md";
 import { ValidatedForm, validationError } from "remix-validated-form";
 import { Hidden, Input, Submit } from "~/components/Form";
 import type { AbilityDatum } from "~/modules/resources";
 import {
   AbilityChart,
-  abilityCurveValidator,
   AbilityEmployeesTable,
+  abilityCurveValidator,
   abilityNameValidator,
   getAbility,
   updateAbility,
 } from "~/modules/resources";
 import { requirePermissions } from "~/services/auth";
 import { flash } from "~/services/session";
+import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 import { error, success } from "~/utils/result";
+
+export const handle: Handle = {
+  breadcrumb: "Abilities",
+  to: path.to.abilities,
+};
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client } = await requirePermissions(request, {
@@ -141,7 +146,7 @@ export default function AbilitiesRoute() {
     ability.shadowWeeks ?? 0
   );
 
-  const updateWeeks = (_: string, newWeeks: number) => {
+  const updateWeeks = (newWeeks: number) => {
     const scale = 1 + (newWeeks - time) / time;
     setData((prevData) =>
       prevData.map((datum) => ({
@@ -152,14 +157,14 @@ export default function AbilitiesRoute() {
     setTime(newWeeks);
   };
 
-  const updateShadowTime = (_: string, newShadowTime: number) => {
+  const updateShadowTime = (newShadowTime: number) => {
     setControlledShadowWeeks(newShadowTime);
   };
 
   return (
     <>
-      <Box bg={useColor("white")} w="full" position="relative">
-        <HStack w="full" justifyContent="space-between" p={4}>
+      <div className="bg-background w-full relative">
+        <HStack className="w-full justify-between p-4">
           {editingTitle.isOpen ? (
             <ValidatedForm
               validator={abilityNameValidator}
@@ -171,7 +176,7 @@ export default function AbilitiesRoute() {
               onSubmit={editingTitle.onClose}
             >
               <Hidden name="intent" value="name" />
-              <HStack spacing={2}>
+              <HStack>
                 <IconButton
                   aria-label="Back"
                   variant="ghost"
@@ -181,11 +186,9 @@ export default function AbilitiesRoute() {
                 <Input
                   autoFocus
                   name="name"
-                  variant="unstyled"
-                  fontWeight="bold"
-                  fontSize="xl"
+                  className="text-xl font-bold border-none shadow-none"
                 />
-                <Submit size="sm">Save</Submit>
+                <Submit>Save</Submit>
                 <IconButton
                   aria-label="Cancel"
                   variant="ghost"
@@ -195,14 +198,14 @@ export default function AbilitiesRoute() {
               </HStack>
             </ValidatedForm>
           ) : (
-            <HStack spacing={2}>
+            <HStack>
               <IconButton
                 aria-label="Back"
                 variant="ghost"
                 icon={<MdOutlineArrowBackIos />}
                 onClick={() => navigate(path.to.abilities)}
               />
-              <Heading size="md">{ability.name}</Heading>
+              <Heading size="h3">{ability.name}</Heading>
               <IconButton
                 aria-label="Edit"
                 variant="ghost"
@@ -212,36 +215,50 @@ export default function AbilitiesRoute() {
             </HStack>
           )}
 
-          <HStack spacing={2}>
-            <Text fontSize="sm">Weeks Shadowing:</Text>
-            <NumberInput
-              maxW="100px"
-              size="sm"
-              min={0}
-              max={time}
+          <HStack>
+            <span className="text-sm">Weeks Shadowing:</span>
+            <NumberField
+              name="unitPrice"
               value={controlledShadowWeeks}
               onChange={updateShadowTime}
+              minValue={0}
+              maxValue={time}
+              className="max-w-[100px]"
             >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-            <Text fontSize="sm">Weeks to Learn:</Text>
-            <NumberInput
-              maxW="100px"
-              size="sm"
-              min={1}
+              <NumberInputGroup className="relative">
+                <NumberInput size="sm" />
+                <NumberInputStepper>
+                  <NumberIncrementStepper>
+                    <LuChevronUp size="0.75em" strokeWidth="3" />
+                  </NumberIncrementStepper>
+                  <NumberDecrementStepper>
+                    <LuChevronDown size="0.75em" strokeWidth="3" />
+                  </NumberDecrementStepper>
+                </NumberInputStepper>
+              </NumberInputGroup>
+            </NumberField>
+
+            <span className="text-sm">Weeks to Learn:</span>
+            <NumberField
+              name="unitPrice"
               value={time}
               onChange={updateWeeks}
+              minValue={1}
+              className="max-w-[100px]"
             >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
+              <NumberInputGroup className="relative">
+                <NumberInput size="sm" />
+                <NumberInputStepper>
+                  <NumberIncrementStepper>
+                    <LuChevronUp size="0.75em" strokeWidth="3" />
+                  </NumberIncrementStepper>
+                  <NumberDecrementStepper>
+                    <LuChevronDown size="0.75em" strokeWidth="3" />
+                  </NumberDecrementStepper>
+                </NumberInputStepper>
+              </NumberInputGroup>
+            </NumberField>
+
             <ValidatedForm
               validator={abilityCurveValidator}
               method="post"
@@ -250,11 +267,11 @@ export default function AbilitiesRoute() {
               <Hidden name="intent" value="curve" />
               <Hidden name="data" value={JSON.stringify(data)} />
               <Hidden name="shadowWeeks" value={controlledShadowWeeks} />
-              <Submit size="sm">Save</Submit>
+              <Submit>Save</Submit>
             </ValidatedForm>
           </HStack>
         </HStack>
-        <Box w="full" h="33vh">
+        <div className="w-full h-[33vh]">
           <ParentSize>
             {({ height, width }) => (
               <AbilityChart
@@ -266,22 +283,16 @@ export default function AbilitiesRoute() {
               />
             )}
           </ParentSize>
-        </Box>
-        <Box position="absolute" bottom={-4} right={4} zIndex={3}>
-          <Button
-            as={Link}
-            to="employee/new"
-            colorScheme="brand"
-            leftIcon={<IoMdAdd />}
-          >
-            New Employee
+        </div>
+        <div className="absolute bottom--4 right-4 z-[3]">
+          <Button asChild leftIcon={<IoMdAdd />}>
+            <Link to="employee/new">New Employee</Link>
           </Button>
-        </Box>
-      </Box>
+        </div>
+      </div>
       <AbilityEmployeesTable
         employees={ability.employeeAbility ?? []}
         weeks={weeks}
-        shadowWeeks={ability.shadowWeeks}
       />
       <Outlet />
     </>

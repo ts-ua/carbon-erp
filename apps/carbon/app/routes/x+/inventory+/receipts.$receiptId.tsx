@@ -97,7 +97,7 @@ export default function EditReceiptsRoute() {
     <ReceiptForm
       // @ts-ignore
       initialValues={initialValues}
-      isPosted={!!receipt?.postingDate ?? false}
+      status={receipt.status}
       notes={notes}
       receiptLines={receiptLines}
     />

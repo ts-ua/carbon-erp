@@ -1,66 +1,85 @@
-import { createFilter, Select as CarbonSelect } from "@carbon/react";
 import {
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-} from "@chakra-ui/react";
-import { useMemo } from "react";
-import { useField } from "remix-validated-form";
-import { timezonesGroupedByCountry } from "~/config/timezones";
+  HStack,
+  IconButton,
+  Select as SelectBase,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@carbon/react";
+import { timezones } from "@carbon/utils";
+import { MdClose } from "react-icons/md";
+import { useControlField, useField } from "remix-validated-form";
+import type { SelectProps } from "./Select";
 
-export type TimezoneProps = {
-  name: string;
-  label?: string;
-  helperText?: string;
-  isReadOnly?: boolean;
-  isLoading?: boolean;
-  placeholder?: string;
-  onChange?: (
-    newValue: { value: string | number; label: string } | null
-  ) => void;
+type TimezoneProps = Omit<SelectProps, "options"> & {
+  size?: "sm" | "md" | "lg";
 };
 
 const Timezone = ({
   name,
   label,
   helperText,
-  isLoading,
   isReadOnly,
+  isClearable,
   placeholder,
-  onChange,
+  size,
   ...props
 }: TimezoneProps) => {
-  const { getInputProps, error, defaultValue } = useField(name);
-  const initialValue = useMemo(
-    () =>
-      timezonesGroupedByCountry
-        .flatMap((group) => group.options)
-        .find((option) => option.value === defaultValue),
-    [defaultValue]
-  );
+  const { getInputProps, error } = useField(name);
+  const [value, setValue] = useControlField<string | undefined>(name);
 
   return (
     <FormControl isInvalid={!!error}>
       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-      <CarbonSelect
+      <input
         {...getInputProps({
-          // @ts-ignore
           id: name,
         })}
-        {...props}
-        defaultValue={initialValue}
-        isReadOnly={isReadOnly}
-        isLoading={isLoading}
-        options={timezonesGroupedByCountry}
-        // Only search the labels (not the values)
-        filterOption={createFilter({
-          matchFrom: "any",
-          stringify: (option) => `${option.label}`,
-        })}
-        placeholder={placeholder ?? "Select a timezone"}
-        onChange={onChange ?? undefined}
+        type="hidden"
+        name={name}
+        id={name}
+        value={value ?? undefined}
       />
+      <HStack spacing={1}>
+        <SelectBase
+          value={value}
+          onValueChange={(value) => setValue(value)}
+          disabled={isReadOnly}
+        >
+          <SelectTrigger size={size} className="min-w-[160px]">
+            <SelectValue placeholder={placeholder} />
+          </SelectTrigger>
+          <SelectContent>
+            {timezones.map(({ label, options }) => (
+              <SelectGroup key={label}>
+                <SelectLabel>{label}</SelectLabel>
+                {options.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            ))}
+          </SelectContent>
+        </SelectBase>
+        {isClearable && !isReadOnly && value && (
+          <IconButton
+            variant="ghost"
+            aria-label="Clear"
+            icon={<MdClose />}
+            onClick={() => setValue("")}
+            size={size === "sm" ? "md" : size}
+          />
+        )}
+      </HStack>
+
       {error ? (
         <FormErrorMessage>{error}</FormErrorMessage>
       ) : (

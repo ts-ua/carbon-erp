@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "lib": ["dom", "ES2015"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["../../packages/react/src/*"]
+    }
   },
   "extends": "@carbon/tsconfig/react-library.json",
   "include": ["src"],

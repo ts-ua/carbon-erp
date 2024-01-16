@@ -1,8 +1,8 @@
-import { Link, MenuItem } from "@chakra-ui/react";
+import { Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -29,9 +29,9 @@ const LocationsTable = memo(({ data, count }: LocationsTableProps) => {
         accessorKey: "name",
         header: "Location",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(row.original.id)}>
+          <Hyperlink onClick={() => navigate(row.original.id)}>
             {row.original.name}
-          </Link>
+          </Hyperlink>
         ),
       },
       {
@@ -63,22 +63,22 @@ const LocationsTable = memo(({ data, count }: LocationsTableProps) => {
       return (
         <>
           <MenuItem
-            icon={<BsPencilSquare />}
             onClick={() => {
               navigate(`${path.to.location(row.id)}?${params.toString()}`);
             }}
           >
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Location
           </MenuItem>
           <MenuItem
-            isDisabled={!permissions.can("delete", "resources")}
-            icon={<IoMdTrash />}
+            disabled={!permissions.can("delete", "resources")}
             onClick={() => {
               navigate(
                 `${path.to.deleteLocation(row.id)}?${params.toString()}`
               );
             }}
           >
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Location
           </MenuItem>
         </>

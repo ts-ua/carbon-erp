@@ -1,22 +1,18 @@
-import { useColor } from "@carbon/react";
 import {
   Alert,
   AlertDescription,
-  AlertIcon,
   AlertTitle,
-  Box,
-  Image,
-  Text,
-  useColorModeValue,
+  Button,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { useActionData } from "@remix-run/react";
+import { Link, useActionData } from "@remix-run/react";
+import { LuAlertCircle, LuCheckCircle } from "react-icons/lu";
 import { ValidatedForm, validationError } from "remix-validated-form";
 
 import { Input, Submit } from "~/components/Form";
@@ -70,57 +66,49 @@ export async function action({ request }: ActionFunctionArgs): FormActionData {
 
 export default function ForgotPasswordRoute() {
   const actionData = useActionData<Result>();
-  const boxBackground = useColor("white");
 
   return (
     <>
-      <Image
-        src={useColorModeValue(
-          "/carbon-logo-dark.png",
-          "/carbon-logo-light.png"
-        )}
+      <img
+        src="/carbon-logo-dark.png"
         alt="Carbon Logo"
-        maxW={100}
-        marginBottom={3}
+        className="block dark:hidden max-w-[100px] mb-3"
+      />
+      <img
+        src="/carbon-logo-light.png"
+        alt="Carbon Logo"
+        className="hidden dark:block max-w-[100px] mb-3"
       />
       {actionData?.success ? (
-        <Alert
-          status="success"
-          variant="subtle"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          textAlign="center"
-          height="240px"
-          p={8}
-        >
-          <AlertIcon boxSize="40px" mr={0} />
-          <AlertTitle mt={4} mb={1} fontSize="lg">
-            Success
-          </AlertTitle>
-          <AlertDescription maxWidth="sm">
+        <Alert className="h-[240px] [&>svg]:left-8 [&>svg]:top-8 p-8">
+          <LuCheckCircle className="w-4 h-4" />
+          <AlertTitle>Success</AlertTitle>
+          <AlertDescription>
             If you have an account, you should receive an email shortly with a
             link to log in.
           </AlertDescription>
         </Alert>
       ) : (
-        <Box rounded="lg" bg={boxBackground} boxShadow="lg" w={380} p={8}>
+        <div className="rounded-lg bg-background shadow-lg p-8 w-[380px]">
           <ValidatedForm validator={forgotPasswordValidator} method="post">
-            <VStack spacing={4} alignItems="start">
-              <Text>
-                Please enter your email address to search for your account.
-              </Text>
+            <VStack spacing={4}>
+              <p>Please enter your email address to search for your account.</p>
               {actionData?.success === false && (
-                <Alert status="error">
-                  <AlertIcon />
+                <Alert variant="destructive">
+                  <LuAlertCircle className="w-4 h-4" />
                   <AlertTitle>{actionData?.message}</AlertTitle>
                 </Alert>
               )}
               <Input name="email" label="Email" />
-              <Submit w="full">Search</Submit>
+              <Submit size="lg" className="w-full">
+                Reset Password
+              </Submit>
+              <Button variant="link" asChild className="w-full">
+                <Link to={path.to.login}>Back to login</Link>
+              </Button>
             </VStack>
           </ValidatedForm>
-        </Box>
+        </div>
       )}
     </>
   );

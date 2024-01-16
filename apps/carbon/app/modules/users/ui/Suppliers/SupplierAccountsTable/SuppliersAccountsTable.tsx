@@ -1,9 +1,8 @@
-import { HStack, MenuItem, useDisclosure } from "@chakra-ui/react";
+import { HStack, MenuIcon, MenuItem, useDisclosure } from "@carbon/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BsEnvelope } from "react-icons/bs";
 import { FaBan } from "react-icons/fa";
-import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
 import { usePermissions } from "~/hooks";
 import type { Supplier } from "~/modules/users";
@@ -53,21 +52,14 @@ const SupplierAccountsTable = memo(
         {
           header: "User",
           cell: ({ row }) => (
-            <HStack spacing={2}>
+            <HStack>
               <Avatar
                 size="sm"
-                // @ts-ignore
-                name={row.original.user?.fullName}
-                // @ts-ignore
-                path={row.original.user?.avatarUrl}
+                name={row.original.user?.fullName ?? undefined}
+                path={row.original.user?.avatarUrl ?? undefined}
               />
 
-              <span>
-                {
-                  // @ts-ignore
-                  `${row.original.user?.firstName} ${row.original.user?.lastName}`
-                }
-              </span>
+              <span>{row.original.user?.fullName ?? ""}</span>
             </HStack>
           ),
         },
@@ -149,22 +141,22 @@ const SupplierAccountsTable = memo(
         return (
           <>
             <MenuItem
-              icon={<BsEnvelope />}
               onClick={() => {
                 setSelectedUserIds([userId]);
                 resendInviteModal.onOpen();
               }}
             >
+              <MenuIcon icon={<BsEnvelope />} />
               Send Account Invite
             </MenuItem>
             {row.user?.active === true && (
               <MenuItem
-                icon={<IoMdTrash />}
                 onClick={(e) => {
                   setSelectedUserIds([userId]);
                   deactivateSupplierModal.onOpen();
                 }}
               >
+                <MenuIcon icon={<FaBan />} />
                 Deactivate Supplier
               </MenuItem>
             )}

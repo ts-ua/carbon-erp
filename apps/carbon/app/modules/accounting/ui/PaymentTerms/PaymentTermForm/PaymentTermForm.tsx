@@ -2,14 +2,13 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
   HStack,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -46,71 +45,72 @@ const PaymentTermForm = ({ initialValues }: PaymentTermFormProps) => {
   );
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={paymentTermValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.paymentTerm(initialValues.id!)
-            : path.to.newPaymentTerm
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{isEditing ? "Edit" : "New"} Payment Term</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={paymentTermValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.paymentTerm(initialValues.id!)
+              : path.to.newPaymentTerm
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{isEditing ? "Edit" : "New"} Payment Term</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <Hidden name="id" />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Input name="name" label="Name" />
               <Select
                 name="calculationMethod"
                 label="After"
                 options={calculationMethodOptions}
-                onChange={({ value }) => {
+                onChange={(value) => {
                   setSelectedCalculationMethod(
-                    value as PaymentTermCalculationMethod
+                    value?.value as PaymentTermCalculationMethod
                   );
                 }}
               />
               <Number
                 name="daysDue"
                 label={`Due Days after ${selectedCalculationMethod}`}
-                min={0}
+                minValue={0}
                 helperText="The amount of days after the calculation method that the payment is due"
               />
               <Number
                 name="daysDiscount"
                 label={`Discount Days after ${selectedCalculationMethod}`}
-                min={0}
+                minValue={0}
                 helperText="The amount of days after the calculation method that the cash discount is available"
               />
               <Number
                 name="discountPercentage"
                 label="Discount Percent"
-                min={0}
-                max={100}
+                minValue={0}
+                maxValue={100}
                 helperText="The percentage of the cash discount. Use 0 for no discount."
               />
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

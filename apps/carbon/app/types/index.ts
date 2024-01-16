@@ -1,6 +1,7 @@
 import type { OptionBase } from "@carbon/react";
 import type { TypedResponse } from "@remix-run/node";
 import type { ReactElement } from "react";
+import type { IconType } from "react-icons";
 import type { ValidationErrorResponseData } from "remix-validated-form";
 
 export type Action = {
@@ -30,7 +31,7 @@ export type ListItem = {
 };
 
 export type NavItem = Omit<Route, "icon"> & {
-  icon: ReactElement;
+  icon: IconType;
   color?: string;
 };
 

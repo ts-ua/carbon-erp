@@ -1,23 +1,21 @@
-import { ActionMenu } from "@carbon/react";
 import {
+  ActionMenu,
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
+  DropdownMenuIcon,
+  DropdownMenuItem,
   HStack,
-  MenuItem,
-  StackDivider,
-  Text,
-  useDisclosure,
   VStack,
-} from "@chakra-ui/react";
+  useDisclosure,
+} from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { ConfirmDelete } from "~/components/Modals";
 import { useUrlParams } from "~/hooks";
@@ -54,35 +52,21 @@ const WorkCellTypeDetail = ({
     deleteModal.onClose();
   };
 
-  const renderContextMenu = (workCell: WorkCell) => {
-    if (!workCell || Array.isArray(workCell)) return null;
-    return (
-      <>
-        <MenuItem as={Link} to={workCell.id} icon={<BsPencilSquare />}>
-          Edit Cell
-        </MenuItem>
-        <MenuItem onClick={() => onDelete(workCell)} icon={<IoMdTrash />}>
-          Delete Cell
-        </MenuItem>
-      </>
-    );
-  };
-
   return (
     <>
-      <Drawer onClose={onClose} isOpen={true} size="sm">
-        <DrawerOverlay />
+      <Drawer
+        open
+        onOpenChange={(open) => {
+          if (!open) onClose();
+        }}
+      >
         <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{workCellType.name}</DrawerHeader>
+          <DrawerHeader>
+            <DrawerTitle>{workCellType.name}</DrawerTitle>
+          </DrawerHeader>
           <DrawerBody>
             {Array.isArray(workCellType?.workCell) && (
-              <VStack
-                alignItems="start"
-                divider={<StackDivider borderColor="gray.200" />}
-                spacing={4}
-                w="full"
-              >
+              <VStack spacing={4}>
                 {workCellType.workCell.map((workCell) => {
                   if (
                     !workCell ||
@@ -92,15 +76,26 @@ const WorkCellTypeDetail = ({
                   )
                     return null;
                   return (
-                    <HStack key={workCell.id} w="full">
-                      <VStack spacing={0} flexGrow={1} alignItems="start">
-                        <Text fontWeight="bold">{workCell.name}</Text>
-                        <Text fontSize="sm" color="gray.500">
+                    <HStack key={workCell.id} className="w-full">
+                      <VStack spacing={0} className="flex-grow">
+                        <p className="font-bold">{workCell.name}</p>
+                        <p className="text-muted-foreground text-sm">
                           {workCell.location?.name} /{" "}
                           {workCell.department?.name}
-                        </Text>
+                        </p>
                       </VStack>
-                      <ActionMenu>{renderContextMenu(workCell)}</ActionMenu>
+                      <ActionMenu>
+                        <DropdownMenuItem asChild>
+                          <Link to={workCell.id}>
+                            <DropdownMenuIcon icon={<BsFillPenFill />} />
+                            Edit Cell
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => onDelete(workCell)}>
+                          <DropdownMenuIcon icon={<IoMdTrash />} />
+                          Delete Cell
+                        </DropdownMenuItem>
+                      </ActionMenu>
                     </HStack>
                   );
                 })}
@@ -108,13 +103,8 @@ const WorkCellTypeDetail = ({
             )}
           </DrawerBody>
           <DrawerFooter>
-            <Button
-              as={Link}
-              to={`new?${params.toString()}`}
-              colorScheme="brand"
-              size="md"
-            >
-              New Work Cell
+            <Button asChild size="md">
+              <Link to={`new?${params.toString()}`}>New Work Cell</Link>
             </Button>
           </DrawerFooter>
         </DrawerContent>

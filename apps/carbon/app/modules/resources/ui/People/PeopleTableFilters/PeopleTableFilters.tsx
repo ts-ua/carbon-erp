@@ -1,7 +1,8 @@
-import { Select, useColor } from "@carbon/react";
-import { Button, HStack } from "@chakra-ui/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox, Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 import type { EmployeeType } from "~/modules/users";
@@ -14,51 +15,31 @@ type PeopleTableFiltersProps = {
 const PeopleTableFilters = ({ employeeTypes }: PeopleTableFiltersProps) => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
-  const employeeTypeOptions = employeeTypes?.map((type) => ({
-    value: type.id,
-    label: type.name,
+  const employeeTypeOptions = employeeTypes?.map<{
+    value: string;
+    label: string;
+  }>((type) => ({
+    value: type.id!,
+    label: type.name!,
   }));
 
-  const borderColor = useColor("gray.200");
-
   return (
-    <HStack
-      px={4}
-      py={3}
-      justifyContent="space-between"
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      w="full"
-    >
-      <HStack spacing={2}>
-        <DebouncedInput
-          param="name"
+    <TableFilters>
+      <HStack>
+        <DebouncedInput param="name" size="sm" placeholder="Search" />
+        <Combobox
           size="sm"
-          minW={180}
-          placeholder="Search"
-        />
-        <Select
-          size="sm"
-          value={employeeTypeOptions.find(
-            (type) => type.value === params.get("type")
-          )}
+          value={params.get("type") ?? ""}
           isClearable
           options={employeeTypeOptions}
-          onChange={(selected) => {
-            setParams({ type: selected?.value });
-          }}
-          aria-label="Employee Type"
           placeholder="Employee Type"
+          onChange={(selected) => {
+            setParams({ type: selected });
+          }}
         />
         <Select
-          // @ts-ignore
           size="sm"
-          value={
-            params.get("active") === "false"
-              ? { value: "false", label: "Inactive" }
-              : { value: "true", label: "Active" }
-          }
+          value={params.get("active") === "false" ? "false" : "true"}
           options={[
             {
               value: "true",
@@ -70,24 +51,21 @@ const PeopleTableFilters = ({ employeeTypes }: PeopleTableFiltersProps) => {
             },
           ]}
           onChange={(selected) => {
-            setParams({ active: selected?.value });
+            setParams({ active: selected });
           }}
           aria-label="Active"
         />
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "users") && (
-          <Button
-            as={Link}
-            to={`${path.to.newEmployee}?${params.toString()}`}
-            colorScheme="brand"
-            leftIcon={<IoMdAdd />}
-          >
-            New Employee
+          <Button asChild leftIcon={<IoMdAdd />}>
+            <Link to={`${path.to.newEmployee}?${params.toString()}`}>
+              New Employee
+            </Link>
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

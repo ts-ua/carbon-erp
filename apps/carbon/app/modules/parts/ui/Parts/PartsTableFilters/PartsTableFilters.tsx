@@ -1,7 +1,8 @@
-import { Select, useColor } from "@carbon/react";
-import { Button, HStack } from "@chakra-ui/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox, Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
 import { partTypes } from "~/modules/parts";
@@ -25,35 +26,18 @@ const PartsTableFilters = ({ partGroups }: PartsTableFiltersProps) => {
     label: group.name,
   }));
 
-  const borderColor = useColor("gray.200");
-
   return (
-    <HStack
-      px={4}
-      py={3}
-      justifyContent="space-between"
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      w="full"
-    >
-      <HStack spacing={2}>
-        <DebouncedInput
-          param="search"
-          size="sm"
-          minW={180}
-          placeholder="Search Parts"
-        />
+    <TableFilters>
+      <HStack>
+        <DebouncedInput param="search" size="sm" placeholder="Search Parts" />
         {partGroupsOptions.length > 0 && (
-          <Select
+          <Combobox
             size="sm"
             isClearable
-            value={partGroupsOptions.find(
-              (type) => type.value === params.get("group")
-            )}
+            value={params.get("group") ?? ""}
             options={partGroupsOptions}
             onChange={(selected) => {
-              setParams({ group: selected?.value });
+              setParams({ group: selected });
             }}
             aria-label="Groups"
             placeholder="Part Groups"
@@ -62,32 +46,25 @@ const PartsTableFilters = ({ partGroups }: PartsTableFiltersProps) => {
         {partTypeOptions.length > 0 && (
           <Select
             size="sm"
-            value={partTypeOptions.find(
-              (type) => type.value === params.get("type")
-            )}
+            value={params.get("type") ?? ""}
             isClearable
             options={partTypeOptions}
             onChange={(selected) => {
-              setParams({ type: selected?.value });
+              setParams({ type: selected });
             }}
             aria-label="Part Type"
             placeholder="Part Type"
           />
         )}
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "parts") && (
-          <Button
-            as={Link}
-            to={path.to.newPart}
-            colorScheme="brand"
-            leftIcon={<IoMdAdd />}
-          >
-            New Part
+          <Button asChild leftIcon={<IoMdAdd />}>
+            <Link to={path.to.newPart}>New Part</Link>
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

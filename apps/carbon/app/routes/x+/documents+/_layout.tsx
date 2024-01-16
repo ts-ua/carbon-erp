@@ -1,4 +1,4 @@
-import { Grid, VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
 import type { MetaFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 import { ContentSidebar } from "~/components/Layout/Sidebar";
@@ -20,11 +20,11 @@ export default function DocumentsRoute() {
   const { links } = useDocumentsSidebar();
 
   return (
-    <Grid w="full" h="full" templateColumns="auto 1fr">
+    <div className="grid grid-cols-[auto_1fr] w-full h-full">
       <ContentSidebar links={links} />
-      <VStack w="full" h="full">
+      <VStack spacing={0} className="h-full">
         <Outlet />
       </VStack>
-    </Grid>
+    </div>
   );
 }

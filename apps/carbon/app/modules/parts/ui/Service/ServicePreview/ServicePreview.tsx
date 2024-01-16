@@ -1,13 +1,17 @@
 import {
   Button,
   Card,
-  CardBody,
+  CardAction,
+  CardAttribute,
+  CardAttributeLabel,
+  CardAttributeValue,
+  CardAttributes,
+  CardContent,
+  CardDescription,
   CardHeader,
-  Heading,
+  CardTitle,
   HStack,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -23,40 +27,38 @@ const ServicePreview = () => {
   );
 
   return (
-    <Card w="full">
-      <CardHeader>
-        <HStack justifyContent="space-between" alignItems="start">
-          <Stack direction="column" spacing={2}>
-            <Heading size="md">{routeData?.service?.name}</Heading>
-            <Text color="gray.500" noOfLines={1}>
-              {routeData?.service?.description}
-            </Text>
-          </Stack>
-          <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
+    <Card>
+      <HStack className="justify-between items-start">
+        <CardHeader>
+          <CardTitle>{routeData?.service?.name}</CardTitle>
+          <CardDescription>{routeData?.service?.description}</CardDescription>
+        </CardHeader>
+        <CardAction>
+          <Button
+            variant="secondary"
+            onClick={() => alert("TODO")}
+            leftIcon={<FaHistory />}
+          >
             View History
           </Button>
-        </HStack>
-      </CardHeader>
-      <CardBody>
-        <Stack direction={["column", "column", "row"]} spacing={8}>
-          <Stack
-            direction={["row", "row", "column"]}
-            alignItems="start"
-            justifyContent="space-between"
-          >
-            <Text color="gray.500">Type</Text>
-            <Text fontWeight="bold">{routeData?.service?.serviceType}</Text>
-          </Stack>
-          <Stack
-            direction={["row", "row", "column"]}
-            alignItems="start"
-            justifyContent="space-between"
-          >
-            <Text color="gray.500">Part Group</Text>
-            <Text fontWeight="bold">{routeData?.service?.partGroup}</Text>
-          </Stack>
-        </Stack>
-      </CardBody>
+        </CardAction>
+      </HStack>
+      <CardContent>
+        <CardAttributes>
+          <CardAttribute>
+            <CardAttributeLabel>Type</CardAttributeLabel>
+            <CardAttributeValue>
+              {routeData?.service?.serviceType}
+            </CardAttributeValue>
+          </CardAttribute>
+          <CardAttribute>
+            <CardAttributeLabel>Part Group</CardAttributeLabel>
+            <CardAttributeValue>
+              {routeData?.service?.partGroup}
+            </CardAttributeValue>
+          </CardAttribute>
+        </CardAttributes>
+      </CardContent>
     </Card>
   );
 };

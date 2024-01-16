@@ -1,6 +1,5 @@
-import { useDebounce } from "@carbon/react";
-import type { InputProps } from "@chakra-ui/react";
-import { Input } from "@chakra-ui/react";
+import type { InputProps } from "@carbon/react";
+import { Input, useDebounce } from "@carbon/react";
 import { useEffect, useRef, useState } from "react";
 import { useUrlParams } from "~/hooks";
 

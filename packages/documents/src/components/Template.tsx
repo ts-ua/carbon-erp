@@ -5,7 +5,7 @@ import type { Meta } from "../types";
 type TemplateProps = PropsWithChildren<{ title: string; meta: Meta }>;
 
 const Template = ({ title, meta, children }: TemplateProps) => {
-  // TODO: build fonts -- right now remix is struggling server side to load fonts
+  // TODO: serve fonts from remix server
   Font.register({
     family: "Satoshi",
     fonts: [

@@ -1,8 +1,16 @@
-import { AvatarGroup, Badge, Link, MenuItem } from "@chakra-ui/react";
+import {
+  AvatarGroup,
+  AvatarGroupList,
+  AvatarOverflowIndicator,
+  Badge,
+  Hyperlink,
+  MenuIcon,
+  MenuItem,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -79,7 +87,7 @@ const ShiftsTable = memo(({ data, count }: ShiftsTableProps) => {
     ].filter(Boolean);
 
     return days.map((day) => (
-      <Badge key={day as string} mr={0.5}>
+      <Badge key={day as string} variant="outline" className="mr-0.5">
         {day}
       </Badge>
     ));
@@ -91,24 +99,27 @@ const ShiftsTable = memo(({ data, count }: ShiftsTableProps) => {
         accessorKey: "name",
         header: "Shift",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(row.original.id)}>
+          <Hyperlink onClick={() => navigate(row.original.id)}>
             {row.original.name}
-          </Link>
+          </Hyperlink>
         ),
       },
       {
         header: "Employees",
         // accessorKey: undefined, // makes the column unsortable
         cell: ({ row }) => (
-          <AvatarGroup max={5} size="sm" spacing={-2}>
-            {row.original.employees.map((employee, index: number) => (
-              <Avatar
-                key={index}
-                name={employee.name ?? undefined}
-                title={employee.name ?? undefined}
-                path={employee.avatarUrl}
-              />
-            ))}
+          <AvatarGroup limit={5} size="sm">
+            <AvatarGroupList>
+              {row.original.employees.map((employee, index: number) => (
+                <Avatar
+                  key={index}
+                  name={employee.name ?? undefined}
+                  title={employee.name ?? undefined}
+                  path={employee.avatarUrl}
+                />
+              ))}
+            </AvatarGroupList>
+            <AvatarOverflowIndicator />
           </AvatarGroup>
         ),
       },
@@ -139,20 +150,20 @@ const ShiftsTable = memo(({ data, count }: ShiftsTableProps) => {
       return (
         <>
           <MenuItem
-            icon={<BsPencilSquare />}
             onClick={() => {
               navigate(`${path.to.shift(row.id)}?${params.toString()}}`);
             }}
           >
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Shift
           </MenuItem>
           <MenuItem
-            isDisabled={!permissions.can("delete", "resources")}
-            icon={<IoMdTrash />}
+            disabled={!permissions.can("delete", "resources")}
             onClick={() => {
               navigate(`${path.to.deleteShift(row.id)}?${params.toString()}`);
             }}
           >
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Shift
           </MenuItem>
         </>

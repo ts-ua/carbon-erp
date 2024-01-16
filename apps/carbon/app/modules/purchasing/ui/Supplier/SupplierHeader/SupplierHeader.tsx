@@ -1,14 +1,17 @@
 import {
   Button,
   Card,
-  CardBody,
+  CardAction,
+  CardAttribute,
+  CardAttributeLabel,
+  CardAttributeValue,
+  CardAttributes,
+  CardContent,
   CardHeader,
-  Heading,
+  CardTitle,
   HStack,
-  Stack,
-  Text,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -34,60 +37,53 @@ const SupplierHeader = () => {
   }>(path.to.supplierRoot);
 
   return (
-    <VStack w="full" alignItems="start" spacing={2}>
-      <Card w="full">
-        <CardHeader>
-          <HStack justifyContent="space-between" alignItems="start">
-            <Stack direction="column" spacing={2}>
-              <Heading size="md">{routeData?.supplier?.name}</Heading>
-            </Stack>
-            <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
+    <VStack>
+      <Card>
+        <HStack className="justify-between items-start">
+          <CardHeader>
+            <CardTitle>{routeData?.supplier?.name}</CardTitle>
+          </CardHeader>
+          <CardAction>
+            <Button
+              variant="secondary"
+              onClick={() => alert("TODO")}
+              leftIcon={<FaHistory />}
+            >
               Supplier Details
             </Button>
-          </HStack>
-        </CardHeader>
-        <CardBody>
-          <Stack direction={["column", "column", "row"]} spacing={8}>
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <Text color="gray.500">Type</Text>
-              <Text fontWeight="bold">
+          </CardAction>
+        </HStack>
+        <CardContent>
+          <CardAttributes>
+            <CardAttribute>
+              <CardAttributeLabel>Type</CardAttributeLabel>
+              <CardAttributeValue>
                 {sharedSupplierData?.supplierTypes?.find(
                   (type) => type.id === routeData?.supplier?.supplierTypeId
                 )?.name ?? "--"}
-              </Text>
-            </Stack>
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <Text color="gray.500">Status</Text>
-              <Text fontWeight="bold">
+              </CardAttributeValue>
+            </CardAttribute>
+            <CardAttribute>
+              <CardAttributeLabel>Status</CardAttributeLabel>
+              <CardAttributeValue>
                 {sharedSupplierData?.supplierStatuses?.find(
                   (status) =>
                     status.id === routeData?.supplier?.supplierStatusId
                 )?.name ?? "--"}
-              </Text>
-            </Stack>
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <Text color="gray.500">Payment Terms</Text>
-              <Text fontWeight="bold">
+              </CardAttributeValue>
+            </CardAttribute>
+            <CardAttribute>
+              <CardAttributeLabel>Payment Terms</CardAttributeLabel>
+              <CardAttributeValue>
+                {/* // TODO: defaultPaymentTermId */}
                 {sharedSupplierData?.paymentTerms?.find(
                   (term) =>
                     term.id === routeData?.supplier?.defaultPaymentTermId
                 )?.name ?? "--"}
-              </Text>
-            </Stack>
-          </Stack>
-        </CardBody>
+              </CardAttributeValue>
+            </CardAttribute>
+          </CardAttributes>
+        </CardContent>
       </Card>
     </VStack>
   );

@@ -1,9 +1,9 @@
-import type { InputProps } from "@chakra-ui/react";
+import type { InputProps } from "@carbon/react";
 import {
-  Input as ChakraInput,
   FormControl,
   FormErrorMessage,
-} from "@chakra-ui/react";
+  Input as InputBase,
+} from "@carbon/react";
 import { forwardRef } from "react";
 import { useField } from "remix-validated-form";
 
@@ -18,7 +18,7 @@ const Hidden = forwardRef<HTMLInputElement, HiddenProps>(
 
     return (
       <FormControl isInvalid={!!error}>
-        <ChakraInput
+        <InputBase
           ref={ref}
           {...getInputProps({
             id: name,

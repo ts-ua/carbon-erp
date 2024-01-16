@@ -3,13 +3,11 @@ import {
   HStack,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
-  Text,
-} from "@chakra-ui/react";
+  ModalTitle,
+} from "@carbon/react";
 import { ValidatedForm } from "remix-validated-form";
 import { UserSelect } from "~/components/Selectors";
 import { deactivateUsersValidator } from "~/modules/users";
@@ -31,22 +29,27 @@ const DeactivateUsersModal = ({
   const isSingleUser = userIds.length === 1;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
+    <Modal
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
       <ModalContent>
         <ModalHeader>
-          {isSingleUser ? "Deactivate Employee" : "Deactivate Employees"}
+          <ModalTitle>
+            {isSingleUser ? "Deactivate Employee" : "Deactivate Employees"}
+          </ModalTitle>
         </ModalHeader>
-        <ModalCloseButton />
         <ModalBody>
-          <Text mb={2}>
+          <p className="mb-2">
             Are you sure you want to deactive
             {isSingleUser ? " this user" : " these users"}?
-          </Text>
+          </p>
           <UserSelect value={userIds} readOnly isMulti />
         </ModalBody>
         <ModalFooter>
-          <HStack spacing={2}>
+          <HStack>
             <Button variant="ghost" onClick={onClose}>
               Cancel
             </Button>
@@ -65,7 +68,7 @@ const DeactivateUsersModal = ({
                 />
               ))}
               <input type="hidden" name="redirectTo" value={redirectTo} />
-              <Button colorScheme="red" type="submit">
+              <Button variant="destructive" type="submit">
                 Deactivate
               </Button>
             </ValidatedForm>

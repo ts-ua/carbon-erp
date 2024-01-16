@@ -1,9 +1,10 @@
-import { Select, useColor } from "@carbon/react";
-import { Button, HStack } from "@chakra-ui/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
-import { usePermissions, useUrlParams, useUser } from "~/hooks";
+import { usePermissions, useUrlParams } from "~/hooks";
 import { receiptSourceDocumentType } from "~/modules/inventory";
 import type { ListItem } from "~/types";
 
@@ -14,10 +15,6 @@ type ReceiptsTableFiltersProps = {
 const ReceiptsTableFilters = ({ locations }: ReceiptsTableFiltersProps) => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
-  const borderColor = useColor("gray.200");
-  const {
-    defaults: { locationId },
-  } = useUser();
 
   const sourceDocumentOptions = receiptSourceDocumentType.map((type) => ({
     label: type,
@@ -30,67 +27,39 @@ const ReceiptsTableFilters = ({ locations }: ReceiptsTableFiltersProps) => {
   }));
 
   return (
-    <HStack
-      px={4}
-      py={3}
-      justifyContent="space-between"
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      w="full"
-    >
-      <HStack spacing={2}>
-        <DebouncedInput
-          param="search"
+    <TableFilters>
+      <HStack>
+        <DebouncedInput param="search" size="sm" placeholder="Search" />
+        <Combobox
           size="sm"
-          minW={180}
-          placeholder="Search"
-        />
-        <Select
-          size="sm"
-          value={sourceDocumentOptions.find(
-            (document) => document.value === params.get("document")
-          )}
+          value={params.get("document") ?? ""}
           isClearable
           options={sourceDocumentOptions}
           onChange={(selected) => {
-            setParams({ document: selected?.value });
+            setParams({ document: selected });
           }}
           aria-label="Source Document"
           placeholder="Source Document"
         />
-        <Select
+        <Combobox
           size="sm"
-          value={
-            params.get("location")
-              ? locationOptions.find(
-                  (location) => location.value === params.get("location")
-                )
-              : locationOptions.find(
-                  (location) => location.value === locationId
-                )
-          }
+          value={params.get("location") ?? ""}
+          isClearable
           options={locationOptions}
           onChange={(selected) => {
-            setParams({ location: selected?.value });
+            setParams({ location: selected });
           }}
-          aria-label="Location"
           placeholder="Location"
         />
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "inventory") && (
-          <Button
-            as={Link}
-            to={`new?${params.toString()}`}
-            colorScheme="brand"
-            leftIcon={<IoMdAdd />}
-          >
-            New Receipt
+          <Button asChild leftIcon={<IoMdAdd />}>
+            <Link to={`new?${params.toString()}`}>New Receipt</Link>
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

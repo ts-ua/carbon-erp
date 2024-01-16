@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
-import { Select } from "@carbon/react";
 import type { PostgrestSingleResponse } from "@supabase/supabase-js";
+import { Combobox } from "~/components";
 import type { EditableTableCellComponentProps } from "~/components/Editable";
 
 const EditableList =
@@ -19,7 +19,7 @@ const EditableList =
     onError,
     onUpdate,
   }: EditableTableCellComponentProps<T>) => {
-    const onChange = async ({ value }: { value: string; label: string }) => {
+    const onChange = async (value: string) => {
       // this is the optimistic update on the FE
       onUpdate(accessorKey, value);
 
@@ -38,12 +38,11 @@ const EditableList =
     };
 
     return (
-      <Select
+      <Combobox
         autoFocus
-        borderRadius="none"
-        defaultValue={options.find((option) => option.value === value)}
+        className="rounded-none"
+        value={options.find((option) => option.value === value)?.value}
         options={options}
-        // @ts-ignore
         onChange={onChange}
         size="sm"
       />

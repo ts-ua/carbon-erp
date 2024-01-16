@@ -1,42 +1,16 @@
-import { Select, useMount } from "@carbon/react";
-import {
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
-} from "@chakra-ui/react";
+import { useMount } from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
 import { useMemo } from "react";
-import { useControlField, useField } from "remix-validated-form";
-import type { getLocations } from "~/modules/resources";
+import type { getLocationsList } from "~/modules/resources";
 import { path } from "~/utils/path";
-import type { SelectProps } from "./Select";
+import type { ComboboxProps } from "./Combobox";
+import Combobox from "./Combobox";
 
-type LocationSelectProps = Omit<SelectProps, "options" | "onChange"> & {
-  isClearable?: boolean;
-  onChange?: (
-    selected: {
-      value: string | number;
-      label: string;
-    } | null
-  ) => void;
-};
+type LocationSelectProps = Omit<ComboboxProps, "options">;
 
-const Location = ({
-  name,
-  label = "Location",
-  helperText,
-  isLoading,
-  isClearable,
-  placeholder = "Select Location",
-  onChange,
-  ...props
-}: LocationSelectProps) => {
-  const { error } = useField(name);
-  const [value, setValue] = useControlField<string | null>(name);
-
+const Location = (props: LocationSelectProps) => {
   const locationFetcher =
-    useFetcher<Awaited<ReturnType<typeof getLocations>>>();
+    useFetcher<Awaited<ReturnType<typeof getLocationsList>>>();
 
   useMount(() => {
     locationFetcher.load(path.to.api.locations);
@@ -53,42 +27,8 @@ const Location = ({
     [locationFetcher.data]
   );
 
-  const handleChange = (
-    selection: {
-      value: string | number;
-      label: string;
-    } | null
-  ) => {
-    const newValue = (selection?.value as string) ?? null;
-    setValue(newValue);
-    onChange?.(selection);
-  };
-
-  const controlledValue = useMemo(
-    // @ts-ignore
-    () => options.find((option) => option.value === value),
-    [value, options]
-  );
-
   return (
-    <FormControl isInvalid={!!error}>
-      {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-      <input type="hidden" name={name} id={name} value={value ?? ""} />
-      <Select
-        {...props}
-        value={controlledValue}
-        isClearable={isClearable}
-        isLoading={isLoading}
-        options={options}
-        placeholder={placeholder}
-        onChange={handleChange}
-      />
-      {error ? (
-        <FormErrorMessage>{error}</FormErrorMessage>
-      ) : (
-        helperText && <FormHelperText>{helperText}</FormHelperText>
-      )}
-    </FormControl>
+    <Combobox options={options} {...props} label={props?.label ?? "Location"} />
   );
 };
 

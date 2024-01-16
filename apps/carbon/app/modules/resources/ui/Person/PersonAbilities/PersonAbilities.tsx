@@ -1,19 +1,7 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
-import {
-  Box,
-  Card,
-  CardBody,
-  CardHeader,
-  Center,
-  Flex,
-  Grid,
-  Heading,
-  Icon,
-  List,
-  ListItem,
-  Text,
-} from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
+import clsx from "clsx";
 import type { IconType } from "react-icons";
 
 import { BsBarChartFill, BsCheckLg } from "react-icons/bs";
@@ -29,27 +17,19 @@ type PersonAbilitiesProps = {
 const AbilityIcons: Record<
   AbilityEmployeeStatus,
   {
-    color: string;
-    bg: string;
     icon: IconType;
     description: string;
   }
 > = {
   [AbilityEmployeeStatus.Complete]: {
-    color: "white",
-    bg: "green.500",
     icon: BsCheckLg,
     description: "Fully trained for",
   },
   [AbilityEmployeeStatus.InProgress]: {
-    color: "white",
-    bg: "blue.400",
     icon: BsBarChartFill,
     description: "Currently training for",
   },
   [AbilityEmployeeStatus.NotStarted]: {
-    color: "gray.700",
-    bg: "gray.200",
     icon: FaThumbsUp,
     description: "Not started training for",
   },
@@ -57,20 +37,19 @@ const AbilityIcons: Record<
 
 const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
   return (
-    <Card w="full">
+    <Card>
       <CardHeader>
-        <Heading size="md">Abilities</Heading>
+        <CardTitle>Abilities</CardTitle>
       </CardHeader>
-      <CardBody>
+      <CardContent>
         {abilities?.length > 0 ? (
-          <List spacing={4}>
+          <ul className="flex flex-col gap-4 w-full">
             {abilities.map((employeeAbility) => {
               const abilityStatus =
                 getTrainingStatus(employeeAbility) ??
                 AbilityEmployeeStatus.NotStarted;
 
-              const { color, bg, icon, description } =
-                AbilityIcons[abilityStatus];
+              const { description, icon } = AbilityIcons[abilityStatus];
 
               if (
                 !employeeAbility.ability ||
@@ -79,56 +58,59 @@ const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
                 return null;
               }
 
+              let Icon = icon;
+
               return (
-                <ListItem key={employeeAbility.id}>
-                  <Grid
-                    key={employeeAbility.id}
-                    gridTemplateColumns="auto 1fr auto"
-                    gridColumnGap={4}
-                  >
-                    <Center
-                      bg={bg}
-                      borderRadius="full"
-                      color={color}
-                      h={10}
-                      w={10}
+                <li key={employeeAbility.id}>
+                  <div className="grid-cols-[auto_1fr_auto] space-x-4">
+                    <div
+                      className={clsx(
+                        "flex h-10 w-10 rounded-full items-center justify-center",
+                        {
+                          "bg-green-500 text-white":
+                            abilityStatus === AbilityEmployeeStatus.Complete,
+                          "bg-blue-400 text-white dark:bg-blue-500 dark:text-white":
+                            abilityStatus === AbilityEmployeeStatus.InProgress,
+                          "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200":
+                            abilityStatus === AbilityEmployeeStatus.NotStarted,
+                        }
+                      )}
                     >
-                      <Icon as={icon} w={5} h={5} />
-                    </Center>
-                    <Flex h="full" alignItems="center">
-                      <Text>
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div className="flex h-full items-center">
+                      <p>
                         {description}{" "}
-                        <Text
-                          as={Link}
-                          fontWeight="bold"
+                        <Link
+                          className="font-bold"
                           to={path.to.employeeAbility(
                             employeeAbility.ability.id,
                             employeeAbility.id
                           )}
                         >
                           {employeeAbility.ability.name}
-                        </Text>
-                      </Text>
-                    </Flex>
-                    <Flex h="full" alignItems="center">
-                      <Text color="gray.500" fontSize="sm">
+                        </Link>
+                      </p>
+                    </div>
+                    <div className="flex h-full items-center">
+                      <p className="text-sm text-muted-foreground">
                         {formatDate(employeeAbility.lastTrainingDate, {
                           month: "short",
                           year: "numeric",
                         })}
-                      </Text>
-                    </Flex>
-                  </Grid>
-                </ListItem>
+                      </p>
+                    </div>
+                  </div>
+                </li>
               );
             })}
-          </List>
+          </ul>
         ) : (
-          <Box color="gray.500" p={4} w="full" textAlign="center">
+          <div className="text-muted-foreground text-center p-4 w-full">
             No abilities added
-          </Box>
+          </div>
         )}
-      </CardBody>
+      </CardContent>
     </Card>
   );
 };

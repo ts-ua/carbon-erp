@@ -1,8 +1,8 @@
-import { Checkbox, Link, MenuItem } from "@chakra-ui/react";
+import { Checkbox, Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -25,9 +25,9 @@ const CurrenciesTable = memo(({ data, count }: CurrenciesTableProps) => {
         accessorKey: "name",
         header: "Name",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(row.original.id)}>
+          <Hyperlink onClick={() => navigate(row.original.id)}>
             {row.original.name}
-          </Link>
+          </Hyperlink>
         ),
       },
       {
@@ -36,9 +36,8 @@ const CurrenciesTable = memo(({ data, count }: CurrenciesTableProps) => {
         cell: (item) => item.getValue(),
       },
       {
-        accessorKey: "symbol",
         header: "Symbol",
-        cell: (item) => item.getValue(),
+        cell: ({ row }) => row.original.symbol,
       },
       {
         accessorKey: "exchangeRate",
@@ -49,7 +48,7 @@ const CurrenciesTable = memo(({ data, count }: CurrenciesTableProps) => {
         accessorKey: "isBaseCurrency",
         header: "Default Currency",
         cell: ({ row }) => (
-          <Checkbox isChecked={row.original.isBaseCurrency} isReadOnly />
+          <Checkbox isChecked={row.original.isBaseCurrency} disabled />
         ),
       },
     ];
@@ -60,23 +59,23 @@ const CurrenciesTable = memo(({ data, count }: CurrenciesTableProps) => {
       return (
         <>
           <MenuItem
-            isDisabled={!permissions.can("update", "accounting")}
-            icon={<BsPencilSquare />}
+            disabled={!permissions.can("update", "accounting")}
             onClick={() => {
               navigate(`${path.to.currency(row.id)}?${params.toString()}`);
             }}
           >
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Currency
           </MenuItem>
           <MenuItem
-            isDisabled={!permissions.can("delete", "accounting")}
-            icon={<IoMdTrash />}
+            disabled={!permissions.can("delete", "accounting")}
             onClick={() => {
               navigate(
                 `${path.to.deleteCurrency(row.id)}?${params.toString()}`
               );
             }}
           >
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Currency
           </MenuItem>
         </>

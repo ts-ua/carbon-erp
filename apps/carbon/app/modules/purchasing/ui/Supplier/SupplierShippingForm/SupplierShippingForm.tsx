@@ -1,13 +1,12 @@
 import {
   Card,
-  CardBody,
+  CardContent,
   CardFooter,
   CardHeader,
-  Grid,
-  Heading,
+  CardTitle,
   HStack,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
@@ -59,23 +58,18 @@ const SupplierShippingForm = ({ initialValues }: SupplierShippingFormProps) => {
       validator={supplierShippingValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card>
         <CardHeader>
-          <Heading size="md">Supplier Shipping</Heading>
+          <CardTitle>Supplier Shipping</CardTitle>
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="supplierId" />
-          <Grid
-            gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
-          >
-            <VStack alignItems="start" spacing={2} w="full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
+            <VStack>
               <Supplier
                 name="shippingSupplierId"
                 label="Shipping Supplier"
-                onChange={({ value }) => setSupplier(value as string)}
+                onChange={(value) => setSupplier(value?.value as string)}
               />
               <SupplierLocation
                 name="shippingSupplierLocationId"
@@ -88,7 +82,7 @@ const SupplierShippingForm = ({ initialValues }: SupplierShippingFormProps) => {
                 supplier={supplier}
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Select
                 name="shippingMethodId"
                 label="Shipping Method"
@@ -100,10 +94,10 @@ const SupplierShippingForm = ({ initialValues }: SupplierShippingFormProps) => {
                 options={shippingTermOptions}
               />
             </VStack>
-          </Grid>
-        </CardBody>
+          </div>
+        </CardContent>
         <CardFooter>
-          <HStack spacing={2}>
+          <HStack>
             <Submit isDisabled={isDisabled}>Save</Submit>
           </HStack>
         </CardFooter>

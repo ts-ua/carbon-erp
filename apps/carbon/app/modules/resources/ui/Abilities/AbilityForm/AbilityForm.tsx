@@ -2,14 +2,14 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
   HStack,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
+
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -37,27 +37,33 @@ const AbilityForm = ({ initialValues }: AbilityFormProps) => {
   const [maxShadowWeeks, setMaxShadowWeeks] = useState(initialValues.weeks);
   // const [equipmentRequired, setEquipmentRequired] = useState(initialValues.equipmentType !== undefined);
 
-  const onWeekChange = (_: string, value: number) => {
+  const onWeekChange = (value: number) => {
     setMaxShadowWeeks(value);
   };
 
   const isDisabled = !permissions.can("create", "resources");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={abilityValidator}
-        method="post"
-        action={path.to.newAbility}
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>New Ability</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={abilityValidator}
+          method="post"
+          action={path.to.newAbility}
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>New Ability</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <Hidden name="id" />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Input name="name" label="Name" />
               {/* <Boolean
                 name="machineOperator"
@@ -69,24 +75,24 @@ const AbilityForm = ({ initialValues }: AbilityFormProps) => {
                 name="startingPoint"
                 label="Learning Curve"
                 options={[
-                  { value: 85, label: "Easy" },
-                  { value: 70, label: "Medium" },
-                  { value: 50, label: "Hard" },
+                  { value: "85", label: "Easy" },
+                  { value: "70", label: "Medium" },
+                  { value: "50", label: "Hard" },
                 ]}
               />
               <Number
                 name="weeks"
                 label="Time to Efficiency (Weeks)"
                 onChange={onWeekChange}
-                min={0}
-                max={52}
+                minValue={0}
+                maxValue={52}
               />
               <Number
                 name="shadowWeeks"
                 label="Time Shadowing (Weeks)"
                 helperText="Non-productive time spent shadowing another employee"
-                min={0}
-                max={maxShadowWeeks}
+                minValue={0}
+                maxValue={maxShadowWeeks}
               />
               <Employees
                 name="employees"
@@ -97,20 +103,15 @@ const AbilityForm = ({ initialValues }: AbilityFormProps) => {
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

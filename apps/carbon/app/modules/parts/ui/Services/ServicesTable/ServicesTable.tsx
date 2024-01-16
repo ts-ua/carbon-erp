@@ -1,8 +1,8 @@
-import { Link, MenuItem } from "@chakra-ui/react";
+import { Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { Table } from "~/components";
 import { useUrlParams } from "~/hooks";
 import type { Service } from "~/modules/parts";
@@ -23,9 +23,11 @@ const ServicesTable = memo(({ data, count }: ServicesTableProps) => {
         accessorKey: "id",
         header: "Service ID",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(path.to.service(row.original.id!))}>
+          <Hyperlink
+            onClick={() => navigate(path.to.service(row.original.id!))}
+          >
             {row.original.id}
-          </Link>
+          </Hyperlink>
         ),
       },
       {
@@ -56,10 +58,8 @@ const ServicesTable = memo(({ data, count }: ServicesTableProps) => {
   const renderContextMenu = useMemo(() => {
     // eslint-disable-next-line react/display-name
     return (row: Service) => (
-      <MenuItem
-        icon={<BsPencilSquare />}
-        onClick={() => navigate(path.to.service(row.id!))}
-      >
+      <MenuItem onClick={() => navigate(path.to.service(row.id!))}>
+        <MenuIcon icon={<BsFillPenFill />} />
         Edit Service
       </MenuItem>
     );

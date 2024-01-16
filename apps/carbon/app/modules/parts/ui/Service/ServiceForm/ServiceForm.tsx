@@ -1,17 +1,18 @@
 import {
   Card,
-  CardBody,
+  CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
-  Grid,
-  Heading,
-  Text,
+  CardTitle,
   VStack,
-} from "@chakra-ui/react";
+  cn,
+} from "@carbon/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Boolean,
+  Combobox,
   Input,
   InputControlled,
   Select,
@@ -101,28 +102,24 @@ const ServiceForm = ({ initialValues }: ServiceFormProps) => {
       validator={serviceValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card>
         <CardHeader>
-          <Heading size="md">
-            {isEditing ? "Service Details" : "New Service"}
-          </Heading>
+          <CardTitle>{isEditing ? "Service Details" : "New Service"}</CardTitle>
           {!isEditing && (
-            <Text color="gray.500" fontWeight="normal">
+            <CardDescription>
               A service is an intangible activity that can be purchased or sold.
               When a service is purchased, it is accounted for as overhead.
-            </Text>
+            </CardDescription>
           )}
         </CardHeader>
-        <CardBody>
-          <Grid
-            gridTemplateColumns={
-              isEditing ? ["1fr", "1fr", "1fr 1fr 1fr"] : "1fr"
-            }
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
+        <CardContent>
+          <div
+            className={cn(
+              "grid w-full gap-x-8 gap-y-2",
+              isEditing ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1"
+            )}
           >
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               {isEditing ? (
                 <Input name="id" label="Service ID" isReadOnly />
               ) : (
@@ -138,24 +135,24 @@ const ServiceForm = ({ initialValues }: ServiceFormProps) => {
               <Input name="name" label="Name" />
               <TextArea name="description" label="Description" />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Select
                 name="serviceType"
                 label="Service Type"
                 options={serviceTypeOptions}
               />
-              <Select
+              <Combobox
                 name="partGroupId"
                 label="Part Group"
                 options={partGroupOptions}
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Boolean name="blocked" label="Blocked" />
               {isEditing && <Boolean name="active" label="Active" />}
             </VStack>
-          </Grid>
-        </CardBody>
+          </div>
+        </CardContent>
         <CardFooter>
           <Submit
             isDisabled={

@@ -1,5 +1,4 @@
-import { File, useNotification } from "@carbon/react";
-import { Button, VStack } from "@chakra-ui/react";
+import { Button, File, VStack, toast } from "@carbon/react";
 import { useSubmit } from "@remix-run/react";
 import type { ChangeEvent } from "react";
 import { Avatar } from "~/components";
@@ -13,7 +12,6 @@ type ProfilePhotoFormProps = {
 
 const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
   const { supabase } = useSupabase();
-  const notification = useNotification();
   const submit = useSubmit();
 
   const uploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +29,7 @@ const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
         });
 
       if (imageUpload.error) {
-        notification.copyableError(imageUpload.error, "Failed to upload image");
+        toast.error("Failed to upload image");
       }
 
       if (imageUpload.data?.path) {
@@ -47,7 +45,7 @@ const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
         .remove([user.avatarUrl]);
 
       if (imageDelete.error) {
-        notification.copyableError(imageDelete.error, "Failed to remove image");
+        toast.error("Failed to remove image");
       }
 
       submitAvatarUrl(null);
@@ -66,14 +64,18 @@ const ProfilePhotoForm = ({ user }: ProfilePhotoFormProps) => {
   };
 
   return (
-    <VStack w="full" spacing={2} px={8}>
-      <Avatar size="2xl" path={user?.avatarUrl} title={user?.fullName ?? ""} />
+    <VStack className="px-8 items-center">
+      <Avatar
+        size="2xl"
+        path={user?.avatarUrl}
+        name={user?.fullName ?? undefined}
+      />
       <File accept="image/*" onChange={uploadImage}>
         {user.avatarUrl ? "Change" : "Upload"}
       </File>
 
       {user.avatarUrl && (
-        <Button variant="outline" onClick={deleteImage}>
+        <Button variant="secondary" onClick={deleteImage}>
           Remove
         </Button>
       )}

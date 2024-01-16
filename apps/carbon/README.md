@@ -3,9 +3,9 @@
 ERP Application built with:
 
 - [Remix](https://remix.run)
-- [Chakra UI](https://chakra-ui.com/)
 - [Supabase](https://supabase.com/)
 - [Postgres](https://postgresql.org/)
+- [shadcn](https://ui.shadcn.com/)
 - [Redis](https://redis.io)
 - [BullMQ](https://docs.bullmq.io)
 

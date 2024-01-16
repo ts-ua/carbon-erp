@@ -1,57 +1,35 @@
-import { Select } from "@carbon/react";
-import {
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  FormLabel,
-} from "@chakra-ui/react";
 import { useFetcher } from "@remix-run/react";
 import { useEffect, useMemo } from "react";
-import { useControlField, useField } from "remix-validated-form";
 import type {
   AccountSubcategory as AccountSubcategoryType,
   getAccountSubcategoriesByCategory,
 } from "~/modules/accounting";
 import { path } from "~/utils/path";
-import type { SelectProps } from "./Select";
+import type { ComboboxProps } from "./Combobox";
+import Combobox from "./Combobox";
 
 type AccountSubcategorySelectProps = Omit<
-  SelectProps,
+  ComboboxProps,
   "options" | "onChange"
 > & {
   accountCategoryId?: string;
-  onChange?: (accountCategory: AccountSubcategoryType | undefined) => void;
+  onChange?: (accountCategory: AccountSubcategoryType | null) => void;
 };
 
-const AccountSubcategory = ({
-  name,
-  label = "Account Subcategory",
-  accountCategoryId,
-  helperText,
-  isReadOnly = false,
-  placeholder = "Select Account Subcategory",
-  onChange,
-}: AccountSubcategorySelectProps) => {
-  const { error, getInputProps, defaultValue } = useField(name);
-
-  const [accountSubcategory, setAccountSubcategory] = useControlField<{
-    value: string | number;
-    label: string;
-  } | null>(name);
-
+const AccountSubcategory = (props: AccountSubcategorySelectProps) => {
   const accountSubcategoriesFetcher =
     useFetcher<Awaited<ReturnType<typeof getAccountSubcategoriesByCategory>>>();
 
   useEffect(() => {
-    if (accountCategoryId) {
+    if (props?.accountCategoryId) {
       accountSubcategoriesFetcher.load(
-        path.to.api.accountingSubcategories(accountCategoryId)
+        path.to.api.accountingSubcategories(props.accountCategoryId)
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accountCategoryId]);
+  }, [props.accountCategoryId]);
 
-  const accountSubcategories = useMemo(
+  const options = useMemo(
     () =>
       accountSubcategoriesFetcher.data?.data?.map((c) => ({
         value: c.id,
@@ -61,56 +39,22 @@ const AccountSubcategory = ({
     [accountSubcategoriesFetcher.data]
   );
 
-  useEffect(() => {
-    // if the initial value is in the options, set it, otherwise set to null
-    if (accountSubcategories) {
-      setAccountSubcategory(
-        accountSubcategories.find((s) => s.value === defaultValue) ?? null
-      );
+  const onChange = (newValue: { label: string; value: string } | null) => {
+    const subCategory =
+      accountSubcategoriesFetcher.data?.data?.find(
+        (subCategory) => subCategory.id === newValue?.value
+      ) ?? null;
 
-      if (onChange) {
-        const subcategory = accountSubcategoriesFetcher.data?.data?.find(
-          (c) => c.id === defaultValue
-        );
-
-        onChange(subcategory);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accountSubcategories, defaultValue]);
-
-  const handleChange = (newValue?: { label: string; value: string }) => {
-    setAccountSubcategory(newValue ?? null);
-    if (onChange) {
-      const subcategory = accountSubcategoriesFetcher.data?.data?.find(
-        (c) => c.id === newValue?.value
-      );
-
-      onChange(subcategory);
-    }
+    props.onChange?.(subCategory as AccountSubcategoryType | null);
   };
 
   return (
-    <FormControl isInvalid={!!error}>
-      <FormLabel htmlFor={name}>{label}</FormLabel>
-      <Select
-        {...getInputProps({
-          // @ts-ignore
-          id: name,
-        })}
-        placeholder={placeholder}
-        options={accountSubcategories}
-        value={accountSubcategory}
-        onChange={handleChange}
-        isReadOnly={isReadOnly}
-        w="full"
-      />
-      {error ? (
-        <FormErrorMessage>{error}</FormErrorMessage>
-      ) : (
-        helperText && <FormHelperText>{helperText}</FormHelperText>
-      )}
-    </FormControl>
+    <Combobox
+      options={options}
+      {...props}
+      onChange={onChange}
+      label={props?.label ?? "Account Subcategory"}
+    />
   );
 };
 

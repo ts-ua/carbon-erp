@@ -1,25 +1,16 @@
 import {
-  Box,
   Button,
-  ButtonGroup,
   HStack,
-  Icon,
-  IconButton,
-  Link,
+  Hyperlink,
+  MenuIcon,
   MenuItem,
-  Text,
   useDisclosure,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-import {
-  BsFillCheckCircleFill,
-  BsListUl,
-  BsPencilSquare,
-  BsPlus,
-} from "react-icons/bs";
+import { BsFillCheckCircleFill, BsFillPenFill, BsListUl } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -59,13 +50,12 @@ const EquipmentTypesTable = memo(
           header: "Equipment Type",
           cell: ({ row }) => (
             <HStack>
-              <Link onClick={() => navigate(row.original.id)}>
+              <Hyperlink onClick={() => navigate(row.original.id)}>
                 {row.original.name}
-              </Link>
+              </Hyperlink>
               {row.original.requiredAbility && (
-                <Icon
-                  as={BsFillCheckCircleFill}
-                  color="green.500"
+                <BsFillCheckCircleFill
+                  className="text-green-500"
                   title="Requires ability"
                 />
               )}
@@ -76,60 +66,44 @@ const EquipmentTypesTable = memo(
           accessorKey: "description",
           header: "Description",
           cell: ({ row }) => (
-            <Text maxW={300} overflow="hidden" textOverflow="ellipsis">
+            <span className="max-w-[300px] line-clamp-1">
               {row.original.description}
-            </Text>
+            </span>
           ),
         },
         {
           header: "Equipment",
           cell: ({ row }) => (
-            <ButtonGroup size="sm" isAttached variant="outline">
-              <Button
-                onClick={() => {
-                  navigate(
-                    `${path.to.equipmentTypeList(
-                      row.original.id
-                    )}?${params?.toString()}`
-                  );
-                }}
-              >
-                {Array.isArray(row.original.equipment)
-                  ? row.original.equipment?.length ?? 0
-                  : 0}{" "}
-                Units
-              </Button>
-              <IconButton
-                aria-label="Add unit"
-                icon={<BsPlus />}
-                onClick={() => {
-                  navigate(
-                    `${path.to.newEquipment(
-                      row.original.id
-                    )}?${params?.toString()}`
-                  );
-                }}
-              />
-            </ButtonGroup>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                navigate(
+                  `${path.to.equipmentTypeList(
+                    row.original.id
+                  )}?${params?.toString()}`
+                );
+              }}
+            >
+              {Array.isArray(row.original.equipment)
+                ? row.original.equipment?.length ?? 0
+                : 0}{" "}
+              Units
+            </Button>
           ),
         },
         {
           accessorKey: "color",
           header: "Color",
           cell: (item) => (
-            <Box
+            <div
               aria-label="Color"
-              w={6}
-              h={6}
-              borderRadius="md"
-              bg={item.getValue() ?? "#000000"}
-              role="img"
+              className="w-6 h-6 rounded-md bg-zinc-500"
+              style={{ background: item.getValue<string>() ?? "#000000" }}
             />
           ),
         },
       ];
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [params]);
+    }, [navigate, params]);
 
     const renderContextMenu = useCallback<
       (row: (typeof data)[number]) => JSX.Element
@@ -137,36 +111,36 @@ const EquipmentTypesTable = memo(
       (row) => (
         <>
           <MenuItem
-            icon={<BiAddToQueue />}
             onClick={() => {
               navigate(`${path.to.newEquipment(row.id)}?${params?.toString()}`);
             }}
           >
+            <MenuIcon icon={<BiAddToQueue />} />
             New Unit
           </MenuItem>
           <MenuItem
-            icon={<BsListUl />}
             onClick={() => {
               navigate(
                 `${path.to.equipmentTypeList(row.id)}?${params?.toString()}`
               );
             }}
           >
+            <MenuIcon icon={<BsListUl />} />
             View Equipment
           </MenuItem>
           <MenuItem
-            icon={<BsPencilSquare />}
             onClick={() => {
               navigate(path.to.equipmentType(row.id));
             }}
           >
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Equipment Type
           </MenuItem>
           <MenuItem
-            isDisabled={!permissions.can("delete", "users")}
-            icon={<IoMdTrash />}
+            disabled={!permissions.can("delete", "users")}
             onClick={() => onDelete(row)}
           >
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Equipment Type
           </MenuItem>
         </>

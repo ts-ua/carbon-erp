@@ -1,24 +1,22 @@
-import { ActionMenu } from "@carbon/react";
 import {
+  ActionMenu,
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
+  DropdownMenuIcon,
+  DropdownMenuItem,
   HStack,
-  MenuItem,
-  StackDivider,
-  Text,
-  useDisclosure,
   VStack,
-} from "@chakra-ui/react";
+  useDisclosure,
+} from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { useState } from "react";
-import { BsPencilSquare } from "react-icons/bs";
-import { IoMdTrash } from "react-icons/io";
+import { BsFillPenFill } from "react-icons/bs";
+import { IoMdAdd, IoMdTrash } from "react-icons/io";
 import { ConfirmDelete } from "~/components/Modals";
 import { useUrlParams } from "~/hooks";
 import type { EquipmentTypeDetailType } from "~/modules/resources";
@@ -55,45 +53,43 @@ const EquipmentTypeDetail = ({
     deleteModal.onClose();
   };
 
-  const renderContextMenu = (equipment: Equipment) => {
-    return (
-      <>
-        <MenuItem as={Link} to={equipment.id} icon={<BsPencilSquare />}>
-          Edit Unit
-        </MenuItem>
-        <MenuItem onClick={() => onDelete(equipment)} icon={<IoMdTrash />}>
-          Delete Unit
-        </MenuItem>
-      </>
-    );
-  };
-
   return (
     <>
-      <Drawer onClose={onClose} isOpen={true} size="sm">
-        <DrawerOverlay />
+      <Drawer
+        open
+        onOpenChange={(open) => {
+          if (!open) onClose();
+        }}
+      >
         <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{equipmentType.name}</DrawerHeader>
+          <DrawerHeader>
+            <DrawerTitle>{equipmentType.name}</DrawerTitle>
+          </DrawerHeader>
           <DrawerBody>
             {Array.isArray(equipmentType?.equipment) && (
-              <VStack
-                alignItems="start"
-                divider={<StackDivider borderColor="gray.200" />}
-                spacing={4}
-                w="full"
-              >
+              <VStack spacing={4}>
                 {equipmentType.equipment.map((equipment) => {
                   return (
-                    <HStack key={equipment.id} w="full">
-                      <VStack spacing={0} flexGrow={1} alignItems="start">
-                        <Text fontWeight="bold">{equipment.name}</Text>
-                        <Text fontSize="sm" color="gray.500">
+                    <HStack key={equipment.id} className="w-full">
+                      <VStack spacing={0} className="flex-grow">
+                        <span className="font-bold">{equipment.name}</span>
+                        <span className="text-sm text-muted-foreground">
                           {/* @ts-ignore */}
                           {equipment.location?.name}
-                        </Text>
+                        </span>
                       </VStack>
-                      <ActionMenu>{renderContextMenu(equipment)}</ActionMenu>
+                      <ActionMenu>
+                        <DropdownMenuItem asChild>
+                          <Link to={equipment.id}>
+                            <DropdownMenuIcon icon={<BsFillPenFill />} />
+                            Edit Unit
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => onDelete(equipment)}>
+                          <DropdownMenuIcon icon={<IoMdTrash />} />
+                          Delete Unit
+                        </DropdownMenuItem>
+                      </ActionMenu>
                     </HStack>
                   );
                 })}
@@ -101,13 +97,8 @@ const EquipmentTypeDetail = ({
             )}
           </DrawerBody>
           <DrawerFooter>
-            <Button
-              as={Link}
-              to={`new?${params.toString()}`}
-              colorScheme="brand"
-              size="md"
-            >
-              New Equipment
+            <Button asChild leftIcon={<IoMdAdd />} size="md">
+              <Link to={`new?${params.toString()}`}>New Equipment</Link>
             </Button>
           </DrawerFooter>
         </DrawerContent>

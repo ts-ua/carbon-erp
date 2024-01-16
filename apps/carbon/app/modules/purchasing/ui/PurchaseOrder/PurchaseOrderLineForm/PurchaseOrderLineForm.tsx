@@ -2,24 +2,26 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
   FormControl,
   FormLabel,
   HStack,
   Input,
   NumberDecrementStepper,
+  NumberField,
   NumberIncrementStepper,
   NumberInput,
-  NumberInputField,
+  NumberInputGroup,
   NumberInputStepper,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
+
 import { useFetcher, useNavigate, useParams } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
+import { LuChevronDown, LuChevronUp } from "react-icons/lu";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Account,
@@ -81,13 +83,13 @@ const PurchaseOrderLineForm = ({
   const [partData, setPartData] = useState<{
     partId: string;
     description: string;
-    unitPrice: string;
+    unitPrice: number;
     uom: string;
     shelfId: string;
   }>({
     partId: initialValues.partId ?? "",
     description: initialValues.description ?? "",
-    unitPrice: initialValues.unitPrice?.toString() ?? "0",
+    unitPrice: initialValues.unitPrice ?? 0,
     uom: initialValues.unitOfMeasureCode ?? "",
     shelfId: initialValues.shelfId ?? "",
   });
@@ -129,7 +131,7 @@ const PurchaseOrderLineForm = ({
     setPartData({
       partId: "",
       description: "",
-      unitPrice: "0",
+      unitPrice: 0,
       uom: "EA",
       shelfId: "",
     });
@@ -159,7 +161,7 @@ const PurchaseOrderLineForm = ({
     setPartData({
       partId,
       description: part.data?.name ?? "",
-      unitPrice: cost.data?.unitCost?.toString() ?? "0",
+      unitPrice: cost.data?.unitCost ?? 0,
       uom: part.data?.unitOfMeasureCode ?? "EA",
       shelfId: shelf.data?.defaultShelfId ?? "",
     });
@@ -176,26 +178,24 @@ const PurchaseOrderLineForm = ({
     setPartData({
       partId: "",
       description: service.data?.name ?? "",
-      unitPrice: "0",
+      unitPrice: 0,
       uom: "EA",
       shelfId: "",
     });
   };
 
-  const onLocationChange = async (
-    newLocationId: string | number | undefined
-  ) => {
+  const onLocationChange = async (newLocation: { value: string } | null) => {
     if (!supabase) throw new Error("supabase is not defined");
-    if (typeof newLocationId !== "string")
+    if (typeof newLocation?.value !== "string")
       throw new Error("locationId is not a string");
 
-    setLocationId(newLocationId);
+    setLocationId(newLocation.value);
     if (!partData.partId) return;
     const shelf = await supabase
       .from("partInventory")
       .select("defaultShelfId")
       .eq("partId", partData.partId)
-      .eq("locationId", newLocationId)
+      .eq("locationId", newLocation.value)
       .maybeSingle();
 
     setPartData((d) => ({
@@ -205,34 +205,40 @@ const PurchaseOrderLineForm = ({
   };
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        defaultValues={initialValues}
-        validator={purchaseOrderLineValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.purchaseOrderLine(orderId, initialValues.id!)
-            : path.to.newPurchaseOrderLine(orderId)
-        }
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          defaultValues={initialValues}
+          validator={purchaseOrderLineValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.purchaseOrderLine(orderId, initialValues.id!)
+              : path.to.newPurchaseOrderLine(orderId)
+          }
+          className="flex flex-col h-full"
+        >
           <DrawerHeader>
-            {isEditing ? "Edit" : "New"} Purchase Order Line
+            <DrawerTitle>
+              {isEditing ? "Edit" : "New"} Purchase Order Line
+            </DrawerTitle>
           </DrawerHeader>
-          <DrawerBody pb={8}>
+          <DrawerBody>
             <Hidden name="id" />
             <Hidden name="purchaseOrderId" />
             <Hidden name="description" value={partData.description} />
-            <VStack spacing={4} alignItems="start">
+            <VStack spacing={4}>
               <Select
                 name="purchaseOrderLineType"
                 label="Type"
                 options={purchaseOrderLineTypeOptions}
-                onChange={({ value }) => {
-                  onTypeChange(value as PurchaseOrderLineType);
+                onChange={(value) => {
+                  onTypeChange(value?.value as PurchaseOrderLineType);
                 }}
               />
               {type === "Part" && (
@@ -240,8 +246,8 @@ const PurchaseOrderLineForm = ({
                   name="partId"
                   label="Part"
                   partReplenishmentSystem="Buy"
-                  onChange={({ value }) => {
-                    onPartChange(value as string);
+                  onChange={(value) => {
+                    onPartChange(value?.value as string);
                   }}
                 />
               )}
@@ -251,8 +257,8 @@ const PurchaseOrderLineForm = ({
                   name="serviceId"
                   label="Service"
                   serviceType="External"
-                  onChange={({ value }) => {
-                    onServiceChange(value as string);
+                  onChange={(value) => {
+                    onServiceChange(value?.value as string);
                   }}
                 />
               )}
@@ -262,11 +268,11 @@ const PurchaseOrderLineForm = ({
                   name="accountNumber"
                   label="Account"
                   classes={["Expense", "Asset"]}
-                  onChange={({ label }) => {
+                  onChange={(value) => {
                     setPartData({
                       partId: "",
-                      description: label,
-                      unitPrice: "0",
+                      description: value?.label ?? "",
+                      unitPrice: 0,
                       uom: "EA",
                       shelfId: "",
                     });
@@ -294,7 +300,7 @@ const PurchaseOrderLineForm = ({
                   {/* <UnitOfMeasure name="unitOfMeasureCode" label="Unit of Measure" value={uom} /> */}
                   <FormControl>
                     <FormLabel htmlFor="unitPrice">Unit Cost</FormLabel>
-                    <NumberInput
+                    <NumberField
                       name="unitPrice"
                       value={partData.unitPrice}
                       onChange={(value) =>
@@ -304,12 +310,18 @@ const PurchaseOrderLineForm = ({
                         }))
                       }
                     >
-                      <NumberInputField />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
+                      <NumberInputGroup className="relative">
+                        <NumberInput />
+                        <NumberInputStepper>
+                          <NumberIncrementStepper>
+                            <LuChevronUp size="1em" strokeWidth="3" />
+                          </NumberIncrementStepper>
+                          <NumberDecrementStepper>
+                            <LuChevronDown size="1em" strokeWidth="3" />
+                          </NumberDecrementStepper>
+                        </NumberInputStepper>
+                      </NumberInputGroup>
+                    </NumberField>
                   </FormControl>
                   {["Part", "Service"].includes(type) && (
                     <SelectControlled
@@ -326,12 +338,14 @@ const PurchaseOrderLineForm = ({
                       label="Shelf"
                       options={shelfOptions}
                       value={partData.shelfId}
-                      onChange={(newValue) =>
-                        setPartData((d) => ({
-                          ...d,
-                          shelfId: newValue as string,
-                        }))
-                      }
+                      onChange={(newValue) => {
+                        if (newValue) {
+                          setPartData((d) => ({
+                            ...d,
+                            shelfId: newValue?.value as string,
+                          }));
+                        }
+                      }}
                     />
                   )}
                 </>
@@ -341,13 +355,13 @@ const PurchaseOrderLineForm = ({
           <DrawerFooter>
             <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button size="md" variant="ghost" onClick={onClose}>
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

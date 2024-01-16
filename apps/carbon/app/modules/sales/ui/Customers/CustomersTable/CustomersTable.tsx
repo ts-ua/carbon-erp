@@ -1,8 +1,8 @@
-import { Link, MenuItem } from "@chakra-ui/react";
+import { Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { Table } from "~/components";
 import type { Customer } from "~/modules/sales";
 import { path } from "~/utils/path";
@@ -21,9 +21,11 @@ const CustomersTable = memo(({ data, count }: CustomersTableProps) => {
         accessorKey: "name",
         header: "Name",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(path.to.customer(row.original.id!))}>
+          <Hyperlink
+            onClick={() => navigate(path.to.customer(row.original.id!))}
+          >
             {row.original.name}
-          </Link>
+          </Hyperlink>
         ),
       },
       {
@@ -40,22 +42,15 @@ const CustomersTable = memo(({ data, count }: CustomersTableProps) => {
       //   id: "orders",
       //   header: "Orders",
       //   cell: ({ row }) => (
-      //     <ButtonGroup size="sm" isAttached variant="outline">
+      //
       //       <Button
+      //         variant="secondary"
       //         onClick={() =>
       //           navigate(`${path.to.salesOrders}?customerId=${row.original.id}`)
       //         }
       //       >
       //         {row.original.orderCount ?? 0} Orders
       //       </Button>
-      //       <IconButton
-      //         aria-label="New Order"
-      //         icon={<BsPlus />}
-      //         onClick={() =>
-      //           navigate(`${path.to.newPurchaseOrder}?customerId=${row.original.id}`)
-      //         }
-      //       />
-      //     </ButtonGroup>
       //   ),
       // },
     ];
@@ -65,10 +60,8 @@ const CustomersTable = memo(({ data, count }: CustomersTableProps) => {
     // eslint-disable-next-line react/display-name
     () => (row: Customer) =>
       (
-        <MenuItem
-          icon={<BsPencilSquare />}
-          onClick={() => navigate(path.to.customer(row.id!))}
-        >
+        <MenuItem onClick={() => navigate(path.to.customer(row.id!))}>
+          <MenuIcon icon={<BsFillPenFill />} />
           Edit Customer
         </MenuItem>
       ),

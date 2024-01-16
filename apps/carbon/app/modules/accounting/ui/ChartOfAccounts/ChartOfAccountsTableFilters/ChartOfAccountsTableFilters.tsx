@@ -1,27 +1,24 @@
-import { DatePicker, Select, useColor } from "@carbon/react";
 import {
   Button,
-  Grid,
+  DatePicker,
   HStack,
   Popover,
-  PopoverArrow,
-  PopoverBody,
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  Text,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { parseDate } from "@internationalized/date";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
 import { MdCalendarMonth, MdClose } from "react-icons/md";
+import { Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { usePermissions, useUrlParams } from "~/hooks";
 import { incomeBalanceTypes } from "~/modules/accounting";
 
 const ChartOfAccountsTableFilters = () => {
   const [params, setParams] = useUrlParams();
   const permissions = usePermissions();
-  const borderColor = useColor("gray.200");
 
   const startDate = params.get("startDate");
   const endDate = params.get("endDate");
@@ -32,70 +29,47 @@ const ChartOfAccountsTableFilters = () => {
   }));
 
   return (
-    <HStack
-      px={4}
-      py={3}
-      justifyContent="space-between"
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      w="full"
-    >
-      <HStack spacing={2}>
+    <TableFilters>
+      <HStack>
         <Select
-          // @ts-ignore
-          minW={200}
+          value={params.get("incomeBalance") ?? ""}
           placeholder="Income/Balance Sheet"
           options={incomeBalanceOptions}
           size="sm"
           isClearable
-          onChange={(newValue) => setParams({ incomeBalance: newValue?.value })}
+          onChange={(newValue) => setParams({ incomeBalance: newValue })}
         />
-        <Popover placement="bottom" closeOnBlur>
-          <PopoverTrigger>
+        <Popover>
+          <PopoverTrigger asChild>
             <Button variant="solid" leftIcon={<MdCalendarMonth />}>
               Date Range
             </Button>
           </PopoverTrigger>
-          <PopoverContent w={360} boxShadow="xl">
+          <PopoverContent className="w-[390px]">
             <PopoverHeader>
-              <Text fontSize="sm">Edit date range</Text>
-              <Text fontSize="xs" color="gray.500">
+              <p className="text-sm">Edit date range</p>
+              <p className="text-xs text-muted-foreground">
                 Select date range to filter net change and balance at date
-              </Text>
+              </p>
             </PopoverHeader>
-            <PopoverArrow />
-            <PopoverBody maxH="50vh">
-              <Grid
-                gridTemplateColumns={"1fr 3fr"}
-                gridRowGap={2}
-                alignItems="center"
-              >
-                <Text fontSize="sm" color="gray.500">
-                  Start Date
-                </Text>
-                <DatePicker
-                  // @ts-ignore
-                  value={startDate ? parseDate(startDate) : null}
-                  onChange={(value) =>
-                    setParams({ startDate: value.toString() })
-                  }
-                />
-                <Text fontSize="sm" color="gray.500">
-                  End Date
-                </Text>
-                <DatePicker
-                  // @ts-ignore
-                  value={endDate ? parseDate(endDate) : null}
-                  onChange={(value) => setParams({ endDate: value.toString() })}
-                />
-              </Grid>
-            </PopoverBody>
+
+            <div className="grid grid-cols-[1fr_3fr] gap-y-2 items-center">
+              <p className="text-sm text-muted-foreground">Start Date</p>
+              <DatePicker
+                value={startDate ? parseDate(startDate) : null}
+                onChange={(value) => setParams({ startDate: value.toString() })}
+              />
+              <p className="text-sm text-muted-foreground">End Date</p>
+              <DatePicker
+                value={endDate ? parseDate(endDate) : null}
+                onChange={(value) => setParams({ endDate: value.toString() })}
+              />
+            </div>
           </PopoverContent>
         </Popover>
         {[...params.entries()].length > 0 && (
           <Button
-            size="sm"
+            variant="solid"
             rightIcon={<MdClose />}
             onClick={() =>
               setParams({
@@ -109,19 +83,14 @@ const ChartOfAccountsTableFilters = () => {
           </Button>
         )}
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "accounting") && (
-          <Button
-            as={Link}
-            to={`new?${params.toString()}`}
-            colorScheme="brand"
-            leftIcon={<IoMdAdd />}
-          >
-            New Account
+          <Button asChild leftIcon={<IoMdAdd />}>
+            <Link to={`new?${params.toString()}`}>New Account</Link>
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

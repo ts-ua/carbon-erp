@@ -1,19 +1,17 @@
-import { useColor, useEscape, useMount } from "@carbon/react";
-import { clip } from "@carbon/utils";
 import {
-  Box,
-  Flex,
   HStack,
-  Icon,
   Table,
   Tbody,
   Td,
-  Text,
   Th,
   Thead,
   Tr,
   VStack,
-} from "@chakra-ui/react";
+  cn,
+  useEscape,
+  useMount,
+} from "@carbon/react";
+import { clip } from "@carbon/utils";
 import type { ColumnDef, ColumnOrderState } from "@tanstack/react-table";
 import {
   flexRender,
@@ -339,11 +337,8 @@ const Grid = <T extends object>({
 
   const rows = table.getRowModel().rows;
 
-  const borderColor = useColor("gray.200");
-  const rowBackground = useColor("gray.50");
-
   return (
-    <VStack w="full" h="full" spacing={0}>
+    <VStack spacing={0} className="h-full">
       {/* {withColumnOrdering && (
         <GridHeader
           columnAccessors={columnAccessors}
@@ -353,11 +348,8 @@ const Grid = <T extends object>({
           withColumnOrdering={withColumnOrdering}
         />
       )} */}
-      <Box
-        w="full"
-        h="full"
-        bg={useColor("white")}
-        overflowX="auto"
+      <div
+        className="w-full h-full bg-background overflow-x-auto"
         style={{
           contain: contained ? "strict" : undefined,
         }}
@@ -367,7 +359,7 @@ const Grid = <T extends object>({
         <Table>
           <Thead>
             {table.getHeaderGroups().map((headerGroup) => (
-              <Tr key={headerGroup.id} h={10}>
+              <Tr key={headerGroup.id} className="h-10">
                 {headerGroup.headers.map((header) => {
                   const accessorKey = getAccessorKey(header.column.columnDef);
 
@@ -387,27 +379,21 @@ const Grid = <T extends object>({
                       //     ? () => toggleSortBy(accessorKey ?? "")
                       //     : undefined
                       // }
-                      borderRightColor={borderColor}
-                      borderRightStyle="solid"
-                      borderRightWidth={1}
-                      cursor={sortable ? "pointer" : undefined}
-                      px={4}
-                      py={3}
-                      w={header.getSize()}
-                      whiteSpace="nowrap"
+                      className={cn(
+                        "border-r border-border px-4 py-3 whitespace-nowrap text-sm",
+                        sortable && "cursor-pointer"
+                      )}
+                      style={{
+                        width: header.getSize(),
+                      }}
                     >
                       {header.isPlaceholder ? null : (
-                        <Flex
-                          justify="flex-start"
-                          align="center"
-                          fontSize="xs"
-                          color="gray.500"
-                        >
+                        <div className="flex justify-start items-center text-xs text-zinc-500">
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                          {/* <chakra.span pl="4">
+                          {/* <span className="pl-4">
                             {sorted ? (
                               sorted === -1 ? (
                                 <FaSortDown aria-label="sorted descending" />
@@ -420,8 +406,8 @@ const Grid = <T extends object>({
                                 style={{ opacity: 0.4 }}
                               />
                             ) : null}
-                          </chakra.span> */}
-                        </Flex>
+                          </span> */}
+                        </div>
                       )}
                     </Th>
                   );
@@ -434,8 +420,6 @@ const Grid = <T extends object>({
               return (
                 <Row
                   key={row.id}
-                  borderColor={borderColor}
-                  backgroundColor={rowBackground}
                   editableComponents={canEdit ? editableComponents : {}}
                   isEditing={isEditing}
                   selectedCell={selectedCell}
@@ -448,39 +432,29 @@ const Grid = <T extends object>({
               );
             })}
             {rows.length === 0 && !onNewRow && (
-              <Tr
-                h={10}
-                _hover={{
-                  backgroundColor: "gray.100",
-                }}
-              >
+              <Tr className="h-10 hover:bg-zinc-100 dark:hover:bg-zinc-900">
                 <Td colSpan={24}>
-                  <Text color="gray.500" w="full" textAlign="center">
+                  <p className="text-muted-foreground text-center w-full">
                     No Data
-                  </Text>
+                  </p>
                 </Td>
               </Tr>
             )}
             {onNewRow && (
               <Tr
                 onClick={onNewRow}
-                cursor="pointer"
-                h={10}
-                _hover={{
-                  backgroundColor: "gray.100",
-                }}
+                className="cursor-pointer h-10 hover:bg-zinc-100 dark:hover:bg-zinc-900"
               >
                 <Td colSpan={24}>
-                  <HStack spacing={2}>
-                    <Icon color="gray.500" as={BsPlus} w={6} h={6} />
-                    <Text color="gray.500">New</Text>
+                  <HStack className="items-start h-6">
+                    <BsPlus className="text-muted-foreground h-6 w-6" />
                   </HStack>
                 </Td>
               </Tr>
             )}
           </Tbody>
         </Table>
-      </Box>
+      </div>
     </VStack>
   );
 };

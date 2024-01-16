@@ -2,14 +2,14 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
   HStack,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
+
 import { useLocation, useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -45,28 +45,34 @@ const ContractorForm = ({ initialValues }: ContractorFormProps) => {
     : !permissions.can("create", "resources");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={contractorValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.contractor(initialValues.id!)
-            : path.to.newContractor
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{isEditing ? "Edit" : "New"} Contractor</DrawerHeader>
-          <DrawerBody pb={8}>
-            <VStack spacing={4} alignItems="start">
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={contractorValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.contractor(initialValues.id!)
+              : path.to.newContractor
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{isEditing ? "Edit" : "New"} Contractor</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
+            <VStack spacing={4}>
               <Supplier
                 name="supplierId"
                 label="Supplier"
                 isReadOnly={isEditing}
-                onChange={({ value }) => setSupplier(value as string)}
+                onChange={(value) => setSupplier(value?.value as string)}
               />
               <SupplierContact
                 name="id"
@@ -78,26 +84,21 @@ const ContractorForm = ({ initialValues }: ContractorFormProps) => {
                 name="hoursPerWeek"
                 label="Hours per Week"
                 helperText="The number of hours per week the supplier is available to work."
-                min={0}
-                max={10000}
+                minValue={0}
+                maxValue={10000}
               />
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

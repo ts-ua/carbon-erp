@@ -1,27 +1,30 @@
-import { CreatableSelect } from "@carbon/react";
-import { convertKbToString } from "@carbon/utils";
 import {
+  Badge,
+  BadgeCloseButton,
+  Command,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
   HStack,
-  Icon,
-  Image,
-  Link,
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+  Hyperlink,
+  MenuIcon,
   MenuItem,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  Tag,
-  TagCloseButton,
-  TagLabel,
-  Text,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  cn,
   useDisclosure,
-} from "@chakra-ui/react";
+} from "@carbon/react";
+import { convertKbToString } from "@carbon/utils";
+import { useRevalidator } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { BsPencilSquare, BsStar, BsStarFill } from "react-icons/bs";
+import { BsFillPenFill, BsStar, BsStarFill } from "react-icons/bs";
 import { IoMdAdd, IoMdTrash } from "react-icons/io";
+import { RxCheck } from "react-icons/rx";
 import { VscOpenPreview } from "react-icons/vsc";
 import { Avatar, Table } from "~/components";
 import { Confirm, ConfirmDelete } from "~/components/Modals";
@@ -38,6 +41,8 @@ type DocumentsTableProps = {
 };
 
 const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
+  console.log(labels);
+  const revalidator = useRevalidator();
   const [params] = useUrlParams();
   const filter = params.get("q");
   // put rows in state for use with optimistic ui updates
@@ -56,24 +61,25 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
     edit,
     favorite,
     isImage,
+    isPdf,
     label,
-    makePreview,
     setLabel,
   } = useDocument();
 
-  const documentLabelModal = useDisclosure();
   const deleteDocumentModal = useDisclosure();
 
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(
     null
   );
 
-  const labelOptions =
-    labels.map(({ label }) => ({
-      value: label as string,
-      label: label as string,
-    })) ?? [];
+  const labelOptions = useMemo(
+    () =>
+      labels.map(({ label }) => ({
+        value: label as string,
+        label: label as string,
+      })) ?? [],
+    [labels]
+  );
 
   const onDeleteLabel = useCallback(
     async (
@@ -143,18 +149,54 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
         header: "Name",
         cell: ({ row }) => (
           <HStack>
-            <Icon
-              color={row.original.favorite ? "yellow.400" : "gray.300"}
-              cursor="pointer"
-              h={4}
-              w={4}
-              as={row.original.favorite ? BsStarFill : BsStar}
-              onClick={() => onFavorite(row.original)}
-            />
+            {row.original.favorite ? (
+              <BsStarFill
+                className="cursor-pointer w-4 h-4 text-yellow-400"
+                onClick={() => onFavorite(row.original)}
+              />
+            ) : (
+              <BsStar
+                className="cursor-pointer w-4 h-4 text-muted-foreground"
+                onClick={() => onFavorite(row.original)}
+              />
+            )}
             <DocumentIcon fileName={row.original.name} />
-            <Link onClick={() => download(row.original)}>
-              {row.original.name}
-            </Link>
+            <Hyperlink onClick={() => download(row.original)}>
+              {row.original.type &&
+              (isImage(row.original.type) || isPdf(row.original.type)) ? (
+                <HoverCard>
+                  <HoverCardTrigger>{row.original.name}</HoverCardTrigger>
+                  {isPdf(row.original.type) ? (
+                    <HoverCardContent className="w-[425px] h-[550px] overflow-hidden p-0">
+                      <iframe
+                        seamless
+                        title={row.original.path}
+                        width="425"
+                        height="550"
+                        src={path.to.file.previewFile(
+                          `private/${row.original.path}`
+                        )}
+                      />
+                    </HoverCardContent>
+                  ) : (
+                    <HoverCardContent className="w-[400px] h-[400px] overflow-hidden p-0">
+                      <iframe
+                        seamless
+                        title={row.original.path}
+                        width="400"
+                        height="400"
+                        src={path.to.file.previewImage(
+                          "private",
+                          row.original.path
+                        )}
+                      />
+                    </HoverCardContent>
+                  )}
+                </HoverCard>
+              ) : (
+                <>{row.original.name}</>
+              )}
+            </Hyperlink>
           </HStack>
         ),
       },
@@ -164,25 +206,43 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
         cell: ({ row }) => (
           <HStack spacing={1}>
             {row.original.labels.map((label) => (
-              <Tag key={label} cursor="pointer" onClick={() => setLabel(label)}>
-                <TagLabel>{label}</TagLabel>
-                <TagCloseButton
+              <Badge
+                key={label}
+                variant="secondary"
+                className="cursor-pointer"
+                onClick={() => setLabel(label)}
+              >
+                {label}
+                <BadgeCloseButton
                   onClick={(e) => onDeleteLabel(e, row.original, label)}
                 />
-              </Tag>
+              </Badge>
             ))}
+            <Popover>
+              <PopoverTrigger>
+                <Badge variant="secondary" className="cursor-pointer px-1">
+                  <IoMdAdd />
+                </Badge>
+              </PopoverTrigger>
+              <PopoverContent className="w-[300px] p-0">
+                {/* TODO: we should have a CreateableMultiSelect component for this */}
 
-            <Tag
-              cursor="pointer"
-              onClick={() => {
-                setSelectedDocument(row.original);
-                documentLabelModal.onOpen();
-              }}
-            >
-              <TagLabel>
-                <IoMdAdd />
-              </TagLabel>
-            </Tag>
+                <CreatableCommand
+                  options={labelOptions}
+                  selected={row.original.labels}
+                  onChange={(newValue) =>
+                    onLabel(row.original, [...row.original.labels, newValue])
+                  }
+                  onCreateOption={async (newValue) => {
+                    await onLabel(row.original, [
+                      ...row.original.labels,
+                      newValue,
+                    ]);
+                    revalidator.revalidate();
+                  }}
+                />
+              </PopoverContent>
+            </Popover>
           </HStack>
         ),
       },
@@ -201,7 +261,7 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
                 size="sm"
                 path={row.original.createdByAvatar ?? undefined}
               />
-              <Text>{row.original.createdByFullName}</Text>
+              <span>{row.original.createdByFullName}</span>
             </HStack>
           );
         },
@@ -218,7 +278,7 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
           return row.original.updatedByFullName ? (
             <HStack>
               <Avatar size="sm" path={row.original.updatedByAvatar ?? null} />
-              <Text>{row.original.updatedByFullName}</Text>
+              <span>{row.original.updatedByFullName}</span>
             </HStack>
           ) : null;
         },
@@ -229,7 +289,17 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
         cell: (item) => item.getValue(),
       },
     ];
-  }, [documentLabelModal, download, onDeleteLabel, onFavorite, setLabel]);
+  }, [
+    download,
+    isImage,
+    isPdf,
+    labelOptions,
+    onDeleteLabel,
+    onFavorite,
+    onLabel,
+    revalidator,
+    setLabel,
+  ]);
 
   const actions = useMemo(() => {
     return [
@@ -281,40 +351,30 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
     // eslint-disable-next-line react/display-name
     return (row: Document) => (
       <>
-        <MenuItem
-          icon={<VscOpenPreview />}
-          isDisabled={!row.type || !isImage(row.type)}
-          onClick={async () => setPreviewImage(await makePreview(row))}
-        >
-          Preview
-        </MenuItem>
-
-        <MenuItem
-          icon={<BsPencilSquare />}
-          isDisabled={canUpdate(row)}
-          onClick={() => edit(row)}
-        >
+        <MenuItem disabled={canUpdate(row)} onClick={() => edit(row)}>
+          <MenuIcon icon={<BsFillPenFill />} />
           Edit
         </MenuItem>
-        <MenuItem icon={<VscOpenPreview />} onClick={() => download(row)}>
+        <MenuItem onClick={() => download(row)}>
+          <MenuIcon icon={<VscOpenPreview />} />
           Download
         </MenuItem>
         <MenuItem
-          icon={<BsStar />}
           onClick={() => {
             onFavorite(row);
           }}
         >
+          <MenuIcon icon={<BsStar />} />
           Favorite
         </MenuItem>
         <MenuItem
-          icon={<IoMdTrash />}
-          isDisabled={canDelete(row)}
+          disabled={canDelete(row)}
           onClick={() => {
             setSelectedDocument(row);
             deleteDocumentModal.onOpen();
           }}
         >
+          <MenuIcon icon={<IoMdTrash />} />
           {filter !== "trash" ? "Move to Trash" : "Restore from Trash"}
         </MenuItem>
       </>
@@ -326,8 +386,6 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
     download,
     edit,
     filter,
-    isImage,
-    makePreview,
     onFavorite,
   ]);
 
@@ -346,54 +404,6 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
         withSelectableRows
         renderContextMenu={renderContextMenu}
       />
-
-      {previewImage && (
-        <Modal isOpen onClose={() => setPreviewImage(null)} size="full">
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader />
-            <ModalCloseButton />
-            <ModalBody>
-              <Image src={previewImage ?? ""} />
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      )}
-
-      {selectedDocument && (
-        <Modal
-          isOpen={documentLabelModal.isOpen}
-          onClose={() => {
-            setSelectedDocument(null);
-            documentLabelModal.onClose();
-          }}
-        >
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>{selectedDocument.name}</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody pb={6}>
-              <CreatableSelect
-                defaultValue={
-                  selectedDocument.labels.map((label) => ({
-                    value: label,
-                    label: label,
-                  })) ?? []
-                }
-                isClearable
-                isMulti
-                options={labelOptions}
-                onChange={(newValues) =>
-                  onLabel(
-                    selectedDocument,
-                    newValues.map((v) => v.value)
-                  )
-                }
-              />
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      )}
 
       {selectedDocument &&
         selectedDocument.id &&
@@ -431,6 +441,71 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
     </>
   );
 });
+
+type CreatableCommandProps = {
+  options: {
+    label: string;
+    value: string;
+  }[];
+  selected: string[];
+  onChange: (selected: string) => void;
+  onCreateOption: (inputValue: string) => void;
+};
+
+const CreatableCommand = ({
+  options,
+  selected,
+  onChange,
+  onCreateOption,
+}: CreatableCommandProps) => {
+  const [search, setSearch] = useState("");
+  const isExactMatch = options.some(
+    (option) => option.value.toLowerCase() === search.toLowerCase()
+  );
+
+  return (
+    <Command>
+      <CommandInput
+        value={search}
+        onValueChange={setSearch}
+        placeholder="Search..."
+        className="h-9"
+      />
+      <CommandGroup>
+        {options.map((option) => {
+          const isSelected = !!selected?.includes(option.value);
+          return (
+            <CommandItem
+              value={option.label}
+              key={option.value}
+              onSelect={() => {
+                if (!isSelected) onChange(option.value);
+              }}
+            >
+              {option.label}
+              <RxCheck
+                className={cn(
+                  "ml-auto h-4 w-4",
+                  isSelected ? "opacity-100" : "opacity-0"
+                )}
+              />
+            </CommandItem>
+          );
+        })}
+        {!isExactMatch && !!search && (
+          <CommandItem
+            onSelect={() => {
+              onCreateOption(search);
+            }}
+          >
+            <span>Create</span>
+            <span className="ml-1 font-bold">{search}</span>
+          </CommandItem>
+        )}
+      </CommandGroup>
+    </Command>
+  );
+};
 
 DocumentsTable.displayName = "DocumentsTable";
 

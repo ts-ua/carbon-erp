@@ -1,22 +1,23 @@
 import {
-  Box,
   Button,
   Card,
-  CardBody,
+  CardAction,
+  CardContent,
   CardHeader,
+  CardTitle,
   Checkbox,
-  Heading,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
   HStack,
   IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { MdMoreHoriz } from "react-icons/md";
 import {
@@ -51,6 +52,7 @@ const PurchaseOrderLines = () => {
     canDelete,
     supabase,
     partOptions,
+    serviceOptions,
     accountOptions,
     onCellEdit,
   } = usePurchaseOrderLines();
@@ -70,39 +72,38 @@ const PurchaseOrderLines = () => {
         accessorKey: "purchaseOrderLineType",
         header: "Type",
         cell: ({ row }) => (
-          <HStack justify="space-between" minW={100}>
+          <HStack className="justify-between min-w-[100px]">
             <span>{row.original.purchaseOrderLineType}</span>
-            <Box position="relative" w={6} h={5}>
-              <Menu>
-                <MenuButton
-                  as={IconButton}
-                  aria-label="Edit purchase order line type"
-                  icon={<MdMoreHoriz />}
-                  size="sm"
-                  position="absolute"
-                  right={-1}
-                  top="-6px"
-                  variant="ghost"
-                  onClick={(e) => e.stopPropagation()}
-                />
-                <MenuList>
-                  <MenuItem
-                    icon={<BsPencilSquare />}
-                    onClick={() => navigate(row.original.id)}
-                    isDisabled={!isEditable || !canEdit}
+            <div className="relative w-6 h-5">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <IconButton
+                    aria-label="Edit purchase order line type"
+                    icon={<MdMoreHoriz />}
+                    size="md"
+                    className="absolute right-[-1px] top-[-6px]"
+                    variant="ghost"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem
+                    onClick={() => navigate(row.original.id!)}
+                    disabled={!isEditable || !canEdit}
                   >
+                    <DropdownMenuIcon icon={<BsFillPenFill />} />
                     Edit Line
-                  </MenuItem>
-                  <MenuItem
-                    icon={<IoMdTrash />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
                     onClick={() => navigate(`delete/${row.original.id}`)}
-                    isDisabled={!isEditable || !canDelete}
+                    disabled={!isEditable || !canDelete}
                   >
+                    <DropdownMenuIcon icon={<IoMdTrash />} />
                     Delete Line
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </Box>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </HStack>
         ),
       },
@@ -235,7 +236,7 @@ const PurchaseOrderLines = () => {
             case "Comment":
               return null;
             default:
-              return <Checkbox isChecked={row.original.receivedComplete} />;
+              return <Checkbox isChecked={!!row.original.receivedComplete} />;
           }
         },
       },
@@ -247,7 +248,7 @@ const PurchaseOrderLines = () => {
             case "Comment":
               return null;
             default:
-              return <Checkbox isChecked={row.original.invoicedComplete} />;
+              return <Checkbox isChecked={!!row.original.invoicedComplete} />;
           }
         },
       },
@@ -263,6 +264,7 @@ const PurchaseOrderLines = () => {
       partId: EditablePurchaseOrderLineNumber(onCellEdit, {
         client: supabase,
         parts: partOptions,
+        services: serviceOptions,
         accounts: accountOptions,
         defaultLocationId: defaults.locationId,
         userId: userId,
@@ -272,6 +274,7 @@ const PurchaseOrderLines = () => {
       onCellEdit,
       supabase,
       partOptions,
+      serviceOptions,
       accountOptions,
       defaults.locationId,
       userId,
@@ -280,18 +283,21 @@ const PurchaseOrderLines = () => {
 
   return (
     <>
-      <Card w="full" h="full">
-        <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="md" display="inline-flex">
-            Purchase Order Lines
-          </Heading>
-          {canEdit && isEditable && (
-            <Button colorScheme="brand" as={Link} to="new">
-              New
-            </Button>
-          )}
-        </CardHeader>
-        <CardBody>
+      <Card className="w-full h-full">
+        <HStack className="justify-between items-start">
+          <CardHeader>
+            <CardTitle>Purchase Order Lines</CardTitle>
+          </CardHeader>
+          <CardAction>
+            {canEdit && isEditable && (
+              <Button asChild>
+                <Link to="new">New</Link>
+              </Button>
+            )}
+          </CardAction>
+        </HStack>
+
+        <CardContent>
           <Grid<PurchaseOrderLine>
             data={routeData?.purchaseOrderLines ?? []}
             columns={columns}
@@ -311,7 +317,7 @@ const PurchaseOrderLines = () => {
             }}
             onNewRow={canEdit && isEditable ? () => navigate("new") : undefined}
           />
-        </CardBody>
+        </CardContent>
       </Card>
       <Outlet />
     </>

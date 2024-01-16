@@ -1,13 +1,14 @@
-import { Select, useColor } from "@carbon/react";
-import { Button, HStack } from "@chakra-ui/react";
+import { Button, HStack } from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { IoMdAdd } from "react-icons/io";
+import { Combobox, Select } from "~/components";
+import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
-import type { SupplierType } from "~/modules/purchasing";
+import type { ListItem } from "~/types";
 
 type SupplierAccountsTableFiltersProps = {
-  supplierTypes: Partial<SupplierType>[];
+  supplierTypes: ListItem[];
 };
 
 const SupplierAccountsTableFilters = ({
@@ -22,45 +23,23 @@ const SupplierAccountsTableFilters = ({
       label: type.name,
     })) ?? [];
 
-  const borderColor = useColor("gray.200");
-
   return (
-    <HStack
-      px={4}
-      py={3}
-      justifyContent="space-between"
-      borderBottomColor={borderColor}
-      borderBottomStyle="solid"
-      borderBottomWidth={1}
-      w="full"
-    >
-      <HStack spacing={2}>
-        <DebouncedInput
-          param="name"
+    <TableFilters>
+      <HStack>
+        <DebouncedInput param="name" size="sm" placeholder="Search" />
+        <Combobox
           size="sm"
-          minW={180}
-          placeholder="Search"
-        />
-        <Select
-          size="sm"
-          value={supplierTypeOptions.find(
-            (type) => type.value === params.get("type")
-          )}
+          value={params.get("type") ?? ""}
           isClearable
           options={supplierTypeOptions}
           onChange={(selected) => {
-            setParams({ type: selected?.value });
+            setParams({ type: selected });
           }}
-          aria-label="Supplier Type"
           placeholder="Supplier Type"
         />
         <Select
           size="sm"
-          value={
-            params.get("active") === "false"
-              ? { value: "false", label: "Inactive" }
-              : { value: "true", label: "Active" }
-          }
+          value={params.get("active") === "false" ? "false" : "true"}
           options={[
             {
               value: "true",
@@ -72,24 +51,18 @@ const SupplierAccountsTableFilters = ({
             },
           ]}
           onChange={(selected) => {
-            setParams({ active: selected?.value });
+            setParams({ active: selected });
           }}
-          aria-label="Active"
         />
       </HStack>
-      <HStack spacing={2}>
+      <HStack>
         {permissions.can("create", "users") && (
-          <Button
-            as={Link}
-            to={`new?${params.toString()}`}
-            colorScheme="brand"
-            leftIcon={<IoMdAdd />}
-          >
-            New Supplier
+          <Button asChild leftIcon={<IoMdAdd />}>
+            <Link to={`new?${params.toString()}`}>New Supplier</Link>
           </Button>
         )}
       </HStack>
-    </HStack>
+    </TableFilters>
   );
 };
 

@@ -1,10 +1,15 @@
-import { HStack, Link, MenuItem, useDisclosure } from "@chakra-ui/react";
+import {
+  HStack,
+  Hyperlink,
+  MenuIcon,
+  MenuItem,
+  useDisclosure,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
-import { BsEnvelope, BsPencilSquare, BsShieldLock } from "react-icons/bs";
+import { BsEnvelope, BsFillPenFill, BsShieldLock } from "react-icons/bs";
 import { FaBan } from "react-icons/fa";
-import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
 import type { Employee } from "~/modules/users";
@@ -61,29 +66,24 @@ const EmployeesTable = memo(
         {
           header: "User",
           cell: ({ row }) => (
-            <HStack spacing={2}>
+            <HStack>
               <Avatar
                 size="sm"
-                // @ts-ignore
-                name={row.original.user?.fullName}
-                // @ts-ignore
-                path={row.original.user?.avatarUrl}
+                name={row.original.user?.fullName ?? undefined}
+                path={row.original.user?.avatarUrl ?? undefined}
               />
-              {/* // @ts-ignore */}
-              <Link
+
+              <Hyperlink
                 onClick={() =>
                   navigate(
                     `${path.to.employeeAccount(
-                      row.original.user?.id
+                      row.original.user?.id!
                     )}?${params.toString()}`
                   )
                 }
               >
-                {
-                  // @ts-ignore
-                  `${row.original.user?.firstName} ${row.original.user?.lastName}`
-                }
-              </Link>
+                {`${row.original.user?.firstName} ${row.original.user?.lastName}`}
+              </Hyperlink>
             </HStack>
           ),
         },
@@ -172,32 +172,32 @@ const EmployeesTable = memo(
         return (
           <>
             <MenuItem
-              icon={<BsPencilSquare />}
               onClick={() =>
                 navigate(
                   `${path.to.employeeAccount(user.id)}?${params.toString()}`
                 )
               }
             >
+              <MenuIcon icon={<BsFillPenFill />} />
               Edit Employee
             </MenuItem>
             <MenuItem
-              icon={<BsEnvelope />}
               onClick={() => {
                 setSelectedUserIds([user.id]);
                 resendInviteModal.onOpen();
               }}
             >
+              <MenuIcon icon={<BsEnvelope />} />
               Send Account Invite
             </MenuItem>
             {user.active === true && (
               <MenuItem
-                icon={<IoMdTrash />}
                 onClick={(e) => {
                   setSelectedUserIds([user.id]);
                   deactivateEmployeeModal.onOpen();
                 }}
               >
+                <MenuIcon icon={<FaBan />} />
                 Deactivate Employee
               </MenuItem>
             )}

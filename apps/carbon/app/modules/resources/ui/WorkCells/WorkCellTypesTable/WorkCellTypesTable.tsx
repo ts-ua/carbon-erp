@@ -1,25 +1,16 @@
 import {
-  Box,
   Button,
-  ButtonGroup,
   HStack,
-  Icon,
-  IconButton,
-  Link,
+  Hyperlink,
+  MenuIcon,
   MenuItem,
-  Text,
   useDisclosure,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
-import {
-  BsFillCheckCircleFill,
-  BsListUl,
-  BsPencilSquare,
-  BsPlus,
-} from "react-icons/bs";
+import { BsFillCheckCircleFill, BsFillPenFill, BsListUl } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -56,13 +47,12 @@ const WorkCellTypesTable = memo(({ data, count }: WorkCellTypesTableProps) => {
         header: "Work Cell Type",
         cell: ({ row }) => (
           <HStack>
-            <Link onClick={() => navigate(row.original.id)}>
+            <Hyperlink onClick={() => navigate(row.original.id)}>
               {row.original.name}
-            </Link>
+            </Hyperlink>
             {row.original.requiredAbility && (
-              <Icon
-                as={BsFillCheckCircleFill}
-                color="green.500"
+              <BsFillCheckCircleFill
+                className="text-green-500"
                 title="Requires ability"
               />
             )}
@@ -73,54 +63,39 @@ const WorkCellTypesTable = memo(({ data, count }: WorkCellTypesTableProps) => {
         accessorKey: "description",
         header: "Description",
         cell: ({ row }) => (
-          <Text maxW={300} overflow="hidden" textOverflow="ellipsis">
+          <span className="max-w-[300px] line-clamp-1">
             {row.original.description}
-          </Text>
+          </span>
         ),
       },
       {
         header: "Work Cells",
         cell: ({ row }) => (
-          <ButtonGroup size="sm" isAttached variant="outline">
-            <Button
-              onClick={() => {
-                navigate(
-                  `${path.to.workCellTypeList(
-                    row.original.id
-                  )}?${params?.toString()}`
-                );
-              }}
-            >
-              {Array.isArray(row.original.workCell)
-                ? row.original.workCell.length
-                : 0}{" "}
-              Work Cells
-            </Button>
-            <IconButton
-              aria-label="Add unit"
-              icon={<BsPlus />}
-              onClick={() => {
-                navigate(
-                  `${path.to.newWorkCellUnit(
-                    row.original.id
-                  )}?${params?.toString()}`
-                );
-              }}
-            />
-          </ButtonGroup>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              navigate(
+                `${path.to.workCellTypeList(
+                  row.original.id
+                )}?${params?.toString()}`
+              );
+            }}
+          >
+            {Array.isArray(row.original.workCell)
+              ? row.original.workCell.length
+              : 0}{" "}
+            Work Cells
+          </Button>
         ),
       },
       {
         accessorKey: "color",
         header: "Color",
         cell: (item) => (
-          <Box
+          <div
             aria-label="Color"
-            w={6}
-            h={6}
-            borderRadius="md"
-            bg={item.getValue() ?? "#000000"}
-            role="img"
+            className="w-6 h-6 rounded-md bg-zinc-500"
+            style={{ background: item.getValue<string>() ?? "#000000" }}
           />
         ),
       },
@@ -134,38 +109,38 @@ const WorkCellTypesTable = memo(({ data, count }: WorkCellTypesTableProps) => {
     (row) => (
       <>
         <MenuItem
-          icon={<BiAddToQueue />}
           onClick={() => {
             navigate(
               `${path.to.newWorkCellUnit(row.id)}?${params?.toString()}`
             );
           }}
         >
+          <MenuIcon icon={<BiAddToQueue />} />
           New Unit
         </MenuItem>
         <MenuItem
-          icon={<BsListUl />}
           onClick={() => {
             navigate(
               `${path.to.workCellTypeList(row.id)}?${params?.toString()}`
             );
           }}
         >
+          <MenuIcon icon={<BsListUl />} />
           Edit Work Cells
         </MenuItem>
         <MenuItem
-          icon={<BsPencilSquare />}
           onClick={() => {
             navigate(path.to.workCellType(row.id));
           }}
         >
+          <MenuIcon icon={<BsFillPenFill />} />
           Edit Work Cell Type
         </MenuItem>
         <MenuItem
-          isDisabled={!permissions.can("delete", "users")}
-          icon={<IoMdTrash />}
+          disabled={!permissions.can("delete", "users")}
           onClick={() => onDelete(row)}
         >
+          <MenuIcon icon={<IoMdTrash />} />
           Delete Work Cell Type
         </MenuItem>
       </>

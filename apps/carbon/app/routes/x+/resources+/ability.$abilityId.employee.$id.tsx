@@ -127,5 +127,5 @@ export default function EmployeeAbilityRoute() {
 
 function getTrainingPercent(traniningDays?: number, weeks?: number) {
   if (!traniningDays || !weeks) return 0;
-  return (traniningDays / 5 / weeks) * 100;
+  return traniningDays / 5 / weeks;
 }

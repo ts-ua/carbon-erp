@@ -1,17 +1,18 @@
 import {
   Card,
-  CardBody,
+  CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
-  Grid,
-  Heading,
-  Text,
+  CardTitle,
   VStack,
-} from "@chakra-ui/react";
+  cn,
+} from "@carbon/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Boolean,
+  Combobox,
   Input,
   InputControlled,
   Select,
@@ -86,7 +87,7 @@ const PartForm = ({ initialValues }: PartFormProps) => {
 
   const { partId, onPartIdChange, loading } = useNextPartIdShortcut();
   const permissions = usePermissions();
-  const isEditing = initialValues.id !== undefined;
+  const isEditing = !!initialValues.id;
 
   const partGroupOptions =
     sharedPartsData?.partGroups.map((partGroup) => ({
@@ -118,26 +119,24 @@ const PartForm = ({ initialValues }: PartFormProps) => {
       validator={partValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card>
         <CardHeader>
-          <Heading size="md">{isEditing ? "Part Details" : "New Part"}</Heading>
+          <CardTitle>{isEditing ? "Part Details" : "New Part"}</CardTitle>
           {!isEditing && (
-            <Text color="gray.500" fontWeight="normal">
+            <CardDescription>
               A part contains the information about a specific item that can be
               purchased or manufactured.
-            </Text>
+            </CardDescription>
           )}
         </CardHeader>
-        <CardBody>
-          <Grid
-            gridTemplateColumns={
-              isEditing ? ["1fr", "1fr", "1fr 1fr 1fr"] : "1fr"
-            }
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
+        <CardContent>
+          <div
+            className={cn(
+              "grid w-full gap-x-8 gap-y-2",
+              isEditing ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1"
+            )}
           >
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               {isEditing ? (
                 <Input name="id" label="Part ID" isReadOnly />
               ) : (
@@ -154,7 +153,7 @@ const PartForm = ({ initialValues }: PartFormProps) => {
               <Input name="name" label="Name" />
               <TextArea name="description" label="Description" />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Select
                 name="replenishmentSystem"
                 label="Replenishment System"
@@ -165,14 +164,14 @@ const PartForm = ({ initialValues }: PartFormProps) => {
                 label="Part Type"
                 options={partTypeOptions}
               />
-              <Select
+              <Combobox
                 name="unitOfMeasureCode"
                 label="Unit of Measure"
                 options={unitOfMeasureOptions}
               />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
-              <Select
+            <VStack>
+              <Combobox
                 name="partGroupId"
                 label="Part Group"
                 options={partGroupOptions}
@@ -180,8 +179,8 @@ const PartForm = ({ initialValues }: PartFormProps) => {
               <Boolean name="blocked" label="Blocked" />
               {isEditing && <Boolean name="active" label="Active" />}
             </VStack>
-          </Grid>
-        </CardBody>
+          </div>
+        </CardContent>
         <CardFooter>
           <Submit
             isDisabled={

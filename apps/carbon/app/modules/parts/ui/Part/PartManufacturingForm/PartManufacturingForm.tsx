@@ -1,12 +1,11 @@
 import {
   Card,
-  CardBody,
+  CardContent,
   CardFooter,
   CardHeader,
-  Grid,
-  Heading,
+  CardTitle,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Boolean, Hidden, Number, Select, Submit } from "~/components/Form";
 import { usePermissions } from "~/hooks";
@@ -37,36 +36,35 @@ const PartManufacturingForm = ({
       validator={partManufacturingValidator}
       defaultValues={initialValues}
     >
-      <Card w="full">
+      <Card>
         <CardHeader>
-          <Heading size="md">Manufacturing</Heading>
+          <CardTitle>Manufacturing</CardTitle>
         </CardHeader>
-        <CardBody>
+        <CardContent>
           <Hidden name="partId" />
-          <Grid
-            gridTemplateColumns={["1fr", "1fr", "1fr 1fr 1fr"]}
-            gridColumnGap={8}
-            gridRowGap={2}
-            w="full"
-          >
-            <VStack alignItems="start" spacing={2} w="full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 w-full">
+            <VStack>
               <Select
                 name="manufacturingPolicy"
                 label="Manufacturing Policy"
                 options={partManufacturingPolicyOptions}
               />
-              <Select
+              {/* <Select
                 name="routingId"
                 label="Routing ID"
                 options={[{ label: "", value: "" }]}
-              />
+              /> */}
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Number name="manufacturingLeadTime" label="Lead Time (Days)" />
-              <Number name="scrapPercentage" label="Scrap Percentage" />
+              <Number
+                name="scrapPercentage"
+                label="Scrap Percentage"
+                formatOptions={{ style: "percent" }}
+              />
               <Number name="lotSize" label="Lot Size" />
             </VStack>
-            <VStack alignItems="start" spacing={2} w="full">
+            <VStack>
               <Boolean
                 name="manufacturingBlocked"
                 label="Manufacturing Blocked"
@@ -76,8 +74,8 @@ const PartManufacturingForm = ({
                 label="Requires Configuration"
               />
             </VStack>
-          </Grid>
-        </CardBody>
+          </div>
+        </CardContent>
         <CardFooter>
           <Submit isDisabled={!permissions.can("update", "parts")}>Save</Submit>
         </CardFooter>

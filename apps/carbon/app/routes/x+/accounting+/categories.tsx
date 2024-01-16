@@ -1,4 +1,4 @@
-import { VStack } from "@chakra-ui/react";
+import { VStack } from "@carbon/react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
@@ -29,7 +29,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const searchParams = new URLSearchParams(url.search);
   const name = searchParams.get("name");
   const incomeBalance = searchParams.get("incomeBalance");
-  const accountClass = searchParams.get("class");
+  const accountClass = searchParams.get("accountClass");
   const { limit, offset, sorts } = getGenericQueryFilters(searchParams);
 
   const [categories] = await Promise.all([
@@ -63,7 +63,7 @@ export default function GlAccountCategoriesRoute() {
   const { count, categories } = useLoaderData<typeof loader>();
 
   return (
-    <VStack w="full" h="full" spacing={0}>
+    <VStack spacing={0} className="h-full">
       <AccountCategoriesTableFilters />
       <AccountCategoriesTable data={categories} count={count} />
       <Outlet />

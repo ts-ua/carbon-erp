@@ -1,8 +1,8 @@
-import { Link, MenuItem } from "@chakra-ui/react";
+import { Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -18,8 +18,6 @@ const PartGroupsTable = memo(({ data, count }: PartGroupsTableProps) => {
   const [params] = useUrlParams();
   const navigate = useNavigate();
   const permissions = usePermissions();
-  // const hasAccounting =
-  //   permissions.has("accounting") && permissions.can("view", "accounting");
 
   const rows = useMemo(() => data, [data]);
 
@@ -29,9 +27,9 @@ const PartGroupsTable = memo(({ data, count }: PartGroupsTableProps) => {
         accessorKey: "name",
         header: "Name",
         cell: ({ row }) => (
-          <Link onClick={() => navigate(row.original.id)}>
+          <Hyperlink onClick={() => navigate(row.original.id)}>
             {row.original.name}
-          </Link>
+          </Hyperlink>
         ),
       },
       {
@@ -48,23 +46,23 @@ const PartGroupsTable = memo(({ data, count }: PartGroupsTableProps) => {
       return (
         <>
           <MenuItem
-            isDisabled={!permissions.can("update", "parts")}
-            icon={<BsPencilSquare />}
+            disabled={!permissions.can("update", "parts")}
             onClick={() => {
               navigate(`${path.to.partGroup(row.id)}?${params.toString()}`);
             }}
           >
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit Part Group
           </MenuItem>
           <MenuItem
-            isDisabled={!permissions.can("delete", "parts")}
-            icon={<IoMdTrash />}
+            disabled={!permissions.can("delete", "parts")}
             onClick={() => {
               navigate(
                 `${path.to.deletePartGroup(row.id)}?${params.toString()}`
               );
             }}
           >
+            <MenuIcon icon={<IoMdTrash />} />
             Delete Part Group
           </MenuItem>
         </>

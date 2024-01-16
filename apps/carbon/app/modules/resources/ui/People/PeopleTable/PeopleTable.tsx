@@ -1,8 +1,8 @@
-import { HStack, Link, MenuItem, Text } from "@chakra-ui/react";
+import { HStack, Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { Avatar, Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
 import type { AttributeCategory, Person } from "~/modules/resources";
@@ -58,13 +58,13 @@ const PeopleTable = memo(
         if (dataType === DataType.User) {
           if (!user) return null;
           return (
-            <HStack spacing={2}>
+            <HStack>
               <Avatar
                 size="sm"
                 name={user.fullName ?? undefined}
                 path={user.avatarUrl}
               />
-              <Text>{user.fullName ?? ""}</Text>
+              <p>{user.fullName ?? ""}</p>
             </HStack>
           );
         }
@@ -97,20 +97,20 @@ const PeopleTable = memo(
         {
           header: "User",
           cell: ({ row }) => (
-            <HStack spacing={2}>
+            <HStack>
               <Avatar
                 size="sm"
                 name={row.original.user?.fullName!}
                 path={row.original.user?.avatarUrl!}
               />
 
-              <Link
+              <Hyperlink
                 onClick={() => {
                   navigate(path.to.person(row?.original.user?.id!));
                 }}
               >
                 {row.original.user?.fullName}
-              </Link>
+              </Hyperlink>
             </HStack>
           ),
         },
@@ -159,32 +159,18 @@ const PeopleTable = memo(
       return [...defaultColumns, ...additionalColumns];
     }, [attributeCategories, navigate, renderGenericAttribute]);
 
-    // const actions = useMemo(() => {
-    //   return [
-    //     {
-    //       label: "Message Employees",
-    //       icon: <BsChat />,
-    //       disabled: !permissions.can("create", "messaging"),
-    //       onClick: (selected: typeof rows) => {
-    //         console.log(selected);
-    //       },
-    //     },
-    //   ];
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
-
     const renderContextMenu = useMemo(() => {
       return permissions.can("update", "resources")
         ? (row: (typeof rows)[number]) => {
             return (
               <MenuItem
-                icon={<BsPencilSquare />}
                 onClick={() =>
                   navigate(
                     `${path.to.person(row.user?.id!)}?${params.toString()}`
                   )
                 }
               >
+                <MenuIcon icon={<BsFillPenFill />} />
                 Edit Employee
               </MenuItem>
             );
@@ -204,48 +190,13 @@ const PeopleTable = memo(
           }}
           renderContextMenu={renderContextMenu}
           withColumnOrdering
-          // withInlineEditing
           withFilters
           withPagination
-          // withSelectableRows={isEditable}
         />
       </>
     );
   }
 );
-
-// const EditableName = ({
-//   value,
-//   row,
-//   accessorKey,
-//   onUpdate,
-// }: EditableTableCellComponentProps<Employee>) => {
-//   const { supabase } = useSupabase();
-//   // @ts-ignore
-//   const userId = row?.user?.id as string;
-//   if (userId === undefined) {
-//     throw new Error("Expected user id to be defined");
-//   }
-
-//   const updateName = async (name: string) => {
-//     const [table, column] = accessorKey.split(".");
-//     onUpdate(name);
-//     await supabase
-//       ?.from(table)
-//       .update({ [column]: name })
-//       .eq("id", userId);
-//   };
-
-//   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-//     if (event.key === "Enter") {
-//       updateName(event.currentTarget.value);
-//     }
-//   };
-
-//   return (
-//     <Input autoFocus defaultValue={value as string} onKeyDown={onKeyDown} />
-//   );
-// };
 
 PeopleTable.displayName = "EmployeeTable";
 

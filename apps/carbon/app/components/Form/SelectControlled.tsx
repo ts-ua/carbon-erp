@@ -1,81 +1,69 @@
-import { Select } from "@carbon/react";
 import {
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useEffect } from "react";
-import { useControlField, useField } from "remix-validated-form";
 
-export type SelectControlledProps = {
+import { useControlField, useField } from "remix-validated-form";
+import { Combobox as ComboboxBase } from "~/components";
+import type { ComboboxProps as ComboboxBaseProps } from "~/components/Combobox";
+
+export type ComboboxProps = Omit<ComboboxBaseProps, "onChange"> & {
   name: string;
   label?: string;
-  options: { value: string | number; label: string }[];
   helperText?: string;
-  isReadOnly?: boolean;
-  isLoading?: boolean;
-  placeholder?: string;
-  value: string | undefined;
-  onChange?: (newValue: string | number | undefined) => void;
+  options: { value: string | number; label: string }[];
+  onChange?: (newValue: { value: string; label: string } | null) => void;
 };
 
 const SelectControlled = ({
   name,
   label,
-  options,
   helperText,
-  isLoading,
-  isReadOnly,
-  placeholder,
-  value,
-  onChange,
+  options,
   ...props
-}: SelectControlledProps) => {
+}: ComboboxProps) => {
   const { getInputProps, error } = useField(name);
-  const [controlValue, setControlValue] = useControlField(name);
+  const [controlValue, setControlValue] = useControlField<string | undefined>(
+    name
+  );
 
   useEffect(() => {
-    setControlValue(value);
-  }, [setControlValue, value]);
+    setControlValue(props.value ?? "");
+  }, [props.value, setControlValue]);
 
-  const handleChange = (
-    selection: { value: string | number; label: string } | undefined
-  ) => {
-    setControlValue(selection?.value || undefined);
-    if (onChange && typeof onChange === "function") {
-      onChange(selection?.value);
+  const onChange = (value: string) => {
+    if (value) {
+      props?.onChange?.(options.find((o) => o.value === value) ?? null);
+    } else {
+      props?.onChange?.(null);
     }
   };
 
   return (
     <FormControl isInvalid={!!error}>
       {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
-      {options.length > 0 ? (
-        <Select
-          {...getInputProps({
-            // @ts-ignore
-            id: name,
-          })}
-          {...props}
-          // @ts-ignore
-          isReadOnly={isReadOnly}
-          isLoading={isLoading}
-          options={options}
-          placeholder={placeholder}
-          // @ts-ignore
-          w="full"
-          value={options.find((option) => option.value === controlValue)}
-          onChange={handleChange}
-        />
-      ) : (
-        <Select
-          isLoading={isLoading}
-          options={[]}
-          // @ts-ignore
-          w="full"
-        />
-      )}
+      <input
+        {...getInputProps({
+          id: name,
+        })}
+        type="hidden"
+        name={name}
+        id={name}
+        value={controlValue}
+      />
+      <ComboboxBase
+        {...props}
+        options={options}
+        value={controlValue}
+        onChange={(newValue) => {
+          setControlValue(newValue ?? "");
+          onChange(newValue ?? "");
+        }}
+        className="w-full"
+      />
 
       {error ? (
         <FormErrorMessage>{error}</FormErrorMessage>

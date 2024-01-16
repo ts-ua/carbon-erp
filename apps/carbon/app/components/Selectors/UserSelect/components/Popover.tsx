@@ -1,4 +1,3 @@
-import { Box, useMultiStyleConfig } from "@chakra-ui/react";
 import type { PropsWithChildren } from "react";
 import { useEffect } from "react";
 import useUserSelectContext from "../provider";
@@ -8,8 +7,6 @@ const Popover = ({ children }: PropsWithChildren) => {
     aria: { popoverProps },
     refs: { listBoxRef, popoverRef, focusableNodes },
   } = useUserSelectContext();
-
-  const menuStyles = useMultiStyleConfig("Menu");
 
   useEffect(() => {
     /* Build a triple linked-list (TreeNode[]) of focusable DOM Elements that are children 
@@ -80,19 +77,13 @@ const Popover = ({ children }: PropsWithChildren) => {
   }, [children, focusableNodes, listBoxRef]);
 
   return (
-    <Box
+    <div
       {...popoverProps}
       ref={popoverRef}
-      sx={{
-        ...menuStyles.list,
-        position: "absolute",
-        width: "100%",
-        marginTop: 1,
-        px: 2,
-      }}
+      className="absolute w-full mt-1 px-2 bg-popover text-popover-foreground shadow-sm border border-border rounded-md min-w-[240px]"
     >
       {children}
-    </Box>
+    </div>
   );
 };
 

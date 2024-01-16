@@ -1,3 +1,10 @@
+import {
+  BsBank,
+  BsCreditCard,
+  BsFillPersonLinesFill,
+  BsFillPinMapFill,
+  BsTruck,
+} from "react-icons/bs";
 import { usePermissions } from "~/hooks";
 import type { Role } from "~/types";
 
@@ -12,28 +19,33 @@ export function useCustomerSidebar({ contacts, locations }: Props) {
     {
       name: "Overview",
       to: "",
+      icon: BsBank,
     },
     {
       name: "Contacts",
       to: "contacts",
       role: ["employee"],
       count: contacts,
+      icon: BsFillPersonLinesFill,
     },
     {
       name: "Locations",
       to: "locations",
       role: ["employee", "customer"],
       count: locations,
+      icon: BsFillPinMapFill,
     },
     {
       name: "Payments",
       to: "payments",
       role: ["employee"],
+      icon: BsCreditCard,
     },
     {
       name: "Shipping",
       to: "shipping",
       role: ["employee"],
+      icon: BsTruck,
     },
   ].filter(
     (item) =>

@@ -3,8 +3,8 @@ import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import {
-  getShift,
   ShiftForm,
+  getShift,
   shiftValidator,
   upsertShift,
 } from "~/modules/resources";
@@ -55,13 +55,13 @@ export async function action({ request }: ActionFunctionArgs) {
   if (createShift.error) {
     return redirect(
       path.to.shifts,
-      await flash(request, error(createShift.error, "Failed to create shift."))
+      await flash(request, error(createShift.error, "Failed to create shift"))
     );
   }
 
   return redirect(
     path.to.shifts,
-    await flash(request, success("Shift updated."))
+    await flash(request, success("Shift updated"))
   );
 }
 

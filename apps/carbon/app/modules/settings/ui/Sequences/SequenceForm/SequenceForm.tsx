@@ -2,16 +2,14 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
   Heading,
   HStack,
-  Text,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
@@ -48,21 +46,27 @@ const SequenceForm = ({ initialValues }: SequenceFormProps) => {
   const isDisabled = !permissions.can("update", "settings");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={sequenceValidator}
-        method="post"
-        action={path.to.tableSequence(initialValues.table)}
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{`${initialValues.name}`} Sequence</DrawerHeader>
-          <DrawerBody pb={8}>
+    <Drawer
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={sequenceValidator}
+          method="post"
+          action={path.to.tableSequence(initialValues.table)}
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <DrawerTitle>{`${initialValues.name}`} Sequence</DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody>
             <Hidden name="table" />
-            <VStack spacing={4} alignItems="start">
-              <Heading size="lg">{makePreview()}</Heading>
+            <VStack spacing={4}>
+              <Heading size="h2">{makePreview()}</Heading>
 
               <Input
                 name="prefix"
@@ -71,52 +75,44 @@ const SequenceForm = ({ initialValues }: SequenceFormProps) => {
               />
               <Number
                 name="next"
-                min={0}
+                minValue={0}
                 label="Next"
-                onChange={(_, val) => setNext(val)}
+                onChange={setNext}
               />
               <Number
                 name="size"
-                min={0}
-                max={30}
+                minValue={0}
+                maxValue={30}
                 label="Size"
-                onChange={(_, val) => setSize(val)}
+                onChange={setSize}
               />
-              <Number name="step" min={0} max={10000} label="Step" />
+              <Number name="step" minValue={0} maxValue={10000} label="Step" />
               <Input
                 name="suffix"
                 label="Suffix"
                 onChange={(e) => setSuffix(e.target.value)}
               />
-              <VStack spacing={0} alignItems="start">
-                <Text
-                  color="gray.500"
-                  fontSize="sm"
-                >{`%{yyyy} = Full Year`}</Text>
-                <Text color="gray.500" fontSize="sm">{`%{yy} = Year`}</Text>
-                <Text color="gray.500" fontSize="sm">{`%{mm} = Month`}</Text>
-                <Text color="gray.500" fontSize="sm">{`%{dd} = Day`}</Text>
-                <Text color="gray.500" fontSize="sm">{`%{hh} = Hour`}</Text>
-                <Text color="gray.500" fontSize="sm">{`%{mm} = Minute`}</Text>
-                <Text color="gray.500" fontSize="sm">{`%{ss} = Second`}</Text>
+              <VStack spacing={0}>
+                <p className="text-muted-foreground text-sm">{`%{yyyy} = Full Year`}</p>
+                <p className="text-muted-foreground text-sm">{`%{yy} = Year`}</p>
+                <p className="text-muted-foreground text-sm">{`%{mm} = Month`}</p>
+                <p className="text-muted-foreground text-sm">{`%{dd} = Day`}</p>
+                <p className="text-muted-foreground text-sm">{`%{hh} = Hour`}</p>
+                <p className="text-muted-foreground text-sm">{`%{mm} = Minute`}</p>
+                <p className="text-muted-foreground text-sm">{`%{ss} = Second`}</p>
               </VStack>
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

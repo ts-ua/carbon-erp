@@ -1,14 +1,12 @@
-import { useColor } from "@carbon/react";
 import {
-  Box,
   Checkbox,
-  Flex,
+  HStack,
   IconButton,
-  List,
-  ListItem,
-  Text,
   Tooltip,
-} from "@chakra-ui/react";
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@carbon/react";
 import { useMemo } from "react";
 import { MdOutlineClear, MdPlaylistAdd } from "react-icons/md";
 import { Avatar } from "~/components";
@@ -39,91 +37,90 @@ const SelectionList = () => {
     [selectionItemsById]
   );
 
-  const background = useColor("gray.100");
-
   return (
-    <List
-      w="full"
-      maxW={width}
-      mt={1}
-      maxH={selectionsMaxHeight}
-      overflowY={selectionsMaxHeight ? "auto" : undefined}
-    >
-      {selected.map((item) => {
-        const id = `UserSelection:SelectedItem-${item.id}`;
-        const canExpand = !checkedSelections && !readOnly && isGroup(item);
+    <TooltipProvider>
+      <ul
+        className="w-full mt-1"
+        style={{
+          maxWidth: width,
+          maxHeight: selectionsMaxHeight,
+          overflowY: selectionsMaxHeight ? "auto" : undefined,
+        }}
+      >
+        {selected.map((item) => {
+          const id = `UserSelection:SelectedItem-${item.id}`;
+          const canExpand = !checkedSelections && !readOnly && isGroup(item);
 
-        return (
-          <ListItem
-            key={item.id}
-            p={2}
-            borderRadius="md"
-            _hover={{ background }}
-          >
-            <Flex direction="row" gap={2} data-testid={`${id}`}>
-              {checkedSelections ? (
-                <>
-                  <Checkbox
-                    id={`${instanceId}:${id}:checkbox`}
-                    data-testid={id}
-                    isChecked={item.isChecked}
-                    onChange={() => onToggleChecked(item)}
-                    size="lg"
-                    flexGrow={2}
-                  >
-                    <Text fontSize={14} noOfLines={1}>
-                      {item.label}
-                    </Text>
-                  </Checkbox>
-                </>
-              ) : (
-                <>
-                  {"fullName" in item ? (
-                    <Avatar
-                      name={item.fullName ?? undefined}
-                      path={item.avatarUrl}
-                      size="sm"
+          return (
+            <li className="p-2 rounded-md hover:bg-accent" key={item.id}>
+              <div className="flex items-center space-x-2">
+                {checkedSelections ? (
+                  <HStack className="w-full">
+                    <Checkbox
+                      id={`${instanceId}:${id}:checkbox`}
+                      data-testid={id}
+                      isChecked={item.isChecked}
+                      onCheckedChange={() => onToggleChecked(item)}
                     />
-                  ) : (
-                    <Avatar name={item.name} path={null} size="sm" />
-                  )}
-
-                  <Box display="flex" alignItems="center" flexGrow={2}>
-                    <Text fontSize={14} noOfLines={1}>
+                    <p className="flex-grow text-sm line-clamp-1">
                       {item.label}
-                    </Text>
-                  </Box>
-                </>
-              )}
+                    </p>
+                  </HStack>
+                ) : (
+                  <>
+                    {"fullName" in item ? (
+                      <Avatar
+                        name={item.fullName ?? undefined}
+                        path={item.avatarUrl}
+                        size="sm"
+                      />
+                    ) : (
+                      <Avatar name={item.name} path={null} size="sm" />
+                    )}
 
-              {!!canExpand && (
-                <Tooltip label="Expand">
-                  <IconButton
-                    aria-label={`Expand ${item.label}`}
-                    icon={<MdPlaylistAdd />}
-                    size="sm"
-                    onClick={() => onExplode(item)}
-                    variant="outline"
-                  />
-                </Tooltip>
-              )}
+                    <div className="flex items-center flex-grow">
+                      <p className="text-sm line-clamp-1">{item.label}</p>
+                    </div>
+                  </>
+                )}
 
-              {!readOnly && !alwaysSelected.includes(item.id) && (
-                <Tooltip label="Remove">
-                  <IconButton
-                    aria-label={`Remove ${item.label}`}
-                    icon={<MdOutlineClear />}
-                    size="sm"
-                    onClick={() => onDeselect(item)}
-                    variant="outline"
-                  />
-                </Tooltip>
-              )}
-            </Flex>
-          </ListItem>
-        );
-      })}
-    </List>
+                {!!canExpand && (
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <IconButton
+                        aria-label={`Expand ${item.label}`}
+                        icon={<MdPlaylistAdd />}
+                        onClick={() => onExplode(item)}
+                        variant="secondary"
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <span>Expand</span>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+
+                {!readOnly && !alwaysSelected.includes(item.id) && (
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <IconButton
+                        aria-label={`Remove ${item.label}`}
+                        icon={<MdOutlineClear />}
+                        onClick={() => onDeselect(item)}
+                        variant="secondary"
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <span>Remove</span>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </TooltipProvider>
   );
 };
 

@@ -1,8 +1,8 @@
-import { Link, MenuItem } from "@chakra-ui/react";
+import { Hyperlink, MenuIcon, MenuItem } from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Table } from "~/components";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -30,9 +30,9 @@ const ShippingMethodsTable = memo(
           accessorKey: "name",
           header: "Name",
           cell: ({ row }) => (
-            <Link onClick={() => navigate(row.original.id)}>
+            <Hyperlink onClick={() => navigate(row.original.id)}>
               {row.original.name}
-            </Link>
+            </Hyperlink>
           ),
         },
         {
@@ -64,25 +64,25 @@ const ShippingMethodsTable = memo(
         return (
           <>
             <MenuItem
-              isDisabled={!permissions.can("update", "inventory")}
-              icon={<BsPencilSquare />}
+              disabled={!permissions.can("update", "inventory")}
               onClick={() => {
                 navigate(
                   `${path.to.shippingMethod(row.id)}?${params.toString()}`
                 );
               }}
             >
+              <MenuIcon icon={<BsFillPenFill />} />
               Edit Shipping Method
             </MenuItem>
             <MenuItem
-              isDisabled={!permissions.can("delete", "inventory")}
-              icon={<IoMdTrash />}
+              disabled={!permissions.can("delete", "inventory")}
               onClick={() => {
                 navigate(
                   `${path.to.deleteShippingMethod(row.id)}?${params.toString()}`
                 );
               }}
             >
+              <MenuIcon icon={<IoMdTrash />} />
               Delete Shipping Method
             </MenuItem>
           </>

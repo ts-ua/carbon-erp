@@ -2,17 +2,16 @@ import {
   Button,
   Drawer,
   DrawerBody,
-  DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  DrawerTitle,
   FormControl,
   FormLabel,
   HStack,
-  Input as ChakraInput,
+  Input as InputBase,
   VStack,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { useParams } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Hidden, Input, Submit } from "~/components/Form";
@@ -49,49 +48,50 @@ const AccountSubcategoryForm = ({
     : !permissions.can("create", "accounting");
 
   return (
-    <Drawer onClose={onClose} isOpen={true} size="sm">
-      <ValidatedForm
-        validator={accountSubcategoryValidator}
-        method="post"
-        action={
-          isEditing
-            ? path.to.accountingSubcategory(initialValues.id!)
-            : path.to.newAccountingSubcategory(categoryId)
-        }
-        defaultValues={initialValues}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+    <Drawer
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+      open
+    >
+      <DrawerContent>
+        <ValidatedForm
+          validator={accountSubcategoryValidator}
+          method="post"
+          action={
+            isEditing
+              ? path.to.accountingSubcategory(initialValues.id!)
+              : path.to.newAccountingSubcategory(categoryId)
+          }
+          defaultValues={initialValues}
+          className="flex flex-col h-full"
+        >
           <DrawerHeader>
-            {isEditing ? "Edit" : "New"} Account Subcategory
+            <DrawerTitle>
+              {isEditing ? "Edit" : "New"} Account Subcategory
+            </DrawerTitle>
           </DrawerHeader>
-          <DrawerBody pb={8}>
+          <DrawerBody>
             <Hidden name="id" />
             <Hidden name="accountCategoryId" />
-            <VStack spacing={2} alignItems="start">
+            <VStack>
               <FormControl>
                 <FormLabel>Category</FormLabel>
-                <ChakraInput value={category} isReadOnly />
+                <InputBase value={category} isReadOnly />
               </FormControl>
               <Input name="name" label="Name" />
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack spacing={2}>
+            <HStack>
               <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button
-                size="md"
-                colorScheme="gray"
-                variant="solid"
-                onClick={onClose}
-              >
+              <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>
             </HStack>
           </DrawerFooter>
-        </DrawerContent>
-      </ValidatedForm>
+        </ValidatedForm>
+      </DrawerContent>
     </Drawer>
   );
 };

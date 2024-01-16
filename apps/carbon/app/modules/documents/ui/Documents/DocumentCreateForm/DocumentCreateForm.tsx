@@ -1,4 +1,4 @@
-import { File, useNotification } from "@carbon/react";
+import { File, toast } from "@carbon/react";
 import { useSubmit } from "@remix-run/react";
 import type { ChangeEvent } from "react";
 import { IoMdAdd } from "react-icons/io";
@@ -7,7 +7,6 @@ import { useSupabase } from "~/lib/supabase";
 import { path } from "~/utils/path";
 
 const DocumentCreateForm = () => {
-  const notification = useNotification();
   const submit = useSubmit();
   const { supabase } = useSupabase();
   const user = useUser();
@@ -29,7 +28,7 @@ const DocumentCreateForm = () => {
         });
 
       if (fileUpload.error) {
-        notification.copyableError(fileUpload.error, "Failed to upload file");
+        toast.error("Failed to upload file");
       }
 
       if (fileUpload.data?.path) {

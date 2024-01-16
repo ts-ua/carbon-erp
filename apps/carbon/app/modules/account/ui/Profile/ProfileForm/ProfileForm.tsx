@@ -1,8 +1,14 @@
-import { Box, Grid, VStack } from "@chakra-ui/react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  VStack,
+} from "@carbon/react";
 import { useParams } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Hidden, Input, Submit, TextArea } from "~/components/Form";
-import { SectionTitle } from "~/components/Layout";
 import { accountProfileValidator } from "~/modules/account";
 import type { User } from "~/modules/users";
 import { path } from "~/utils/path";
@@ -16,25 +22,37 @@ const ProfileForm = ({ user }: ProfileFormProps) => {
   const isSelf = !personId;
 
   return (
-    <Box w="full">
-      <SectionTitle>Basic Information</SectionTitle>
-      <ValidatedForm
-        method="post"
-        action={isSelf ? path.to.profile : path.to.person(personId)}
-        validator={accountProfileValidator}
-        defaultValues={user}
-      >
-        <VStack spacing={4} my={4} w="full" alignItems="start">
-          <Grid gridTemplateColumns="1fr 1fr" gridColumnGap={4} w="full">
-            <Input name="firstName" label="First Name" />
-            <Input name="lastName" label="Last Name" />
-          </Grid>
-          <TextArea name="about" label="About" characterLimit={160} my={2} />
-          <Hidden name="intent" value="about" />
-          <Submit size="sm">Save</Submit>
-        </VStack>
-      </ValidatedForm>
-    </Box>
+    <ValidatedForm
+      method="post"
+      action={isSelf ? path.to.profile : path.to.person(personId)}
+      validator={accountProfileValidator}
+      defaultValues={user}
+      className="w-full"
+    >
+      <Card>
+        <CardHeader>
+          <CardTitle>Basic Information</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <VStack spacing={4} className="my-4">
+            <div className="grid grid-cols-2 gap-4 w-full">
+              <Input name="firstName" label="First Name" />
+              <Input name="lastName" label="Last Name" />
+            </div>
+            <TextArea
+              name="about"
+              label="About"
+              characterLimit={160}
+              className="my-2"
+            />
+            <Hidden name="intent" value="about" />
+          </VStack>
+        </CardContent>
+        <CardFooter>
+          <Submit>Save</Submit>
+        </CardFooter>
+      </Card>
+    </ValidatedForm>
   );
 };
 

@@ -1,23 +1,19 @@
 import {
   Button,
-  IconButton,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
   HStack,
-  List,
-  ListItem,
+  IconButton,
   Popover,
-  PopoverArrow,
-  PopoverBody,
   PopoverContent,
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
   Switch,
-  Text,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-} from "@chakra-ui/react";
+} from "@carbon/react";
 import { Reorder } from "framer-motion";
 import { BsChevronDown, BsListUl } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
@@ -39,85 +35,73 @@ const Sort = ({ columnAccessors }: SortProps) => {
   const hasNoSorts = sorts.length === 0;
 
   return (
-    <Popover placement="bottom" closeOnBlur>
-      <PopoverTrigger>
+    <Popover>
+      <PopoverTrigger asChild>
         <Button
-          colorScheme={hasNoSorts ? undefined : "brand"}
-          variant={hasNoSorts ? "ghost" : "solid"}
+          variant={hasNoSorts ? "ghost" : "primary"}
           leftIcon={<BsListUl />}
         >
           {hasNoSorts ? "Sort" : "Sorted"}
         </Button>
       </PopoverTrigger>
-      <PopoverContent w={420} boxShadow="xl">
+      <PopoverContent className="w-[420px]">
         {hasNoSorts && (
           <PopoverHeader>
-            <Text fontSize="sm">No sorts applied to this view</Text>
-            <Text fontSize="xs" color="gray.500">
+            <p className="text-sm">No sorts applied to this view</p>
+            <p className="text-xs text-muted-foreground">
               Add a column below to sort the view
-            </Text>
+            </p>
           </PopoverHeader>
         )}
-        <PopoverArrow />
+
         {!hasNoSorts && (
-          <PopoverBody>
-            <List
-              as={Reorder.Group}
-              axis="y"
-              values={sorts}
-              onReorder={reorderSorts}
-              spacing={2}
-            >
-              {sorts.map((sort) => {
-                const [column, direction] = sort.split(":");
-                return (
-                  <ListItem
-                    key={sort}
-                    as={Reorder.Item}
-                    value={sort}
-                    rounded="lg"
-                  >
-                    <HStack>
-                      <IconButton
-                        aria-label="Drag handle"
-                        icon={<MdOutlineDragIndicator />}
-                        variant="ghost"
-                      />
-                      <Text fontSize="small" flexGrow={1}>
-                        <>{columnAccessors[column] ?? ""}</>
-                      </Text>
-                      <Switch
-                        isChecked={direction === "asc"}
-                        onChange={() => toggleSortByDirection(column)}
-                      />
-                      <Text fontSize="xs" color="gray.500">
-                        Ascending
-                      </Text>
-                      <IconButton
-                        aria-label="Remove sort by column"
-                        icon={<IoMdClose />}
-                        onClick={() => removeSortBy(sort)}
-                        variant="ghost"
-                      />
-                    </HStack>
-                  </ListItem>
-                );
-              })}
-            </List>
-          </PopoverBody>
+          <Reorder.Group
+            axis="y"
+            values={sorts}
+            onReorder={reorderSorts}
+            className="space-y-2"
+          >
+            {sorts.map((sort) => {
+              const [column, direction] = sort.split(":");
+              return (
+                <Reorder.Item key={sort} value={sort} className="rounded-lg">
+                  <HStack>
+                    <IconButton
+                      aria-label="Drag handle"
+                      icon={<MdOutlineDragIndicator />}
+                      variant="ghost"
+                    />
+                    <span className="text-sm flex-grow">
+                      <>{columnAccessors[column] ?? ""}</>
+                    </span>
+                    <Switch
+                      checked={direction === "asc"}
+                      onCheckedChange={() => toggleSortByDirection(column)}
+                    />
+                    <span className="text-sm text-muted-foreground">
+                      Ascending
+                    </span>
+                    <IconButton
+                      aria-label="Remove sort by column"
+                      icon={<IoMdClose />}
+                      onClick={() => removeSortBy(sort)}
+                      variant="ghost"
+                    />
+                  </HStack>
+                </Reorder.Item>
+              );
+            })}
+          </Reorder.Group>
         )}
 
         <PopoverFooter>
-          <Menu isLazy>
-            <MenuButton
-              as={Button}
-              rightIcon={<BsChevronDown />}
-              colorScheme="gray"
-              variant="outline"
-            >
-              Pick a column to sort by
-            </MenuButton>
-            <MenuList fontSize="sm" boxShadow="xl">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button rightIcon={<BsChevronDown />} variant="secondary">
+                Pick a column to sort by
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-48">
               {Object.keys(columnAccessors)
                 .filter((columnAccessor) => {
                   return !sorts
@@ -126,17 +110,17 @@ const Sort = ({ columnAccessors }: SortProps) => {
                 })
                 .map((columnAccessor) => {
                   return (
-                    <MenuItem
+                    <DropdownMenuItem
                       key={columnAccessor}
                       onClick={() => toggleSortBy(columnAccessor)}
-                      icon={<BsListUl />}
                     >
+                      <DropdownMenuIcon icon={<BsListUl />} />
                       {columnAccessors[columnAccessor]}
-                    </MenuItem>
+                    </DropdownMenuItem>
                   );
                 })}
-            </MenuList>
-          </Menu>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </PopoverFooter>
       </PopoverContent>
     </Popover>

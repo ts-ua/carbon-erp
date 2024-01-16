@@ -1,24 +1,24 @@
-import { convertKbToString } from "@carbon/utils";
 import {
   Card,
-  CardBody,
+  CardAction,
+  CardContent,
   CardHeader,
-  Flex,
-  Heading,
+  CardTitle,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
   HStack,
+  Hyperlink,
   IconButton,
-  Link,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Table,
   Tbody,
   Td,
   Th,
   Thead,
   Tr,
-} from "@chakra-ui/react";
+} from "@carbon/react";
+import { convertKbToString } from "@carbon/utils";
 import { Outlet } from "@remix-run/react";
 import { MdMoreVert } from "react-icons/md";
 import { DocumentIcon } from "~/modules/documents";
@@ -45,23 +45,27 @@ const PurchaseOrderDocuments = ({
 
   return (
     <>
-      <Card w="full">
-        <CardHeader display="flex" justifyContent="space-between">
-          <Heading size="md" display="inline-flex">
-            {isExternal ? "External" : "Internal"} Attachments
-          </Heading>
-          <PurchaseOrderDocumentForm
-            isExternal={isExternal}
-            orderId={orderId}
-          />
-        </CardHeader>
-        <CardBody>
+      <Card>
+        <HStack className="justify-between items-start">
+          <CardHeader>
+            <CardTitle>
+              {isExternal ? "External" : "Internal"} Attachments
+            </CardTitle>
+          </CardHeader>
+          <CardAction>
+            <PurchaseOrderDocumentForm
+              isExternal={isExternal}
+              orderId={orderId}
+            />
+          </CardAction>
+        </HStack>
+        <CardContent>
           <Table>
             <Thead>
               <Tr>
                 <Th>Name</Th>
                 <Th>Size</Th>
-                {/* <Th>Uploaded By</Th> */}
+
                 <Th></Th>
               </Tr>
             </Thead>
@@ -72,9 +76,9 @@ const PurchaseOrderDocuments = ({
                     <Td>
                       <HStack>
                         <DocumentIcon fileName={attachment.name} />
-                        <Link onClick={() => download(attachment)}>
+                        <Hyperlink onClick={() => download(attachment)}>
                           {attachment.name}
-                        </Link>
+                        </Hyperlink>
                       </HStack>
                     </Td>
                     <Td>
@@ -82,50 +86,47 @@ const PurchaseOrderDocuments = ({
                         Math.floor((attachment.metadata?.size ?? 0) / 1024)
                       )}
                     </Td>
-                    {/* <Td>
-                      <HStack>
-                        <Avatar
-                          size="sm"
-                          path={getAvatarPath(attachment.owner) ?? null}
-                        />
-                        <Text>{getFullName(attachment.owner)}</Text>
-                      </HStack>
-                    </Td> */}
                     <Td>
-                      <Flex w="full" justifyContent="flex-end">
-                        <Menu>
-                          <MenuButton
-                            aria-label="More"
-                            as={IconButton}
-                            icon={<MdMoreVert />}
-                            variant="outline"
-                          />
-                          <MenuList>
-                            <MenuItem onClick={() => download(attachment)}>
+                      <div className="flex justify-end w-full">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <IconButton
+                              aria-label="More"
+                              icon={<MdMoreVert />}
+                              variant="secondary"
+                            />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DropdownMenuItem
+                              onClick={() => download(attachment)}
+                            >
                               Download
-                            </MenuItem>
-                            <MenuItem
-                              isDisabled={!canDelete}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              disabled={!canDelete}
                               onClick={() => deleteAttachment(attachment)}
                             >
                               Delete
-                            </MenuItem>
-                          </MenuList>
-                        </Menu>
-                      </Flex>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
                     </Td>
                   </Tr>
                 ))
               ) : (
                 <Tr>
-                  <Td colSpan={24} py={8} color="gray.500" textAlign="center">
+                  <Td
+                    colSpan={24}
+                    className="py-8 text-muted-foreground text-center"
+                  >
                     No {isExternal ? "external" : "internal"} attachments
                   </Td>
                 </Tr>
               )}
             </Tbody>
           </Table>
-        </CardBody>
+        </CardContent>
       </Card>
       <Outlet />
     </>

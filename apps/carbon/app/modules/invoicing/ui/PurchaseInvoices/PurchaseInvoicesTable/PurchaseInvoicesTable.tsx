@@ -1,8 +1,14 @@
-import { HStack, Link, MenuItem, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  HStack,
+  Hyperlink,
+  MenuIcon,
+  MenuItem,
+  useDisclosure,
+} from "@carbon/react";
 import { useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useMemo, useState } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
@@ -39,7 +45,7 @@ const PurchaseInvoicesTable = memo(
           accessorKey: "invoiceId",
           header: "Invoice Number",
           cell: ({ row }) => (
-            <Link
+            <Hyperlink
               onClick={
                 row.original?.id !== null
                   ? () => navigate(path.to.purchaseInvoice(row.original.id!))
@@ -47,7 +53,7 @@ const PurchaseInvoicesTable = memo(
               }
             >
               {row.original?.invoiceId}
-            </Link>
+            </Hyperlink>
           ),
         },
         {
@@ -81,7 +87,7 @@ const PurchaseInvoicesTable = memo(
             return (
               <HStack>
                 <Avatar size="sm" path={row.original.createdByAvatar} />
-                <Text>{row.original.createdByFullName}</Text>
+                <span>{row.original.createdByFullName}</span>
               </HStack>
             );
           },
@@ -98,7 +104,7 @@ const PurchaseInvoicesTable = memo(
             return row.original.updatedByFullName ? (
               <HStack>
                 <Avatar size="sm" path={row.original.updatedByAvatar ?? null} />
-                <Text>{row.original.updatedByFullName}</Text>
+                <span>{row.original.updatedByFullName}</span>
               </HStack>
             ) : null;
           },
@@ -124,15 +130,14 @@ const PurchaseInvoicesTable = memo(
       return (row: PurchaseInvoice) => (
         <>
           <MenuItem
-            icon={<BsPencilSquare />}
-            isDisabled={!permissions.can("view", "invoicing")}
-            onClick={() => navigate(row.id!)}
+            disabled={!permissions.can("view", "invoicing")}
+            onClick={() => navigate(path.to.purchaseInvoice(row.id!))}
           >
+            <MenuIcon icon={<BsFillPenFill />} />
             Edit
           </MenuItem>
           <MenuItem
-            icon={<IoMdTrash />}
-            isDisabled={
+            disabled={
               row.status !== "Draft" || !permissions.can("delete", "invoicing")
             }
             onClick={() => {
@@ -140,6 +145,7 @@ const PurchaseInvoicesTable = memo(
               closePurchaseInvoiceModal.onOpen();
             }}
           >
+            <MenuIcon icon={<IoMdTrash />} />
             Delete
           </MenuItem>
         </>

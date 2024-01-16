@@ -1,8 +1,14 @@
-import { Badge, HStack, MenuItem, Progress } from "@chakra-ui/react";
+import {
+  Badge,
+  DropdownMenuIcon,
+  HStack,
+  MenuItem,
+  Progress,
+} from "@carbon/react";
 import { useNavigate, useParams } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useCallback, useMemo } from "react";
-import { BsPencilSquare } from "react-icons/bs";
+import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
 import { usePermissions } from "~/hooks";
@@ -13,7 +19,6 @@ import { path } from "~/utils/path";
 type AbilityEmployeeTableProps = {
   employees: AbilityEmployees;
   weeks: number;
-  shadowWeeks: number;
 };
 
 const AbilityEmployeesTable = ({
@@ -62,7 +67,7 @@ const AbilityEmployeesTable = ({
         accessorKey: "name",
         header: "Name",
         cell: ({ row }) => (
-          <HStack spacing={2}>
+          <HStack>
             <Avatar
               size="sm"
               name={row.original.name}
@@ -79,18 +84,12 @@ const AbilityEmployeesTable = ({
           const status = row.original.status;
           return (
             <Badge
-              size="sm"
               variant={
                 status === AbilityEmployeeStatus.Complete
-                  ? undefined
-                  : "outline"
-              }
-              colorScheme={
-                status === AbilityEmployeeStatus.Complete
-                  ? "green"
+                  ? "default"
                   : status === AbilityEmployeeStatus.InProgress
-                  ? "yellow"
-                  : "gray"
+                  ? "outline"
+                  : "secondary"
               }
             >
               {status}
@@ -126,21 +125,21 @@ const AbilityEmployeesTable = ({
       return (
         <>
           <MenuItem
-            isDisabled={!permissions.can("update", "resources")}
-            icon={<BsPencilSquare />}
+            disabled={!permissions.can("update", "resources")}
             onClick={() => {
               navigate(path.to.employeeAbility(abilityId, row.id));
             }}
           >
+            <DropdownMenuIcon icon={<BsFillPenFill />} />
             Edit Employee Ability
           </MenuItem>
           <MenuItem
-            isDisabled={!permissions.can("delete", "resources")}
-            icon={<IoMdTrash />}
+            disabled={!permissions.can("delete", "resources")}
             onClick={() => {
               navigate(path.to.deleteEmployeeAbility(abilityId, row.id));
             }}
           >
+            <DropdownMenuIcon icon={<IoMdTrash />} />
             Delete Employee Ability
           </MenuItem>
         </>

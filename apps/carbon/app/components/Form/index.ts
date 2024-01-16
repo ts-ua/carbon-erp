@@ -6,8 +6,8 @@ import AccountSubcategory from "./AccountSubcategory";
 import Array from "./Array";
 import Boolean from "./Boolean";
 import Color from "./Color";
-import CreatableMultiSelect from "./CreatableMultiSelect";
-import CreatableSelect from "./CreatableSelect";
+import Combobox from "./Combobox";
+import CreatableCombobox from "./CreatableCombobox";
 import Currency from "./Currency";
 import Customer from "./Customer";
 import CustomerContact from "./CustomerContact";
@@ -30,7 +30,7 @@ import Select from "./Select";
 import SelectControlled from "./SelectControlled";
 import Sequence from "./Sequence";
 import Service from "./Service";
-import Slider from "./Slider";
+import Shift from "./Shift";
 import Submit from "./Submit";
 import Supplier from "./Supplier";
 import SupplierContact from "./SupplierContact";
@@ -50,8 +50,8 @@ export {
   Array,
   Boolean,
   Color,
-  CreatableMultiSelect,
-  CreatableSelect,
+  Combobox,
+  CreatableCombobox,
   Currency,
   Customer,
   CustomerContact,
@@ -74,7 +74,7 @@ export {
   SelectControlled,
   Sequence,
   Service,
-  Slider,
+  Shift,
   Submit,
   Supplier,
   SupplierContact,

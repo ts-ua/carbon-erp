@@ -49,5 +49,9 @@ export default function CustomersNewRoute() {
   const initialValues = {
     name: "",
   };
-  return <CustomerForm initialValues={initialValues} />;
+  return (
+    <div className="w-1/2 max-w-[720px] min-w-[420px] mx-auto">
+      <CustomerForm initialValues={initialValues} />
+    </div>
+  );
 }

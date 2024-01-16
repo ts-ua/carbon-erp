@@ -1,35 +1,29 @@
-import { useColor, useDebounce, useKeyboardShortcuts } from "@carbon/react";
-import { clip } from "@carbon/utils";
-import type { ButtonProps } from "@chakra-ui/react";
 import {
-  Box,
   Button,
-  Flex,
   HStack,
-  Icon,
   Input,
   InputGroup,
   InputLeftElement,
   Kbd,
-  List,
-  ListItem,
   Modal,
   ModalBody,
   ModalContent,
-  ModalOverlay,
-  Text,
   VStack,
+  useDebounce,
   useDisclosure,
-} from "@chakra-ui/react";
+  useKeyboardShortcuts,
+} from "@carbon/react";
+import { clip } from "@carbon/utils";
 import { Link, useNavigate } from "@remix-run/react";
+import clsx from "clsx";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AiOutlinePartition } from "react-icons/ai";
 import { BiListCheck } from "react-icons/bi";
 import { BsArrowReturnLeft, BsCartDash, BsCartPlus } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
-import { FaSearch } from "react-icons/fa";
 import { HiOutlineDocumentDuplicate } from "react-icons/hi";
-import { SiHandshake } from "react-icons/si";
+import { PiShareNetworkFill } from "react-icons/pi";
+import { RxMagnifyingGlass } from "react-icons/rx";
 import { useSidebar } from "~/components/Layout/Sidebar/useSidebar";
 import { useSupabase } from "~/lib/supabase";
 import type { NavItem } from "~/types";
@@ -191,47 +185,31 @@ const SearchModal = ({
 
   return (
     <Modal
-      isOpen={isOpen}
-      onClose={() => {
-        onClose();
+      open={isOpen}
+      onOpenChange={(open) => {
         setQuery("");
+        if (!open) onClose();
       }}
     >
-      <ModalOverlay />
-      <ModalContent borderRadius="lg">
-        <ModalBody p={0}>
-          <InputGroup size="lg">
-            <InputLeftElement
-              pointerEvents="none"
-              children={<Icon as={FaSearch} color="gray.500" />}
-            />
+      <ModalContent className="rounded-lg top-[10vh] translate-y-0 p-0">
+        <ModalBody className="max-h-[66vh]">
+          <InputGroup
+            size="lg"
+            className="ring-0 focus-within:ring-0 shadow-none border-0"
+          >
+            <InputLeftElement className="pointer-events-none">
+              <RxMagnifyingGlass className="text-muted-foreground" />
+            </InputLeftElement>
             <Input
               placeholder="Search..."
               value={query}
-              variant="flushed"
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={onKeyDown}
-              borderTopLeftRadius="lg"
-              borderTopRightRadius="lg"
-              _focus={{
-                borderBottomColor: "transparent",
-                boxShadow: "none",
-                outline: "none",
-              }}
             />
           </InputGroup>
 
-          <Box
-            bg="white"
-            borderRadius="lg"
-            boxShadow="lg"
-            maxH="66vh"
-            overflowY="scroll"
-            px={4}
-            pt={0}
-            pb={4}
-          >
-            <List role="listbox" ref={listboxRef}>
+          <div className="h-[calc(100%-3rem)] overflow-y-scroll p-4 pt-0">
+            <ul role="listbox" ref={listboxRef}>
               {moduleResults.map((item, itemIndex) => (
                 <Module
                   key={item.to}
@@ -255,48 +233,49 @@ const SearchModal = ({
                   }
                 />
               ))}
-            </List>
-          </Box>
+            </ul>
+          </div>
         </ModalBody>
       </ModalContent>
     </Modal>
   );
 };
 
-const resultIconProps = {
-  mr: 4,
-  w: 8,
-  h: 8,
-  color: "gray.500",
-};
-
 function ResultIcon({ entity }: { entity: SearchResult["entity"] | "Module" }) {
   switch (entity) {
     case "Customer":
-      return <Icon as={SiHandshake} {...resultIconProps} />;
+      return (
+        <PiShareNetworkFill className="w-8 h-8 mr-4 text-muted-foreground" />
+      );
     case "Document":
-      return <Icon as={HiOutlineDocumentDuplicate} {...resultIconProps} />;
+      return (
+        <HiOutlineDocumentDuplicate className="w-8 h-8 mr-4 text-muted-foreground" />
+      );
     case "Job":
-      return <Icon as={BiListCheck} {...resultIconProps} />;
+      return <BiListCheck className="w-8 h-8 mr-4 text-muted-foreground" />;
     case "Part":
-      return <Icon as={AiOutlinePartition} {...resultIconProps} />;
+      return (
+        <AiOutlinePartition className="w-8 h-8 mr-4 text-muted-foreground" />
+      );
     case "Person":
-      return <Icon as={CgProfile} {...resultIconProps} />;
+      return <CgProfile className="w-8 h-8 mr-4 text-muted-foreground" />;
     case "Resource":
-      return <Icon as={CgProfile} {...resultIconProps} />;
+      return <CgProfile className="w-8 h-8 mr-4 text-muted-foreground" />;
     case "Purchase Order":
-      return <Icon as={BsCartDash} {...resultIconProps} />;
+      return <BsCartDash className="w-8 h-8 mr-4 text-muted-foreground" />;
     case "Sales Order":
-      return <Icon as={BsCartPlus} {...resultIconProps} />;
+      return <BsCartPlus className="w-8 h-8 mr-4 text-muted-foreground" />;
     case "Supplier":
-      return <Icon as={SiHandshake} {...resultIconProps} />;
+      return (
+        <PiShareNetworkFill className="w-8 h-8 mr-4 text-muted-foreground" />
+      );
     default:
       return null;
   }
 }
 
 function EnterIcon() {
-  return <Icon h={6} w={6} color="gray.500" as={BsArrowReturnLeft} />;
+  return <BsArrowReturnLeft className="w-6 h-6 text-muted-foreground" />;
 }
 
 function Result({
@@ -310,30 +289,34 @@ function Result({
   onClick: () => void;
   onHover: () => void;
 }) {
-  const bgColor = useColor("gray.100");
   return (
     <Link to={result.link} onClick={onClick}>
-      <HStack
-        as={ListItem}
+      <li
+        className={clsx(
+          "flex w-full items-center bg-card rounded-lg  min-h-[4rem] mt-2 p-2",
+          {
+            "bg-primary text-primary-foreground": selected,
+            "bg-muted text-foreground": !selected,
+          }
+        )}
         role="option"
-        bg={selected ? "gray.900" : bgColor}
-        borderRadius="lg"
-        color={selected ? "white" : undefined}
-        minH={16}
-        mt={2}
-        px={4}
-        py={2}
+        aria-selected={selected}
         onMouseEnter={onHover}
       >
         <ResultIcon entity={result.entity} />
-        <VStack alignItems="start" flexGrow={1} spacing={0} w="full">
-          <Text fontSize="sm" color="gray.500">
+        <VStack spacing={0} className="flex-1">
+          <p
+            className={clsx("text-sm", {
+              "text-primary-foreground/60": selected,
+              "text-muted-foreground": !selected,
+            })}
+          >
             {result.entity}
-          </Text>
-          <Text fontWeight="bold">{result.name}</Text>
+          </p>
+          <p className="font-bold">{result.name}</p>
         </VStack>
         <EnterIcon />
-      </HStack>
+      </li>
     </Link>
   );
 }
@@ -349,37 +332,38 @@ function Module({
   onClick: () => void;
   onHover: () => void;
 }) {
-  const bgColor = useColor("gray.100");
   return (
     <Link to={item.to} onClick={onClick}>
-      <HStack
-        as={ListItem}
+      <li
+        className={clsx(
+          "flex w-full items-center bg-card rounded-lg  min-h-[4rem] mt-2 p-2",
+          {
+            "bg-primary text-primary-foreground": selected,
+            "bg-muted text-foreground": !selected,
+          }
+        )}
         role="option"
-        bg={selected ? "gray.900" : bgColor}
-        borderRadius="lg"
-        color={selected ? "white" : undefined}
-        minH={16}
-        mt={2}
-        px={4}
-        py={2}
+        aria-selected={selected}
         onMouseEnter={onHover}
       >
-        {/* {item.icon && ( // @ts-expect-error
-          <Icon as={item.icon} {...resultIconProps} />
-        )} */}
-        <VStack alignItems="start" flexGrow={1} spacing={0} w="full">
-          <Text fontSize="sm" color="gray.500">
+        <VStack spacing={0} className="flex-1">
+          <p
+            className={clsx("text-sm", {
+              "text-primary-foreground/60": selected,
+              "text-muted-foreground": !selected,
+            })}
+          >
             Module
-          </Text>
-          <Text fontWeight="bold">{item.name}</Text>
+          </p>
+          <p className="font-bold">{item.name}</p>
         </VStack>
         <EnterIcon />
-      </HStack>
+      </li>
     </Link>
   );
 }
 
-const SearchButton = (props: ButtonProps) => {
+const SearchButton = () => {
   const searchModal = useDisclosure();
   useKeyboardShortcuts({
     "/": searchModal.onOpen,
@@ -388,19 +372,14 @@ const SearchButton = (props: ButtonProps) => {
   return (
     <>
       <Button
-        colorScheme="gray"
-        leftIcon={<FaSearch />}
-        variant="outline"
-        boxShadow="sm"
-        color="gray.500"
-        w={200}
-        mt={2}
+        leftIcon={<RxMagnifyingGlass />}
+        variant="secondary"
+        className="text-muted-foreground w-[200px] px-2"
         onClick={searchModal.onOpen}
-        {...props}
       >
-        <HStack w="full">
-          <Flex flexGrow={1}>Search</Flex>
-          <Kbd size="lg">/</Kbd>
+        <HStack className="w-full">
+          <div className="flex flex-grow">Search</div>
+          <Kbd>/</Kbd>
         </HStack>
       </Button>
       <SearchModal isOpen={searchModal.isOpen} onClose={searchModal.onClose} />
