@@ -1,22 +1,24 @@
-import { Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
 import type { ComponentProps } from "react";
-import { forwardRef } from "react";
 import { RxDotFilled } from "react-icons/rx";
+import { cn } from "~/utils/cn";
+import { Badge } from "./Badge";
 
-const Status = forwardRef<
-  HTMLDivElement,
-  ComponentProps<"div"> & {
-    color?: "green" | "orange" | "red" | "yellow" | "blue" | "gray";
-  }
->(({ color = "gray", children, className, ...props }, ref) => {
+type StatusProps = ComponentProps<"div"> & {
+  color?: "green" | "orange" | "red" | "yellow" | "blue" | "gray";
+};
+
+const Status = ({
+  color = "gray",
+  children,
+  className,
+  ...props
+}: StatusProps) => {
   return (
-    <Tag colorScheme={color} className={className} ref={ref}>
-      <TagLeftIcon as={RxDotFilled} marginEnd={0} size="10px" />
-      <TagLabel>{children}</TagLabel>
-    </Tag>
+    <Badge variant={color} className={cn("pl-1.5", className)} {...props}>
+      <RxDotFilled className="w-5 h-5 mr-1" />
+      {children}
+    </Badge>
   );
-});
-
-Status.displayName = "Status";
+};
 
 export { Status };

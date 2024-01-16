@@ -1,10 +1,8 @@
-import { HStack, Loading, cn } from "@carbon/react";
-import { Box, Icon, List, ListItem } from "@chakra-ui/react";
+import { HStack, Spinner, cn } from "@carbon/react";
 import { FaChevronRight } from "react-icons/fa";
 import { RxCheck } from "react-icons/rx";
 import useUserSelectContext from "../provider";
 import type { IndividualOrGroup, OptionGroup } from "../types";
-import { useGroupStyles, useOptionStyles } from "./useUserSelectStyles";
 
 const UserTreeSelect = () => {
   const {
@@ -17,7 +15,7 @@ const UserTreeSelect = () => {
   } = useUserSelectContext();
 
   return (
-    <List
+    <div
       {...listBoxProps}
       aria-multiselectable={isMulti}
       ref={listBoxRef}
@@ -25,23 +23,23 @@ const UserTreeSelect = () => {
       className="overflow-auto max-h-[300px] my-1 flex flex-col"
     >
       {loading ? (
-        <Loading />
+        <Spinner />
       ) : groups.length > 0 ? (
         groups.map((group) => <Group key={group.uid} group={group} />)
       ) : (
         <p className="text-center">No options found</p>
       )}
-    </List>
+    </div>
   );
 };
 
 const MoreIcon = ({ isExpanded }: { isExpanded: boolean }) => (
-  <Icon
-    as={FaChevronRight}
-    w={4}
-    h={4}
-    transition="transform .25s ease"
-    transform={isExpanded ? "rotate(-0.25turn)" : undefined}
+  <FaChevronRight
+    className="h-3 w-3"
+    style={{
+      transition: "transform .25s ease",
+      transform: isExpanded ? "rotate(0.25turn)" : undefined,
+    }}
   />
 );
 
@@ -58,7 +56,6 @@ const Group = ({ group }: { group: OptionGroup }) => {
 
   const isFocused = group.uid === focusedId;
   const isExpanded = group.expanded && group.items.length > 0;
-  const sx = useGroupStyles(isFocused, isExpanded);
 
   return (
     <div
@@ -67,17 +64,22 @@ const Group = ({ group }: { group: OptionGroup }) => {
       className="rounded-md outline-none"
       aria-expanded={isExpanded}
     >
-      <Box
+      <div
         role="treeitem"
         aria-selected={isExpanded ? "true" : "false"}
         onClick={() =>
           group.expanded ? onGroupCollapse(group.uid) : onGroupExpand(group.uid)
         }
-        sx={sx}
+        className={cn(
+          "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 w-full",
+          isFocused && "bg-accent text-accent-foreground"
+        )}
       >
-        <span className="line-clamp-1">{group.name}</span>
-        <MoreIcon isExpanded={isExpanded} />
-      </Box>
+        <HStack className="w-full justify-between items-center">
+          <span className="line-clamp-1">{group.name}</span>
+          <MoreIcon isExpanded={isExpanded} />
+        </HStack>
+      </div>
       {isExpanded && (
         <ul role="group" className="flex flex-col">
           {group.items.map((item) => {
@@ -122,18 +124,21 @@ const Option = ({
   isSelected: boolean;
   onClick?: () => void;
 }) => {
-  const sx = useOptionStyles(isFocused, isSelected, isDisabled);
   const name = item.label;
 
   return (
-    <ListItem
-      as="li"
+    <li
       id={id}
+      className={cn(
+        "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        (isSelected || isFocused) && "bg-accent text-accent-foreground",
+        isDisabled && "opacity-50 pointer-events-none"
+      )}
       tabIndex={0}
       aria-selected={isSelected}
+      aria-disabled={isDisabled}
       role="treeitem"
       onClick={onClick}
-      sx={sx}
     >
       <HStack spacing={1} className="w-full items-center">
         <RxCheck
@@ -144,7 +149,7 @@ const Option = ({
         />
         <span className="line-clamp-1">{name}</span>
       </HStack>
-    </ListItem>
+    </li>
   );
 };
 

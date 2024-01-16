@@ -1,5 +1,6 @@
 import {
   Badge,
+  BadgeCloseButton,
   Button,
   Command,
   CommandEmpty,
@@ -14,7 +15,6 @@ import {
 } from "@carbon/react";
 import type { ComponentPropsWithoutRef } from "react";
 import { forwardRef, useState } from "react";
-import { MdClose } from "react-icons/md";
 import { RxCheck, RxMagnifyingGlass } from "react-icons/rx";
 
 export type MultiSelectProps = Omit<
@@ -64,8 +64,7 @@ const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
                     onClick={() => handleUnselect(item)}
                   >
                     {options.find((option) => option.value === item)?.label}
-                    <button
-                      className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                    <BadgeCloseButton
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
                           handleUnselect(item);
@@ -76,9 +75,7 @@ const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
                         e.stopPropagation();
                       }}
                       onClick={() => handleUnselect(item)}
-                    >
-                      <MdClose className="h-3 w-3 text-muted-foreground hover:text-foreground" />
-                    </button>
+                    />
                   </Badge>
                 ))}
               </div>

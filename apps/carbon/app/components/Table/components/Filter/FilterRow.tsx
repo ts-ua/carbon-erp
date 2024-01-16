@@ -1,7 +1,7 @@
 import { IconButton, Input, useDebounce } from "@carbon/react";
-import { Select } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
+import { Select } from "~/components";
 import { filterOperatorLabels } from "~/utils/query";
 
 type FilterRowProps = {
@@ -30,37 +30,45 @@ const FilterRow = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQuery]);
 
-  const onColumnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newFilter = `${e.target.value}:${operator}:${searchValue}`;
+  const onColumnChange = (value: string) => {
+    const newFilter = `${value}:${operator}:${searchValue}`;
     onUpdate(newFilter);
   };
 
-  const onOperatorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newFilter = `${column}:${e.target.value}:${searchValue}`;
+  const onOperatorChange = (value: string) => {
+    const newFilter = `${column}:${value}:${searchValue}`;
     onUpdate(newFilter);
   };
 
   return (
     <div className="grid gap-x-2 grid-cols-[1fr_1fr_1fr_auto]">
-      <Select size="sm" defaultValue={column} onChange={onColumnChange}>
-        {Object.entries(columnAccessors).map(([accessor, title]) => (
-          <option key={accessor} value={accessor}>
-            {title}
-          </option>
-        ))}
-      </Select>
-      <Select size="sm" defaultValue={operator} onChange={onOperatorChange}>
-        {filterOperatorLabels.map(({ operator, label }) => (
-          <option key={operator} value={operator}>
-            {label}
-          </option>
-        ))}
-      </Select>
+      <Select
+        size="sm"
+        defaultValue={column}
+        placeholder="Column"
+        onChange={onColumnChange}
+        options={Object.entries(columnAccessors).map(([accessor, title]) => ({
+          label: title,
+          value: accessor,
+        }))}
+        className="w-[100px]"
+      />
+      <Select
+        size="sm"
+        placeholder="Operator"
+        defaultValue={operator}
+        onChange={onOperatorChange}
+        options={filterOperatorLabels.map(({ operator, label }) => ({
+          label,
+          value: operator,
+        }))}
+        className="w-[100px]"
+      />
       <Input
         defaultValue={searchValue}
         onChange={(e) => setValue(e.target.value)}
         size="sm"
-        placeholder="Enter a value"
+        placeholder="Value"
       />
       <IconButton
         aria-label="Remove filter"

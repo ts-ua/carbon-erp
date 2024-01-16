@@ -4,7 +4,7 @@
 }
 
 #nprogress .bar {
-  background: var(--chakra-ui-focus-ring-color);
+  background: #002aff99;
 
   position: fixed;
   z-index: 1031;

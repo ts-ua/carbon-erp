@@ -1,4 +1,5 @@
 import { ActionMenu } from "./ActionMenu";
+import { Alert, AlertDescription, AlertTitle } from "./Alert";
 import type { AvatarProps } from "./Avatar";
 import {
   Avatar,
@@ -6,12 +7,16 @@ import {
   AvatarGroupList,
   AvatarOverflowIndicator,
 } from "./Avatar";
-import { Badge } from "./Badge";
+import { Badge, BadgeCloseButton } from "./Badge";
 import type { ButtonProps } from "./Button";
 import { Button } from "./Button";
 import {
   Card,
   CardAction,
+  CardAttribute,
+  CardAttributeLabel,
+  CardAttributeValue,
+  CardAttributes,
   CardContent,
   CardDescription,
   CardFooter,
@@ -111,7 +116,6 @@ import {
   InputRightElement,
 } from "./Input";
 import { Kbd } from "./Kbd";
-import { Loading } from "./Loading";
 import {
   Menu,
   MenuCheckboxItem,
@@ -126,7 +130,7 @@ import {
   MenuSub,
   MenuSubContent,
 } from "./Menu";
-import { Menubar, MenubarItem, MenubarTrigger } from "./Menubar";
+import { Menubar, MenubarItem } from "./Menubar";
 import {
   Modal,
   ModalBody,
@@ -156,6 +160,7 @@ import {
   PopoverHeader,
   PopoverTrigger,
 } from "./Popover";
+import { Progress } from "./Progress";
 import { RadioGroup, RadioGroupItem } from "./Radio";
 import {
   Select,
@@ -169,13 +174,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./Select";
+import { Spinner } from "./Spinner";
 import { Status } from "./Status";
 import { Switch } from "./Switch";
 import { Table, TableCaption, Tbody, Td, Tfoot, Th, Thead, Tr } from "./Table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./Tabs";
 import type { TextareaProps } from "./Textarea";
 import { Textarea } from "./Textarea";
-import ThemeProvider, { theme } from "./Theme";
+import { Toaster, toast } from "./Toast";
 import {
   Tooltip,
   TooltipContent,
@@ -184,7 +190,6 @@ import {
 } from "./Tooltip";
 import { VStack } from "./VStack";
 import {
-  useColor,
   useDebounce,
   useDisclosure,
   useEscape,
@@ -192,7 +197,6 @@ import {
   useInterval,
   useKeyboardShortcuts,
   useMount,
-  useNotification,
   useOutsideClick,
 } from "./hooks";
 import { cn } from "./utils/cn";
@@ -200,14 +204,22 @@ import { getValidChildren } from "./utils/react";
 
 export {
   ActionMenu,
+  Alert,
+  AlertDescription,
+  AlertTitle,
   Avatar,
   AvatarGroup,
   AvatarGroupList,
   AvatarOverflowIndicator,
   Badge,
+  BadgeCloseButton,
   Button,
   Card,
   CardAction,
+  CardAttribute,
+  CardAttributeLabel,
+  CardAttributeValue,
+  CardAttributes,
   CardContent,
   CardDescription,
   CardFooter,
@@ -292,7 +304,6 @@ export {
   InputRightAddon,
   InputRightElement,
   Kbd,
-  Loading,
   Menu,
   MenuCheckboxItem,
   MenuGroup,
@@ -307,7 +318,6 @@ export {
   MenuSubContent,
   Menubar,
   MenubarItem,
-  MenubarTrigger,
   Modal,
   ModalBody,
   ModalClose,
@@ -330,6 +340,7 @@ export {
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
+  Progress,
   RadioGroup,
   RadioGroupItem,
   Select,
@@ -342,6 +353,7 @@ export {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
+  Spinner,
   Status,
   Switch,
   Table,
@@ -356,8 +368,8 @@ export {
   Tfoot,
   Th,
   Thead,
-  ThemeProvider,
   TimePicker,
+  Toaster,
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -367,8 +379,7 @@ export {
   cn,
   getValidChildren,
   multiSelectTriggerVariants,
-  theme,
-  useColor,
+  toast,
   useDebounce,
   useDisclosure,
   useEditor,
@@ -377,7 +388,6 @@ export {
   useInterval,
   useKeyboardShortcuts,
   useMount,
-  useNotification,
   useOutsideClick,
 };
 export type {

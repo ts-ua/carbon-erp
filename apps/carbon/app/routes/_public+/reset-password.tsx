@@ -1,5 +1,5 @@
-import { HStack, VStack } from "@carbon/react";
-import { Button, Image, Text, useColorModeValue } from "@chakra-ui/react";
+import { Button, HStack, VStack } from "@carbon/react";
+
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
@@ -53,14 +53,15 @@ export default function ResetPasswordRoute() {
 
   return (
     <>
-      <Image
-        src={useColorModeValue(
-          "/carbon-logo-dark.png",
-          "/carbon-logo-light.png"
-        )}
+      <img
+        src="/carbon-logo-dark.png"
         alt="Carbon Logo"
-        maxW={100}
-        marginBottom={3}
+        className="block dark:hidden max-w-[100px] mb-3"
+      />
+      <img
+        src="/carbon-logo-light.png"
+        alt="Carbon Logo"
+        className="hidden dark:block max-w-[100px] mb-3"
       />
 
       <div className="rounded-lg bg-background shadow-lg p-8 w-[380px]">
@@ -70,13 +71,13 @@ export default function ResetPasswordRoute() {
           validator={resetPasswordValidator}
         >
           <VStack spacing={4}>
-            <Text>Please select a new password.</Text>
+            <p>Please select a new password.</p>
 
             <Password name="password" label="New Password" />
             <HStack spacing={4}>
               <Submit>Reset Password</Submit>
               <Button
-                variant="solid"
+                variant="secondary"
                 onClick={() => navigate(path.to.authenticatedRoot)}
               >
                 Skip

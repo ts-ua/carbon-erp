@@ -27,6 +27,57 @@ const CardAction = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
 );
 CardAction.displayName = "CardAction";
 
+const CardAttribute = forwardRef<
+  HTMLDivElement,
+  HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "flex flex-row md:flex-col items-start justify-between gap-2",
+      className
+    )}
+    {...props}
+  />
+));
+CardAttribute.displayName = "CardAttribute";
+
+const CardAttributes = forwardRef<
+  HTMLDivElement,
+  HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col md:flex-row gap-8", className)}
+    {...props}
+  />
+));
+CardAttributes.displayName = "CardAttributes";
+
+const CardAttributeLabel = forwardRef<
+  HTMLDivElement,
+  HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+));
+CardAttributeLabel.displayName = "CardAttributeLabel";
+
+const CardAttributeValue = forwardRef<
+  HTMLDivElement,
+  HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("font-bold text-foreground", className)}
+    {...props}
+  />
+));
+CardAttributeValue.displayName = "CardAttributeValue";
+
 const CardHeader = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
@@ -90,6 +141,10 @@ CardFooter.displayName = "CardFooter";
 export {
   Card,
   CardAction,
+  CardAttribute,
+  CardAttributeLabel,
+  CardAttributeValue,
+  CardAttributes,
   CardContent,
   CardDescription,
   CardFooter,

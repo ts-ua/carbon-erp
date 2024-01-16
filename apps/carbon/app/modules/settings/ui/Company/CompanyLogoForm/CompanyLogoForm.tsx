@@ -1,4 +1,4 @@
-import { Avatar, Button, File, VStack, useNotification } from "@carbon/react";
+import { Avatar, Button, File, VStack, toast } from "@carbon/react";
 import { useSubmit } from "@remix-run/react";
 import type { ChangeEvent } from "react";
 import { useSupabase } from "~/lib/supabase";
@@ -11,7 +11,6 @@ type CompanyLogoFormProps = {
 
 const CompanyLogoForm = ({ company }: CompanyLogoFormProps) => {
   const { supabase } = useSupabase();
-  const notification = useNotification();
   const submit = useSubmit();
 
   const logoPath = company?.logo
@@ -31,7 +30,7 @@ const CompanyLogoForm = ({ company }: CompanyLogoFormProps) => {
         });
 
       if (imageUpload.error) {
-        notification.copyableError(imageUpload.error, "Failed to upload logo");
+        toast.error("Failed to upload logo");
       }
 
       if (imageUpload.data?.path) {
@@ -47,7 +46,7 @@ const CompanyLogoForm = ({ company }: CompanyLogoFormProps) => {
         .remove([logoPath]);
 
       if (imageDelete.error) {
-        notification.copyableError(imageDelete.error, "Failed to remove image");
+        toast.error("Failed to remove image");
       }
 
       submitLogoUrl(null);

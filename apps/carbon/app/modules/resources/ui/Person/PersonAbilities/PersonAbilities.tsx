@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@carbon/react";
 import { formatDate } from "@carbon/utils";
-import { List, ListItem } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import clsx from "clsx";
 import type { IconType } from "react-icons";
@@ -44,7 +43,7 @@ const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
       </CardHeader>
       <CardContent>
         {abilities?.length > 0 ? (
-          <List spacing={4}>
+          <ul className="flex flex-col gap-4 w-full">
             {abilities.map((employeeAbility) => {
               const abilityStatus =
                 getTrainingStatus(employeeAbility) ??
@@ -62,7 +61,7 @@ const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
               let Icon = icon;
 
               return (
-                <ListItem key={employeeAbility.id}>
+                <li key={employeeAbility.id}>
                   <div className="grid-cols-[auto_1fr_auto] space-x-4">
                     <div
                       className={clsx(
@@ -102,10 +101,10 @@ const PersonAbilities = ({ abilities }: PersonAbilitiesProps) => {
                       </p>
                     </div>
                   </div>
-                </ListItem>
+                </li>
               );
             })}
-          </List>
+          </ul>
         ) : (
           <div className="text-muted-foreground text-center p-4 w-full">
             No abilities added

@@ -7,8 +7,8 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightElement,
+  Spinner,
 } from "@carbon/react";
-import { Spinner } from "@chakra-ui/react";
 import { MdOutlineClear } from "react-icons/md";
 import useUserSelectContext from "../provider";
 
@@ -57,7 +57,7 @@ const Input = () => {
       {!readOnly && !disabled && (
         <InputRightElement>
           <HStack spacing={1}>
-            {loading && <Spinner size="sm" />}
+            {loading && <Spinner />}
             {!loading && !disabled && inputValue.length > 0 && (
               <IconButton
                 aria-label="Clear search query"

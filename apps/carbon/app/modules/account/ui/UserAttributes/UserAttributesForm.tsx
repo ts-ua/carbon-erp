@@ -1,11 +1,4 @@
-import {
-  Button,
-  HStack,
-  Switch,
-  VStack,
-  useColor,
-  useDisclosure,
-} from "@carbon/react";
+import { Button, HStack, Switch, VStack, useDisclosure } from "@carbon/react";
 import { parseDate } from "@internationalized/date";
 import { useFetcher, useParams } from "@remix-run/react";
 import { useState } from "react";
@@ -65,6 +58,7 @@ const UserAttributesForm = ({ attributeCategory }: UserAttributesFormProps) => {
       <VStack spacing={4}>
         {attributeCategory.userAttribute.map((attribute) => {
           const genericProps = getGenericProps(
+            // @ts-ignore
             attribute as PublicAttributes["userAttribute"],
             optimisticUpdates[attribute.id]
           );
@@ -130,7 +124,6 @@ const GenericAttributeRow = (props: GenericAttributeRowProps) => {
 
 function renderTypedForm({
   attribute,
-  borderColor,
   type,
   value,
   updateFetcher,
@@ -140,7 +133,6 @@ function renderTypedForm({
   onSubmit,
   onClose,
 }: GenericAttributeRowProps & {
-  borderColor: string;
   userId: string;
   onSubmit: (value: string | boolean | number) => void;
   onClose: () => void;
@@ -367,14 +359,12 @@ function TypedForm(
     onClose: () => void;
   }
 ) {
-  const borderColor = useColor("gray.100");
-  return renderTypedForm({ ...props, borderColor });
+  return renderTypedForm({ ...props });
 }
 
 function renderTypedDisplay({
-  borderColor,
   ...props
-}: GenericAttributeRowProps & { borderColor: string; onOpen: () => void }) {
+}: GenericAttributeRowProps & { onOpen: () => void }) {
   const {
     attribute,
     displayValue,
@@ -469,8 +459,7 @@ function TypedDisplay(
     onOpen: () => void;
   }
 ) {
-  const borderColor = useColor("gray.100");
-  return renderTypedDisplay({ ...props, borderColor });
+  return renderTypedDisplay({ ...props });
 }
 
 function getGenericProps(

@@ -1,4 +1,4 @@
-import { VStack, useNotification } from "@carbon/react";
+import { Toaster, VStack, toast } from "@carbon/react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Outlet, useLoaderData, useNavigation } from "@remix-run/react";
@@ -71,17 +71,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function AuthenticatedRoute() {
   const { session, result } = useLoaderData<typeof loader>();
-  const notify = useNotification();
   const transition = useNavigation();
 
   /* Toast Messages */
   useEffect(() => {
+    console.log("result", result);
     if (result?.success === true) {
-      notify.success(result.message);
+      toast.success(result.message);
     } else if (result?.message) {
-      notify.error(result.message);
+      toast.error(result.message);
     }
-  }, [result, notify]);
+  }, [result]);
 
   /* NProgress */
   useEffect(() => {
@@ -95,19 +95,22 @@ export default function AuthenticatedRoute() {
   return (
     <SupabaseProvider session={session}>
       <RealtimeDataProvider>
-        <div className="grid grid-cols-[auto_1fr] h-screen w-screen">
-          <IconSidebar />
-          <div className="w-full h-full">
-            <div className="grid grid-rows-[auto_1fr] h-full w-full">
-              <Topbar />
-              <div className="flex w-full h-full">
-                <VStack spacing={0} className="bg-muted">
-                  <Outlet />
-                </VStack>
+        <>
+          <div className="grid grid-cols-[auto_1fr] h-screen w-screen">
+            <IconSidebar />
+            <div className="w-full h-full">
+              <div className="grid grid-rows-[auto_1fr] h-full w-full">
+                <Topbar />
+                <div className="flex w-full h-full">
+                  <VStack spacing={0} className="bg-muted">
+                    <Outlet />
+                  </VStack>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+          <Toaster />
+        </>
       </RealtimeDataProvider>
     </SupabaseProvider>
   );

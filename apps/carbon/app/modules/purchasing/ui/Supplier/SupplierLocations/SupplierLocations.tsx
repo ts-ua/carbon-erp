@@ -8,7 +8,6 @@ import {
   HStack,
   useDisclosure,
 } from "@carbon/react";
-import { List, ListItem } from "@chakra-ui/react";
 import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
 import { useCallback, useState } from "react";
 import { BsFillPenFill } from "react-icons/bs";
@@ -97,18 +96,18 @@ const SupplierLocations = ({ locations }: SupplierLocationsProps) => {
               </p>
             </div>
           ) : (
-            <List w="full" spacing={4}>
+            <ul className="flex flex-col w-full gap-4">
               {locations?.map((location) => (
-                <ListItem key={location.id}>
+                <li key={location.id}>
                   {location.address && !Array.isArray(location.address) ? (
                     <Address
                       address={location.address}
                       actions={getActions(location)}
                     />
                   ) : null}
-                </ListItem>
+                </li>
               ))}
-            </List>
+            </ul>
           )}
         </CardContent>
       </Card>

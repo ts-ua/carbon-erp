@@ -8,7 +8,6 @@ import {
   HStack,
   useDisclosure,
 } from "@carbon/react";
-import { List, ListItem } from "@chakra-ui/react";
 import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
 import { useCallback, useState } from "react";
 import { BsFillPenFill } from "react-icons/bs";
@@ -110,9 +109,9 @@ const SupplierContacts = ({ contacts }: SupplierContactsProps) => {
               </p>
             </div>
           ) : (
-            <List w="full" spacing={4}>
+            <ul className="flex flex-col w-full gap-4">
               {contacts?.map((contact) => (
-                <ListItem key={contact.id}>
+                <li key={contact.id}>
                   {contact.contact &&
                   !Array.isArray(contact.contact) &&
                   !Array.isArray(contact.user) ? (
@@ -123,9 +122,9 @@ const SupplierContacts = ({ contacts }: SupplierContactsProps) => {
                       actions={getActions(contact)}
                     />
                   ) : null}
-                </ListItem>
+                </li>
               ))}
-            </List>
+            </ul>
           )}
         </CardContent>
       </Card>

@@ -1,6 +1,5 @@
-import { useOutsideClick } from "@chakra-ui/react";
 import { useRef } from "react";
-import { useEscape } from "../../hooks";
+import { useEscape, useOutsideClick } from "~/hooks";
 
 export function Popover(props: any) {
   const ref = useRef();

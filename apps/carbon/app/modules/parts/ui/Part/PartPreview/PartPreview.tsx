@@ -2,13 +2,17 @@ import {
   Button,
   Card,
   CardAction,
+  CardAttribute,
+  CardAttributeLabel,
+  CardAttributeValue,
+  CardAttributes,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
   HStack,
 } from "@carbon/react";
-import { Stack } from "@chakra-ui/react";
+
 import { useParams } from "@remix-run/react";
 import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
@@ -41,42 +45,26 @@ const PartPreview = () => {
         </CardAction>
       </HStack>
       <CardContent>
-        <Stack direction={["column", "column", "row"]} spacing={8}>
-          <Stack
-            direction={["row", "row", "column"]}
-            alignItems="start"
-            justifyContent="space-between"
-          >
-            <span className="text-sm text-muted-foreground">
-              Replenishment System
-            </span>
-            <span className="font-bold">
+        <CardAttributes>
+          <CardAttribute>
+            <CardAttributeLabel>Replenishment System</CardAttributeLabel>
+            <CardAttributeValue>
               {routeData?.partSummary?.replenishmentSystem}
-            </span>
-          </Stack>
-          <Stack
-            direction={["row", "row", "column"]}
-            alignItems="start"
-            justifyContent="space-between"
-          >
-            <span className="text-sm text-muted-foreground">Part Type</span>
-            <span className="font-bold">
+            </CardAttributeValue>
+          </CardAttribute>
+          <CardAttribute>
+            <CardAttributeLabel>Part Type</CardAttributeLabel>
+            <CardAttributeValue>
               {routeData?.partSummary?.partType}
-            </span>
-          </Stack>
-          <Stack
-            direction={["row", "row", "column"]}
-            alignItems="start"
-            justifyContent="space-between"
-          >
-            <span className="text-sm text-muted-foreground">
-              Unit of Measure
-            </span>
-            <span className="font-bold">
+            </CardAttributeValue>
+          </CardAttribute>
+          <CardAttribute>
+            <CardAttributeLabel>Unit of Measure</CardAttributeLabel>
+            <CardAttributeValue>
               {routeData?.partSummary?.unitOfMeasureCode}
-            </span>
-          </Stack>
-        </Stack>
+            </CardAttributeValue>
+          </CardAttribute>
+        </CardAttributes>
       </CardContent>
     </Card>
   );

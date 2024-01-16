@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, AlertTitle, VStack } from "@chakra-ui/react";
+import { Alert, AlertTitle, Button, VStack } from "@carbon/react";
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -6,6 +6,7 @@ import type {
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Link, useActionData, useSearchParams } from "@remix-run/react";
+import { LuAlertCircle } from "react-icons/lu";
 import { ValidatedForm, validationError } from "remix-validated-form";
 
 import { Hidden, Input, Password, Submit } from "~/components/Form";
@@ -86,8 +87,8 @@ export default function LoginRoute() {
         >
           <VStack spacing={4}>
             {result && result?.message && (
-              <Alert status="error">
-                <AlertIcon />
+              <Alert variant="destructive">
+                <LuAlertCircle className="w-4 h-4" />
                 <AlertTitle>{result?.message}</AlertTitle>
               </Alert>
             )}
@@ -96,11 +97,11 @@ export default function LoginRoute() {
             <Password name="password" label="Password" type="password" />
             <Hidden name="redirectTo" value={redirectTo} type="hidden" />
             <Submit size="lg" className="w-full">
-              Sign in
+              Sign In
             </Submit>
-            <Link to={path.to.forgotPassword} className="text-foreground">
-              Forgot password?
-            </Link>
+            <Button variant="link" asChild className="w-full">
+              <Link to={path.to.forgotPassword}>Forgot Password</Link>
+            </Button>
           </VStack>
         </ValidatedForm>
       </div>

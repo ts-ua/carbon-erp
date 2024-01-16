@@ -1,4 +1,3 @@
-import { Box } from "@chakra-ui/react";
 import type { CalendarDate, DateValue } from "@internationalized/date";
 import { createCalendar } from "@internationalized/date";
 import type { CalendarProps } from "@react-aria/calendar";
@@ -34,7 +33,7 @@ export const Calendar = (props: CalendarProps<DateValue>) => {
 
   return (
     <div {...calendarProps} ref={ref}>
-      <Box display="flex" alignItems="center" paddingBottom="4">
+      <div className="flex items-center pb-4">
         <CalendarButton
           {...prevButtonProps}
           icon={<BiChevronLeft />}
@@ -49,7 +48,7 @@ export const Calendar = (props: CalendarProps<DateValue>) => {
           icon={<BiChevronRight />}
           aria-label="Next"
         />
-      </Box>
+      </div>
       <CalendarGrid state={state} />
     </div>
   );

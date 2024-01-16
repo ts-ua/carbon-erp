@@ -1,4 +1,3 @@
-import { Divider, Wrap } from "@chakra-ui/react";
 import { TooltipProvider } from "~/Tooltip";
 import type { EditorComponent } from "../types";
 import BlockQuote from "./BlockQuote";
@@ -17,19 +16,17 @@ const Toolbar: EditorComponent = ({ editor }) => {
   return (
     <TooltipProvider>
       <div className="w-full border-b border-border p-2">
-        <Wrap shouldWrapChildren>
+        <div className="flex flex-wrap gap-2">
           <Paragraph editor={editor} />
           <HeadingOne editor={editor} />
           <HeadingTwo editor={editor} />
           <HeadingThree editor={editor} />
-          <Divider orientation="vertical" />
 
           {/* Inline styles */}
           <Bold editor={editor} />
           <Italic editor={editor} />
           <Strike editor={editor} />
           <Code editor={editor} />
-          <Divider orientation="vertical" />
 
           {/* Block styles */}
           <UnorderedList editor={editor} />
@@ -37,7 +34,7 @@ const Toolbar: EditorComponent = ({ editor }) => {
           <CodeBlock editor={editor} />
           <BlockQuote editor={editor} />
           <HorizontalRule editor={editor} />
-        </Wrap>
+        </div>
       </div>
     </TooltipProvider>
   );

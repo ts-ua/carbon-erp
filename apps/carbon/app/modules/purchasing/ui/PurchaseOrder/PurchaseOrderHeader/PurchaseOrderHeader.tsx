@@ -2,6 +2,10 @@ import {
   Button,
   Card,
   CardAction,
+  CardAttribute,
+  CardAttributeLabel,
+  CardAttributeValue,
+  CardAttributes,
   CardContent,
   CardDescription,
   CardHeader,
@@ -11,7 +15,6 @@ import {
   MenubarItem,
   VStack,
 } from "@carbon/react";
-import { Stack } from "@chakra-ui/react";
 import { useParams } from "@remix-run/react";
 import { useMemo } from "react";
 import { FaHistory } from "react-icons/fa";
@@ -107,74 +110,38 @@ const PurchaseOrderHeader = () => {
           </CardAction>
         </HStack>
         <CardContent>
-          <Stack direction={["column", "column", "row"]} spacing={8}>
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <span className="text-sm text-muted-foreground">Total</span>
-              <span className="font-bold">
+          <CardAttributes>
+            <CardAttribute>
+              <CardAttributeLabel>Total</CardAttributeLabel>
+              <CardAttributeValue>
                 {formatter.format(purchaseOrderTotals?.total ?? 0)}
-              </span>
-            </Stack>
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <span className="text-sm text-muted-foreground">Order Date</span>
-              <span className="font-bold">
+              </CardAttributeValue>
+            </CardAttribute>
+            <CardAttribute>
+              <CardAttributeLabel>Order Date</CardAttributeLabel>
+              <CardAttributeValue>
                 {routeData?.purchaseOrder?.orderDate}
-              </span>
-            </Stack>
+              </CardAttributeValue>
+            </CardAttribute>
 
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <span className="text-sm text-muted-foreground">
-                Promised Date
-              </span>
-              <span className="font-bold">
+            <CardAttribute>
+              <CardAttributeLabel>Promised Date</CardAttributeLabel>
+              <CardAttributeValue>
                 {routeData?.purchaseOrder?.receiptPromisedDate}
-              </span>
-            </Stack>
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <span className="text-sm text-muted-foreground">Type</span>
-              <span className="font-bold">
+              </CardAttributeValue>
+            </CardAttribute>
+            <CardAttribute>
+              <CardAttributeLabel>Type</CardAttributeLabel>
+              <CardAttributeValue>
                 {routeData?.purchaseOrder?.type}
-              </span>
-            </Stack>
-            {/* 
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <span className="text-sm text-muted-foreground">Subtotal</span>
-              <span className="font-bold">
-                // TODO: this doesn't update when client-side lines are updated
-                {currencyFormatter.format(
-                  routeData?.purchaseOrder?.subtotal ?? 0
-                )}
-              </span>
-            </Stack> 
-            */}
-            <Stack
-              direction={["row", "row", "column"]}
-              alignItems="start"
-              justifyContent="space-between"
-            >
-              <span className="text-sm text-muted-foreground">Status</span>
+              </CardAttributeValue>
+            </CardAttribute>
+
+            <CardAttribute>
+              <CardAttributeLabel>Status</CardAttributeLabel>
               <PurchasingStatus status={routeData?.purchaseOrder?.status} />
-            </Stack>
-          </Stack>
+            </CardAttribute>
+          </CardAttributes>
         </CardContent>
       </Card>
     </VStack>

@@ -1,4 +1,4 @@
-import { useNotification } from "@carbon/react";
+import { toast } from "@carbon/react";
 import { useFetcher } from "@remix-run/react";
 import { useCallback } from "react";
 import { usePermissions } from "~/hooks";
@@ -16,7 +16,6 @@ export const usePurchaseOrderDocuments = ({
   isExternal,
   orderId,
 }: Props) => {
-  const notification = useNotification();
   const fetcher = useFetcher();
   const permissions = usePermissions();
   const { supabase } = useSupabase();
@@ -35,14 +34,14 @@ export const usePurchaseOrderDocuments = ({
         .remove([`${orderId}/${attachment.name}`]);
 
       if (!result || result.error) {
-        notification.error(result?.error?.message || "Error deleting file");
+        toast.error(result?.error?.message || "Error deleting file");
         return;
       }
 
-      notification.success("File deleted successfully");
+      toast.success("File deleted successfully");
       refresh();
     },
-    [supabase, notification, orderId, isExternal, refresh]
+    [supabase, orderId, isExternal, refresh]
   );
 
   const download = useCallback(
@@ -52,7 +51,7 @@ export const usePurchaseOrderDocuments = ({
         .download(`${orderId}/${attachment.name}`);
 
       if (!result || result.error) {
-        notification.error(result?.error?.message || "Error downloading file");
+        toast.error(result?.error?.message || "Error downloading file");
         return;
       }
 
@@ -68,7 +67,7 @@ export const usePurchaseOrderDocuments = ({
         document.body.removeChild(a);
       }, 0);
     },
-    [supabase, notification, orderId, isExternal]
+    [supabase, orderId, isExternal]
   );
 
   // const getAvatarPath = useCallback(
@@ -96,13 +95,13 @@ export const usePurchaseOrderDocuments = ({
         .download(`${orderId}/${attachment.name}`);
 
       if (!result || result.error) {
-        notification.error(result?.error?.message || "Error previewing file");
+        toast.error(result?.error?.message || "Error previewing file");
         return null;
       }
 
       return window.URL.createObjectURL(result.data);
     },
-    [isExternal, notification, orderId, supabase?.storage]
+    [isExternal, orderId, supabase?.storage]
   );
 
   return {

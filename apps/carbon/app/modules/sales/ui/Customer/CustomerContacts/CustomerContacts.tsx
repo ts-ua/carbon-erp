@@ -1,12 +1,13 @@
 import {
+  Button,
   Card,
   CardAction,
   CardContent,
   CardHeader,
   CardTitle,
   HStack,
+  useDisclosure,
 } from "@carbon/react";
-import { Button, List, ListItem, useDisclosure } from "@chakra-ui/react";
 import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
 import { useCallback, useState } from "react";
 import { BsFillPenFill } from "react-icons/bs";
@@ -83,8 +84,8 @@ const CustomerContacts = ({ contacts }: CustomerContactsProps) => {
           </CardHeader>
           <CardAction>
             {canEdit && (
-              <Button colorScheme="brand" as={Link} to="new">
-                New
+              <Button asChild>
+                <Link to="new">New</Link>
               </Button>
             )}
           </CardAction>
@@ -97,9 +98,9 @@ const CustomerContacts = ({ contacts }: CustomerContactsProps) => {
               </p>
             </div>
           ) : (
-            <List w="full" spacing={4}>
+            <ul className="flex flex-col w-full gap-4">
               {contacts?.map((contact) => (
-                <ListItem key={contact.id}>
+                <li key={contact.id}>
                   {contact.contact &&
                   !Array.isArray(contact.contact) &&
                   !Array.isArray(contact.user) ? (
@@ -110,9 +111,9 @@ const CustomerContacts = ({ contacts }: CustomerContactsProps) => {
                       actions={getActions(contact)}
                     />
                   ) : null}
-                </ListItem>
+                </li>
               ))}
-            </List>
+            </ul>
           )}
         </CardContent>
       </Card>

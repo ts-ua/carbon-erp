@@ -1,4 +1,3 @@
-import { Box, Icon } from "@chakra-ui/react";
 import type { DateValue } from "@internationalized/date";
 import { createCalendar } from "@internationalized/date";
 import type { RangeCalendarProps } from "@react-aria/calendar";
@@ -27,21 +26,28 @@ export function RangeCalendar(props: RangeCalendarProps<DateValue>) {
 
   return (
     <div {...calendarProps} ref={ref}>
-      <Box display="flex" alignItems="center" paddingBottom="4">
-        <CalendarButton {...prevButtonProps}>
-          <Icon as={FaAngleLeft} w={6} h={6} />
-        </CalendarButton>
+      <div className="flex items-center pb-4">
+        <CalendarButton
+          aria-label="Previous Month"
+          icon={<FaAngleLeft />}
+          {...prevButtonProps}
+          className="w-6 h-6"
+        />
+
         <Heading as="h2" size="h3" className="flex-1 text-center">
           {title}
         </Heading>
-        <CalendarButton {...nextButtonProps}>
-          <Icon as={FaAngleRight} w={6} h={6} />
-        </CalendarButton>
-      </Box>
-      <Box display="flex" gap="8">
+        <CalendarButton
+          aria-label="Next Month"
+          icon={<FaAngleRight />}
+          {...nextButtonProps}
+          className="w-6 h-6"
+        />
+      </div>
+      <div className="flex gap-8">
         <CalendarGrid state={state} />
         <CalendarGrid state={state} offset={{ months: 1 }} />
-      </Box>
+      </div>
     </div>
   );
 }
