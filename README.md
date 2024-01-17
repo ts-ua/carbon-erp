@@ -1,5 +1,9 @@
 <p align="center"><a href="https://carbon.us.org" target="_blank"><img src="https://raw.githubusercontent.com/barbinbrad/carbon/main/www/public/logo-full.png" width="500" alt="Carbon Logo"></a></p>
 
+
+https://github.com/barbinbrad/carbon/assets/64510427/abc040a0-3899-47cf-924e-c5dd88097352
+
+
 # Carbon ERP
 
 Carbon is a high permformance, open-source, single tenant (incomplete) ERP written in Typescript. It allows customers, suppliers, and employees to share a common platform that's easy to integrate with.
