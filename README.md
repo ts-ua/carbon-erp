@@ -24,7 +24,7 @@ Product highlights/roadmap are:
 
 - [x] Search
 - [x] Customer and supplier access
-- [ ] Double-entry accrual accounting
+- [x] Double-entry accrual accounting
 - [ ] Stochastic scheduling/planning
 - [ ] Graph-based routing for manufacturing
 
@@ -35,6 +35,19 @@ Product highlights/roadmap are:
 - [ ] Public Alpha: Ready for use. But go easy on us, there'll be bugs.
 - [ ] Public Beta: Stable enough for most non-enterprise use-cases.
 - [ ] Public: Production-ready
+
+## Techstack
+
+- [Remix](https://remix.run) – framework
+- [Typescript](https://www.typescriptlang.org/) – language
+- [Tailwind](https://tailwindcss.com) – styling
+- [Radix UI](https://radix-ui.com) - behavior
+- [Supabase](https://supabase.com) - database
+- [Supabase](https://supabase.com) – auth
+- [Redis](https://redis.io) - cache
+- [Trigger](https://trigger.dev) - jobs
+- [Resend](https://resend.com) – email
+- [Vercel](https://vercel.com) – hosting
 
 ## Codebase
 
@@ -62,13 +75,6 @@ The monorepo follows the Turborepo covention of grouping packages into one of tw
 | `@carbon/tsconfig`     | Shared, extendable tsconfig configuration used across apps and packages |
 | `@carbon/utils`        | Shared utility functions used across apps and packages                  |
 
-There are two other top-level folders worth mentioning:
-
-| Package Name | Description                                          | Local Command        |
-| ------------ | ---------------------------------------------------- | -------------------- |
-| `shared`     | A shared API for things like currency exchange rates | `npm run dev:shared` |
-| `www`        | The documentation site                               | `npm run dev:www`    |
-
 ## Local Development
 
 Make sure that you have [Docker installed](https://docs.docker.com/desktop/install/mac-install/) on your system since this monorepo uses the Docker for local development.
@@ -77,7 +83,7 @@ After running the steps below you should be able to access the following apps/co
 
 | Application     | URL                                                                                                                |
 | --------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Carbon ERP      | [http://localhost:3600](http://localhost:3600)                                                                     |
+| Carbon ERP      | [http://localhost:3000](http://localhost:3000)                                                                     |
 | Postgres        | [postgresql://postgres:postgres@localhost:54322/postgres](postgresql://postgres:postgres@localhost:54322/postgres) |
 | Supabase Studio | [http://localhost:54323/project/default](http://localhost:54323/project/default)                                   |
 | Inbucket        | [http://localhost:54324/monitor](http://localhost:54324/monitor)                                                   |

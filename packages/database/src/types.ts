@@ -1665,6 +1665,24 @@ export interface Database {
           }
         ];
       };
+      currencyExchangeRate: {
+        Row: {
+          currency: string;
+          exchangeRate: number;
+          timestamp: string;
+        };
+        Insert: {
+          currency: string;
+          exchangeRate: number;
+          timestamp?: string;
+        };
+        Update: {
+          currency?: string;
+          exchangeRate?: number;
+          timestamp?: string;
+        };
+        Relationships: [];
+      };
       customer: {
         Row: {
           accountManagerId: string | null;

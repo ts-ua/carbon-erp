@@ -107,7 +107,7 @@ export function ErrorBoundary() {
     <Document title="Error!">
       <div className="dark">
         <div className="flex flex-col w-full h-screen bg-zinc-900 items-center justify-center space-y-4">
-          <Heading size="display">Something went wrong</Heading>
+          <Heading size="display">Cuss! Something went wrong</Heading>
           <p className="text-foreground">{message}</p>
         </div>
       </div>
