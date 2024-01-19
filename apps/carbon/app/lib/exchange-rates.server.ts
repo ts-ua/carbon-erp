@@ -79,8 +79,11 @@ export class ExchangeRatesClient {
 const apiKey = process.env.EXCHANGE_RATES_API_KEY;
 const apiUrl = process.env.EXCHANGE_RATES_API_URL;
 
-export const exchangeRatesClient = new ExchangeRatesClient({
-  apiKey,
-  apiUrl,
-  baseCurrency: "USD",
-});
+export const exchangeRatesClient =
+  apiKey && apiUrl
+    ? new ExchangeRatesClient({
+        apiKey,
+        apiUrl,
+        baseCurrency: "USD",
+      })
+    : undefined;

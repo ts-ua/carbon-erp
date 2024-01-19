@@ -48,13 +48,19 @@ Finally, start the apps and packages:
 npm run dev         # npm run dev in all apps & packages
 ```
 
-To kill the database containers in a non-recoverable way, you can run:
+To stop the database containers in a recoverable way, you can run:
 
 ```bash
-npm run db:kill   # stop and delete all database containers
+npm run db:stop   # stop and delete all database containers
 ```
 
-To restart and reseed the database, you can run:
+To restart the database containers, you can run:
+
+```bash
+npm run db:restart # restart all database containers
+```
+
+To rebuild and reseed the database, you can run:
 
 ```bash
 npm run db:build # runs db:kill, db:start, and setup
