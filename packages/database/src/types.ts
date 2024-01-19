@@ -3189,6 +3189,55 @@ export interface Database {
           }
         ];
       };
+      integration: {
+        Row: {
+          active: boolean;
+          jsonschema: Json;
+          metadata: Json;
+          name: string;
+          updatedAt: string;
+          updatedBy: string | null;
+          visible: boolean;
+        };
+        Insert: {
+          active?: boolean;
+          jsonschema: Json;
+          metadata?: Json;
+          name: string;
+          updatedAt?: string;
+          updatedBy?: string | null;
+          visible?: boolean;
+        };
+        Update: {
+          active?: boolean;
+          jsonschema?: Json;
+          metadata?: Json;
+          name?: string;
+          updatedAt?: string;
+          updatedBy?: string | null;
+          visible?: boolean;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "integration_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "integration_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "integration_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
       journal: {
         Row: {
           accountingPeriodId: string | null;
