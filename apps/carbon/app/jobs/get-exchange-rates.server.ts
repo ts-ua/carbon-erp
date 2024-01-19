@@ -13,18 +13,23 @@ export const job = triggerClient.defineJob({
     seconds: 60 * 60 * 8, // thrice a day
   }),
   run: async (payload, io, ctx) => {
+    // TODO: get client dynamically from DB
+    if (!exchangeRatesClient) return;
+
     await io.logger.info(`💵 Exchange Rates Job: ${payload.lastTimestamp}`);
     await io.logger.info(JSON.stringify(exchangeRatesClient.getMetaData()));
 
     try {
       const rates = await exchangeRatesClient.getExchangeRates();
+      const timestamp = new Date().toISOString();
       await io.logger.info(JSON.stringify(rates));
       const { error } = await supabaseClient
         .from("currencyExchangeRate")
-        .insert(
+        .upsert(
           Object.entries(rates).map(([currency, exchangeRate]) => ({
             currency,
             exchangeRate,
+            timestamp,
           }))
         );
       if (error) {

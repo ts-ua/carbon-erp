@@ -1,12 +1,10 @@
 CREATE TABLE "currencyExchangeRate" (
-  "id" SERIAL PRIMARY KEY,
   "currency" TEXT NOT NULL,
   "exchangeRate" NUMERIC NOT NULL,
-  "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
-);
+  "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
 
-CREATE INDEX "currencyExchangeRate_currency_index" ON "currencyExchangeRate" ("currency");
-CREATE INDEX "currencyExchangeRate_createdAt_index" ON "currencyExchangeRate" ("createdAt");
+  CONSTRAINT "currencyExchangeRate_pkey" PRIMARY KEY ("currency")
+);
 
 ALTER TABLE "currencyExchangeRate" ENABLE ROW LEVEL SECURITY;
 
