@@ -68,7 +68,7 @@ function makeAuthSession(
     userId: supabaseSession.user.id,
     email: supabaseSession.user.email,
     expiresIn:
-      (supabaseSession.expires_in ?? 3600) - REFRESH_ACCESS_TOKEN_THRESHOLD,
+      (supabaseSession.expires_in ?? 3000) - REFRESH_ACCESS_TOKEN_THRESHOLD,
     expiresAt: supabaseSession.expires_at ?? -1,
   };
 }

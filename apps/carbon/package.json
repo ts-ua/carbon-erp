@@ -5,8 +5,9 @@
   "sideEffects": false,
   "scripts": {
     "build": "remix build",
-    "dev": "PORT=3600 run-p dev:*",
-    "dev:remix": "remix dev",
+    "dev": "run-p dev:remix dev:trigger",
+    "dev:remix": "PORT=3000 remix dev",
+    "dev:trigger": "sleep 15 && npx @trigger.dev/cli@latest dev",
     "start": "remix-serve ./build/index.js",
     "clean": "rimraf .cache .turbo node_modules dist build",
     "lint": "TIMING=1 eslint \"app/**/*.ts*\"",
@@ -36,6 +37,9 @@
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.10",
     "@tanstack/react-table": "^8.9.3",
+    "@trigger.dev/react": "^2.3.15",
+    "@trigger.dev/remix": "^2.3.15",
+    "@trigger.dev/sdk": "^2.3.15",
     "@visx/axis": "3.3.0",
     "@visx/curve": "3.3.0",
     "@visx/drag": "3.3.0",
@@ -46,6 +50,7 @@
     "@visx/responsive": "3.3.0",
     "@visx/scale": "3.3.0",
     "@visx/shape": "3.3.0",
+    "axios": "^1.6.5",
     "bullmq": "^4.6.2",
     "clsx": "^2.0.0",
     "d3-array": "^3.2.4",
@@ -83,6 +88,9 @@
     "tailwind-scrollbar": "^3.0.1",
     "tailwindcss": "3.3.2",
     "typescript": "^5.2.2"
+  },
+  "trigger.dev": {
+    "endpointId": "carbon-erp-wzkF"
   },
   "engines": {
     "node": ">=18"

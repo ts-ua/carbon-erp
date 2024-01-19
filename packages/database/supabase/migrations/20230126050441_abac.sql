@@ -50,7 +50,7 @@ CREATE POLICY "Customers with sales_view can view contacts from their organizati
     )
   );
 
-CREATE POLICY "Many employees can create contact" ON "contact"
+CREATE POLICY "Many employees can create contacts" ON "contact"
   FOR INSERT
   WITH CHECK (
     (
