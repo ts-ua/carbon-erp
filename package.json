@@ -34,7 +34,6 @@
     "deploy": "turbo run deploy",
     "dev": "turbo run dev --filter=./apps/* --filter=./packages/*",
     "dev:apps": "turbo run dev --filter=./apps/*",
-    "dev:shared": "turbo run dev --filter=./shared",
     "dev:www": "turbo run dev --filter=./www",
     "dev:packages": "turbo run dev --filter=./packages/*",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

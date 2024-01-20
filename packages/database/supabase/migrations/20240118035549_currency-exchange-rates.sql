@@ -1,7 +1,7 @@
 CREATE TABLE "currencyExchangeRate" (
   "currency" TEXT NOT NULL,
   "exchangeRate" NUMERIC NOT NULL,
-  "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
 
   CONSTRAINT "currencyExchangeRate_pkey" PRIMARY KEY ("currency")
 );

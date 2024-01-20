@@ -1,3 +1,4 @@
+import { CgSync } from "react-icons/cg";
 import { GoNumber } from "react-icons/go";
 import { TbBuildingFactory2 } from "react-icons/tb";
 import { usePermissions } from "~/hooks";
@@ -19,6 +20,12 @@ const settingsRoutes: AuthenticatedRouteGroup[] = [
   {
     name: "System",
     routes: [
+      {
+        name: "Integrations",
+        to: path.to.integrations,
+        role: "employee",
+        icon: <CgSync />,
+      },
       {
         name: "Sequences",
         to: path.to.sequences,
