@@ -1669,17 +1669,17 @@ export interface Database {
         Row: {
           currency: string;
           exchangeRate: number;
-          timestamp: string;
+          updatedAt: string;
         };
         Insert: {
           currency: string;
           exchangeRate: number;
-          timestamp?: string;
+          updatedAt?: string;
         };
         Update: {
           currency?: string;
           exchangeRate?: number;
-          timestamp?: string;
+          updatedAt?: string;
         };
         Relationships: [];
       };

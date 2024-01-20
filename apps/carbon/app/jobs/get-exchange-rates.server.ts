@@ -1,9 +1,13 @@
 import { intervalTrigger } from "@trigger.dev/sdk";
-import { exchangeRatesClient } from "~/lib/exchange-rates.server";
+import z from "zod";
+import { getExchangeRatesClient } from "~/lib/exchange-rates.server";
 import { getSupabaseServiceRole } from "~/lib/supabase";
 import { triggerClient } from "~/lib/trigger.server";
 
 const supabaseClient = getSupabaseServiceRole();
+const metadataSchema = z.object({
+  apiKey: z.string(),
+});
 
 export const job = triggerClient.defineJob({
   id: "get-exchange-rates",
@@ -13,7 +17,22 @@ export const job = triggerClient.defineJob({
     seconds: 60 * 60 * 8, // thrice a day
   }),
   run: async (payload, io, ctx) => {
-    // TODO: get client dynamically from DB
+    const integration = await supabaseClient
+      .from("integration")
+      .select("active, metadata")
+      .eq("name", "exchangeRatesV1")
+      .maybeSingle();
+
+    const integrationMetadata = metadataSchema.safeParse(
+      integration?.data?.metadata
+    );
+
+    if (!integrationMetadata.success || integration?.data?.active !== true)
+      return;
+    const exchangeRatesClient = getExchangeRatesClient(
+      integrationMetadata.data.apiKey
+    );
+
     if (!exchangeRatesClient) return;
 
     await io.logger.info(`💵 Exchange Rates Job: ${payload.lastTimestamp}`);
@@ -21,7 +40,7 @@ export const job = triggerClient.defineJob({
 
     try {
       const rates = await exchangeRatesClient.getExchangeRates();
-      const timestamp = new Date().toISOString();
+      const updatedAt = new Date().toISOString();
       await io.logger.info(JSON.stringify(rates));
       const { error } = await supabaseClient
         .from("currencyExchangeRate")
@@ -29,7 +48,7 @@ export const job = triggerClient.defineJob({
           Object.entries(rates).map(([currency, exchangeRate]) => ({
             currency,
             exchangeRate,
-            timestamp,
+            updatedAt,
           }))
         );
       if (error) {
@@ -39,7 +58,7 @@ export const job = triggerClient.defineJob({
 
       io.logger.log("Success");
     } catch (err) {
-      // TODO: notify SRE
+      // TODO: notify someone
       await io.logger.error(JSON.stringify(err));
     }
   },

@@ -7404,7 +7404,7 @@ CREATE OR REPLACE VIEW "employeeSummary" WITH(SECURITY_INVOKER=true) AS
 CREATE TABLE "currencyExchangeRate" (
   "currency" TEXT NOT NULL,
   "exchangeRate" NUMERIC NOT NULL,
-  "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+  "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
 
   CONSTRAINT "currencyExchangeRate_pkey" PRIMARY KEY ("currency")
 );
@@ -7433,7 +7433,7 @@ CREATE TABLE integration (
   "updatedBy" TEXT,
 
   CONSTRAINT integration_pkey PRIMARY KEY ("name"),
-  CHECK (
+  CONSTRAINT integration_metadata CHECK (
     active = false OR
     json_matches_schema(jsonschema, metadata)
   ),
