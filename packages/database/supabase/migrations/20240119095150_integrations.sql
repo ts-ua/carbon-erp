@@ -2,7 +2,9 @@
 CREATE EXTENSION pg_jsonschema WITH SCHEMA extensions;
 
 CREATE TABLE integration (
-  "name" TEXT NOT NULL,
+  "id" TEXT NOT NULL,
+  "description" TEXT,
+  "logoPath" TEXT,
   "active" BOOLEAN NOT NULL DEFAULT FALSE,
   "visible" BOOLEAN NOT NULL DEFAULT TRUE,
   "jsonschema" JSON NOT NULL,
@@ -10,7 +12,7 @@ CREATE TABLE integration (
   "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   "updatedBy" TEXT,
 
-  CONSTRAINT integration_pkey PRIMARY KEY ("name"),
+  CONSTRAINT integration_pkey PRIMARY KEY ("id"),
   CONSTRAINT integration_metadata CHECK (
     active = false OR
     json_matches_schema(jsonschema, metadata)
@@ -31,9 +33,9 @@ CREATE POLICY "Employees with settings_update can update integrations." ON "inte
     (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
 
-INSERT INTO "integration" ("name", "jsonschema") 
+INSERT INTO "integration" ("id", "jsonschema") 
 VALUES (
-  'exchangeRatesV1', 
+  'exchange-rates-v1', 
   '{
     "type": "object",
     "properties": {
