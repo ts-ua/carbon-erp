@@ -1,16 +1,13 @@
 import { intervalTrigger } from "@trigger.dev/sdk";
-import z from "zod";
 import { getExchangeRatesClient } from "~/lib/exchange-rates.server";
 import { getSupabaseServiceRole } from "~/lib/supabase";
 import { triggerClient } from "~/lib/trigger.server";
+import { exchangeRatesMetadata } from "~/modules/settings";
 
 const supabaseClient = getSupabaseServiceRole();
-const metadataSchema = z.object({
-  apiKey: z.string(),
-});
 
 export const job = triggerClient.defineJob({
-  id: "get-exchange-rates",
+  id: "update-exchange-rates",
   name: "Update Currency Exchange Rates",
   version: "0.0.2",
   trigger: intervalTrigger({
@@ -20,10 +17,10 @@ export const job = triggerClient.defineJob({
     const integration = await supabaseClient
       .from("integration")
       .select("active, metadata")
-      .eq("name", "exchangeRatesV1")
+      .eq("id", "exchange-rates-v1")
       .maybeSingle();
 
-    const integrationMetadata = metadataSchema.safeParse(
+    const integrationMetadata = exchangeRatesMetadata.safeParse(
       integration?.data?.metadata
     );
 
