@@ -11,13 +11,14 @@ import {
   VStack,
 } from "@carbon/react";
 import { ValidatedForm } from "remix-validated-form";
-import { Input, Submit } from "~/components/Form";
-import { exchangeRatesMetadataValidator } from "~/modules/settings";
+import { Boolean, Input, Submit } from "~/components/Form";
+import { usePermissions } from "~/hooks";
+import { exchangeRatesFormValidator } from "~/modules/settings";
 import type { TypeOfValidator } from "~/types/validators";
 import { path } from "~/utils/path";
 
 type ExchangeRatesFormProps = {
-  initialValues: TypeOfValidator<typeof exchangeRatesMetadataValidator>;
+  initialValues: TypeOfValidator<typeof exchangeRatesFormValidator>;
   onClose: () => void;
 };
 
@@ -25,6 +26,9 @@ const ExchangeRatesForm = ({
   initialValues,
   onClose,
 }: ExchangeRatesFormProps) => {
+  const permissions = usePermissions();
+  const isDisabled = !permissions.can("update", "settings");
+
   return (
     <Drawer
       open
@@ -34,27 +38,28 @@ const ExchangeRatesForm = ({
     >
       <DrawerContent>
         <ValidatedForm
-          validator={exchangeRatesMetadataValidator}
+          validator={exchangeRatesFormValidator}
           method="post"
           action={path.to.integration("exchange-rates-v1")}
           defaultValues={initialValues}
           className="flex flex-col h-full"
         >
           <DrawerHeader>
-            <DrawerTitle>Exchange Rates Integration</DrawerTitle>
+            <DrawerTitle>Update Exchange Rates</DrawerTitle>
             <DrawerDescription>
               Updates the exchange rates using
-              http://api.exchangeratesapi.io/v1/ three times per day
+              http://api.exchangeratesapi.io/v1/
             </DrawerDescription>
           </DrawerHeader>
           <DrawerBody>
-            <VStack>
+            <VStack spacing={4}>
+              <Boolean name="active" label="Active" />
               <Input name="apiKey" label="API Key" />
             </VStack>
           </DrawerBody>
           <DrawerFooter>
             <HStack>
-              <Submit>Save</Submit>
+              <Submit isDisabled={isDisabled}>Save</Submit>
               <Button size="md" variant="solid" onClick={onClose}>
                 Cancel
               </Button>

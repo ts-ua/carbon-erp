@@ -1,6 +1,6 @@
 import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { getIntegrations } from "~/modules/settings";
+import { IntegrationsList, getIntegrations } from "~/modules/settings";
 import { requirePermissions } from "~/services/auth";
 import { flash } from "~/services/session";
 import { path } from "~/utils/path";
@@ -30,9 +30,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function IntegrationsRoute() {
   const { integrations } = useLoaderData<typeof loader>();
+
   return (
     <>
-      <pre>{JSON.stringify(integrations, null, 2)}</pre>
+      <IntegrationsList integrations={integrations} />
       <Outlet />
     </>
   );

@@ -164,6 +164,7 @@ export async function updateIntegration(
   client: SupabaseClient<Database>,
   update: {
     id: string;
+    active: boolean;
     metadata: Json;
     updatedBy: string;
   }

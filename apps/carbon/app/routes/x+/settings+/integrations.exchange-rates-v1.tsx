@@ -3,8 +3,8 @@ import { json, redirect } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import {
+  exchangeRatesFormValidator,
   exchangeRatesMetadata,
-  exchangeRatesMetadataValidator,
   getIntegration,
   updateIntegration,
 } from "~/modules/settings";
@@ -17,11 +17,12 @@ import { error, success } from "~/utils/result";
 
 const defaultValue = {
   apiKey: "",
+  active: false,
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client } = await requirePermissions(request, {
-    view: "settings",
+    update: "settings",
   });
 
   const integration = await getIntegration(client, "exchange-rates-v1");
@@ -41,7 +42,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return json({
     integration: validIntegration.success
-      ? validIntegration.data
+      ? {
+          active: integration.data?.active,
+          ...validIntegration.data,
+        }
       : defaultValue,
   });
 }
@@ -52,10 +56,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     update: "settings",
   });
 
-  const { customerId } = params;
-  if (!customerId) throw new Error("Could not find customerId");
-
-  const validation = await exchangeRatesMetadataValidator.validate(
+  const validation = await exchangeRatesFormValidator.validate(
     await request.formData()
   );
 
@@ -63,10 +64,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
+  const { active, ...data } = validation.data;
+
   const update = await updateIntegration(client, {
     id: "exchange-rates-v1",
+    active,
     metadata: {
-      ...validation.data,
+      ...data,
     },
     updatedBy: userId,
   });
@@ -88,6 +92,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
 export default function ExchangeRatesIntegrationRoute() {
   const { integration } = useLoaderData<typeof loader>();
+
   const navigate = useNavigate();
 
   return (

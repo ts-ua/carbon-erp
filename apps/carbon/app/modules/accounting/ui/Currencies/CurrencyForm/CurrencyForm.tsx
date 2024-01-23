@@ -27,6 +27,9 @@ const CurrencyForm = ({ initialValues }: CurrencyFormProps) => {
   const permissions = usePermissions();
   const navigate = useNavigate();
   const onClose = () => navigate(-1);
+  const [decimalPlaces, setDecimalPlaces] = useState(
+    initialValues.decimalPlaces ?? 2
+  );
 
   const routeData = useRouteData<{ baseCurrency?: Currency }>(
     path.to.accountingRoot
@@ -72,13 +75,23 @@ const CurrencyForm = ({ initialValues }: CurrencyFormProps) => {
                 label="Name"
                 onChange={(e) => setName(e.target.value)}
               />
-              <Input name="code" label="Code" />
+              <Input name="code" label="Code" isReadOnly={isEditing} />
               <Input name="symbol" label="Symbol" />
+              <Number
+                name="decimalPlaces"
+                label="Decimal Places"
+                minValue={0}
+                maxValue={4}
+                onChange={setDecimalPlaces}
+              />
               <Number
                 name="exchangeRate"
                 label="Exchange Rate"
                 minValue={isBaseCurrency ? 1 : 0}
                 maxValue={isBaseCurrency ? 1 : undefined}
+                formatOptions={{
+                  minimumFractionDigits: decimalPlaces ?? 0,
+                }}
                 helperText={exchnageRateHelperText}
               />
               <Boolean name="isBaseCurrency" label="Base Currency" />

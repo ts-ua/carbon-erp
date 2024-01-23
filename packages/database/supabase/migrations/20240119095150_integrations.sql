@@ -3,6 +3,7 @@ CREATE EXTENSION pg_jsonschema WITH SCHEMA extensions;
 
 CREATE TABLE integration (
   "id" TEXT NOT NULL,
+  "title" TEXT NOT NULL,
   "description" TEXT,
   "logoPath" TEXT,
   "active" BOOLEAN NOT NULL DEFAULT FALSE,
@@ -33,9 +34,12 @@ CREATE POLICY "Employees with settings_update can update integrations." ON "inte
     (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
 
-INSERT INTO "integration" ("id", "jsonschema") 
+INSERT INTO "integration" ("id", "title", "description", "logoPath", "jsonschema") 
 VALUES (
   'exchange-rates-v1', 
+  'Update Exchange Rates',
+  'Pulls currency rates from exchange rates API',
+  '/integrations/exchange-rates.png',
   '{
     "type": "object",
     "properties": {

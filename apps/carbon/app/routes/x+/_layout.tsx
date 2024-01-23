@@ -75,7 +75,6 @@ export default function AuthenticatedRoute() {
 
   /* Toast Messages */
   useEffect(() => {
-    console.log("result", result);
     if (result?.success === true) {
       toast.success(result.message);
     } else if (result?.message) {

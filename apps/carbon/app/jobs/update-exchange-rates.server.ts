@@ -2,6 +2,7 @@ import { intervalTrigger } from "@trigger.dev/sdk";
 import { getExchangeRatesClient } from "~/lib/exchange-rates.server";
 import { getSupabaseServiceRole } from "~/lib/supabase";
 import { triggerClient } from "~/lib/trigger.server";
+import type { CurrencyCode } from "~/modules/accounting";
 import { exchangeRatesMetadata } from "~/modules/settings";
 
 const supabaseClient = getSupabaseServiceRole();
@@ -39,15 +40,26 @@ export const job = triggerClient.defineJob({
       const rates = await exchangeRatesClient.getExchangeRates();
       const updatedAt = new Date().toISOString();
       await io.logger.info(JSON.stringify(rates));
-      const { error } = await supabaseClient
-        .from("currencyExchangeRate")
-        .upsert(
-          Object.entries(rates).map(([currency, exchangeRate]) => ({
-            currency,
-            exchangeRate,
-            updatedAt,
-          }))
-        );
+      const { data } = await supabaseClient.from("currency").select("*");
+      if (!data) return;
+
+      const updates = data
+        .map((currency) => ({
+          ...currency,
+          exchangeRate: Number(
+            rates[currency.code as CurrencyCode]?.toFixed(
+              currency.decimalPlaces
+            )
+          ),
+          updatedAt,
+        }))
+        .filter((currency) => currency.exchangeRate);
+
+      console.log({ updates });
+
+      if (updates?.length === 0) return;
+
+      const { error } = await supabaseClient.from("currency").upsert(updates);
       if (error) {
         await io.logger.error(JSON.stringify(error));
         return;
