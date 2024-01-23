@@ -3,6 +3,7 @@ import {
   Drawer,
   DrawerBody,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -65,6 +66,10 @@ const ContractorForm = ({ initialValues }: ContractorFormProps) => {
         >
           <DrawerHeader>
             <DrawerTitle>{isEditing ? "Edit" : "New"} Contractor</DrawerTitle>
+            <DrawerDescription>
+              A contractor is a supplier contact with particular abilities and
+              available hours
+            </DrawerDescription>
           </DrawerHeader>
           <DrawerBody>
             <VStack spacing={4}>
@@ -83,7 +88,7 @@ const ContractorForm = ({ initialValues }: ContractorFormProps) => {
               <Number
                 name="hoursPerWeek"
                 label="Hours per Week"
-                helperText="The number of hours per week the supplier is available to work."
+                helperText="The number of hours per week the contractor is available to work."
                 minValue={0}
                 maxValue={10000}
               />

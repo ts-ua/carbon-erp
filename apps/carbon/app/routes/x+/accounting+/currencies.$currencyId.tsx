@@ -77,6 +77,7 @@ export default function EditCurrencysRoute() {
     code: currency?.code ?? "",
     symbol: currency?.symbol ?? "",
     exchangeRate: currency?.exchangeRate ?? 1,
+    decimalPlaces: currency?.decimalPlaces ?? 2,
     isBaseCurrency: currency?.isBaseCurrency ?? false,
   };
 

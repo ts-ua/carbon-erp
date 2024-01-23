@@ -10,8 +10,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     view: "sales",
   });
 
-  console.log("customer locations endpoint");
-
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);
   const customerId = searchParams.get("customerId") as string;
@@ -20,8 +18,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return json({
       data: [],
     });
-
-  console.log({ customerId });
 
   const locations = await getCustomerLocations(authorized.client, customerId);
   if (locations.error) {
