@@ -6,7 +6,7 @@ import NProgress from "nprogress";
 import { useEffect } from "react";
 import { IconSidebar, Topbar } from "~/components/Layout";
 import { SupabaseProvider, getSupabase } from "~/lib/supabase";
-import { getCompany } from "~/modules/settings";
+import { getCompany, getIntegrations } from "~/modules/settings";
 import { RealtimeDataProvider } from "~/modules/shared";
 import {
   getUser,
@@ -29,10 +29,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const client = getSupabase(accessToken);
 
   // parallelize the requests
-  const [sessionFlash, company, user, claims, groups, defaults] =
+  const [sessionFlash, company, integrations, user, claims, groups, defaults] =
     await Promise.all([
       getSessionFlash(request),
       getCompany(client),
+      getIntegrations(client),
       getUser(client, userId),
       getUserClaims(request),
       getUserGroups(client, userId),
@@ -56,6 +57,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         expiresAt,
       },
       company: company.data,
+      integrations: integrations.data ?? [],
       user: user.data,
       groups: groups.data,
       defaults: defaults.data,
