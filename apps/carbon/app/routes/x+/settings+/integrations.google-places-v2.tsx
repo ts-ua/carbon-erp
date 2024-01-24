@@ -36,8 +36,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  console.log({ integration });
-
   const validIntegration = apiKey.safeParse(integration.data?.metadata);
 
   return json({
