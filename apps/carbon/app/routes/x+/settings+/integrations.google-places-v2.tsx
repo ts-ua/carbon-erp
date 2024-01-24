@@ -3,10 +3,10 @@ import { json, redirect } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import {
-  ExchangeRatesForm,
+  GooglePlacesForm,
   apiKey,
-  exchangeRatesFormValidator,
   getIntegration,
+  googlePlacesFormValidator,
   updateIntegration,
 } from "~/modules/settings";
 import { requirePermissions } from "~/services/auth";
@@ -25,16 +25,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
     update: "settings",
   });
 
-  const integration = await getIntegration(client, "exchange-rates-v1");
+  const integration = await getIntegration(client, "google-places-v2");
   if (integration.error) {
     return redirect(
       path.to.integrations,
       await flash(
         request,
-        error(integration.error, "Failed to load integration")
+        error(integration.error, "Failed to load Google Places integration")
       )
     );
   }
+
+  console.log({ integration });
 
   const validIntegration = apiKey.safeParse(integration.data?.metadata);
 
@@ -54,7 +56,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     update: "settings",
   });
 
-  const validation = await exchangeRatesFormValidator.validate(
+  const validation = await googlePlacesFormValidator.validate(
     await request.formData()
   );
 
@@ -65,7 +67,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { active, ...data } = validation.data;
 
   const update = await updateIntegration(client, {
-    id: "exchange-rates-v1",
+    id: "google-places-v2",
     active,
     metadata: {
       ...data,
@@ -77,24 +79,24 @@ export async function action({ request, params }: ActionFunctionArgs) {
       path.to.integrations,
       await flash(
         request,
-        error(update.error, "Failed to update exchange rates integration")
+        error(update.error, "Failed to update Google Places integration")
       )
     );
   }
 
   return redirect(
     path.to.integrations,
-    await flash(request, success("Updated exchange rates integration"))
+    await flash(request, success("Updated Google Places integration"))
   );
 }
 
-export default function ExchangeRatesIntegrationRoute() {
+export default function GooglePlacesIntegrationRoute() {
   const { integration } = useLoaderData<typeof loader>();
 
   const navigate = useNavigate();
 
   return (
-    <ExchangeRatesForm
+    <GooglePlacesForm
       initialValues={integration}
       onClose={() => navigate(path.to.integrations)}
     />

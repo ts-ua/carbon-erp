@@ -9891,13 +9891,13 @@ export interface Database {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey";
-            columns: ["supplierCountryCode"];
+            columns: ["customerCountryCode"];
             referencedRelation: "country";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "address_countryCode_fkey";
-            columns: ["customerCountryCode"];
+            columns: ["supplierCountryCode"];
             referencedRelation: "country";
             referencedColumns: ["id"];
           }

@@ -14,7 +14,6 @@ import {
   createContext,
   forwardRef,
   useContext,
-  useEffect,
   useState,
 } from "react";
 
@@ -54,13 +53,9 @@ const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(
   ({ className, name, src, size, children, ...props }, ref) => {
     const isGroup = !!useAvatarGroupContext()?.limit;
     const avatarInitials = getInitials(name ?? "");
-    const [_src, setSrc] = useState(src);
+    const [error, setError] = useState(false);
 
-    useEffect(() => {
-      setSrc(src);
-    }, [src]);
-
-    return _src ? (
+    return src && !error ? (
       <img
         className={cn(
           avatarVariants({ size, isGroup }),
@@ -68,8 +63,8 @@ const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(
           className
         )}
         alt={name ?? "avatar"}
-        src={_src}
-        onError={() => setSrc(undefined)}
+        src={src}
+        onError={() => setError(true)}
       />
     ) : (
       <span
