@@ -76,14 +76,16 @@ export class ExchangeRatesClient {
   }
 }
 
-const apiKey = process.env.EXCHANGE_RATES_API_KEY;
-const apiUrl = process.env.EXCHANGE_RATES_API_URL;
-
-export const exchangeRatesClient =
-  apiKey && apiUrl
+export const getExchangeRatesClient = (
+  apiKey?: string,
+  apiUrl: string = "http://api.exchangeratesapi.io/v1/latest",
+  baseCurrency: CurrencyCode = "USD"
+) => {
+  return typeof apiKey === "string"
     ? new ExchangeRatesClient({
         apiKey,
         apiUrl,
-        baseCurrency: "USD",
+        baseCurrency,
       })
     : undefined;
+};

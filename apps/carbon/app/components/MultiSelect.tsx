@@ -74,7 +74,11 @@ const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
                         e.preventDefault();
                         e.stopPropagation();
                       }}
-                      onClick={() => handleUnselect(item)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleUnselect(item);
+                      }}
                     />
                   </Badge>
                 ))}

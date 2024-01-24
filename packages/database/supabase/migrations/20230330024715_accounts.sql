@@ -3,18 +3,16 @@ CREATE TABLE "currency" (
   "name" TEXT NOT NULL,
   "code" TEXT NOT NULL,
   "symbol" TEXT,
-  "exchangeRate" NUMERIC(10,4) NOT NULL DEFAULT 1.0000,
+  "exchangeRate" NUMERIC(20,8) NOT NULL DEFAULT 1,
+  "decimalPlaces" INTEGER NOT NULL DEFAULT 2,
   "isBaseCurrency" BOOLEAN NOT NULL DEFAULT false,
   "active" BOOLEAN NOT NULL DEFAULT true,
-  "createdBy" TEXT NOT NULL,
-  "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   "updatedBy" TEXT,
   "updatedAt" TIMESTAMP WITH TIME ZONE,
 
   CONSTRAINT "currency_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "currency_code_key" UNIQUE ("code"),
   CONSTRAINT "currency_exchangeRate_check" CHECK ("exchangeRate" > 0),
-  CONSTRAINT "currency_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user"("id"),
   CONSTRAINT "currency_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user"("id")
 );
 
@@ -48,6 +46,7 @@ CREATE POLICY "Employees with accounting_delete can delete currencies" ON "curre
     coalesce(get_my_claim('accounting_delete')::boolean, false) = true 
     AND (get_my_claim('role'::text)) = '"employee"'::jsonb
   );
+
 
 CREATE TYPE "glAccountCategory" AS ENUM (
   'Bank',
