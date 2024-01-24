@@ -59,7 +59,11 @@ export async function getIntegration(
 }
 
 export async function getIntegrations(client: SupabaseClient<Database>) {
-  return client.from("integration").select("*").eq("visible", true);
+  return client
+    .from("integration")
+    .select("*")
+    .eq("visible", true)
+    .order("title");
 }
 
 export async function getNextSequence(

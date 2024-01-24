@@ -37,9 +37,41 @@ CREATE POLICY "Employees with settings_update can update integrations." ON "inte
 INSERT INTO "integration" ("id", "title", "description", "logoPath", "jsonschema") 
 VALUES (
   'exchange-rates-v1', 
-  'Update Exchange Rates',
+  'Exchange Rates',
   'Pulls currency rates from exchange rates API',
   '/integrations/exchange-rates.png',
+  '{
+    "type": "object",
+    "properties": {
+      "apiKey": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "apiKey"
+    ]
+  }'::json),
+  (
+  'resend', 
+  'Resend Emails',
+  'Sends Transactional Emails with Resend API',
+  '/integrations/resend.png',
+  '{
+    "type": "object",
+    "properties": {
+      "apiKey": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "apiKey"
+    ]
+  }'::json),
+  (
+  'google-places-v2', 
+  'Google Places',
+  'Autocomplete addresses with Google Places API',
+  '/integrations/google-places.png',
   '{
     "type": "object",
     "properties": {
