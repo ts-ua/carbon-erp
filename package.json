@@ -10,8 +10,7 @@
   "scripts": {
     "build": "turbo run build",
     "build:packages": "turbo run build --filter=./packages/*",
-    "clean": "turbo run clean && rimraf node_modules",
-    "predb:build": "tsx scripts/generate-schema-md.ts",
+    "clean": "turbo run clean && rimraf ./node_modules && rimraf ./package-lock.json",
     "db:build": "run-s db:kill db:start setup",
     "postdb:build": "tsx scripts/generate-db-types.ts",
     "db:restart": "run-s db:stop db:start",
@@ -34,7 +33,6 @@
     "deploy": "turbo run deploy",
     "dev": "turbo run dev --filter=./apps/* --filter=./packages/*",
     "dev:apps": "turbo run dev --filter=./apps/*",
-    "dev:shared": "turbo run dev --filter=./shared",
     "dev:www": "turbo run dev --filter=./www",
     "dev:packages": "turbo run dev --filter=./packages/*",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

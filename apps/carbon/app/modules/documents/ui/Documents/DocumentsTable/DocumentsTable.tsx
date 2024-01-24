@@ -41,7 +41,6 @@ type DocumentsTableProps = {
 };
 
 const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
-  console.log(labels);
   const revalidator = useRevalidator();
   const [params] = useUrlParams();
   const filter = params.get("q");

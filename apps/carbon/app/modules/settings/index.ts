@@ -1,3 +1,4 @@
+export * from "./integrations.models";
 export * from "./settings.models";
 export * from "./settings.service";
 export * from "./types";

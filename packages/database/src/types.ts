@@ -1590,8 +1590,7 @@ export interface Database {
         Row: {
           active: boolean;
           code: string;
-          createdAt: string;
-          createdBy: string;
+          decimalPlaces: number;
           exchangeRate: number;
           id: string;
           isBaseCurrency: boolean;
@@ -1603,8 +1602,7 @@ export interface Database {
         Insert: {
           active?: boolean;
           code: string;
-          createdAt?: string;
-          createdBy: string;
+          decimalPlaces?: number;
           exchangeRate?: number;
           id?: string;
           isBaseCurrency?: boolean;
@@ -1616,8 +1614,7 @@ export interface Database {
         Update: {
           active?: boolean;
           code?: string;
-          createdAt?: string;
-          createdBy?: string;
+          decimalPlaces?: number;
           exchangeRate?: number;
           id?: string;
           isBaseCurrency?: boolean;
@@ -1627,24 +1624,6 @@ export interface Database {
           updatedBy?: string | null;
         };
         Relationships: [
-          {
-            foreignKeyName: "currency_createdBy_fkey";
-            columns: ["createdBy"];
-            referencedRelation: "user";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "currency_createdBy_fkey";
-            columns: ["createdBy"];
-            referencedRelation: "employeeSummary";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "currency_createdBy_fkey";
-            columns: ["createdBy"];
-            referencedRelation: "userDefaults";
-            referencedColumns: ["userId"];
-          },
           {
             foreignKeyName: "currency_updatedBy_fkey";
             columns: ["updatedBy"];
@@ -1669,17 +1648,17 @@ export interface Database {
         Row: {
           currency: string;
           exchangeRate: number;
-          timestamp: string;
+          updatedAt: string;
         };
         Insert: {
           currency: string;
           exchangeRate: number;
-          timestamp?: string;
+          updatedAt?: string;
         };
         Update: {
           currency?: string;
           exchangeRate?: number;
-          timestamp?: string;
+          updatedAt?: string;
         };
         Relationships: [];
       };
@@ -3183,6 +3162,64 @@ export interface Database {
           },
           {
             foreignKeyName: "holiday_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
+      integration: {
+        Row: {
+          active: boolean;
+          description: string | null;
+          id: string;
+          jsonschema: Json;
+          logoPath: string | null;
+          metadata: Json;
+          title: string;
+          updatedAt: string;
+          updatedBy: string | null;
+          visible: boolean;
+        };
+        Insert: {
+          active?: boolean;
+          description?: string | null;
+          id: string;
+          jsonschema: Json;
+          logoPath?: string | null;
+          metadata?: Json;
+          title: string;
+          updatedAt?: string;
+          updatedBy?: string | null;
+          visible?: boolean;
+        };
+        Update: {
+          active?: boolean;
+          description?: string | null;
+          id?: string;
+          jsonschema?: Json;
+          logoPath?: string | null;
+          metadata?: Json;
+          title?: string;
+          updatedAt?: string;
+          updatedBy?: string | null;
+          visible?: boolean;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "integration_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "integration_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "integration_updatedBy_fkey";
             columns: ["updatedBy"];
             referencedRelation: "userDefaults";
             referencedColumns: ["userId"];
@@ -9854,13 +9891,13 @@ export interface Database {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey";
-            columns: ["supplierCountryCode"];
+            columns: ["customerCountryCode"];
             referencedRelation: "country";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "address_countryCode_fkey";
-            columns: ["customerCountryCode"];
+            columns: ["supplierCountryCode"];
             referencedRelation: "country";
             referencedColumns: ["id"];
           }

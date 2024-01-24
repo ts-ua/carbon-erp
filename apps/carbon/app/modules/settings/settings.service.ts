@@ -1,4 +1,4 @@
-import type { Database } from "@carbon/database";
+import type { Database, Json } from "@carbon/database";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { SUPABASE_API_URL } from "~/config/env";
 import type { TypeOfValidator } from "~/types/validators";
@@ -44,6 +44,26 @@ export async function getCurrentSequence(
     data: `${derivedPrefix}${currentSequence}${derivedSuffix}`,
     error: null,
   };
+}
+
+export async function getIntegration(
+  client: SupabaseClient<Database>,
+  id: string
+) {
+  return client
+    .from("integration")
+    .select("*")
+    .eq("id", id)
+    .eq("visible", true)
+    .single();
+}
+
+export async function getIntegrations(client: SupabaseClient<Database>) {
+  return client
+    .from("integration")
+    .select("*")
+    .eq("visible", true)
+    .order("title");
 }
 
 export async function getNextSequence(
@@ -142,6 +162,19 @@ export async function updateCompany(
   }
 ) {
   return client.from("company").update(sanitize(company)).eq("id", true);
+}
+
+export async function updateIntegration(
+  client: SupabaseClient<Database>,
+  update: {
+    id: string;
+    active: boolean;
+    metadata: Json;
+    updatedBy: string;
+  }
+) {
+  const { id, ...data } = update;
+  return client.from("integration").update(data).eq("id", id);
 }
 
 export async function updateLogo(

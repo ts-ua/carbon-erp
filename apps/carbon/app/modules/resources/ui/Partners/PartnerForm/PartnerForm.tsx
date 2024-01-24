@@ -3,6 +3,7 @@ import {
   Drawer,
   DrawerBody,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -89,6 +90,10 @@ const PartnerForm = ({ initialValues }: PartnerFormProps) => {
         >
           <DrawerHeader>
             <DrawerTitle>{isEditing ? "Edit" : "New"} Partner</DrawerTitle>
+            <DrawerDescription>
+              A partner is combination of a supplier location and and an ability
+              with a certain amount of time available
+            </DrawerDescription>
           </DrawerHeader>
           <DrawerBody>
             <VStack spacing={4}>
