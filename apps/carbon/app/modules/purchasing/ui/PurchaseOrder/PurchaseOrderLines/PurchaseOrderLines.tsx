@@ -283,7 +283,7 @@ const PurchaseOrderLines = () => {
 
   return (
     <>
-      <Card className="w-full h-full">
+      <Card className="w-full h-full min-h-[50vh]">
         <HStack className="justify-between items-start">
           <CardHeader>
             <CardTitle>Purchase Order Lines</CardTitle>

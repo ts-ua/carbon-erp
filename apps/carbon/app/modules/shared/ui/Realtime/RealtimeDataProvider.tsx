@@ -1,16 +1,39 @@
-import { useEffect, useState } from "react";
+import idb from "localforage";
+import { useEffect } from "react";
+import { flushSync } from "react-dom";
 import { useSupabase } from "~/lib/supabase";
 import { useCustomers, useParts, useSuppliers } from "~/stores";
 
+let hydrated = false;
+
 const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
-  const [loading, setLoading] = useState(true);
   const { supabase, accessToken } = useSupabase();
 
-  const [, setParts] = useParts();
+  const [, setParts] = useParts([]);
   const [, setSuppliers] = useSuppliers();
   const [, setCustomers] = useCustomers();
 
-  const fetchData = async () => {
+  const hydrate = async () => {
+    if (!hydrated) {
+      const localData = await Promise.all([
+        idb.getItem("customers"),
+        idb.getItem("parts"),
+        idb.getItem("suppliers"),
+      ]);
+
+      hydrated = true;
+
+      if (localData.every((data) => data !== null)) {
+        const [localCustomers, localParts, localSuppliers] = localData;
+
+        setCustomers(localCustomers);
+        setParts(localParts);
+        setSuppliers(localSuppliers);
+
+        flushSync(() => setLoading(false));
+      }
+    }
+
     if (!supabase || !accessToken) return;
 
     const [parts, suppliers, customers] = await Promise.all([
@@ -36,9 +59,9 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    if (!supabase || !accessToken) return;
-    fetchData();
+    hydrate();
 
+    if (!supabase || !accessToken) return;
     supabase.realtime.setAuth(accessToken);
     const channel = supabase
       .channel("realtime:core")
@@ -194,28 +217,24 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [supabase, accessToken]);
 
-  if (loading) {
-    return <Loading />;
-  }
-
   return <>{children}</>;
 };
 
-function Loading() {
-  return (
-    <div className="flex flex-col h-screen w-screen items-center justify-center">
-      <img
-        src="/carbon-logo-dark.png"
-        alt="Carbon Logo"
-        className="block dark:hidden max-w-[100px]"
-      />
-      <img
-        src="/carbon-logo-light.png"
-        alt="Carbon Logo"
-        className="hidden dark:block max-w-[100px]"
-      />
-    </div>
-  );
-}
+// function Loading() {
+//   return (
+//     <div className="flex flex-col h-screen w-screen items-center justify-center">
+//       <img
+//         src="/carbon-logo-dark.png"
+//         alt="Carbon Logo"
+//         className="block dark:hidden max-w-[100px]"
+//       />
+//       <img
+//         src="/carbon-logo-light.png"
+//         alt="Carbon Logo"
+//         className="hidden dark:block max-w-[100px]"
+//       />
+//     </div>
+//   );
+// }
 
 export default RealtimeDataProvider;
