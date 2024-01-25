@@ -3,4 +3,4 @@ import { useNanoStore } from "~/hooks";
 import type { ListItem } from "~/types";
 
 const $suppliersStore = atom<ListItem[]>([]);
-export const useSuppliers = () => useNanoStore($suppliersStore, "suppliers");
+export const useSuppliers = () => useNanoStore($suppliersStore, "supplier");
