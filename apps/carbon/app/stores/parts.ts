@@ -15,6 +15,6 @@ const $manufacturedPartsStore = computed($partsStore, (part) =>
   part.filter((i) => i.replenishmentSystem === "Make")
 );
 
-export const useParts = () => useNanoStore<Part[]>($partsStore);
+export const useParts = () => useNanoStore<Part[]>($partsStore, "parts");
 export const usePurchasedParts = () => useValue($purchasedPartsStore);
 export const useManufacturedParts = () => useValue($manufacturedPartsStore);

@@ -74,7 +74,7 @@ export default function PurchaseInvoiceRoute() {
   return (
     <>
       <PurchaseInvoiceHeader />
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_4fr] h-full w-full gap-x-4">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_4fr] h-full w-full gap-4">
         <PurchaseInvoiceSidebar />
         <Outlet />
       </div>
