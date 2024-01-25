@@ -54,7 +54,7 @@ export default function SupplierRoute() {
   return (
     <>
       <SupplierHeader />
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_4fr] h-full w-full gap-x-4">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_4fr] h-full w-full gap-4">
         <SupplierSidebar />
         <Outlet />
       </div>
