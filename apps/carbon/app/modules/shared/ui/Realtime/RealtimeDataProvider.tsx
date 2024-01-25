@@ -1,37 +1,33 @@
 import idb from "localforage";
 import { useEffect } from "react";
-import { flushSync } from "react-dom";
 import { useSupabase } from "~/lib/supabase";
 import { useCustomers, useParts, useSuppliers } from "~/stores";
+import type { Part } from "~/stores/parts";
+import type { ListItem } from "~/types";
 
 let hydrated = false;
+let hydratedFromServer = false;
 
 const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
   const { supabase, accessToken } = useSupabase();
 
-  const [, setParts] = useParts([]);
+  const [, setParts] = useParts();
   const [, setSuppliers] = useSuppliers();
   const [, setCustomers] = useCustomers();
 
   const hydrate = async () => {
     if (!hydrated) {
-      const localData = await Promise.all([
-        idb.getItem("customers"),
-        idb.getItem("parts"),
-        idb.getItem("suppliers"),
-      ]);
-
       hydrated = true;
 
-      if (localData.every((data) => data !== null)) {
-        const [localCustomers, localParts, localSuppliers] = localData;
-
-        setCustomers(localCustomers);
-        setParts(localParts);
-        setSuppliers(localSuppliers);
-
-        flushSync(() => setLoading(false));
-      }
+      idb.getItem("customers").then((data) => {
+        if (data && !hydratedFromServer) setCustomers(data as ListItem[], true);
+      });
+      idb.getItem("parts").then((data) => {
+        if (data && !hydratedFromServer) setParts(data as Part[], true);
+      });
+      idb.getItem("suppliers").then((data) => {
+        if (data && !hydratedFromServer) setSuppliers(data as ListItem[], true);
+      });
     }
 
     if (!supabase || !accessToken) return;
@@ -51,11 +47,11 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
       throw new Error("Failed to fetch core data");
     }
 
+    hydratedFromServer = true;
+
     setParts(parts.data ?? []);
     setSuppliers(suppliers.data ?? []);
     setCustomers(customers.data ?? []);
-
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -219,22 +215,5 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
 
   return <>{children}</>;
 };
-
-// function Loading() {
-//   return (
-//     <div className="flex flex-col h-screen w-screen items-center justify-center">
-//       <img
-//         src="/carbon-logo-dark.png"
-//         alt="Carbon Logo"
-//         className="block dark:hidden max-w-[100px]"
-//       />
-//       <img
-//         src="/carbon-logo-light.png"
-//         alt="Carbon Logo"
-//         className="hidden dark:block max-w-[100px]"
-//       />
-//     </div>
-//   );
-// }
 
 export default RealtimeDataProvider;
