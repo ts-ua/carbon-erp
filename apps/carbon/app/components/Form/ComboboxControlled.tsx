@@ -7,10 +7,10 @@ import {
 import { useEffect } from "react";
 
 import { useControlField, useField } from "remix-validated-form";
-import { Select as SelectBase } from "~/components";
-import type { SelectProps as SelectBaseProps } from "~/components/Select";
+import { Combobox as ComboboxBase } from "~/components";
+import type { ComboboxProps as ComboboxBaseProps } from "~/components/Combobox";
 
-export type SelectProps = Omit<SelectBaseProps, "onChange"> & {
+export type ComboboxProps = Omit<ComboboxBaseProps, "onChange"> & {
   name: string;
   label?: string;
   helperText?: string;
@@ -18,13 +18,13 @@ export type SelectProps = Omit<SelectBaseProps, "onChange"> & {
   onChange?: (newValue: { value: string; label: string } | null) => void;
 };
 
-const SelectControlled = ({
+const ComboboxControlled = ({
   name,
   label,
   helperText,
   options,
   ...props
-}: SelectProps) => {
+}: ComboboxProps) => {
   const { getInputProps, error } = useField(name);
   const [controlValue, setControlValue] = useControlField<string | undefined>(
     name
@@ -54,7 +54,7 @@ const SelectControlled = ({
         id={name}
         value={controlValue}
       />
-      <SelectBase
+      <ComboboxBase
         {...props}
         options={options}
         value={controlValue}
@@ -74,6 +74,6 @@ const SelectControlled = ({
   );
 };
 
-SelectControlled.displayName = "SelectControlled";
+ComboboxControlled.displayName = "ComboboxControlled";
 
-export default SelectControlled;
+export default ComboboxControlled;

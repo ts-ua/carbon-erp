@@ -18,8 +18,8 @@ import { useEffect, useMemo } from "react";
 import { ValidatedForm, useControlField } from "remix-validated-form";
 import {
   Ability,
+  ComboboxControlled,
   Number,
-  SelectControlled,
   Submit,
   Supplier,
 } from "~/components/Form";
@@ -163,7 +163,7 @@ const SupplierLocationsBySupplier = ({
   return (
     <FormControl>
       <FormLabel>Supplier Location</FormLabel>
-      <SelectControlled
+      <ComboboxControlled
         name="id"
         options={supplierLocations}
         value={supplierLocation ?? undefined}

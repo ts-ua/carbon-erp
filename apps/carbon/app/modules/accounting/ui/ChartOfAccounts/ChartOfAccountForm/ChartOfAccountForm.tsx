@@ -18,10 +18,10 @@ import {
   AccountCategory,
   AccountSubcategory,
   Boolean,
+  ComboboxControlled,
   Hidden,
   Input,
   Select,
-  SelectControlled,
   Submit,
 } from "~/components/Form";
 import { usePermissions } from "~/hooks";
@@ -124,7 +124,7 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
                   name="accountSubcategoryId"
                   accountCategoryId={accountCategoryId}
                 />
-                <SelectControlled
+                <ComboboxControlled
                   name="incomeBalance"
                   label="Income/Balance"
                   options={incomeBalanceTypes.map((incomeBalance) => ({
@@ -139,7 +139,7 @@ const ChartOfAccountForm = ({ initialValues }: ChartOfAccountFormProps) => {
                 />
               </VStack>
               <VStack spacing={4}>
-                <SelectControlled
+                <ComboboxControlled
                   name="class"
                   label="Class"
                   options={accountClassTypes.map((accountClass) => ({
