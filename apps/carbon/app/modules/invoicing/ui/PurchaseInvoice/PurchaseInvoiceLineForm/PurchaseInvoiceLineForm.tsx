@@ -25,11 +25,11 @@ import { LuChevronDown, LuChevronUp } from "react-icons/lu";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Account,
+  ComboboxControlled,
   Hidden,
   Number,
   Part,
   Select,
-  SelectControlled,
   Service,
   Submit,
 } from "~/components/Form";
@@ -326,7 +326,7 @@ const PurchaseInvoiceLineForm = ({
                     </NumberField>
                   </FormControl>
                   {["Part", "Service"].includes(type) && (
-                    <SelectControlled
+                    <ComboboxControlled
                       name="locationId"
                       label="Location"
                       options={locationOptions}
@@ -335,7 +335,7 @@ const PurchaseInvoiceLineForm = ({
                     />
                   )}
                   {type === "Part" && (
-                    <SelectControlled
+                    <ComboboxControlled
                       name="shelfId"
                       label="Shelf"
                       options={shelfOptions}

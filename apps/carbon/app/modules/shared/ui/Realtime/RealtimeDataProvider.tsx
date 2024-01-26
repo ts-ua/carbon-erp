@@ -5,7 +5,7 @@ import { useCustomers, useParts, useSuppliers } from "~/stores";
 import type { Part } from "~/stores/parts";
 import type { ListItem } from "~/types";
 
-let hydrated = false;
+let hydratedFromIdb = false;
 let hydratedFromServer = false;
 
 const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
@@ -16,8 +16,8 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
   const [, setCustomers] = useCustomers();
 
   const hydrate = async () => {
-    if (!hydrated) {
-      hydrated = true;
+    if (!hydratedFromIdb) {
+      hydratedFromIdb = true;
 
       idb.getItem("customers").then((data) => {
         if (data && !hydratedFromServer) setCustomers(data as ListItem[], true);
