@@ -26,11 +26,15 @@ import { useParams } from "@remix-run/react";
 import { useMemo, useState } from "react";
 import { FaHistory } from "react-icons/fa";
 import { ValidatedForm } from "remix-validated-form";
-import { SelectControlled, SupplierContact } from "~/components/Form";
-import { usePermissions, useRouteData } from "~/hooks";
+import { Hidden, SelectControlled, SupplierContact } from "~/components/Form";
+import { usePermissions, useRouteData, useUser } from "~/hooks";
 import { useIntegrations } from "~/hooks/useIntegrations";
 import type { PurchaseOrder } from "~/modules/purchasing";
-import { PurchasingStatus, usePurchaseOrderTotals } from "~/modules/purchasing";
+import {
+  PurchasingStatus,
+  purchaseOrderReleaseValidator,
+  usePurchaseOrderTotals,
+} from "~/modules/purchasing";
 import { path } from "~/utils/path";
 import { usePurchaseOrder } from "../../PurchaseOrders/usePurchaseOrder";
 
@@ -42,6 +46,8 @@ const PurchaseOrderHeader = () => {
   const routeData = useRouteData<{ purchaseOrder: PurchaseOrder }>(
     path.to.purchaseOrder(orderId)
   );
+
+  if (!routeData?.purchaseOrder) throw new Error("purchaseOrder not found");
 
   const [purchaseOrderTotals] = usePurchaseOrderTotals();
 
@@ -61,8 +67,6 @@ const PurchaseOrderHeader = () => {
           <Menubar>
             <MenubarItem
               onClick={() => {
-                if (!routeData?.purchaseOrder)
-                  throw new Error("purchaseOrder not found");
                 release(routeData.purchaseOrder);
               }}
               isDisabled={
@@ -75,8 +79,6 @@ const PurchaseOrderHeader = () => {
             </MenubarItem>
             <MenubarItem
               onClick={() => {
-                if (!routeData?.purchaseOrder)
-                  throw new Error("purchaseOrder not found");
                 receive(routeData.purchaseOrder);
               }}
               isDisabled={
@@ -88,8 +90,6 @@ const PurchaseOrderHeader = () => {
             </MenubarItem>
             <MenubarItem
               onClick={() => {
-                if (!routeData?.purchaseOrder)
-                  throw new Error("purchaseOrder not found");
                 invoice(routeData.purchaseOrder);
               }}
               isDisabled={
@@ -168,6 +168,10 @@ type PurchaseOrderReleaseModalProps = {
 const PurchaseOrderReleaseModal = ({
   purchaseOrder,
 }: PurchaseOrderReleaseModalProps) => {
+  const { orderId } = useParams();
+  if (!orderId) throw new Error("orderId not found");
+
+  const { email: buyerEmail } = useUser();
   const integrations = useIntegrations();
   const canEmail = integrations.has("resend");
 
@@ -178,13 +182,17 @@ const PurchaseOrderReleaseModal = ({
   return (
     <Modal open>
       <ModalContent>
-        <ValidatedForm method="post">
+        <ValidatedForm
+          method="post"
+          validator={purchaseOrderReleaseValidator}
+          action={path.to.purchaseOrderReleaseEmail(orderId)}
+        >
           <ModalHeader>
             <ModalTitle>{`Release ${purchaseOrder?.purchaseOrderId}`}</ModalTitle>
             <ModalDescription>Description</ModalDescription>
           </ModalHeader>
           <ModalBody>
-            <VStack spacing={4}>
+            <VStack>
               {canEmail && (
                 <SelectControlled
                   label="Send Via"
@@ -206,10 +214,13 @@ const PurchaseOrderReleaseModal = ({
                 />
               )}
               {notificationType === "Email" && (
-                <SupplierContact
-                  name="supplierContact"
-                  supplier={purchaseOrder?.supplierId ?? undefined}
-                />
+                <>
+                  <Hidden name="buyerEmail" value={buyerEmail} />
+                  <SupplierContact
+                    name="supplierContact"
+                    supplier={purchaseOrder?.supplierId ?? undefined}
+                  />
+                </>
               )}
             </VStack>
           </ModalBody>

@@ -29,6 +29,7 @@ module.exports = {
     "@carbon/logger",
     "@carbon/react",
     "@carbon/utils",
+    "nanoid",
     "nanostores",
     "@nanostores/react",
   ],
