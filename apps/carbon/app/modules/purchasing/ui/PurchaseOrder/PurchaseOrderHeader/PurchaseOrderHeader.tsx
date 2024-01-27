@@ -26,8 +26,8 @@ import { useParams } from "@remix-run/react";
 import { useMemo, useState } from "react";
 import { FaHistory } from "react-icons/fa";
 import { ValidatedForm } from "remix-validated-form";
-import { Hidden, SelectControlled, SupplierContact } from "~/components/Form";
-import { usePermissions, useRouteData, useUser } from "~/hooks";
+import { SelectControlled, SupplierContact } from "~/components/Form";
+import { usePermissions, useRouteData } from "~/hooks";
 import { useIntegrations } from "~/hooks/useIntegrations";
 import type { PurchaseOrder } from "~/modules/purchasing";
 import {
@@ -171,7 +171,6 @@ const PurchaseOrderReleaseModal = ({
   const { orderId } = useParams();
   if (!orderId) throw new Error("orderId not found");
 
-  const { email: buyerEmail } = useUser();
   const integrations = useIntegrations();
   const canEmail = integrations.has("resend");
 
@@ -199,8 +198,8 @@ const PurchaseOrderReleaseModal = ({
                   name="notification"
                   options={[
                     {
-                      label: "Download",
-                      value: "Download",
+                      label: "None",
+                      value: "None",
                     },
                     {
                       label: "Email",
@@ -214,13 +213,10 @@ const PurchaseOrderReleaseModal = ({
                 />
               )}
               {notificationType === "Email" && (
-                <>
-                  <Hidden name="buyerEmail" value={buyerEmail} />
-                  <SupplierContact
-                    name="supplierContact"
-                    supplier={purchaseOrder?.supplierId ?? undefined}
-                  />
-                </>
+                <SupplierContact
+                  name="supplierContact"
+                  supplier={purchaseOrder?.supplierId ?? undefined}
+                />
               )}
             </VStack>
           </ModalBody>

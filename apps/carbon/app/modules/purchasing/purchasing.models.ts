@@ -157,8 +157,8 @@ export const purchaseOrderPaymentValidator = withZod(
 export const purchaseOrderReleaseValidator = withZod(
   z
     .object({
-      notification: z.enum(["Email", "Download"]),
-      buyerEmail: zfd.text(z.string().optional()),
+      notification: z.enum(["Email", "None"]),
+
       supplierContact: zfd.text(z.string().optional()),
     })
     .refine(

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "@react-pdf/renderer";
-import type { Company } from "../types";
+import type { Company } from "../../types";
 
 type SummaryProps = {
   company: Company;

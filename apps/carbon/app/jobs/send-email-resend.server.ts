@@ -20,6 +20,7 @@ const job = triggerClient.defineJob({
       cc: z.union([z.string(), z.array(z.string())]).optional(),
       from: z.string().optional(),
       subject: z.string(),
+      text: z.string(),
       html: z.string(),
       attachments: z
         .object({
@@ -46,18 +47,21 @@ const job = triggerClient.defineJob({
 
     const resend = new Resend(integrationMetadata.data.apiKey);
 
-    await io.logger.info(`📬 Resend Email Job`);
-    await resend.emails.send({
+    const email = {
       from: "onboarding@resend.dev",
       to: payload.to,
       reply_to: payload.from,
       subject: payload.subject,
       html: payload.html,
+      text: payload.text,
       attachments: payload.attachments,
       headers: {
         "X-Entity-Ref-ID": nanoid(7),
       },
-    });
+    };
+
+    await io.logger.info(`📬 Resend Email Job`);
+    await resend.emails.send(email);
   },
 });
 
