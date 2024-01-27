@@ -1,19 +1,25 @@
+import { PurchaseOrderEmail } from "@carbon/documents";
+import { renderAsync } from "@react-email/components";
 import { redirect, type ActionFunctionArgs } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
+import { triggerClient } from "~/lib/trigger.server";
 import {
+  getPurchaseOrder,
   getSupplierContact,
   purchaseOrderReleaseValidator,
 } from "~/modules/purchasing";
+import { getCompany } from "~/modules/settings";
+import { getUser } from "~/modules/users/users.server";
 import { requirePermissions } from "~/services/auth";
 import { flash } from "~/services/session";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";
-import { success } from "~/utils/result";
+import { error, success } from "~/utils/result";
 
 export async function action({ request, params, context }: ActionFunctionArgs) {
   assertIsPost(request);
 
-  const { client } = await requirePermissions(request, {
+  const { client, userId } = await requirePermissions(request, {
     create: "purchasing",
     role: "employee",
   });
@@ -29,34 +35,64 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const { notification, buyerEmail, supplierContact } = validation.data;
+  const { notification, supplierContact } = validation.data;
 
   switch (notification) {
     case "Email":
-      if (!supplierContact) throw new Error("Supplier contact is required");
-      if (!buyerEmail) throw new Error("Buyer email is required");
+      try {
+        if (!supplierContact) throw new Error("Supplier contact is required");
 
-      const contact = await getSupplierContact(client, supplierContact);
-      const supplierEmail = contact.data?.contact?.email;
+        const [company, contact, purchaseOrder, user] = await Promise.all([
+          getCompany(client),
+          getSupplierContact(client, supplierContact),
+          getPurchaseOrder(client, orderId),
+          getUser(client, userId),
+        ]);
 
-      if (!supplierEmail) throw new Error("Failed to get supplier contact");
+        if (!contact?.data?.contact)
+          throw new Error("Failed to get supplier contact");
+        if (!company.data) throw new Error("Failed to get company");
+        if (!purchaseOrder.data)
+          throw new Error("Failed to get purchase order");
+        if (!user.data) throw new Error("Failed to get user");
+
+        const supplierEmail = contact.data.contact.email;
+        const supplierName = `${contact.data.contact.firstName} ${contact.data.contact.lastName}`;
+
+        const buyerEmail = user.data.email;
+        const buyerName = `${user.data.firstName} ${user.data.lastName}`;
+
+        const emailTemplate = PurchaseOrderEmail({
+          company: company.data,
+          purchaseOrder: { id: purchaseOrder.data.purchaseOrderId! },
+          recipient: { email: supplierEmail, name: supplierName },
+          sender: { email: buyerEmail, name: buyerName },
+        });
+
+        await triggerClient.sendEvent({
+          name: "resend.email",
+          payload: {
+            to: [buyerEmail, supplierEmail],
+            from: buyerEmail,
+            subject: `New Purchase Order from ${company.data.name}`,
+            html: await renderAsync(emailTemplate),
+            text: await renderAsync(emailTemplate, { plainText: true }),
+            attachments: [],
+          },
+        });
+      } catch (err) {
+        return redirect(
+          path.to.purchaseOrder(orderId),
+          await flash(request, error(err, "Failed to send email"))
+        );
+      }
 
       break;
-    case "Download":
-      return redirect(path.to.file.purchaseOrder(orderId));
+    case "None":
+      break;
     default:
       throw new Error("Invalid notification type");
   }
-  // await triggerClient.sendEvent({
-  //   name: "resend.email",
-  //   payload: {
-  //     to: ["bradbarbin@protonmail.com", "gravyfries@protonmail.com"],
-  //     from: "bradbarbin@protonmail.com",
-  //     subject: "Hello from the server",
-  //     html: "<p>This is a replyable email from the <strong>server</strong></p>",
-  //     attachments: [],
-  //   },
-  // });
 
   return redirect(
     path.to.purchaseOrder(orderId),

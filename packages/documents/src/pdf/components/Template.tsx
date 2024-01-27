@@ -1,6 +1,6 @@
 import { Document, Font, Page, StyleSheet } from "@react-pdf/renderer";
 import type { PropsWithChildren } from "react";
-import type { Meta } from "../types";
+import type { Meta } from "../../types";
 
 type TemplateProps = PropsWithChildren<{ title: string; meta: Meta }>;
 

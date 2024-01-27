@@ -1,8 +1,8 @@
 import type { Database } from "@carbon/database";
 import { StyleSheet, Text, View } from "@react-pdf/renderer";
 
-import { Header, Summary, Template } from "../components";
 import type { PDF } from "../types";
+import { Header, Summary, Template } from "./components";
 
 interface PurchaseOrderPDFProps extends PDF {
   purchaseOrder: Database["public"]["Views"]["purchaseOrders"]["Row"];

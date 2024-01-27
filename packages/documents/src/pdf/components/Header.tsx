@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View } from "@react-pdf/renderer";
-import type { Company } from "../types";
+import type { Company } from "../../types";
 
 type HeaderProps = {
   company: Company;
