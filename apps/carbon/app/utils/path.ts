@@ -334,14 +334,18 @@ export const path = {
       generatePath(`${x}/purchase-order/${id}/delivery`),
     purchaseOrderDetails: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/details`),
+    purchaseOrderExternalDocuments: (id: string) =>
+      generatePath(`${x}/purchase-order/${id}/external`),
+    purchaseOrderInternalDocuments: (id: string) =>
+      generatePath(`${x}/purchase-order/${id}/internal`),
     purchaseOrderLines: (orderId: string) =>
       generatePath(`${x}/purchase-order/${orderId}/lines`),
     purchaseOrderLine: (orderId: string, id: string) =>
       generatePath(`${x}/purchase-order/${orderId}/lines/${id}`),
     purchaseOrderPayment: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/payment`),
-    purchaseOrderReleaseEmail: (id: string) =>
-      generatePath(`${x}/purchase-order/${id}/release-email`),
+    purchaseOrderRelease: (id: string) =>
+      generatePath(`${x}/purchase-order/${id}/release`),
     purchaseOrders: `${x}/purchasing/orders`,
     purchasing: `${x}/purchasing`,
     receipt: (id: string) => generatePath(`${x}/inventory/receipts/${id}`),

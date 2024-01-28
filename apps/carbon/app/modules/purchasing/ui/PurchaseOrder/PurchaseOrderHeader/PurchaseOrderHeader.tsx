@@ -21,6 +21,7 @@ import {
   ModalHeader,
   ModalTitle,
   VStack,
+  useDisclosure,
 } from "@carbon/react";
 import { useParams } from "@remix-run/react";
 import { useMemo, useState } from "react";
@@ -48,6 +49,9 @@ const PurchaseOrderHeader = () => {
   );
 
   if (!routeData?.purchaseOrder) throw new Error("purchaseOrder not found");
+  const isReleased = !["Draft", "Approved"].includes(
+    routeData?.purchaseOrder?.status ?? ""
+  );
 
   const [purchaseOrderTotals] = usePurchaseOrderTotals();
 
@@ -58,22 +62,26 @@ const PurchaseOrderHeader = () => {
     []
   );
 
-  const { receive, release, invoice } = usePurchaseOrder();
+  const { receive, invoice } = usePurchaseOrder();
+  const releaseDisclosure = useDisclosure();
 
   return (
     <>
       <VStack>
         {permissions.is("employee") && (
           <Menubar>
+            <MenubarItem asChild>
+              <a
+                target="_blank"
+                href={path.to.file.purchaseOrder(orderId)}
+                rel="noreferrer"
+              >
+                {isReleased ? "View" : "Preview"}
+              </a>
+            </MenubarItem>
             <MenubarItem
-              onClick={() => {
-                release(routeData.purchaseOrder);
-              }}
-              isDisabled={
-                !["Draft", "Approved"].includes(
-                  routeData?.purchaseOrder?.status ?? ""
-                )
-              }
+              onClick={releaseDisclosure.onOpen}
+              isDisabled={isReleased}
             >
               Release
             </MenubarItem>
@@ -156,17 +164,24 @@ const PurchaseOrderHeader = () => {
           </CardContent>
         </Card>
       </VStack>
-      <PurchaseOrderReleaseModal purchaseOrder={routeData?.purchaseOrder} />
+      {releaseDisclosure.isOpen && (
+        <PurchaseOrderReleaseModal
+          purchaseOrder={routeData?.purchaseOrder}
+          onClose={releaseDisclosure.onClose}
+        />
+      )}
     </>
   );
 };
 
 type PurchaseOrderReleaseModalProps = {
+  onClose: () => void;
   purchaseOrder?: PurchaseOrder;
 };
 
 const PurchaseOrderReleaseModal = ({
   purchaseOrder,
+  onClose,
 }: PurchaseOrderReleaseModalProps) => {
   const { orderId } = useParams();
   if (!orderId) throw new Error("orderId not found");
@@ -179,16 +194,27 @@ const PurchaseOrderReleaseModal = ({
   );
 
   return (
-    <Modal open>
+    <Modal
+      open
+      onOpenChange={(open) => {
+        if (!open) {
+          onClose();
+        }
+      }}
+    >
       <ModalContent>
         <ValidatedForm
           method="post"
           validator={purchaseOrderReleaseValidator}
-          action={path.to.purchaseOrderReleaseEmail(orderId)}
+          action={path.to.purchaseOrderRelease(orderId)}
+          onSubmit={onClose}
         >
           <ModalHeader>
             <ModalTitle>{`Release ${purchaseOrder?.purchaseOrderId}`}</ModalTitle>
-            <ModalDescription>Description</ModalDescription>
+            <ModalDescription>
+              Are you sure you want to release the purchase order? Releasing the
+              order will affect supply and demand.
+            </ModalDescription>
           </ModalHeader>
           <ModalBody>
             <VStack>
@@ -221,7 +247,9 @@ const PurchaseOrderReleaseModal = ({
             </VStack>
           </ModalBody>
           <ModalFooter>
-            <Button variant="secondary">Cancel</Button>
+            <Button variant="secondary" onClick={onClose}>
+              Cancel
+            </Button>
             <Button type="submit">Release</Button>
           </ModalFooter>
         </ValidatedForm>

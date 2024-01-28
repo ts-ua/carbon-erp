@@ -1,3 +1,4 @@
+import { useParams } from "@remix-run/react";
 import { BsBank, BsCreditCard, BsListCheck, BsTruck } from "react-icons/bs";
 import {
   HiOutlineDocumentArrowDown,
@@ -5,6 +6,7 @@ import {
 } from "react-icons/hi2";
 import { usePermissions } from "~/hooks";
 import type { Role } from "~/types";
+import { path } from "~/utils/path";
 
 type Props = {
   lines?: number;
@@ -17,41 +19,44 @@ export function usePurchaseOrderSidebar({
   internalDocuments = 0,
   externalDocuments = 0,
 }: Props) {
+  const { orderId } = useParams();
+  if (!orderId) throw new Error("orderId not found");
+
   const permissions = usePermissions();
   return [
     {
       name: "Summary",
-      to: "details",
+      to: path.to.purchaseOrderDetails(orderId),
       icon: BsBank,
     },
     {
       name: "Lines",
-      to: "lines",
+      to: path.to.purchaseOrderLines(orderId),
       count: lines,
       icon: BsListCheck,
     },
     {
       name: "Delivery",
-      to: "delivery",
+      to: path.to.purchaseOrderDelivery(orderId),
       role: ["employee", "supplier"],
       icon: BsTruck,
     },
     {
       name: "Payment",
-      to: "payment",
+      to: path.to.purchaseOrderPayment(orderId),
       role: ["employee"],
       icon: BsCreditCard,
     },
     {
-      name: "Internal Attachments",
-      to: "internal",
+      name: "Internal Documents",
+      to: path.to.purchaseOrderInternalDocuments(orderId),
       role: ["employee"],
       count: internalDocuments,
       icon: HiOutlineDocumentArrowDown,
     },
     {
-      name: "External Attachments",
-      to: "external",
+      name: "External Documents",
+      to: path.to.purchaseOrderExternalDocuments(orderId),
       role: ["employee", "supplier"],
       count: externalDocuments,
       icon: HiOutlineDocumentArrowUp,
