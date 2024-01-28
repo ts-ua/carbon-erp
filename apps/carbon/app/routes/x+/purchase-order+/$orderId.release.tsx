@@ -7,6 +7,7 @@ import {
   getPurchaseOrder,
   getSupplierContact,
   purchaseOrderReleaseValidator,
+  releasePurchaseOrder,
 } from "~/modules/purchasing";
 import { getCompany } from "~/modules/settings";
 import { getUser } from "~/modules/users/users.server";
@@ -16,7 +17,7 @@ import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";
 import { error, success } from "~/utils/result";
 
-export async function action({ request, params, context }: ActionFunctionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   assertIsPost(request);
 
   const { client, userId } = await requirePermissions(request, {
@@ -26,6 +27,17 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
 
   const { orderId } = params;
   if (!orderId) throw new Error("Could not find orderId");
+
+  const release = await releasePurchaseOrder(client, orderId, userId);
+  if (release.error) {
+    return redirect(
+      path.to.purchaseOrder(orderId),
+      await flash(
+        request,
+        error(release.error, "Failed to release purchase order")
+      )
+    );
+  }
 
   const validation = await purchaseOrderReleaseValidator.validate(
     await request.formData()
@@ -88,6 +100,7 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
       }
 
       break;
+    case undefined:
     case "None":
       break;
     default:
@@ -95,7 +108,7 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
   }
 
   return redirect(
-    path.to.purchaseOrder(orderId),
+    path.to.purchaseOrderExternalDocuments(orderId),
     await flash(request, success("Purchase order released"))
   );
 }
