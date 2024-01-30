@@ -31,6 +31,7 @@ export async function action(args: ActionFunctionArgs) {
   if (!orderId) throw new Error("Could not find orderId");
 
   let file: ArrayBuffer;
+  let bucketName = orderId;
   let fileName: string;
 
   const release = await releasePurchaseOrder(client, orderId, userId);
@@ -61,13 +62,13 @@ export async function action(args: ActionFunctionArgs) {
       throw new Error("Failed to generate PDF");
 
     file = await pdf.arrayBuffer();
-    fileName = `${orderId}/${purchaseOrder.data.purchaseOrderId} - ${new Date()
+    fileName = `${purchaseOrder.data.purchaseOrderId} - ${new Date()
       .toISOString()
       .slice(0, -5)}.pdf`;
 
     const fileUpload = await client.storage
       .from("purchasing-external")
-      .upload(fileName, file, {
+      .upload(`${bucketName}/${fileName}`, file, {
         cacheControl: `${12 * 60 * 60}`,
         contentType: "application/pdf",
       });
@@ -132,7 +133,12 @@ export async function action(args: ActionFunctionArgs) {
             subject: `New Purchase Order from ${company.data.name}`,
             html: await renderAsync(emailTemplate),
             text: await renderAsync(emailTemplate, { plainText: true }),
-            attachments: [],
+            attachments: [
+              {
+                content: Buffer.from(file),
+                filename: fileName,
+              },
+            ],
           },
         });
       } catch (err) {
