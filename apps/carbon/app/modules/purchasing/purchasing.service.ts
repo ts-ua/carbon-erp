@@ -475,7 +475,6 @@ export async function releasePurchaseOrder(
   purchaseOrderId: string,
   userId: string
 ) {
-  console.log("releasing purchase order");
   return client
     .from("purchaseOrder")
     .update({
