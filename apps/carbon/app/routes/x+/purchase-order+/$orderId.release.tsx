@@ -11,13 +11,15 @@ import {
 } from "~/modules/purchasing";
 import { getCompany } from "~/modules/settings";
 import { getUser } from "~/modules/users/users.server";
+import { loader as pdfLoader } from "~/routes/file+/purchase-order+/$orderId[.]pdf";
 import { requirePermissions } from "~/services/auth";
 import { flash } from "~/services/session";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";
 import { error, success } from "~/utils/result";
 
-export async function action({ request, params }: ActionFunctionArgs) {
+export async function action(args: ActionFunctionArgs) {
+  const { request, params } = args;
   assertIsPost(request);
 
   const { client, userId } = await requirePermissions(request, {
@@ -28,6 +30,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { orderId } = params;
   if (!orderId) throw new Error("Could not find orderId");
 
+  let file: ArrayBuffer;
+  let fileName: string;
+
   const release = await releasePurchaseOrder(client, orderId, userId);
   if (release.error) {
     return redirect(
@@ -36,6 +41,47 @@ export async function action({ request, params }: ActionFunctionArgs) {
         request,
         error(release.error, "Failed to release purchase order")
       )
+    );
+  }
+
+  const purchaseOrder = await getPurchaseOrder(client, orderId);
+  if (purchaseOrder.error) {
+    return redirect(
+      path.to.purchaseOrder(orderId),
+      await flash(
+        request,
+        error(purchaseOrder.error, "Failed to get purchase order")
+      )
+    );
+  }
+
+  try {
+    const pdf = await pdfLoader(args);
+    if (pdf.headers.get("content-type") !== "application/pdf")
+      throw new Error("Failed to generate PDF");
+
+    file = await pdf.arrayBuffer();
+    fileName = `${orderId}/${purchaseOrder.data.purchaseOrderId} - ${new Date()
+      .toISOString()
+      .slice(0, -5)}.pdf`;
+
+    const fileUpload = await client.storage
+      .from("purchasing-external")
+      .upload(fileName, file, {
+        cacheControl: `${12 * 60 * 60}`,
+        contentType: "application/pdf",
+      });
+
+    if (fileUpload.error) {
+      return redirect(
+        path.to.purchaseOrder(orderId),
+        await flash(request, error(fileUpload.error, "Failed to upload file"))
+      );
+    }
+  } catch (err) {
+    return redirect(
+      path.to.purchaseOrder(orderId),
+      await flash(request, error(err, "Failed to generate PDF"))
     );
   }
 
@@ -54,18 +100,15 @@ export async function action({ request, params }: ActionFunctionArgs) {
       try {
         if (!supplierContact) throw new Error("Supplier contact is required");
 
-        const [company, contact, purchaseOrder, user] = await Promise.all([
+        const [company, contact, user] = await Promise.all([
           getCompany(client),
           getSupplierContact(client, supplierContact),
-          getPurchaseOrder(client, orderId),
           getUser(client, userId),
         ]);
 
         if (!contact?.data?.contact)
           throw new Error("Failed to get supplier contact");
         if (!company.data) throw new Error("Failed to get company");
-        if (!purchaseOrder.data)
-          throw new Error("Failed to get purchase order");
         if (!user.data) throw new Error("Failed to get user");
 
         const supplierEmail = contact.data.contact.email;

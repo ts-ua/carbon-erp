@@ -14,6 +14,7 @@ export let loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { client } = await requirePermissions(request, {
     view: "purchasing",
   });
+
   const { orderId } = params;
   if (!orderId) throw new Error("Could not find orderId");
 
