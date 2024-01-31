@@ -1,5 +1,19 @@
 import type { Database } from "@carbon/database";
 
+export interface Email {
+  company: Company;
+  recipient: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+  sender: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+}
+
 export interface PDF {
   title?: string;
   meta?: Meta;

@@ -7,10 +7,10 @@ import { exchangeRatesIntegration } from "~/modules/settings";
 
 const supabaseClient = getSupabaseServiceRole();
 
-export const job = triggerClient.defineJob({
+const job = triggerClient.defineJob({
   id: "update-exchange-rates",
   name: "Update Currency Exchange Rates",
-  version: "0.0.2",
+  version: "0.0.1",
   trigger: intervalTrigger({
     seconds: 60 * 60 * 8, // thrice a day
   }),
@@ -72,3 +72,5 @@ export const job = triggerClient.defineJob({
     }
   },
 });
+
+export default job;

@@ -470,6 +470,21 @@ export async function insertSupplierLocation(
     .single();
 }
 
+export async function releasePurchaseOrder(
+  client: SupabaseClient<Database>,
+  purchaseOrderId: string,
+  userId: string
+) {
+  return client
+    .from("purchaseOrder")
+    .update({
+      status: "To Receive and Invoice",
+      updatedAt: today(getLocalTimeZone()).toString(),
+      updatedBy: userId,
+    })
+    .eq("id", purchaseOrderId);
+}
+
 export async function updateSupplier(
   client: SupabaseClient<Database>,
   supplier: Omit<TypeOfValidator<typeof supplierValidator>, "id"> & {

@@ -1,8 +1,6 @@
 <p align="center"><a href="https://carbon.us.org" target="_blank"><img src="https://raw.githubusercontent.com/barbinbrad/carbon/main/www/public/logo-full.png" width="500" alt="Carbon Logo"></a></p>
 
-
 https://github.com/barbinbrad/carbon/assets/64510427/abc040a0-3899-47cf-924e-c5dd88097352
-
 
 # Carbon ERP
 
@@ -68,6 +66,7 @@ The monorepo follows the Turborepo covention of grouping packages into one of tw
 | ---------------------- | ----------------------------------------------------------------------- |
 | `eslint-config-carbon` | Shared, extendable eslint configuration for apps and packages           |
 | `@carbon/database`     | Database schema, migrations and types                                   |
+| `@carbon/documents`    | Transactional PDFs and email templates                                  |
 | `@carbon/jest`         | Jest preset configuration shared across apps and packages               |
 | `@carbon/logger`       | Shared logger used across apps                                          |
 | `@carbon/react`        | Shared web-based UI components                                          |

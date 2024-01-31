@@ -154,6 +154,21 @@ export const purchaseOrderPaymentValidator = withZod(
   })
 );
 
+export const purchaseOrderReleaseValidator = withZod(
+  z
+    .object({
+      notification: z.enum(["Email", "None"]).optional(),
+      supplierContact: zfd.text(z.string().optional()),
+    })
+    .refine(
+      (data) => (data.notification === "Email" ? data.supplierContact : true),
+      {
+        message: "Supplier contact is required for email",
+        path: ["supplierContact"], // path of error
+      }
+    )
+);
+
 export const supplierValidator = withZod(
   z.object({
     id: zfd.text(z.string().optional()),

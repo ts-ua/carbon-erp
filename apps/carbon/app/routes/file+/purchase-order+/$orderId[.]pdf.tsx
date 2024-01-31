@@ -10,10 +10,11 @@ import {
 import { getCompany } from "~/modules/settings";
 import { requirePermissions } from "~/services/auth";
 
-export let loader = async ({ request, params }: LoaderFunctionArgs) => {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client } = await requirePermissions(request, {
     view: "purchasing",
   });
+
   const { orderId } = params;
   if (!orderId) throw new Error("Could not find orderId");
 
@@ -72,4 +73,4 @@ export let loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   const headers = new Headers({ "Content-Type": "application/pdf" });
   return new Response(body, { status: 200, headers });
-};
+}
