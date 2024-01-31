@@ -49,7 +49,7 @@ const Cell = <T extends object>({
   return (
     <Td
       className={cn(
-        "relative px-4 py-2 whitespace-nowrap text-sm outline-none",
+        "relative px-4 whitespace-nowrap text-sm outline-none",
         wasEdited && "bg-yellow-100 dark:bg-yellow-900",
         isEditing &&
           !hasEditableTableCellComponent &&

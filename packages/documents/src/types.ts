@@ -3,11 +3,13 @@ import type { Database } from "@carbon/database";
 export interface Email {
   company: Company;
   recipient: {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
   };
   sender: {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
   };
 }
