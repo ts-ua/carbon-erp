@@ -86,7 +86,10 @@ export default function AuthenticatedRoute() {
 
   /* NProgress */
   useEffect(() => {
-    if (transition.state === "loading") {
+    if (
+      (transition.state === "loading" || transition.state === "submitting") &&
+      !NProgress.isStarted()
+    ) {
       NProgress.start();
     } else {
       NProgress.done();
