@@ -13,31 +13,18 @@ import {
   HStack,
   Menubar,
   MenubarItem,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalDescription,
-  ModalFooter,
-  ModalHeader,
-  ModalTitle,
   VStack,
   useDisclosure,
 } from "@carbon/react";
 import { useParams } from "@remix-run/react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { FaHistory } from "react-icons/fa";
-import { ValidatedForm } from "remix-validated-form";
-import { SelectControlled, SupplierContact } from "~/components/Form";
 import { usePermissions, useRouteData } from "~/hooks";
-import { useIntegrations } from "~/hooks/useIntegrations";
 import type { PurchaseOrder } from "~/modules/purchasing";
-import {
-  PurchasingStatus,
-  purchaseOrderReleaseValidator,
-  usePurchaseOrderTotals,
-} from "~/modules/purchasing";
+import { PurchasingStatus, usePurchaseOrderTotals } from "~/modules/purchasing";
 import { path } from "~/utils/path";
-import { usePurchaseOrder } from "../../PurchaseOrders/usePurchaseOrder";
+import { usePurchaseOrder } from "../PurchaseOrders/usePurchaseOrder";
+import PurchaseOrderReleaseModal from "./PurchaseOrderReleaseModal";
 
 const PurchaseOrderHeader = () => {
   const permissions = usePermissions();
@@ -76,9 +63,10 @@ const PurchaseOrderHeader = () => {
                 href={path.to.file.purchaseOrder(orderId)}
                 rel="noreferrer"
               >
-                {isReleased ? "View" : "Preview"}
+                Preview
               </a>
             </MenubarItem>
+
             <MenubarItem
               onClick={releaseDisclosure.onOpen}
               isDisabled={isReleased}
@@ -171,90 +159,6 @@ const PurchaseOrderHeader = () => {
         />
       )}
     </>
-  );
-};
-
-type PurchaseOrderReleaseModalProps = {
-  onClose: () => void;
-  purchaseOrder?: PurchaseOrder;
-};
-
-const PurchaseOrderReleaseModal = ({
-  purchaseOrder,
-  onClose,
-}: PurchaseOrderReleaseModalProps) => {
-  const { orderId } = useParams();
-  if (!orderId) throw new Error("orderId not found");
-
-  const integrations = useIntegrations();
-  const canEmail = integrations.has("resend");
-
-  const [notificationType, setNotificationType] = useState(
-    canEmail ? "Email" : "Download"
-  );
-
-  return (
-    <Modal
-      open
-      onOpenChange={(open) => {
-        if (!open) {
-          onClose();
-        }
-      }}
-    >
-      <ModalContent>
-        <ValidatedForm
-          method="post"
-          validator={purchaseOrderReleaseValidator}
-          action={path.to.purchaseOrderRelease(orderId)}
-          onSubmit={onClose}
-        >
-          <ModalHeader>
-            <ModalTitle>{`Release ${purchaseOrder?.purchaseOrderId}`}</ModalTitle>
-            <ModalDescription>
-              Are you sure you want to release the purchase order? Releasing the
-              order will affect supply and demand.
-            </ModalDescription>
-          </ModalHeader>
-          <ModalBody>
-            <VStack>
-              {canEmail && (
-                <SelectControlled
-                  label="Send Via"
-                  name="notification"
-                  options={[
-                    {
-                      label: "None",
-                      value: "None",
-                    },
-                    {
-                      label: "Email",
-                      value: "Email",
-                    },
-                  ]}
-                  value={notificationType}
-                  onChange={(t) => {
-                    if (t) setNotificationType(t.value);
-                  }}
-                />
-              )}
-              {notificationType === "Email" && (
-                <SupplierContact
-                  name="supplierContact"
-                  supplier={purchaseOrder?.supplierId ?? undefined}
-                />
-              )}
-            </VStack>
-          </ModalBody>
-          <ModalFooter>
-            <Button variant="secondary" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button type="submit">Release</Button>
-          </ModalFooter>
-        </ValidatedForm>
-      </ModalContent>
-    </Modal>
   );
 };
 

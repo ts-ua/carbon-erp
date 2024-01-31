@@ -5,6 +5,8 @@ import { validationError } from "remix-validated-form";
 import { triggerClient } from "~/lib/trigger.server";
 import {
   getPurchaseOrder,
+  getPurchaseOrderLines,
+  getPurchaseOrderLocations,
   getSupplierContact,
   purchaseOrderReleaseValidator,
   releasePurchaseOrder,
@@ -101,36 +103,54 @@ export async function action(args: ActionFunctionArgs) {
       try {
         if (!supplierContact) throw new Error("Supplier contact is required");
 
-        const [company, contact, user] = await Promise.all([
+        const [
+          company,
+          supplier,
+          purchaseOrder,
+          purchaseOrderLines,
+          purchaseOrderLocations,
+          buyer,
+        ] = await Promise.all([
           getCompany(client),
           getSupplierContact(client, supplierContact),
+          getPurchaseOrder(client, orderId),
+          getPurchaseOrderLines(client, orderId),
+          getPurchaseOrderLocations(client, orderId),
           getUser(client, userId),
         ]);
 
-        if (!contact?.data?.contact)
+        if (!supplier?.data?.contact)
           throw new Error("Failed to get supplier contact");
         if (!company.data) throw new Error("Failed to get company");
-        if (!user.data) throw new Error("Failed to get user");
-
-        const supplierEmail = contact.data.contact.email;
-        const supplierName = `${contact.data.contact.firstName} ${contact.data.contact.lastName}`;
-
-        const buyerEmail = user.data.email;
-        const buyerName = `${user.data.firstName} ${user.data.lastName}`;
+        if (!buyer.data) throw new Error("Failed to get user");
+        if (!purchaseOrder.data)
+          throw new Error("Failed to get purchase order");
+        if (!purchaseOrderLocations.data)
+          throw new Error("Failed to get purchase order locations");
 
         const emailTemplate = PurchaseOrderEmail({
           company: company.data,
-          purchaseOrder: { id: purchaseOrder.data.purchaseOrderId! },
-          recipient: { email: supplierEmail, name: supplierName },
-          sender: { email: buyerEmail, name: buyerName },
+          purchaseOrder: purchaseOrder.data,
+          purchaseOrderLines: purchaseOrderLines.data ?? [],
+          purchaseOrderLocations: purchaseOrderLocations.data,
+          recipient: {
+            email: supplier.data.contact.email,
+            firstName: supplier.data.contact.firstName,
+            lastName: supplier.data.contact.lastName,
+          },
+          sender: {
+            email: buyer.data.email,
+            firstName: buyer.data.firstName,
+            lastName: buyer.data.lastName,
+          },
         });
 
         await triggerClient.sendEvent({
           name: "resend.email",
           payload: {
-            to: [buyerEmail, supplierEmail],
-            from: buyerEmail,
-            subject: `New Purchase Order from ${company.data.name}`,
+            to: [buyer.data.email, supplier.data.contact.email],
+            from: buyer.data.email,
+            subject: `${purchaseOrder.data.purchaseOrderId} from ${company.data.name}`,
             html: await renderAsync(emailTemplate),
             text: await renderAsync(emailTemplate, { plainText: true }),
             attachments: [
