@@ -131,7 +131,7 @@ export default function AccountProfile() {
     <>
       <PageTitle
         title="Profile"
-        subtitle="This information will be displayed publicly so be careful what you
+        subtitle="This information will be visible to all users, so be careful what you
         share."
       />
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 w-full">

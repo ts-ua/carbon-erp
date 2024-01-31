@@ -7,6 +7,7 @@ import Array from "./Array";
 import Boolean from "./Boolean";
 import Color from "./Color";
 import Combobox from "./Combobox";
+import ComboboxControlled from "./ComboboxControlled";
 import CreatableCombobox from "./CreatableCombobox";
 import Currency from "./Currency";
 import Customer from "./Customer";
@@ -51,6 +52,7 @@ export {
   Boolean,
   Color,
   Combobox,
+  ComboboxControlled,
   CreatableCombobox,
   Currency,
   Customer,

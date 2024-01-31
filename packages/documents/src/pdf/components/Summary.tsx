@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "@react-pdf/renderer";
-import type { Company } from "../types";
+import type { Company } from "../../types";
 
 type SummaryProps = {
   company: Company;
@@ -27,8 +27,9 @@ const styles = StyleSheet.create({
   },
   companyName: {
     fontSize: 13,
+    letterSpacing: -0.5,
     color: "#000000",
-    fontWeight: 900,
+    fontWeight: 700,
   },
   documentSummary: {
     display: "flex",

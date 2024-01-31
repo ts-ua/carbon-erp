@@ -1,8 +1,15 @@
 import type { Database } from "@carbon/database";
 import { StyleSheet, Text, View } from "@react-pdf/renderer";
 
-import { Header, Summary, Template } from "../components";
 import type { PDF } from "../types";
+import {
+  getLineDescription,
+  getLineDescriptionDetails,
+  getLineTotal,
+  getTotal,
+} from "../utils/purchase-order";
+import { formatAddress } from "../utils/shared";
+import { Header, Summary, Template } from "./components";
 
 interface PurchaseOrderPDFProps extends PDF {
   purchaseOrder: Database["public"]["Views"]["purchaseOrders"]["Row"];
@@ -11,107 +18,6 @@ interface PurchaseOrderPDFProps extends PDF {
 }
 
 // TODO: format currency based on settings
-
-const styles = StyleSheet.create({
-  row: {
-    display: "flex",
-    alignItems: "flex-start",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-    width: "100%",
-  },
-  colFull: {
-    display: "flex",
-    flexDirection: "column",
-    rowGap: 3,
-    fontSize: 11,
-    fontWeight: 500,
-    width: "100%",
-  },
-  colHalf: {
-    display: "flex",
-    flexDirection: "column",
-    rowGap: 3,
-    fontSize: 11,
-    fontWeight: 500,
-    width: "50%",
-  },
-  colThird: {
-    display: "flex",
-    flexDirection: "column",
-    rowGap: 3,
-    fontSize: 11,
-    fontWeight: 500,
-    width: "32%",
-  },
-  label: {
-    color: "#7d7d7d",
-  },
-  bold: {
-    fontWeight: 700,
-    color: "#000000",
-  },
-  table: {
-    marginBottom: 20,
-    fontSize: 10,
-  },
-  thead: {
-    flexGrow: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: "20px",
-    padding: "6px 3px 6px 3px",
-    borderTop: 1,
-    borderTopColor: "#CCCCCC",
-    borderTopStyle: "solid",
-    borderBottom: 1,
-    borderBottomColor: "#CCCCCC",
-    borderBottomStyle: "solid",
-    fontWeight: 700,
-    color: "#7d7d7d",
-    textTransform: "uppercase",
-  },
-  tr: {
-    flexGrow: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: "6px 3px 6px 3px",
-    borderBottom: 1,
-    borderBottomColor: "#CCCCCC",
-  },
-  tfoot: {
-    flexGrow: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "6px 3px 6px 3px",
-    borderTopStyle: "solid",
-    borderBottom: 1,
-    borderBottomColor: "#CCCCCC",
-    borderBottomStyle: "solid",
-    fontWeight: 700,
-    color: "#7d7d7d",
-    textTransform: "uppercase",
-  },
-  tableCol1: {
-    width: "50%",
-    textAlign: "left",
-  },
-  tableCol2: {
-    width: "15%",
-    textAlign: "right",
-  },
-  tableCol3: {
-    width: "15%",
-    textAlign: "right",
-  },
-  tableCol4: {
-    width: "20%",
-    textAlign: "right",
-  },
-});
 
 const PurchaseOrderPDF = ({
   company,
@@ -296,88 +202,105 @@ const PurchaseOrderPDF = ({
   );
 };
 
-function formatAddress(
-  city: string | null,
-  state: string | null,
-  postalCode: string | null
-) {
-  if (city && state && postalCode) {
-    return `${city}, ${state}, ${postalCode}`;
-  }
-
-  return "";
-}
-
-function getLineDescription(
-  line: Database["public"]["Views"]["purchaseOrderLines"]["Row"]
-) {
-  switch (line?.purchaseOrderLineType) {
-    case "Part":
-      const supplierPartNumber = line.supplierPartId
-        ? ` (${line.supplierPartId})`
-        : "";
-      return line?.partId + supplierPartNumber;
-    case "Service":
-      const supplierServiceNumber = line.supplierServiceId
-        ? ` (${line.supplierServiceId})`
-        : "";
-      return line?.serviceId + supplierServiceNumber;
-    case "Fixed Asset":
-      return line?.assetId;
-    case "G/L Account":
-    case "Comment":
-      return line?.description;
-    default:
-      return "";
-  }
-}
-
-function getLineDescriptionDetails(
-  line: Database["public"]["Views"]["purchaseOrderLines"]["Row"]
-) {
-  switch (line?.purchaseOrderLineType) {
-    case "Part":
-      const partDescription = line?.partDescription
-        ? `\n${line.partDescription}`
-        : "";
-      return line?.description + partDescription;
-    case "Service":
-      const serviceDescription = line?.serviceDescription
-        ? `\n${line.serviceDescription}`
-        : "";
-      return line?.description + serviceDescription;
-    case "Fixed Asset":
-      return line?.description;
-    case "G/L Account":
-      return `GL Account: ${line?.accountNumber}`;
-    case "Comment":
-    default:
-      return "";
-  }
-}
-
-function getLineTotal(
-  line: Database["public"]["Views"]["purchaseOrderLines"]["Row"]
-) {
-  if (line?.purchaseQuantity && line?.unitPrice) {
-    return (line.purchaseQuantity * line.unitPrice).toFixed(2);
-  }
-
-  return "";
-}
-
-function getTotal(
-  lines: Database["public"]["Views"]["purchaseOrderLines"]["Row"][]
-) {
-  let total = 0;
-
-  lines.forEach((line) => {
-    if (line?.purchaseQuantity && line?.unitPrice) {
-      total += line.purchaseQuantity * line.unitPrice;
-    }
-  });
-
-  return total.toFixed(2);
-}
-
 export default PurchaseOrderPDF;
+
+const styles = StyleSheet.create({
+  row: {
+    display: "flex",
+    alignItems: "flex-start",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20,
+    width: "100%",
+  },
+  colFull: {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: 3,
+    fontSize: 11,
+    fontWeight: 500,
+    width: "100%",
+  },
+  colHalf: {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: 3,
+    fontSize: 11,
+    fontWeight: 500,
+    width: "50%",
+  },
+  colThird: {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: 3,
+    fontSize: 11,
+    fontWeight: 500,
+    width: "32%",
+  },
+  label: {
+    color: "#7d7d7d",
+  },
+  bold: {
+    fontWeight: 700,
+    color: "#000000",
+  },
+  table: {
+    marginBottom: 20,
+    fontSize: 10,
+  },
+  thead: {
+    flexGrow: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: "20px",
+    padding: "6px 3px 6px 3px",
+    borderTop: 1,
+    borderTopColor: "#CCCCCC",
+    borderTopStyle: "solid",
+    borderBottom: 1,
+    borderBottomColor: "#CCCCCC",
+    borderBottomStyle: "solid",
+    fontWeight: 700,
+    color: "#7d7d7d",
+    textTransform: "uppercase",
+  },
+  tr: {
+    flexGrow: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: "6px 3px 6px 3px",
+    borderBottom: 1,
+    borderBottomColor: "#CCCCCC",
+  },
+  tfoot: {
+    flexGrow: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "6px 3px 6px 3px",
+    borderTopStyle: "solid",
+    borderBottom: 1,
+    borderBottomColor: "#CCCCCC",
+    borderBottomStyle: "solid",
+    fontWeight: 700,
+    color: "#7d7d7d",
+    textTransform: "uppercase",
+  },
+  tableCol1: {
+    width: "50%",
+    textAlign: "left",
+  },
+  tableCol2: {
+    width: "15%",
+    textAlign: "right",
+  },
+  tableCol3: {
+    width: "15%",
+    textAlign: "right",
+  },
+  tableCol4: {
+    width: "20%",
+    textAlign: "right",
+  },
+});

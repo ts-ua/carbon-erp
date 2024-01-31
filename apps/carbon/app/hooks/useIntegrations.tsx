@@ -4,22 +4,22 @@ import { path } from "~/utils/path";
 import { useRouteData } from "./useRouteData";
 
 export function useIntegrations(): {
-  integrations: Integration[];
+  list: Integration[];
   has: (id: string) => boolean;
 } {
-  const data = useRouteData<{
+  const list = useRouteData<{
     integrations: Integration[];
   }>(path.to.authenticatedRoot);
 
   const has = useCallback(
     (id: string) => {
-      return data?.integrations.find((i) => i.id === id)?.active ?? false;
+      return list?.integrations.find((i) => i.id === id)?.active ?? false;
     },
-    [data?.integrations]
+    [list?.integrations]
   );
 
   return {
-    integrations: data?.integrations ?? [],
+    list: list?.integrations ?? [],
     has,
   };
 }

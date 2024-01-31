@@ -13,11 +13,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function IntegrationsRoute() {
-  const { integrations } = useIntegrations();
+  const { list } = useIntegrations();
 
   return (
     <>
-      <IntegrationsList integrations={integrations} />
+      <IntegrationsList integrations={list} />
       <Outlet />
     </>
   );

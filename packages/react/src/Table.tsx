@@ -84,7 +84,7 @@ const Td = forwardRef<
   <td
     ref={ref}
     className={cn(
-      "text-foreground py-4 px-6 align-middle [&:has([role=checkbox])]:pr-0",
+      "text-foreground px-6 align-middle [&:has([role=checkbox])]:pr-0 h-11",
       className
     )}
     {...props}
