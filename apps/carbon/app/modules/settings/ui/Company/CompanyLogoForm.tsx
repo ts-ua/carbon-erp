@@ -1,6 +1,6 @@
 import { Avatar, Button, File, VStack, toast } from "@carbon/react";
 import { useSubmit } from "@remix-run/react";
-import type { ChangeEvent } from "react";
+import { type ChangeEvent } from "react";
 import { useSupabase } from "~/lib/supabase";
 import type { Company } from "~/modules/settings";
 import { path } from "~/utils/path";
@@ -64,12 +64,18 @@ const CompanyLogoForm = ({ company }: CompanyLogoFormProps) => {
   };
 
   return (
-    <VStack className="items-center p-8">
-      <Avatar
-        size="2xl"
-        src={company?.logo ?? undefined}
-        name={company?.name}
-      />
+    <VStack className="items-center px-8">
+      {company?.logo ? (
+        <img
+          alt={`${company.name} Logo`}
+          width="128"
+          height="auto"
+          src={company.logo}
+        />
+      ) : (
+        <Avatar name={company?.name} size="2xl" />
+      )}
+
       <File accept="image/*" onChange={uploadImage}>
         {company.logo ? "Change" : "Upload"}
       </File>
