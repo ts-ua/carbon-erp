@@ -24,6 +24,7 @@ import Tailwind from "~/styles/tailwind.css";
 export function links() {
   return [
     { rel: "stylesheet", href: Tailwind },
+    { rel: "stylesheet", href: "/assets/theme.css" },
     { rel: "stylesheet", href: Background },
     { rel: "stylesheet", href: NProgress },
   ];

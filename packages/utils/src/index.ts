@@ -1,4 +1,5 @@
 export * from "./accounting";
+export * from "./color";
 export * from "./date";
 export * from "./file";
 export * from "./geo";

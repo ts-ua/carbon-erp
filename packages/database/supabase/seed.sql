@@ -3,6 +3,30 @@
 INSERT INTO "user" ("id", "email", "firstName", "lastName")
 VALUES ('system', 'system@carbon.us.org', 'System', 'Operation');
 
+-- theme
+
+INSERT INTO "theme" (
+  "primaryBackgroundLight",
+  "primaryForegroundLight",
+  "primaryBackgroundDark",
+  "primaryForegroundDark",
+  "accentBackgroundLight",
+  "accentForegroundLight",
+  "accentBackgroundDark",
+  "accentForegroundDark",
+  "updatedBy"
+) VALUES (
+  '240 5.9% 10%',
+  '0 0% 98%',
+  '0 0% 98%',
+  '240 5.9% 10%',
+  '240 4.8% 89.9%',
+  '240 5.9% 10%',
+  '240 3.7% 15.9%',
+  '0 0% 98%',
+  'system'
+);
+
 -- currencies
 
 INSERT INTO "currency" ("name", "code", "symbol", "exchangeRate", "decimalPlaces", "isBaseCurrency") 

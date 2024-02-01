@@ -387,7 +387,7 @@ function renderTypedDisplay({
           )}
           <HStack className="justify-end w-full self-center">
             <Button
-              isDisabled={!isAuthorized && (!attribute.canSelfManage ?? true)}
+              isDisabled={!isAuthorized || !attribute.canSelfManage}
               variant="ghost"
               onClick={onOpen}
             >

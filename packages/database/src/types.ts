@@ -8374,6 +8374,67 @@ export interface Database {
           }
         ];
       };
+      theme: {
+        Row: {
+          accentBackgroundDark: string;
+          accentBackgroundLight: string;
+          accentForegroundDark: string;
+          accentForegroundLight: string;
+          id: boolean;
+          primaryBackgroundDark: string;
+          primaryBackgroundLight: string;
+          primaryForegroundDark: string;
+          primaryForegroundLight: string;
+          updatedAt: string;
+          updatedBy: string;
+        };
+        Insert: {
+          accentBackgroundDark: string;
+          accentBackgroundLight: string;
+          accentForegroundDark: string;
+          accentForegroundLight: string;
+          id?: boolean;
+          primaryBackgroundDark: string;
+          primaryBackgroundLight: string;
+          primaryForegroundDark: string;
+          primaryForegroundLight: string;
+          updatedAt?: string;
+          updatedBy: string;
+        };
+        Update: {
+          accentBackgroundDark?: string;
+          accentBackgroundLight?: string;
+          accentForegroundDark?: string;
+          accentForegroundLight?: string;
+          id?: boolean;
+          primaryBackgroundDark?: string;
+          primaryBackgroundLight?: string;
+          primaryForegroundDark?: string;
+          primaryForegroundLight?: string;
+          updatedAt?: string;
+          updatedBy?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "theme_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "theme_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "theme_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
       unitOfMeasure: {
         Row: {
           active: boolean;
@@ -9891,13 +9952,13 @@ export interface Database {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey";
-            columns: ["customerCountryCode"];
+            columns: ["supplierCountryCode"];
             referencedRelation: "country";
             referencedColumns: ["id"];
           },
           {
             foreignKeyName: "address_countryCode_fkey";
-            columns: ["supplierCountryCode"];
+            columns: ["customerCountryCode"];
             referencedRelation: "country";
             referencedColumns: ["id"];
           }
