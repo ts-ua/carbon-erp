@@ -8376,41 +8376,20 @@ export interface Database {
       };
       theme: {
         Row: {
-          accentBackgroundDark: string;
-          accentBackgroundLight: string;
-          accentForegroundDark: string;
-          accentForegroundLight: string;
           id: boolean;
-          primaryBackgroundDark: string;
-          primaryBackgroundLight: string;
-          primaryForegroundDark: string;
-          primaryForegroundLight: string;
+          theme: string;
           updatedAt: string;
           updatedBy: string;
         };
         Insert: {
-          accentBackgroundDark: string;
-          accentBackgroundLight: string;
-          accentForegroundDark: string;
-          accentForegroundLight: string;
           id?: boolean;
-          primaryBackgroundDark: string;
-          primaryBackgroundLight: string;
-          primaryForegroundDark: string;
-          primaryForegroundLight: string;
+          theme: string;
           updatedAt?: string;
           updatedBy: string;
         };
         Update: {
-          accentBackgroundDark?: string;
-          accentBackgroundLight?: string;
-          accentForegroundDark?: string;
-          accentForegroundLight?: string;
           id?: boolean;
-          primaryBackgroundDark?: string;
-          primaryBackgroundLight?: string;
-          primaryForegroundDark?: string;
-          primaryForegroundLight?: string;
+          theme?: string;
           updatedAt?: string;
           updatedBy?: string;
         };

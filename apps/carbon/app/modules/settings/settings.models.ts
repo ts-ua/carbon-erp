@@ -36,31 +36,21 @@ export const sequenceValidator = withZod(
   })
 );
 
+export const themes = [
+  "zinc",
+  "neutral",
+  "red",
+  "rose",
+  "orange",
+  "green",
+  "blue",
+  "yellow",
+  "violet",
+] as const;
+export type Theme = (typeof themes)[number];
+
 export const themeValidator = withZod(
   z.object({
-    primaryBackgroundLight: z
-      .string()
-      .min(1, { message: "Primary background light is required" }),
-    primaryForegroundLight: z
-      .string()
-      .min(1, { message: "Primary foreground light is required" }),
-    accentBackgroundLight: z
-      .string()
-      .min(1, { message: "Accent background light is required" }),
-    accentForegroundLight: z
-      .string()
-      .min(1, { message: "Accent foreground light is required" }),
-    primaryBackgroundDark: z
-      .string()
-      .min(1, { message: "Primary background dark is required" }),
-    primaryForegroundDark: z
-      .string()
-      .min(1, { message: "Primary foreground dark is required" }),
-    accentBackgroundDark: z
-      .string()
-      .min(1, { message: "Accent background dark is required" }),
-    accentForegroundDark: z
-      .string()
-      .min(1, { message: "Accent foreground dark is required" }),
+    theme: z.enum(themes),
   })
 );

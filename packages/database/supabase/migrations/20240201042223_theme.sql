@@ -1,13 +1,6 @@
 CREATE TABLE "theme" (
   "id" BOOLEAN NOT NULL DEFAULT TRUE,
-  "primaryBackgroundLight" TEXT NOT NULL,
-  "primaryForegroundLight" TEXT NOT NULL,
-  "primaryBackgroundDark" TEXT NOT NULL,
-  "primaryForegroundDark" TEXT NOT NULL,
-  "accentBackgroundLight" TEXT NOT NULL,
-  "accentForegroundLight" TEXT NOT NULL,
-  "accentBackgroundDark" TEXT NOT NULL,
-  "accentForegroundDark" TEXT NOT NULL,
+  "theme" TEXT NOT NULL,
   "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   "updatedBy" TEXT NOT NULL,
 
@@ -18,11 +11,9 @@ CREATE TABLE "theme" (
 
 ALTER TABLE "theme" ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Authenticated users can view themes" ON "theme"
+CREATE POLICY "Anyone can view the theme" ON "theme"
   FOR SELECT
-  USING (
-    auth.role() = 'authenticated'
-  );
+  USING (TRUE);
 
 CREATE POLICY "Employees with settings_update can update themes" ON "theme"
   FOR UPDATE
