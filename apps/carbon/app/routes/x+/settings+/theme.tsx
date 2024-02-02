@@ -1,10 +1,10 @@
 import { VStack } from "@carbon/react";
-import { hexToHls, hslToHex } from "@carbon/utils";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import { PageTitle } from "~/components/Layout";
+import type { Theme as ThemeValue } from "~/modules/settings";
 import {
   ThemeForm,
   getTheme,
@@ -36,15 +36,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  const { id, updatedBy, updatedAt, ...themeData } = theme.data;
-
-  Object.keys(themeData).forEach((key) => {
-    // @ts-ignore
-    themeData[key] = hslToHex(themeData[key]);
-  });
-
   return json({
-    theme: themeData,
+    theme: theme.data,
   });
 }
 
@@ -61,12 +54,6 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const themeData = validation.data;
-  Object.keys(themeData).forEach((key) => {
-    // @ts-ignore
-    themeData[key] = hexToHls(themeData[key]);
-  });
-
   const update = await updateTheme(client, {
     ...validation.data,
     updatedBy: userId,
@@ -77,23 +64,23 @@ export async function action({ request }: ActionFunctionArgs) {
       await flash(request, error(update.error, "Failed to update theme"))
     );
 
-  return json(
-    {},
-    await flash(request, success("Updated theme. Please refresh the page."))
-  );
+  return json({}, await flash(request, success("Updated theme.")));
 }
 
 export default function Theme() {
   const { theme } = useLoaderData<typeof loader>();
 
-  const initialValues = theme;
+  const initialValues = {
+    theme: theme.theme as ThemeValue,
+  };
 
   return (
     <VStack spacing={0} className="bg-background p-8 h-full">
       <PageTitle
         title="Theme"
-        subtitle="This information will be displayed on document headers."
+        subtitle="Pick a style and color scheme that suits you best."
       />
+
       <ThemeForm theme={initialValues} />
     </VStack>
   );

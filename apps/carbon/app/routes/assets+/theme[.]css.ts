@@ -1,3 +1,4 @@
+import { getThemeCode, themes } from "@carbon/utils";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { getTheme } from "~/modules/settings";
 import { requirePermissions } from "~/services/auth";
@@ -14,34 +15,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
   }
 
-  const {
-    primaryBackgroundLight,
-    primaryForegroundLight,
-    accentBackgroundLight,
-    accentForegroundLight,
-    primaryBackgroundDark,
-    primaryForegroundDark,
-    accentBackgroundDark,
-    accentForegroundDark,
-  } = theme.data;
+  const selectedThemeName = theme.data?.theme || "zinc";
+  const selectedTheme = themes.find(
+    (theme) => theme.name === selectedThemeName
+  );
 
-  console.log(theme.data);
-
-  let css = `
-  :root {
-    --primary: ${primaryBackgroundLight};
-    --primary-foreground: ${primaryForegroundLight};
-    --accent: ${accentBackgroundLight};
-    --accent-foreground: ${accentForegroundLight};
+  if (!selectedTheme) {
+    return new Response("", {
+      headers: {
+        "Content-Type": "text/css",
+      },
+    });
   }
 
-  .dark {
-    --primary: ${primaryBackgroundDark};
-    --primary-foreground: ${primaryForegroundDark};
-    --accent: ${accentBackgroundDark};
-    --accent-foreground: ${accentForegroundDark};
-  }
-  `;
+  const css = getThemeCode(selectedTheme);
 
   return new Response(css, {
     headers: {

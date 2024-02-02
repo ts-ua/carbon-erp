@@ -6,24 +6,10 @@ VALUES ('system', 'system@carbon.us.org', 'System', 'Operation');
 -- theme
 
 INSERT INTO "theme" (
-  "primaryBackgroundLight",
-  "primaryForegroundLight",
-  "primaryBackgroundDark",
-  "primaryForegroundDark",
-  "accentBackgroundLight",
-  "accentForegroundLight",
-  "accentBackgroundDark",
-  "accentForegroundDark",
+  "theme",
   "updatedBy"
 ) VALUES (
-  '240 5.9% 10%',
-  '0 0% 98%',
-  '0 0% 98%',
-  '240 5.9% 10%',
-  '240 4.8% 89.9%',
-  '240 5.9% 10%',
-  '240 3.7% 15.9%',
-  '0 0% 98%',
+  'zinc',
   'system'
 );
 

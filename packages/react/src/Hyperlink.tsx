@@ -10,7 +10,10 @@ const Hyperlink = forwardRef<ElementRef<"a">, ComponentPropsWithoutRef<"a">>(
         {...props}
         href={href}
         ref={ref}
-        className={cn("text-primary hover:underline cursor-pointer", className)}
+        className={cn(
+          "text-foreground hover:underline cursor-pointer",
+          className
+        )}
       >
         {children}
       </a>
@@ -18,7 +21,10 @@ const Hyperlink = forwardRef<ElementRef<"a">, ComponentPropsWithoutRef<"a">>(
       <span
         {...props}
         ref={ref}
-        className={cn("text-primary hover:underline cursor-pointer", className)}
+        className={cn(
+          "text-foreground hover:underline cursor-pointer",
+          className
+        )}
       >
         {children}
       </span>
