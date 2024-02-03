@@ -6,13 +6,13 @@ import { useFetcher } from "@remix-run/react";
 import { getSupabase } from "~/lib/supabase";
 import { getUserByEmail } from "~/modules/users/users.server";
 import { refreshAccessToken } from "~/services/auth";
-import { callbackValidator } from "~/services/auth/auth.form";
+import { callbackValidator } from "~/services/auth/auth.models";
 import {
   commitAuthSession,
   destroyAuthSession,
   flash,
   getAuthSession,
-} from "~/services/session";
+} from "~/services/session.server";
 import type { FormActionData } from "~/types";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";

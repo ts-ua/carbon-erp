@@ -3,7 +3,7 @@ import template from "lodash.template";
 export const themes = [
   {
     name: "zinc",
-    label: "Zinc",
+    label: "Carbon",
     activeColor: {
       light: "240 5.9% 10%",
       dark: "240 5.2% 33.9%",
