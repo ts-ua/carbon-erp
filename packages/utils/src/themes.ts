@@ -297,7 +297,7 @@ export const themes = [
         "popover-foreground": "0 0% 95%",
         card: "24 9.8% 10%",
         "card-foreground": "0 0% 95%",
-        primary: "142.1 70.6% 45.3%",
+        primary: "142.1 87.6% 63.3%",
         "primary-foreground": "144.9 80.4% 10%",
         secondary: "240 3.7% 15.9%",
         "secondary-foreground": "0 0% 98%",
