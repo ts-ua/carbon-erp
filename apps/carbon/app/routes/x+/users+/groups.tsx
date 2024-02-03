@@ -6,7 +6,7 @@ import { arrayToTree } from "performant-array-to-tree";
 import type { Group } from "~/modules/users";
 import { GroupsTable, GroupsTableFilters, getGroups } from "~/modules/users";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 import { getGenericQueryFilters } from "~/utils/query";

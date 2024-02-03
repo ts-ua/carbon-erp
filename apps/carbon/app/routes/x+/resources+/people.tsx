@@ -11,7 +11,7 @@ import {
 } from "~/modules/resources";
 import { getEmployeeTypes } from "~/modules/users";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 import { getGenericQueryFilters } from "~/utils/query";

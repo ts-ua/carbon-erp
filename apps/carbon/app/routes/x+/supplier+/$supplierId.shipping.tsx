@@ -9,7 +9,7 @@ import {
   updateSupplierShipping,
 } from "~/modules/purchasing";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";
 import { error, success } from "~/utils/result";

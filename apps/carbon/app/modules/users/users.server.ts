@@ -18,7 +18,7 @@ import {
   sendInviteByEmail,
   sendMagicLink,
 } from "~/services/auth";
-import { flash, requireAuthSession } from "~/services/session";
+import { flash, requireAuthSession } from "~/services/session.server";
 import type { ListItem, Result } from "~/types";
 import { path } from "~/utils/path";
 import { error, success } from "~/utils/result";

@@ -9,7 +9,7 @@ import {
   getCustomerLocations,
 } from "~/modules/sales";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 import { error } from "~/utils/result";

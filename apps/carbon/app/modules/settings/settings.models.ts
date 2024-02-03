@@ -35,3 +35,22 @@ export const sequenceValidator = withZod(
     size: zfd.numeric(z.number().min(1).max(20)),
   })
 );
+
+export const themes = [
+  "zinc",
+  "neutral",
+  "red",
+  "rose",
+  "orange",
+  "green",
+  "blue",
+  "yellow",
+  "violet",
+] as const;
+export type Theme = (typeof themes)[number];
+
+export const themeValidator = withZod(
+  z.object({
+    theme: z.enum(themes),
+  })
+);

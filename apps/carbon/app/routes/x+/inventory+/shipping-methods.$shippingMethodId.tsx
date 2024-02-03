@@ -4,13 +4,13 @@ import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import type { ShippingCarrier } from "~/modules/inventory";
 import {
-  getShippingMethod,
   ShippingMethodForm,
+  getShippingMethod,
   shippingMethodValidator,
   upsertShippingMethod,
 } from "~/modules/inventory";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { assertIsPost, notFound } from "~/utils/http";
 import { path } from "~/utils/path";
 import { error, success } from "~/utils/result";

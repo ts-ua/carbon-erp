@@ -12,7 +12,7 @@ import {
 import { getLocationsList } from "~/modules/resources";
 import { getUserDefaults } from "~/modules/users/users.server";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import type { ListItem } from "~/types";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";

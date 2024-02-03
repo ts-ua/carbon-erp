@@ -1,6 +1,10 @@
 // root.tsx
 import { Heading } from "@carbon/react";
-import type { MetaFunction } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
   Links,
@@ -13,17 +17,22 @@ import {
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
+import { withZod } from "@remix-validated-form/with-zod";
 import { Analytics } from "@vercel/analytics/react";
 import React from "react";
 import { getBrowserEnv } from "~/config/env";
-
+import { getMode, setMode } from "~/services/mode.server";
 import Background from "~/styles/background.css";
 import NProgress from "~/styles/nprogress.css";
 import Tailwind from "~/styles/tailwind.css";
+import { error } from "~/utils/result";
+import { useMode } from "./hooks/useMode";
+import { modeValidator } from "./types/validators";
 
 export function links() {
   return [
     { rel: "stylesheet", href: Tailwind },
+    { rel: "stylesheet", href: "/assets/theme.css" },
     { rel: "stylesheet", href: Background },
     { rel: "stylesheet", href: NProgress },
   ];
@@ -43,25 +52,47 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function loader() {
+export async function loader({ request }: LoaderFunctionArgs) {
   const { SUPABASE_API_URL, SUPABASE_ANON_PUBLIC } = getBrowserEnv();
   return json({
     env: {
       SUPABASE_API_URL,
       SUPABASE_ANON_PUBLIC,
     },
+    mode: getMode(request),
   });
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const validation = await withZod(modeValidator).validate(
+    await request.formData()
+  );
+
+  if (validation.error) {
+    return json(error(validation.error, "Invalid mode"), {
+      status: 400,
+    });
+  }
+
+  return json(
+    {},
+    {
+      headers: { "Set-Cookie": setMode(validation.data.mode) },
+    }
+  );
 }
 
 function Document({
   children,
   title = "Carbon ERP",
+  mode = "light",
 }: {
   children: React.ReactNode;
   title?: string;
+  mode?: "light" | "dark";
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${mode} h-full overflow-x-hidden`}>
       <head>
         <Meta />
         <title>{title}</title>
@@ -82,8 +113,10 @@ export default function App() {
   const loaderData = useLoaderData<typeof loader>();
   const env = loaderData?.env ?? {};
 
+  const mode = useMode();
+
   return (
-    <Document>
+    <Document mode={mode}>
       <Outlet />
       <script
         dangerouslySetInnerHTML={{

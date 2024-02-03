@@ -6,7 +6,7 @@ import { useRouteData } from "~/hooks";
 import type { PartSummary } from "~/modules/parts";
 import { PartForm, partValidator, upsertPart } from "~/modules/parts";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";
 import { error, success } from "~/utils/result";

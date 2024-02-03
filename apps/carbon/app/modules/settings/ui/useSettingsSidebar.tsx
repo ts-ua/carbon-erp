@@ -1,3 +1,4 @@
+import { BsPaletteFill } from "react-icons/bs";
 import { CgSync } from "react-icons/cg";
 import { GoNumber } from "react-icons/go";
 import { TbBuildingFactory2 } from "react-icons/tb";
@@ -31,6 +32,12 @@ const settingsRoutes: AuthenticatedRouteGroup[] = [
         to: path.to.sequences,
         role: "employee",
         icon: <GoNumber />,
+      },
+      {
+        name: "Theme",
+        to: path.to.theme,
+        role: "employee",
+        icon: <BsPaletteFill />,
       },
     ],
   },

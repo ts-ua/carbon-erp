@@ -4,7 +4,7 @@ import { validationError } from "remix-validated-form";
 import { CreateEmployeeModal, createEmployeeValidator } from "~/modules/users";
 import { createEmployeeAccount } from "~/modules/users/users.server";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";
 

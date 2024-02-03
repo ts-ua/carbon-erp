@@ -4,7 +4,7 @@ import { useLoaderData, useNavigate, useParams } from "@remix-run/react";
 import { ConfirmDelete } from "~/components/Modals";
 import { deleteReceipt, getReceipt } from "~/modules/inventory";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { notFound } from "~/utils/http";
 import { path } from "~/utils/path";
 import { error, success } from "~/utils/result";

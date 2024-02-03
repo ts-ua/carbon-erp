@@ -4,13 +4,13 @@ import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import type { PaymentTermCalculationMethod } from "~/modules/accounting";
 import {
-  getPaymentTerm,
   PaymentTermForm,
+  getPaymentTerm,
   paymentTermValidator,
   upsertPaymentTerm,
 } from "~/modules/accounting";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { assertIsPost, notFound } from "~/utils/http";
 import { path } from "~/utils/path";
 import { error, success } from "~/utils/result";

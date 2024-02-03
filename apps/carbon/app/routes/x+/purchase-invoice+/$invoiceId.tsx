@@ -11,7 +11,7 @@ import {
 } from "~/modules/invoicing";
 import { getLocationsList } from "~/modules/resources";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 import { error } from "~/utils/result";

@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { requireAuthSession } from "~/services/session";
+import { requireAuthSession } from "~/services/session.server";
 import { path } from "~/utils/path";
 
 export async function loader({ request }: LoaderFunctionArgs) {

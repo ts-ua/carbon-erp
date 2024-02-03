@@ -7,7 +7,7 @@ import {
 } from "~/modules/users";
 import { createSupplierAccount } from "~/modules/users/users.server";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";
 

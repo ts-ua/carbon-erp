@@ -7,7 +7,7 @@ import {
   getPurchaseInvoiceLine,
 } from "~/modules/invoicing";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { notFound } from "~/utils/http";
 import { path } from "~/utils/path";
 import { error, success } from "~/utils/result";
