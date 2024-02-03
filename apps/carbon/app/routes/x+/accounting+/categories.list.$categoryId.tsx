@@ -8,7 +8,7 @@ import {
   getAccountSubcategoriesByCategory,
 } from "~/modules/accounting";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { notFound } from "~/utils/http";
 import { path } from "~/utils/path";
 import { error } from "~/utils/result";

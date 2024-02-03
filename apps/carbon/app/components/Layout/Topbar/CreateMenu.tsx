@@ -9,7 +9,7 @@ import {
 import { Link } from "@remix-run/react";
 import useCreate from "./useCreate";
 
-const Create = () => {
+const CreateMenu = () => {
   const createLinks = useCreate();
 
   if (!createLinks.length) return null;
@@ -33,4 +33,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default CreateMenu;

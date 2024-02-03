@@ -1,9 +1,9 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { getSupplierLocations, SupplierLocations } from "~/modules/purchasing";
+import { SupplierLocations, getSupplierLocations } from "~/modules/purchasing";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { path } from "~/utils/path";
 import { error } from "~/utils/result";
 

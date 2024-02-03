@@ -2,7 +2,7 @@ import type { ActionFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { deleteNote } from "~/modules/shared";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { error } from "~/utils/result";
 
 export async function action({ request, params }: ActionFunctionArgs) {

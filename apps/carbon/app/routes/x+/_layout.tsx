@@ -18,7 +18,7 @@ import {
   destroyAuthSession,
   getSessionFlash,
   requireAuthSession,
-} from "~/services/session";
+} from "~/services/session.server";
 import { path } from "~/utils/path";
 
 export async function loader({ request }: LoaderFunctionArgs) {

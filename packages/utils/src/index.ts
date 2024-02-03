@@ -4,5 +4,6 @@ export * from "./file";
 export * from "./geo";
 export * from "./math";
 export * from "./ssr";
+export * from "./themes";
 export * from "./types";
 export * from "./url";

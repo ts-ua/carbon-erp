@@ -1,19 +1,19 @@
 import { VStack } from "@carbon/react";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import { PageTitle } from "~/components/Layout";
+import { useRouteData } from "~/hooks";
+import type { Company as CompanyType } from "~/modules/settings";
 import {
   CompanyForm,
   CompanyLogoForm,
   companyValidator,
-  getCompany,
   updateCompany,
   updateLogo,
 } from "~/modules/settings";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import type { Handle } from "~/utils/handle";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";
@@ -24,24 +24,11 @@ export const handle: Handle = {
   to: path.to.company,
 };
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const { client } = await requirePermissions(request, {});
-
-  const company = await getCompany(client);
-
-  if (company.error || !company.data) {
-    return redirect(
-      path.to.settings,
-      await flash(request, error(company.error, "Failed to get company"))
-    );
-  }
-
-  return json({ company: company.data });
-}
-
 export async function action({ request }: ActionFunctionArgs) {
   assertIsPost(request);
-  const { client, userId } = await requirePermissions(request, {});
+  const { client, userId } = await requirePermissions(request, {
+    update: "settings",
+  });
   const formData = await request.formData();
 
   if (formData.get("intent") === "about") {
@@ -98,7 +85,12 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function Company() {
-  const { company } = useLoaderData<typeof loader>();
+  const routeData = useRouteData<{ company: CompanyType }>(
+    path.to.authenticatedRoot
+  );
+
+  const company = routeData?.company;
+  if (!company) throw new Error("Company not found");
 
   const initialValues = {
     name: company.name,

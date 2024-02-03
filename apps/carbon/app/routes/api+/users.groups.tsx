@@ -3,7 +3,7 @@ import { json } from "@remix-run/node";
 import { arrayToTree } from "performant-array-to-tree";
 import type { Group } from "~/modules/users";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { error } from "~/utils/result";
 
 export async function loader({ request }: LoaderFunctionArgs) {

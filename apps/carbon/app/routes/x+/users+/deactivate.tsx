@@ -6,7 +6,7 @@ import { deactivateUser } from "~/modules/users/users.server";
 import type { UserAdminQueueData } from "~/queues";
 import { userAdminQueue, UserAdminQueueType } from "~/queues";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { safeRedirect } from "~/utils/http";
 import { error, success } from "~/utils/result";
 

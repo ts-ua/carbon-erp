@@ -7,7 +7,7 @@ import type {
 import { REFRESH_ACCESS_TOKEN_THRESHOLD, VERCEL_URL } from "~/config/env";
 import { getSupabase, getSupabaseServiceRole } from "~/lib/supabase";
 import { getUserClaims } from "~/modules/users/users.server";
-import { flash, requireAuthSession } from "~/services/session";
+import { flash, requireAuthSession } from "~/services/session.server";
 import { path } from "~/utils/path";
 import { error } from "~/utils/result";
 import type { AuthSession } from "./types";

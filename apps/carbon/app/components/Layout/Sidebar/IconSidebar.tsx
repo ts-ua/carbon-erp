@@ -9,6 +9,9 @@ import {
 import { Link, useMatches } from "@remix-run/react";
 import { BsFillHexagonFill } from "react-icons/bs";
 import { z } from "zod";
+import { useRouteData } from "~/hooks";
+import type { Company } from "~/modules/settings";
+import { path } from "~/utils/path";
 import { useSidebar } from "./useSidebar";
 
 export const ModuleHandle = z.object({
@@ -16,6 +19,12 @@ export const ModuleHandle = z.object({
 });
 
 const IconSidebar = () => {
+  const routeData = useRouteData<{ company: Company }>(
+    path.to.authenticatedRoot
+  );
+
+  const company = routeData?.company;
+
   const links = useSidebar();
   const matchedModules = useMatches().reduce((acc, match) => {
     if (match.handle) {
@@ -33,17 +42,31 @@ const IconSidebar = () => {
       <div>
         <TooltipProvider>
           <VStack spacing={0} className="self-start sticky">
-            <Button
-              isIcon
-              asChild
-              variant="ghost"
-              size="lg"
-              className="rounded-none"
-            >
-              <Link to="/">
-                <BsFillHexagonFill />
+            {company?.logo ? (
+              <Link
+                to="/"
+                className="flex w-[44px] h-[48px] p-2 items-center justify-center hover:bg-accent"
+              >
+                <img
+                  src={company.logo}
+                  alt={`${company.name} Logo`}
+                  className="w-full"
+                />
               </Link>
-            </Button>
+            ) : (
+              <Button
+                isIcon
+                asChild
+                variant="ghost"
+                size="lg"
+                className="rounded-none"
+              >
+                <Link to="/">
+                  <BsFillHexagonFill />
+                </Link>
+              </Button>
+            )}
+
             {links.map((link) => {
               const module = link.to.split("/")[2]; // link.to is "/x/parts" -- this returns "parts"
 

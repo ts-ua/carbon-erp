@@ -6,7 +6,7 @@ import { resendInvite } from "~/modules/users/users.server";
 import type { UserAdminQueueData } from "~/queues";
 import { userAdminQueue, UserAdminQueueType } from "~/queues";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { error, success } from "~/utils/result";
 
 export async function action({ request }: ActionFunctionArgs) {

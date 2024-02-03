@@ -3,6 +3,16 @@
 INSERT INTO "user" ("id", "email", "firstName", "lastName")
 VALUES ('system', 'system@carbon.us.org', 'System', 'Operation');
 
+-- theme
+
+INSERT INTO "theme" (
+  "theme",
+  "updatedBy"
+) VALUES (
+  'zinc',
+  'system'
+);
+
 -- currencies
 
 INSERT INTO "currency" ("name", "code", "symbol", "exchangeRate", "decimalPlaces", "isBaseCurrency") 

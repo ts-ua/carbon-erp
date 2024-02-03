@@ -20,10 +20,14 @@
   "jest": {
     "preset": "@carbon/jest/node"
   },
+  "dependencies": {
+    "lodash.template": "^4.5.0"
+  },
   "devDependencies": {
     "@carbon/jest": "*",
     "@carbon/tsconfig": "*",
     "@types/jest": "^26.0.22",
+    "@types/lodash.template": "4.5.3",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "eslint": "^8.23.1",

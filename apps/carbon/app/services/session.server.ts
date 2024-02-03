@@ -19,8 +19,8 @@ import {
 
 import type { Result } from "~/types";
 import { path } from "~/utils/path";
-import { refreshAccessToken, verifyAuthSession } from "../auth/auth.server";
-import type { AuthSession } from "../auth/types";
+import { refreshAccessToken, verifyAuthSession } from "./auth/auth.server";
+import type { AuthSession } from "./auth/types";
 
 async function assertAuthSession(
   request: Request,

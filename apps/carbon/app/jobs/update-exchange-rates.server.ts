@@ -55,8 +55,6 @@ const job = triggerClient.defineJob({
         }))
         .filter((currency) => currency.exchangeRate);
 
-      console.log({ updates });
-
       if (updates?.length === 0) return;
 
       const { error } = await supabaseClient.from("currency").upsert(updates);

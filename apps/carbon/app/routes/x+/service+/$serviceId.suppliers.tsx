@@ -3,7 +3,7 @@ import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { ServiceSuppliers, getServiceSuppliers } from "~/modules/parts";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { path } from "~/utils/path";
 import { error } from "~/utils/result";
 
