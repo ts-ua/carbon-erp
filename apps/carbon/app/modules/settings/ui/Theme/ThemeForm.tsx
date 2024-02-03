@@ -1,10 +1,11 @@
-import { Button, VStack, cn, useMount } from "@carbon/react";
+import { Button, VStack, cn } from "@carbon/react";
 import type { Theme } from "@carbon/utils";
 import { themes } from "@carbon/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RxCheck } from "react-icons/rx";
 import { ValidatedForm } from "remix-validated-form";
 import { Hidden, Submit } from "~/components/Form";
+import { useMode } from "~/hooks/useMode";
 import type { Theme as ThemeValue } from "~/modules/settings";
 import { themeValidator } from "~/modules/settings";
 import type { TypeOfValidator } from "~/types/validators";
@@ -16,21 +17,25 @@ type ThemeFormProps = {
 
 const ThemeForm = ({ theme: defaultValues }: ThemeFormProps) => {
   const [theme, setTheme] = useState<ThemeValue>(defaultValues.theme);
-  const [isDark, setIsDark] = useState(false);
-
-  useMount(() => {
-    setIsDark(document.body.classList.contains("dark"));
-  });
+  const mode = useMode();
 
   const onThemeChange = (t: Theme) => {
     setTheme(t.name);
 
-    const variables = isDark ? t.cssVars.dark : t.cssVars.light;
+    const variables = mode === "dark" ? t.cssVars.dark : t.cssVars.light;
 
     Object.entries(variables).forEach(([key, value]) => {
       document.body.style.setProperty(`--${key}`, value);
     });
   };
+
+  useEffect(() => {
+    const t = themes.find((t) => t.name === theme);
+    if (t) {
+      onThemeChange(t);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
 
   return (
     <div className="w-full">
@@ -57,7 +62,7 @@ const ThemeForm = ({ theme: defaultValues }: ThemeFormProps) => {
                   style={
                     {
                       "--theme-primary": `hsl(${
-                        t?.activeColor[isDark ? "dark" : "light"]
+                        t?.activeColor[mode === "dark" ? "dark" : "light"]
                       })`,
                     } as React.CSSProperties
                   }

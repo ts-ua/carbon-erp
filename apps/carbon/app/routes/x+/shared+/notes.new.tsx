@@ -3,7 +3,7 @@ import { redirect } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
 import { insertNote, noteValidator } from "~/modules/shared";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { assertIsPost } from "~/utils/http";
 import { error } from "~/utils/result";
 

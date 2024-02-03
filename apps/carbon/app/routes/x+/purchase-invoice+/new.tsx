@@ -15,7 +15,7 @@ import {
 } from "~/modules/invoicing/invoicing.server";
 import { getNextSequence, rollbackNextSequence } from "~/modules/settings";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import type { ListItem } from "~/types";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";

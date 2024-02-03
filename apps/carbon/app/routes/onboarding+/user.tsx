@@ -21,7 +21,7 @@ import {
 } from "~/modules/account";
 import { getUser } from "~/modules/users/users.server";
 import { requirePermissions } from "~/services/auth";
-import { destroyAuthSession } from "~/services/session";
+import { destroyAuthSession } from "~/services/session.server";
 import type { TypeOfValidator } from "~/types/validators";
 import { assertIsPost } from "~/utils/http";
 

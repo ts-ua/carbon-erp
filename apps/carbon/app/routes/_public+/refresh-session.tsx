@@ -2,7 +2,10 @@ import type { ActionFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
 
-import { commitAuthSession, refreshAuthSession } from "~/services/session";
+import {
+  commitAuthSession,
+  refreshAuthSession,
+} from "~/services/session.server";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";
 

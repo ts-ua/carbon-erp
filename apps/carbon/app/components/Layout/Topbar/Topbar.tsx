@@ -1,10 +1,10 @@
-import { Button, HStack } from "@carbon/react";
-import { BiHelpCircle } from "react-icons/bi";
-import { BsChatSquare } from "react-icons/bs";
+import { HStack } from "@carbon/react";
 import { Search } from "~/components/Search";
 import AvatarMenu from "./AvatarMenu";
 import Breadcrumbs from "./Breadcrumbs";
-import Create from "./Create";
+import CreateMenu from "./CreateMenu";
+import HelpMenu from "./HelpMenu";
+import ModeSwitcher from "./ModeSwitcher";
 
 const Topbar = () => {
   return (
@@ -12,25 +12,9 @@ const Topbar = () => {
       <Breadcrumbs />
       <Search />
       <HStack spacing={1} className="justify-end py-2">
-        <Create />
-        <Button asChild leftIcon={<BiHelpCircle />} variant="secondary">
-          <a
-            target="_blank"
-            href="https://github.com/barbinbrad/carbon/issues/new/choose"
-            rel="noreferrer"
-          >
-            Help
-          </a>
-        </Button>
-        <Button asChild leftIcon={<BsChatSquare />} variant="secondary">
-          <a
-            target="_blank"
-            href="https://github.com/barbinbrad/carbon/discussions/new/choose"
-            rel="noreferrer"
-          >
-            Feedback
-          </a>
-        </Button>
+        <CreateMenu />
+        <HelpMenu />
+        <ModeSwitcher />
         <AvatarMenu />
       </HStack>
     </div>

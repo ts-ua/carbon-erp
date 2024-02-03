@@ -3,7 +3,7 @@ import { redirect } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
 import { ServiceForm, serviceValidator, upsertService } from "~/modules/parts";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import type { Handle } from "~/utils/handle";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";

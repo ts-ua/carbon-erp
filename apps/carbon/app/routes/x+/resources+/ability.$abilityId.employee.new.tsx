@@ -11,7 +11,7 @@ import {
 } from "~/modules/resources";
 import { EmployeeAbilityForm } from "~/modules/resources/ui/Abilities";
 import { requirePermissions } from "~/services/auth";
-import { flash } from "~/services/session";
+import { flash } from "~/services/session.server";
 import { path } from "~/utils/path";
 import { error, success } from "~/utils/result";
 

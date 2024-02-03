@@ -15,7 +15,7 @@ import {
   signInWithEmail,
   verifyAuthSession,
 } from "~/services/auth";
-import { createAuthSession, getAuthSession } from "~/services/session";
+import { createAuthSession, getAuthSession } from "~/services/session.server";
 import type { FormActionData, Result } from "~/types";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";

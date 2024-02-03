@@ -7,7 +7,7 @@ import { ValidatedForm, validationError } from "remix-validated-form";
 import { Password, Submit } from "~/components/Form";
 import { resetPassword } from "~/modules/users/users.server";
 import { resetPasswordValidator } from "~/services/auth";
-import { flash, requireAuthSession } from "~/services/session";
+import { flash, requireAuthSession } from "~/services/session.server";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";
 import { error, success } from "~/utils/result";
