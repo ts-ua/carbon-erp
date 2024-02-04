@@ -92,3 +92,30 @@ CREATE TABLE "requestForQuoteSupplierLine" (
   CONSTRAINT "requestForQuoteSupplierLine_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "requestForQuoteSupplierLine_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+CREATE OR REPLACE VIEW "requestForQuotes" WITH(SECURITY_INVOKER=true) AS
+  SELECT 
+  r."id",
+  r."status",
+  r."notes",
+  r."receiptDate",
+  r."expirationDate",
+  r."locationId",
+  l."name" AS "locationName",
+  array_agg(rs."supplierId") AS "supplierIds",
+  array_agg(rl."partId") AS "partIds"
+FROM "requestForQuote" r
+LEFT JOIN "location" l
+  ON l.id = r."locationId"
+LEFT JOIN "requestForQuoteSupplier" rs
+  ON rs."requestForQuoteId" = r.id
+LEFT JOIN "requestForQuoteLine" rl
+  ON rl."requestForQuoteId" = r.id
+GROUP BY
+  r."id",
+  r."status",
+  r."notes",
+  r."receiptDate",
+  r."expirationDate",
+  r."locationId",
+  l."name";

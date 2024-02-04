@@ -1,19 +1,19 @@
 import { v4 as uuidv4 } from "uuid";
 
 const possibleFeatures = [
-  "Accounting",
+  // "Accounting",
   "Documents",
   "Inventory",
   "Invoicing",
-  "Jobs",
-  "Messaging",
+  // "Jobs",
+  // "Messaging",
   "Parts",
   "Purchasing",
   "Resources",
   "Sales",
-  "Scheduling",
+  // "Scheduling",
   "Settings",
-  "Timecards",
+  // "Timecards",
   "Users",
 ] as const;
 
@@ -28,4 +28,4 @@ possibleFeatures.forEach((name) => {
   };
 });
 
-export { possibleFeatures, features };
+export { features, possibleFeatures };

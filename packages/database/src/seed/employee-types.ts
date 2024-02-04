@@ -27,12 +27,12 @@ export const employeeTypePermissionsDefinitions: Record<
   >
 > = {
   Admin: {
-    Accounting: {
-      create: true,
-      update: true,
-      delete: true,
-      view: true,
-    },
+    // Accounting: {
+    //   create: true,
+    //   update: true,
+    //   delete: true,
+    //   view: true,
+    // },
     Invoicing: {
       create: true,
       update: true,
@@ -45,24 +45,24 @@ export const employeeTypePermissionsDefinitions: Record<
       delete: true,
       view: true,
     },
-    Jobs: {
-      create: true,
-      update: true,
-      delete: true,
-      view: true,
-    },
+    // Jobs: {
+    //   create: true,
+    //   update: true,
+    //   delete: true,
+    //   view: true,
+    // },
     Inventory: {
       create: true,
       update: true,
       delete: true,
       view: true,
     },
-    Scheduling: {
-      create: true,
-      update: true,
-      delete: true,
-      view: true,
-    },
+    // Scheduling: {
+    //   create: true,
+    //   update: true,
+    //   delete: true,
+    //   view: true,
+    // },
     Sales: {
       create: true,
       update: true,
@@ -81,18 +81,18 @@ export const employeeTypePermissionsDefinitions: Record<
       delete: true,
       view: true,
     },
-    Messaging: {
-      create: true,
-      update: true,
-      delete: true,
-      view: true,
-    },
-    Timecards: {
-      create: true,
-      update: true,
-      delete: true,
-      view: true,
-    },
+    // Messaging: {
+    //   create: true,
+    //   update: true,
+    //   delete: true,
+    //   view: true,
+    // },
+    // Timecards: {
+    //   create: true,
+    //   update: true,
+    //   delete: true,
+    //   view: true,
+    // },
     Resources: {
       create: true,
       update: true,
@@ -113,12 +113,12 @@ export const employeeTypePermissionsDefinitions: Record<
     },
   },
   "Project Manager": {
-    Accounting: {
-      create: false,
-      update: false,
-      delete: false,
-      view: false,
-    },
+    // Accounting: {
+    //   create: false,
+    //   update: false,
+    //   delete: false,
+    //   view: false,
+    // },
     Invoicing: {
       create: false,
       update: false,
@@ -131,24 +131,24 @@ export const employeeTypePermissionsDefinitions: Record<
       delete: true,
       view: true,
     },
-    Jobs: {
-      create: true,
-      update: true,
-      delete: true,
-      view: true,
-    },
+    // Jobs: {
+    //   create: true,
+    //   update: true,
+    //   delete: true,
+    //   view: true,
+    // },
     Inventory: {
       create: false,
       update: false,
       delete: false,
       view: true,
     },
-    Scheduling: {
-      create: true,
-      update: true,
-      delete: true,
-      view: true,
-    },
+    // Scheduling: {
+    //   create: true,
+    //   update: true,
+    //   delete: true,
+    //   view: true,
+    // },
     Sales: {
       create: false,
       update: false,
@@ -167,18 +167,18 @@ export const employeeTypePermissionsDefinitions: Record<
       delete: true,
       view: true,
     },
-    Messaging: {
-      create: true,
-      update: true,
-      delete: true,
-      view: true,
-    },
-    Timecards: {
-      create: false,
-      update: false,
-      delete: false,
-      view: true,
-    },
+    // Messaging: {
+    //   create: true,
+    //   update: true,
+    //   delete: true,
+    //   view: true,
+    // },
+    // Timecards: {
+    //   create: false,
+    //   update: false,
+    //   delete: false,
+    //   view: true,
+    // },
     Resources: {
       create: true,
       update: true,
@@ -199,12 +199,12 @@ export const employeeTypePermissionsDefinitions: Record<
     },
   },
   Sales: {
-    Accounting: {
-      create: false,
-      update: false,
-      delete: false,
-      view: false,
-    },
+    // Accounting: {
+    //   create: false,
+    //   update: false,
+    //   delete: false,
+    //   view: false,
+    // },
     Invoicing: {
       create: false,
       update: false,
@@ -217,24 +217,24 @@ export const employeeTypePermissionsDefinitions: Record<
       delete: false,
       view: true,
     },
-    Jobs: {
-      create: false,
-      update: false,
-      delete: false,
-      view: true,
-    },
+    // Jobs: {
+    //   create: false,
+    //   update: false,
+    //   delete: false,
+    //   view: true,
+    // },
     Inventory: {
       create: false,
       update: false,
       delete: false,
       view: true,
     },
-    Scheduling: {
-      create: false,
-      update: false,
-      delete: false,
-      view: true,
-    },
+    // Scheduling: {
+    //   create: false,
+    //   update: false,
+    //   delete: false,
+    //   view: true,
+    // },
     Sales: {
       create: true,
       update: true,
@@ -253,18 +253,18 @@ export const employeeTypePermissionsDefinitions: Record<
       delete: true,
       view: true,
     },
-    Messaging: {
-      create: true,
-      update: true,
-      delete: true,
-      view: true,
-    },
-    Timecards: {
-      create: false,
-      update: false,
-      delete: false,
-      view: false,
-    },
+    // Messaging: {
+    //   create: true,
+    //   update: true,
+    //   delete: true,
+    //   view: true,
+    // },
+    // Timecards: {
+    //   create: false,
+    //   update: false,
+    //   delete: false,
+    //   view: false,
+    // },
     Resources: {
       create: false,
       update: false,

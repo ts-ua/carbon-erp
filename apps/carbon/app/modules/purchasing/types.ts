@@ -3,6 +3,7 @@ import type {
   getExternalDocuments,
   getPurchaseOrderLines,
   getPurchaseOrders,
+  getRequestsForQuotes,
   getSupplier,
   getSupplierContacts,
   getSupplierLocations,
@@ -35,6 +36,10 @@ export type PurchaseOrderType =
 
 export type PurchaseOrderTransactionType =
   Database["public"]["Enums"]["purchaseOrderTransactionType"];
+
+export type RequestForQuote = NonNullable<
+  Awaited<ReturnType<typeof getRequestsForQuotes>>["data"]
+>[number];
 
 export type Supplier = NonNullable<
   Awaited<ReturnType<typeof getSuppliers>>["data"]
