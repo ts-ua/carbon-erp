@@ -6999,7 +6999,9 @@ export interface Database {
           id: string;
           locationId: string | null;
           name: string;
+          notes: string | null;
           receiptDate: string;
+          status: Database["public"]["Enums"]["requestForQuoteStatus"];
           updatedAt: string | null;
           updatedBy: string | null;
         };
@@ -7010,7 +7012,9 @@ export interface Database {
           id?: string;
           locationId?: string | null;
           name: string;
+          notes?: string | null;
           receiptDate: string;
+          status?: Database["public"]["Enums"]["requestForQuoteStatus"];
           updatedAt?: string | null;
           updatedBy?: string | null;
         };
@@ -7021,7 +7025,9 @@ export interface Database {
           id?: string;
           locationId?: string | null;
           name?: string;
+          notes?: string | null;
           receiptDate?: string;
+          status?: Database["public"]["Enums"]["requestForQuoteStatus"];
           updatedAt?: string | null;
           updatedBy?: string | null;
         };
@@ -7086,6 +7092,7 @@ export interface Database {
         Row: {
           createdAt: string | null;
           createdBy: string;
+          description: string | null;
           id: string;
           locationId: string | null;
           partId: string;
@@ -7100,6 +7107,7 @@ export interface Database {
         Insert: {
           createdAt?: string | null;
           createdBy: string;
+          description?: string | null;
           id?: string;
           locationId?: string | null;
           partId: string;
@@ -7114,6 +7122,7 @@ export interface Database {
         Update: {
           createdAt?: string | null;
           createdBy?: string;
+          description?: string | null;
           id?: string;
           locationId?: string | null;
           partId?: string;
@@ -7220,29 +7229,44 @@ export interface Database {
       };
       requestForQuoteSupplier: {
         Row: {
+          completedAt: string | null;
           createdAt: string | null;
           createdBy: string;
           id: string;
+          password: string | null;
           requestForQuoteId: string;
+          supplierContactId: string | null;
           supplierId: string;
+          supplierLocationId: string | null;
+          token: string | null;
           updatedAt: string | null;
           updatedBy: string | null;
         };
         Insert: {
+          completedAt?: string | null;
           createdAt?: string | null;
           createdBy: string;
           id?: string;
+          password?: string | null;
           requestForQuoteId: string;
+          supplierContactId?: string | null;
           supplierId: string;
+          supplierLocationId?: string | null;
+          token?: string | null;
           updatedAt?: string | null;
           updatedBy?: string | null;
         };
         Update: {
+          completedAt?: string | null;
           createdAt?: string | null;
           createdBy?: string;
           id?: string;
+          password?: string | null;
           requestForQuoteId?: string;
+          supplierContactId?: string | null;
           supplierId?: string;
+          supplierLocationId?: string | null;
+          token?: string | null;
           updatedAt?: string | null;
           updatedBy?: string | null;
         };
@@ -7269,6 +7293,12 @@ export interface Database {
             foreignKeyName: "requestForQuoteSupplier_requestForQuoteId_fkey";
             columns: ["requestForQuoteId"];
             referencedRelation: "requestForQuote";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_supplierContactId_fkey";
+            columns: ["supplierContactId"];
+            referencedRelation: "contact";
             referencedColumns: ["id"];
           },
           {
@@ -7302,6 +7332,24 @@ export interface Database {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "requestForQuoteSupplier_supplierLocationId_fkey";
+            columns: ["supplierLocationId"];
+            referencedRelation: "location";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_supplierLocationId_fkey";
+            columns: ["supplierLocationId"];
+            referencedRelation: "partQuantities";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_supplierLocationId_fkey";
+            columns: ["supplierLocationId"];
+            referencedRelation: "purchaseOrders";
+            referencedColumns: ["locationId"];
+          },
+          {
             foreignKeyName: "requestForQuoteSupplier_updatedBy_fkey";
             columns: ["updatedBy"];
             referencedRelation: "user";
@@ -7326,7 +7374,6 @@ export interface Database {
           createdAt: string | null;
           createdBy: string;
           id: string;
-          quantity: number;
           requestForQuoteLineId: string;
           requestForQuoteSupplierId: string;
           unitPrice: number;
@@ -7337,7 +7384,6 @@ export interface Database {
           createdAt?: string | null;
           createdBy: string;
           id?: string;
-          quantity: number;
           requestForQuoteLineId: string;
           requestForQuoteSupplierId: string;
           unitPrice: number;
@@ -7348,7 +7394,6 @@ export interface Database {
           createdAt?: string | null;
           createdBy?: string;
           id?: string;
-          quantity?: number;
           requestForQuoteLineId?: string;
           requestForQuoteSupplierId?: string;
           unitPrice?: number;
@@ -10909,6 +10954,7 @@ export interface Database {
         | "Manufacturing Consumption"
         | "Manufacturing Output";
       receiptStatus: "Draft" | "Pending" | "Posted";
+      requestForQuoteStatus: "Draft" | "Sent" | "Expired" | "Closed";
       searchEntity:
         | "Resource"
         | "Person"
