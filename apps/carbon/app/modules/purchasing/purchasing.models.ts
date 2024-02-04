@@ -169,6 +169,62 @@ export const purchaseOrderReleaseValidator = withZod(
     )
 );
 
+const requestForQuoteStatusType = [
+  "Draft",
+  "Sent",
+  "Expired",
+  "Closed",
+] as const;
+
+export const requestForQuoteValidator = withZod(
+  z.object({
+    id: zfd.text(z.string().optional()),
+    name: z.string().min(1, { message: "Name is required" }),
+    status: z.enum(requestForQuoteStatusType).optional(),
+    notes: zfd.text(z.string().optional()),
+    receiptDate: z.string().min(1, { message: "Receipt Date is required" }),
+    expirationDate: zfd.text(z.string().optional()),
+    locationId: zfd.text(z.string().optional()),
+  })
+);
+
+export const requestForQuoteLineValidator = withZod(
+  z.object({
+    id: zfd.text(z.string().optional()),
+    requestForQuoteId: z.string().min(36, { message: "Request is required" }),
+    partId: zfd.text(z.string().optional()),
+    description: zfd.text(z.string().optional()),
+    quantity: zfd.numeric(z.number()),
+    unitPrice: zfd.numeric(z.number().optional()),
+    unitOfMeasureCode: zfd.text(z.string().optional()),
+    locationId: zfd.text(z.string().optional()),
+    shelfId: zfd.text(z.string().optional()),
+  })
+);
+
+export const requestForQuoteSupplierValidator = withZod(
+  z.object({
+    id: zfd.text(z.string().optional()),
+    requestForQuoteId: z.string().min(36, { message: "Request is required" }),
+    supplierId: z.string().min(36, { message: "Supplier is required" }),
+    supplierLocationId: zfd.text(z.string().optional()),
+    supplierContactId: zfd.text(z.string().optional()),
+  })
+);
+
+export const requestForQuoteSupplierLineValidator = withZod(
+  z.object({
+    id: zfd.text(z.string().optional()),
+    requestForQuoteSupplierId: z.string().min(36, {
+      message: "Request supplier is required",
+    }),
+    requestForQuoteLineId: z.string().min(36, {
+      message: "Request line is required",
+    }),
+    unitPrice: zfd.numeric(z.number().optional()),
+  })
+);
+
 export const supplierValidator = withZod(
   z.object({
     id: zfd.text(z.string().optional()),

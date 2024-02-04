@@ -1,6 +1,10 @@
+CREATE TYPE "requestForQuoteStatus" AS ENUM ('Draft', 'Sent', 'Expired', 'Closed');
+
 CREATE TABLE "requestForQuote" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "name" TEXT NOT NULL,
+  "status" "requestForQuoteStatus" NOT NULL DEFAULT 'Draft',
+  "notes" TEXT,
   "receiptDate" DATE NOT NULL,
   "expirationDate" DATE,
   "locationId" TEXT,
@@ -21,6 +25,7 @@ CREATE TABLE "requestForQuoteLine" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "requestForQuoteId" TEXT NOT NULL,
   "partId" TEXT NOT NULL,
+  "description" TEXT,
   "quantity" NUMERIC(20, 2) NOT NULL,
   "unitPrice" NUMERIC(20, 2) NOT NULL DEFAULT 0,
   "unitOfMeasureCode" TEXT,
@@ -49,6 +54,11 @@ CREATE TABLE "requestForQuoteSupplier" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "requestForQuoteId" TEXT NOT NULL,
   "supplierId" TEXT NOT NULL,
+  "supplierLocationId" TEXT,
+  "supplierContactId" TEXT,
+  "token" TEXT,
+  "password" TEXT,
+  "completedAt" TIMESTAMP WITH TIME ZONE,
   "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT now(),
   "createdBy" TEXT NOT NULL,
   "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT now(),
@@ -57,6 +67,8 @@ CREATE TABLE "requestForQuoteSupplier" (
   CONSTRAINT "requestForQuoteSupplier_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "requestForQuoteSupplier_requestForQuoteId_fkey" FOREIGN KEY ("requestForQuoteId") REFERENCES "requestForQuote"("id") ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT "requestForQuoteSupplier_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "supplier"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT "requestForQuoteSupplier_supplierLocationId_fkey" FOREIGN KEY ("supplierLocationId") REFERENCES "location"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT "requestForQuoteSupplier_supplierContactId_fkey" FOREIGN KEY ("supplierContactId") REFERENCES "contact"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "requestForQuoteSupplier_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "requestForQuoteSupplier_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -68,7 +80,6 @@ CREATE TABLE "requestForQuoteSupplierLine" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "requestForQuoteSupplierId" TEXT NOT NULL,
   "requestForQuoteLineId" TEXT NOT NULL,
-  "quantity" NUMERIC(20, 2) NOT NULL,
   "unitPrice" NUMERIC(20, 2) NOT NULL,
   "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT now(),
   "createdBy" TEXT NOT NULL,
