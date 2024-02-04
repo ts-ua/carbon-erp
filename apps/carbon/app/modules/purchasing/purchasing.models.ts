@@ -169,7 +169,7 @@ export const purchaseOrderReleaseValidator = withZod(
     )
 );
 
-const requestForQuoteStatusType = [
+export const requestForQuoteStatusType = [
   "Draft",
   "Sent",
   "Expired",

@@ -7196,6 +7196,12 @@ export interface Database {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "requestForQuoteLine_requestForQuoteId_fkey";
+            columns: ["requestForQuoteId"];
+            referencedRelation: "requestForQuotes";
+            referencedColumns: ["id"];
+          },
+          {
             foreignKeyName: "requestForQuoteLine_shelfId_fkey";
             columns: ["shelfId", "locationId"];
             referencedRelation: "shelf";
@@ -7293,6 +7299,12 @@ export interface Database {
             foreignKeyName: "requestForQuoteSupplier_requestForQuoteId_fkey";
             columns: ["requestForQuoteId"];
             referencedRelation: "requestForQuote";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_requestForQuoteId_fkey";
+            columns: ["requestForQuoteId"];
+            referencedRelation: "requestForQuotes";
             referencedColumns: ["id"];
           },
           {
@@ -10588,6 +10600,38 @@ export interface Database {
             columns: ["supplierId"];
             referencedRelation: "suppliers";
             referencedColumns: ["id"];
+          }
+        ];
+      };
+      requestForQuotes: {
+        Row: {
+          expirationDate: string | null;
+          id: string | null;
+          locationId: string | null;
+          locationName: string | null;
+          notes: string | null;
+          receiptDate: string | null;
+          status: Database["public"]["Enums"]["requestForQuoteStatus"] | null;
+          supplierIds: string[] | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "requestForQuote_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "location";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuote_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "partQuantities";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "requestForQuote_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "purchaseOrders";
+            referencedColumns: ["locationId"];
           }
         ];
       };

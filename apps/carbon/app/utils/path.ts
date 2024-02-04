@@ -269,6 +269,7 @@ export const path = {
     newPurchaseOrderLine: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/lines/new`),
     newReceipt: `${x}/inventory/receipts/new`,
+    newRequestForQuote: `${x}/rfq/new`,
     newShift: `${x}/resources/shifts/new`,
     newShippingMethod: `${x}/inventory/shipping-methods/new`,
     newService: `${x}/service/new`,
@@ -354,6 +355,7 @@ export const path = {
     receiptPost: (id: string) =>
       generatePath(`${x}/inventory/receipts/${id}/post`),
     refreshSession: "/refresh-session",
+    requestForQuotes: `${x}/purchasing/rfqs`,
     resendInvite: `${x}/users/resend-invite`,
     resetPassord: "/reset-password",
     resources: `${x}/resources`,

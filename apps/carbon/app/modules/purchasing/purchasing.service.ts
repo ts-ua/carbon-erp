@@ -198,6 +198,39 @@ export async function getPurchaseOrderSuppliers(
   return client.from("purchaseOrderSuppliers").select("id, name");
 }
 
+export async function getRequestsForQuotes(
+  client: SupabaseClient<Database>,
+  args: GenericQueryFilters & {
+    search: string | null;
+    status: string | null;
+    supplierId: string | null;
+    partId: string | null;
+  }
+) {
+  let query = client.from("requestForQuotes").select("*", { count: "exact" });
+
+  if (args.search) {
+    query = query.or(
+      `id.ilike.%${args.search}%,name.ilike.%${args.search}%,description.ilike.%${args.search}%`
+    );
+  }
+
+  if (args.status) {
+    query = query.eq("status", args.status);
+  }
+
+  if (args.supplierId) {
+    query = query.contains("supplierIds", [args.supplierId]);
+  }
+
+  if (args.partId) {
+    query = query.contains("partIds", [args.partId]);
+  }
+
+  query = setGenericQueryFilters(query, args, "id", false);
+  return query;
+}
+
 export async function getSupplier(
   client: SupabaseClient<Database>,
   supplierId: string
