@@ -1,9 +1,18 @@
-import { HStack, Hyperlink } from "@carbon/react";
+import {
+  HStack,
+  Hyperlink,
+  MenuIcon,
+  MenuItem,
+  useDisclosure,
+} from "@carbon/react";
 import { useFetcher, useFetchers, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
-import { memo, useMemo } from "react";
-import { BsStar, BsStarFill } from "react-icons/bs";
+import { memo, useMemo, useState } from "react";
+import { BsFillPenFill, BsStar, BsStarFill } from "react-icons/bs";
+import { IoMdTrash } from "react-icons/io";
 import { Avatar, Table } from "~/components";
+import { ConfirmDelete } from "~/components/Modals";
+import { usePermissions } from "~/hooks";
 import {
   RequestForQuoteStatus,
   type RequestForQuote,
@@ -20,6 +29,7 @@ type RequestForQuotesTableProps = {
 
 const RequestForQuotesTable = memo(
   ({ data, count }: RequestForQuotesTableProps) => {
+    const permissions = usePermissions();
     const navigate = useNavigate();
     const fetcher = useFetcher();
     const optimisticFavorite = useOptimisticFavorite();
@@ -38,6 +48,10 @@ const RequestForQuotesTable = memo(
         ),
       [data, optimisticFavorite]
     );
+
+    const [selectedRequestForQuote, setSelectedRequestForQuote] =
+      useState<RequestForQuote | null>(null);
+    const deleteRequestForQuoteModal = useDisclosure();
 
     const columns = useMemo<ColumnDef<RequestForQuote>[]>(() => {
       return [
@@ -158,36 +172,27 @@ const RequestForQuotesTable = memo(
       updatedByFullName: false,
     };
 
-    //   const renderContextMenu = useMemo(() => {
-    //     // eslint-disable-next-line react/display-name
-    //     return (row: RequestForQuote) => (
-    //       <>
-    //         <MenuItem
-    //           disabled={!permissions.can("view", "purchasing")}
-    //           onClick={() => alert("TODO")}
-    //         >
-    //           <MenuIcon icon={<BsFillPenFill />} />
-    //           Edit
-    //         </MenuItem>
-    //         <MenuItem
-    //           onClick={() => {
-    //             alert("TODO");
-    //           }}
-    //         >
-    //           <MenuIcon icon={<BsStar />} />
-    //           Favorite
-    //         </MenuItem>
-
-    //         <MenuItem
-    //           disabled={!permissions.can("delete", "purchasing")}
-    //           onClick={() => alert("TODO")}
-    //         >
-    //           <MenuIcon icon={<IoMdTrash />} />
-    //           Delete
-    //         </MenuItem>
-    //       </>
-    //     );
-    //   }, [permissions]);
+    const renderContextMenu = useMemo(() => {
+      // eslint-disable-next-line react/display-name
+      return (row: RequestForQuote) => (
+        <>
+          <MenuItem onClick={() => navigate(path.to.requestForQuote(row.id!))}>
+            <MenuIcon icon={<BsFillPenFill />} />
+            Edit
+          </MenuItem>
+          <MenuItem
+            disabled={!permissions.can("delete", "purchasing")}
+            onClick={() => {
+              setSelectedRequestForQuote(row);
+              deleteRequestForQuoteModal.onOpen();
+            }}
+          >
+            <MenuIcon icon={<IoMdTrash />} />
+            Delete
+          </MenuItem>
+        </>
+      );
+    }, [deleteRequestForQuoteModal, navigate, permissions]);
 
     return (
       <>
@@ -200,8 +205,24 @@ const RequestForQuotesTable = memo(
           withFilters
           withPagination
           withSimpleSorting
-          // renderContextMenu={renderContextMenu}
+          renderContextMenu={renderContextMenu}
         />
+        {selectedRequestForQuote && selectedRequestForQuote.id && (
+          <ConfirmDelete
+            action={path.to.deleteRequestForQuote(selectedRequestForQuote.id)}
+            isOpen={deleteRequestForQuoteModal.isOpen}
+            name={selectedRequestForQuote.requestForQuoteId!}
+            text={`Are you sure you want to delete ${selectedRequestForQuote.requestForQuoteId!}? This cannot be undone.`}
+            onCancel={() => {
+              deleteRequestForQuoteModal.onClose();
+              setSelectedRequestForQuote(null);
+            }}
+            onSubmit={() => {
+              deleteRequestForQuoteModal.onClose();
+              setSelectedRequestForQuote(null);
+            }}
+          />
+        )}
       </>
     );
   }

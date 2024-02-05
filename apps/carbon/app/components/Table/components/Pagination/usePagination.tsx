@@ -1,5 +1,6 @@
 import type { RowSelectionState } from "@tanstack/react-table";
 import type { Dispatch, SetStateAction } from "react";
+import { flushSync } from "react-dom";
 import { useUrlParams } from "~/hooks";
 import { parseNumberFromUrlParam } from "~/utils/http";
 
@@ -17,12 +18,16 @@ export function usePagination(
   const canNextPage = pageIndex < Math.ceil(count / pageSize);
 
   const gotoPage = (page: number) => {
-    setRowSelections({});
-    setParams({
-      ...Object.fromEntries(params),
-      offset: (page - 1) * pageSize,
-      limit: pageSize,
+    flushSync(() => {
+      setRowSelections({});
+      setParams({
+        ...Object.fromEntries(params),
+        offset: (page - 1) * pageSize,
+        limit: pageSize,
+      });
     });
+
+    window?.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const previousPage = () => {
