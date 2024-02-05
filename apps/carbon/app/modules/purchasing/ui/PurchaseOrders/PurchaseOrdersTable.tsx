@@ -5,8 +5,9 @@ import {
   MenuItem,
   useDisclosure,
 } from "@carbon/react";
+import { useFetcher, useFetchers } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { BsFillPenFill, BsStar, BsStarFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { MdCallReceived } from "react-icons/md";
@@ -18,6 +19,7 @@ import type {
   purchaseOrderStatusType,
 } from "~/modules/purchasing";
 import { PurchasingStatus } from "~/modules/purchasing";
+import { favoriteSchema } from "~/types/validators";
 import { path } from "~/utils/path";
 import { usePurchaseOrder } from "./usePurchaseOrder";
 
@@ -29,38 +31,29 @@ type PurchaseOrdersTableProps = {
 const PurchaseOrdersTable = memo(
   ({ data, count }: PurchaseOrdersTableProps) => {
     const permissions = usePermissions();
+    const fetcher = useFetcher();
+    const optimisticFavorite = useOptimisticFavorite();
 
-    // put rows in state for use with optimistic ui updates
-    const [rows, setRows] = useState<PurchaseOrder[]>(data);
-    // we have to do this useEffect silliness since we're putitng rows
-    // in state for optimistic ui updates
-    useEffect(() => {
-      setRows(data);
-    }, [data]);
+    const rows = useMemo<PurchaseOrder[]>(
+      () =>
+        data.map((d) =>
+          d.id === optimisticFavorite?.id
+            ? {
+                ...d,
+                favorite: optimisticFavorite?.favorite
+                  ? optimisticFavorite.favorite === "favorite"
+                  : d.favorite,
+              }
+            : d
+        ),
+      [data, optimisticFavorite]
+    );
 
-    const { edit, favorite, receive } = usePurchaseOrder();
+    const { edit, receive } = usePurchaseOrder();
 
     const [selectedPurchaseOrder, setSelectedPurchaseOrder] =
       useState<PurchaseOrder | null>(null);
     const deletePurchaseOrderModal = useDisclosure();
-
-    const onFavorite = useCallback(
-      async (row: PurchaseOrder) => {
-        // optimistically update the UI and then make the mutation
-        setRows((prev) => {
-          const index = prev.findIndex((item) => item.id === row.id);
-          const updated = [...prev];
-          updated[index] = {
-            ...updated[index],
-            favorite: !updated[index].favorite,
-          };
-          return updated;
-        });
-        // mutate the database
-        await favorite(row);
-      },
-      [favorite]
-    );
 
     const columns = useMemo<ColumnDef<PurchaseOrder>[]>(() => {
       return [
@@ -70,15 +63,33 @@ const PurchaseOrdersTable = memo(
           cell: ({ row }) => (
             <HStack>
               {row.original.favorite ? (
-                <BsStarFill
-                  className="text-yellow-400 cursor-pointer h-4 w-4"
-                  onClick={() => onFavorite(row.original)}
-                />
+                <fetcher.Form
+                  method="post"
+                  action={path.to.purchaseOrderFavorite}
+                >
+                  <input type="hidden" name="id" value={row.original.id!} />
+                  <input type="hidden" name="favorite" value="unfavorite" />
+                  <button type="submit">
+                    <BsStarFill
+                      className="text-yellow-400 cursor-pointer h-4 w-4"
+                      type="submit"
+                    />
+                  </button>
+                </fetcher.Form>
               ) : (
-                <BsStar
-                  className="text-muted-foreground cursor-pointer h-4 w-4"
-                  onClick={() => onFavorite(row.original)}
-                />
+                <fetcher.Form
+                  method="post"
+                  action={path.to.purchaseOrderFavorite}
+                >
+                  <input type="hidden" name="id" value={row.original.id!} />
+                  <input type="hidden" name="favorite" value="favorite" />
+                  <button type="submit">
+                    <BsStar
+                      className="text-yellow-400 cursor-pointer h-4 w-4"
+                      type="submit"
+                    />
+                  </button>
+                </fetcher.Form>
               )}
 
               <Hyperlink onClick={() => edit(row.original)}>
@@ -146,7 +157,7 @@ const PurchaseOrdersTable = memo(
           cell: (item) => item.getValue(),
         },
       ];
-    }, [edit, onFavorite]);
+    }, [edit, fetcher]);
 
     const defaultColumnVisibility = {
       createdAt: false,
@@ -167,14 +178,7 @@ const PurchaseOrdersTable = memo(
             <MenuIcon icon={<BsFillPenFill />} />
             Edit
           </MenuItem>
-          <MenuItem
-            onClick={() => {
-              onFavorite(row);
-            }}
-          >
-            <MenuIcon icon={<BsStar />} />
-            Favorite
-          </MenuItem>
+
           <MenuItem
             disabled={
               !["To Recieve", "To Receive and Invoice"].includes(
@@ -200,7 +204,7 @@ const PurchaseOrdersTable = memo(
           </MenuItem>
         </>
       );
-    }, [deletePurchaseOrderModal, edit, onFavorite, permissions, receive]);
+    }, [deletePurchaseOrderModal, edit, permissions, receive]);
 
     return (
       <>
@@ -236,7 +240,22 @@ const PurchaseOrdersTable = memo(
     );
   }
 );
-
 PurchaseOrdersTable.displayName = "PurchaseOrdersTable";
 
 export default PurchaseOrdersTable;
+
+function useOptimisticFavorite() {
+  const fetchers = useFetchers();
+  const favoriteFetcher = fetchers.find(
+    (f) => f.formAction === path.to.purchaseOrderFavorite
+  );
+
+  if (favoriteFetcher && favoriteFetcher.formData) {
+    const id = favoriteFetcher.formData.get("id");
+    const favorite = favoriteFetcher.formData.get("favorite") ?? "off";
+    const submission = favoriteSchema.safeParse({ id, favorite });
+    if (submission.success) {
+      return submission.data;
+    }
+  }
+}
