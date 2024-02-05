@@ -121,6 +121,7 @@ const DocumentsTable = memo(({ data, count, labels }: DocumentsTableProps) => {
     [label]
   );
 
+  // TODO: rows shouldn't be in state -- we should use optimistic updates like purchase order favorites
   const onFavorite = useCallback(
     async (row: Document) => {
       // optimistically update the UI and then make the mutation

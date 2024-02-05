@@ -190,6 +190,7 @@ export const path = {
     departments: `${x}/resources/departments`,
     document: (id: string) => generatePath(`${x}/documents/search/${id}`),
     documents: `${x}/documents/search`,
+    documentFavorite: `${x}/documents/favorite`,
     documentRestore: (id: string) =>
       generatePath(`${x}/documents/${id}/restore`),
     documentsTrash: `${x}/documents/search?q=trash`,
@@ -337,6 +338,7 @@ export const path = {
       generatePath(`${x}/purchase-order/${id}/details`),
     purchaseOrderExternalDocuments: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/external`),
+    purchaseOrderFavorite: `${x}/purchasing/orders/favorite`,
     purchaseOrderInternalDocuments: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/internal`),
     purchaseOrderLines: (orderId: string) =>
@@ -355,6 +357,8 @@ export const path = {
     receiptPost: (id: string) =>
       generatePath(`${x}/inventory/receipts/${id}/post`),
     refreshSession: "/refresh-session",
+    requestForQuote: (id: string) => generatePath(`${x}/rfq/${id}`),
+    requestForQuoteFavorite: `${x}/purchasing/rfqs/favorite`,
     requestForQuotes: `${x}/purchasing/rfqs`,
     resendInvite: `${x}/users/resend-invite`,
     resetPassord: "/reset-password",

@@ -2,7 +2,8 @@ CREATE TYPE "requestForQuoteStatus" AS ENUM ('Draft', 'Sent', 'Expired', 'Closed
 
 CREATE TABLE "requestForQuote" (
   "id" TEXT NOT NULL DEFAULT xid(),
-  "name" TEXT NOT NULL,
+  "requestForQuoteId" TEXT NOT NULL,
+  "description" TEXT,
   "status" "requestForQuoteStatus" NOT NULL DEFAULT 'Draft',
   "notes" TEXT,
   "receiptDate" DATE NOT NULL,
@@ -93,17 +94,55 @@ CREATE TABLE "requestForQuoteSupplierLine" (
   CONSTRAINT "requestForQuoteSupplierLine_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+CREATE TABLE "requestForQuoteFavorite" (
+  "requestForQuoteId" TEXT NOT NULL,
+  "userId" TEXT NOT NULL,
+
+  CONSTRAINT "requestForQuoteFavorites_pkey" PRIMARY KEY ("requestForQuoteId", "userId"),
+  CONSTRAINT "requestForQuoteFavorites_requestForQuoteId_fkey" FOREIGN KEY ("requestForQuoteId") REFERENCES "requestForQuote"("id") ON DELETE CASCADE,
+  CONSTRAINT "requestForQuoteFavorites_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE
+);
+
+CREATE INDEX "requestForQuoteFavorites_userId_idx" ON "requestForQuoteFavorite" ("userId");
+CREATE INDEX "requestForQuoteFavorites_requestForQuoteId_idx" ON "requestForQuoteFavorite" ("requestForQuoteId");
+
+ALTER TABLE "requestForQuoteFavorite" ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view their own rfq favorites" ON "requestForQuoteFavorite" 
+  FOR SELECT USING (
+    auth.uid()::text = "userId"
+  );
+
+CREATE POLICY "Users can create their own rfq favorites" ON "requestForQuoteFavorite" 
+  FOR INSERT WITH CHECK (
+    auth.uid()::text = "userId"
+  );
+
+CREATE POLICY "Users can delete their own rfq favorites" ON "requestForQuoteFavorite"
+  FOR DELETE USING (
+    auth.uid()::text = "userId"
+  ); 
+
 CREATE OR REPLACE VIEW "requestForQuotes" WITH(SECURITY_INVOKER=true) AS
   SELECT 
   r."id",
+  r."requestForQuoteId",
+  r."description",
   r."status",
   r."notes",
   r."receiptDate",
   r."expirationDate",
   r."locationId",
+  r."createdAt",
+  r."createdBy",
+  uc."fullName" AS "createdByFullName",
+  uc."avatarUrl" AS "createdByAvatar",
+  uu."fullName" AS "updatedByFullName",
+  uu."avatarUrl" AS "updatedByAvatar",
   l."name" AS "locationName",
   array_agg(rs."supplierId") AS "supplierIds",
-  array_agg(rl."partId") AS "partIds"
+  array_agg(rl."partId") AS "partIds",
+  EXISTS(SELECT 1 FROM "requestForQuoteFavorite" pf WHERE pf."requestForQuoteId" = r.id AND pf."userId" = auth.uid()::text) AS favorite
 FROM "requestForQuote" r
 LEFT JOIN "location" l
   ON l.id = r."locationId"
@@ -111,11 +150,23 @@ LEFT JOIN "requestForQuoteSupplier" rs
   ON rs."requestForQuoteId" = r.id
 LEFT JOIN "requestForQuoteLine" rl
   ON rl."requestForQuoteId" = r.id
+LEFT JOIN "user" uc
+  ON uc.id = r."createdBy"
+LEFT JOIN "user" uu
+  ON uu.id = r."updatedBy"
 GROUP BY
   r."id",
+  r."requestForQuoteId",
+  r."description",
   r."status",
   r."notes",
   r."receiptDate",
   r."expirationDate",
   r."locationId",
+  r."createdAt",
+  r."createdBy",
+  uc."fullName",
+  uc."avatarUrl",
+  uu."fullName",
+  uu."avatarUrl",
   l."name";

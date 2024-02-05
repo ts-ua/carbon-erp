@@ -209,6 +209,28 @@ export async function upsertDocument(
     .eq("id", document.id);
 }
 
+export async function updateDocumentFavorite(
+  client: SupabaseClient<Database>,
+  args: {
+    id: string;
+    favorite: boolean;
+    userId: string;
+  }
+) {
+  const { id, favorite, userId } = args;
+  if (!favorite) {
+    return client
+      .from("documentFavorite")
+      .delete()
+      .eq("documentId", id)
+      .eq("userId", userId);
+  } else {
+    return client
+      .from("documentFavorite")
+      .insert({ documentId: id, userId: userId });
+  }
+}
+
 export async function updateDocumentLabels(
   client: SupabaseClient<Database>,
   document: TypeOfValidator<typeof documentLabelsValidator> & {

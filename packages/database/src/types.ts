@@ -6995,12 +6995,13 @@ export interface Database {
         Row: {
           createdAt: string | null;
           createdBy: string;
+          description: string | null;
           expirationDate: string | null;
           id: string;
           locationId: string | null;
-          name: string;
           notes: string | null;
           receiptDate: string;
+          requestForQuoteId: string;
           status: Database["public"]["Enums"]["requestForQuoteStatus"];
           updatedAt: string | null;
           updatedBy: string | null;
@@ -7008,12 +7009,13 @@ export interface Database {
         Insert: {
           createdAt?: string | null;
           createdBy: string;
+          description?: string | null;
           expirationDate?: string | null;
           id?: string;
           locationId?: string | null;
-          name: string;
           notes?: string | null;
           receiptDate: string;
+          requestForQuoteId: string;
           status?: Database["public"]["Enums"]["requestForQuoteStatus"];
           updatedAt?: string | null;
           updatedBy?: string | null;
@@ -7021,12 +7023,13 @@ export interface Database {
         Update: {
           createdAt?: string | null;
           createdBy?: string;
+          description?: string | null;
           expirationDate?: string | null;
           id?: string;
           locationId?: string | null;
-          name?: string;
           notes?: string | null;
           receiptDate?: string;
+          requestForQuoteId?: string;
           status?: Database["public"]["Enums"]["requestForQuoteStatus"];
           updatedAt?: string | null;
           updatedBy?: string | null;
@@ -7083,6 +7086,52 @@ export interface Database {
           {
             foreignKeyName: "requestForQuote_updatedBy_fkey";
             columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
+      requestForQuoteFavorite: {
+        Row: {
+          requestForQuoteId: string;
+          userId: string;
+        };
+        Insert: {
+          requestForQuoteId: string;
+          userId: string;
+        };
+        Update: {
+          requestForQuoteId?: string;
+          userId?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "requestForQuoteFavorites_requestForQuoteId_fkey";
+            columns: ["requestForQuoteId"];
+            referencedRelation: "requestForQuote";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteFavorites_requestForQuoteId_fkey";
+            columns: ["requestForQuoteId"];
+            referencedRelation: "requestForQuotes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteFavorites_userId_fkey";
+            columns: ["userId"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteFavorites_userId_fkey";
+            columns: ["userId"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteFavorites_userId_fkey";
+            columns: ["userId"];
             referencedRelation: "userDefaults";
             referencedColumns: ["userId"];
           }
@@ -10605,16 +10654,44 @@ export interface Database {
       };
       requestForQuotes: {
         Row: {
+          createdAt: string | null;
+          createdBy: string | null;
+          createdByAvatar: string | null;
+          createdByFullName: string | null;
+          description: string | null;
           expirationDate: string | null;
+          favorite: boolean | null;
           id: string | null;
           locationId: string | null;
           locationName: string | null;
           notes: string | null;
+          partIds: string[] | null;
           receiptDate: string | null;
+          requestForQuoteId: string | null;
           status: Database["public"]["Enums"]["requestForQuoteStatus"] | null;
           supplierIds: string[] | null;
+          updatedByAvatar: string | null;
+          updatedByFullName: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: "requestForQuote_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuote_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuote_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
           {
             foreignKeyName: "requestForQuote_locationId_fkey";
             columns: ["locationId"];

@@ -518,6 +518,50 @@ export async function releasePurchaseOrder(
     .eq("id", purchaseOrderId);
 }
 
+export async function updatePurchaseOrderFavorite(
+  client: SupabaseClient<Database>,
+  args: {
+    id: string;
+    favorite: boolean;
+    userId: string;
+  }
+) {
+  const { id, favorite, userId } = args;
+  if (!favorite) {
+    return client
+      .from("purchaseOrderFavorite")
+      .delete()
+      .eq("purchaseOrderId", id)
+      .eq("userId", userId);
+  } else {
+    return client
+      .from("purchaseOrderFavorite")
+      .insert({ purchaseOrderId: id, userId: userId });
+  }
+}
+
+export async function updateRequestForQuoteFavorite(
+  client: SupabaseClient<Database>,
+  args: {
+    id: string;
+    favorite: boolean;
+    userId: string;
+  }
+) {
+  const { id, favorite, userId } = args;
+  if (!favorite) {
+    return client
+      .from("requestForQuoteFavorite")
+      .delete()
+      .eq("requestForQuoteId", id)
+      .eq("userId", userId);
+  } else {
+    return client
+      .from("requestForQuoteFavorite")
+      .insert({ requestForQuoteId: id, userId: userId });
+  }
+}
+
 export async function updateSupplier(
   client: SupabaseClient<Database>,
   supplier: Omit<TypeOfValidator<typeof supplierValidator>, "id"> & {
