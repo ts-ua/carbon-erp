@@ -52,6 +52,23 @@ export async function deletePurchaseOrderLine(
     .eq("id", purchaseOrderLineId);
 }
 
+export async function deleteRequestForQuote(
+  client: SupabaseClient<Database>,
+  requestForQuoteId: string
+) {
+  return client.from("requestForQuote").delete().eq("id", requestForQuoteId);
+}
+
+export async function deleteRequestForQuoteLine(
+  client: SupabaseClient<Database>,
+  requestForQuoteLineId: string
+) {
+  return client
+    .from("requestForQuoteLine")
+    .delete()
+    .eq("id", requestForQuoteLineId);
+}
+
 export async function deleteSupplierContact(
   client: SupabaseClient<Database>,
   supplierId: string,

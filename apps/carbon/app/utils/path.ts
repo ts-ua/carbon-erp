@@ -168,6 +168,8 @@ export const path = {
       generatePath(`${x}/purchase-order/${orderId}/lines/delete/${lineId}`),
     deleteReceipt: (id: string) =>
       generatePath(`${x}/inventory/receipts/delete/${id}`),
+    deleteRequestForQuote: (id: string) =>
+      generatePath(`${x}/rfq/delete/${id}`),
     deleteShift: (id: string) =>
       generatePath(`${x}/resources/shifts/delete/${id}`),
     deleteShippingMethod: (id: string) =>
