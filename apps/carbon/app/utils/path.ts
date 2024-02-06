@@ -168,6 +168,8 @@ export const path = {
       generatePath(`${x}/purchase-order/${orderId}/lines/delete/${lineId}`),
     deleteReceipt: (id: string) =>
       generatePath(`${x}/inventory/receipts/delete/${id}`),
+    deleteRequestForQuote: (id: string) =>
+      generatePath(`${x}/rfq/delete/${id}`),
     deleteShift: (id: string) =>
       generatePath(`${x}/resources/shifts/delete/${id}`),
     deleteShippingMethod: (id: string) =>
@@ -190,6 +192,7 @@ export const path = {
     departments: `${x}/resources/departments`,
     document: (id: string) => generatePath(`${x}/documents/search/${id}`),
     documents: `${x}/documents/search`,
+    documentFavorite: `${x}/documents/favorite`,
     documentRestore: (id: string) =>
       generatePath(`${x}/documents/${id}/restore`),
     documentsTrash: `${x}/documents/search?q=trash`,
@@ -269,6 +272,7 @@ export const path = {
     newPurchaseOrderLine: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/lines/new`),
     newReceipt: `${x}/inventory/receipts/new`,
+    newRequestForQuote: `${x}/rfq/new`,
     newShift: `${x}/resources/shifts/new`,
     newShippingMethod: `${x}/inventory/shipping-methods/new`,
     newService: `${x}/service/new`,
@@ -336,6 +340,7 @@ export const path = {
       generatePath(`${x}/purchase-order/${id}/details`),
     purchaseOrderExternalDocuments: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/external`),
+    purchaseOrderFavorite: `${x}/purchasing/orders/favorite`,
     purchaseOrderInternalDocuments: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/internal`),
     purchaseOrderLines: (orderId: string) =>
@@ -348,12 +353,16 @@ export const path = {
       generatePath(`${x}/purchase-order/${id}/release`),
     purchaseOrders: `${x}/purchasing/orders`,
     purchasing: `${x}/purchasing`,
+    quotes: `${x}/sales/quotes`,
     receipt: (id: string) => generatePath(`${x}/inventory/receipts/${id}`),
     receipts: `${x}/inventory/receipts`,
     receiptInvoice: (id: string) => generatePath(`${x}/receipt/${id}/invoice`),
     receiptPost: (id: string) =>
       generatePath(`${x}/inventory/receipts/${id}/post`),
     refreshSession: "/refresh-session",
+    requestForQuote: (id: string) => generatePath(`${x}/rfq/${id}`),
+    requestForQuoteFavorite: `${x}/purchasing/rfqs/favorite`,
+    requestForQuotes: `${x}/purchasing/rfqs`,
     resendInvite: `${x}/users/resend-invite`,
     resetPassord: "/reset-password",
     resources: `${x}/resources`,

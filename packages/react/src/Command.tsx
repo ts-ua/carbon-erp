@@ -98,6 +98,13 @@ const CommandList = forwardRef<
 
 CommandList.displayName = CommandPrimitive.List.displayName;
 
+const CommandLoading = forwardRef<
+  ElementRef<typeof CommandPrimitive.Loading>,
+  ComponentPropsWithoutRef<typeof CommandPrimitive.Loading>
+>((props, ref) => <CommandPrimitive.Loading ref={ref} {...props} />);
+
+CommandLoading.displayName = CommandPrimitive.Loading.displayName;
+
 const CommandEmpty = forwardRef<
   ElementRef<typeof CommandPrimitive.Empty>,
   ComponentPropsWithoutRef<typeof CommandPrimitive.Empty>
@@ -272,6 +279,7 @@ export {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandLoading,
   CommandSeparator,
   CommandShortcut,
   CommandTrigger,
