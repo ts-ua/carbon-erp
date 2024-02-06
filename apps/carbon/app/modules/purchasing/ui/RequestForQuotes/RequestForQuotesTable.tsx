@@ -14,12 +14,12 @@ import { Avatar, Table } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
 import { usePermissions } from "~/hooks";
 import {
-  RequestForQuoteStatus,
   type RequestForQuote,
   type requestForQuoteStatusType,
 } from "~/modules/purchasing";
 import { favoriteSchema } from "~/types/validators";
 import { path } from "~/utils/path";
+import { RequestForQuoteStatus } from "../RequestForQuote";
 // import { RequestForQuoteStatus } from "~/modules/purchasing";
 
 type RequestForQuotesTableProps = {
@@ -57,7 +57,7 @@ const RequestForQuotesTable = memo(
       return [
         {
           accessorKey: "requestForQuoteId",
-          header: "ID",
+          header: "RFQ Number",
           cell: ({ row }) => (
             <HStack>
               {row.original.favorite ? (

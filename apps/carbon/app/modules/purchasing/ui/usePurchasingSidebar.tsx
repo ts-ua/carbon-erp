@@ -13,6 +13,7 @@ const purchasingRoutes: AuthenticatedRouteGroup[] = [
       {
         name: "Request for Quotes",
         to: path.to.requestForQuotes,
+        permission: "employee",
       },
       {
         name: "Suppliers",

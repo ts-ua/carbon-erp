@@ -11,6 +11,7 @@ import type {
   purchaseOrderLineValidator,
   purchaseOrderPaymentValidator,
   purchaseOrderValidator,
+  requestForQuoteValidator,
   supplierContactValidator,
   supplierPaymentValidator,
   supplierShippingValidator,
@@ -838,6 +839,38 @@ export async function upsertPurchaseOrderPayment(
     .insert([purchaseOrderPayment])
     .select("id")
     .single();
+}
+
+export async function upsertRequestForQuote(
+  client: SupabaseClient<Database>,
+  requestForQuote:
+    | (Omit<
+        TypeOfValidator<typeof requestForQuoteValidator>,
+        "id" | "requestForQuoteId"
+      > & {
+        requestForQuoteId: string;
+        createdBy: string;
+      })
+    | (Omit<
+        TypeOfValidator<typeof requestForQuoteValidator>,
+        "id" | "requestForQuoteId"
+      > & {
+        id: string;
+        requestForQuoteId: string;
+        updatedBy: string;
+      })
+) {
+  if ("createdBy" in requestForQuote) {
+    return client
+      .from("requestForQuote")
+      .insert([requestForQuote])
+      .select("id, requestForQuoteId");
+  } else {
+    return client
+      .from("requestForQuote")
+      .update(sanitize(requestForQuote))
+      .eq("id", requestForQuote.id);
+  }
 }
 
 export async function upsertSupplierType(

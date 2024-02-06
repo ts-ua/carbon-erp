@@ -1,3 +1,4 @@
+import RequestForQuoteForm from "./RequestForQuoteForm";
 import RequestForQuoteStatus from "./RequestForQuoteStatus";
 
-export { RequestForQuoteStatus };
+export { RequestForQuoteForm, RequestForQuoteStatus };
