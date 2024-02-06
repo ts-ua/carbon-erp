@@ -6991,6 +6991,527 @@ export interface Database {
           }
         ];
       };
+      requestForQuote: {
+        Row: {
+          createdAt: string | null;
+          createdBy: string;
+          description: string | null;
+          expirationDate: string | null;
+          id: string;
+          locationId: string | null;
+          notes: string | null;
+          receiptDate: string;
+          requestForQuoteId: string;
+          status: Database["public"]["Enums"]["requestForQuoteStatus"];
+          updatedAt: string | null;
+          updatedBy: string | null;
+        };
+        Insert: {
+          createdAt?: string | null;
+          createdBy: string;
+          description?: string | null;
+          expirationDate?: string | null;
+          id?: string;
+          locationId?: string | null;
+          notes?: string | null;
+          receiptDate: string;
+          requestForQuoteId: string;
+          status?: Database["public"]["Enums"]["requestForQuoteStatus"];
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Update: {
+          createdAt?: string | null;
+          createdBy?: string;
+          description?: string | null;
+          expirationDate?: string | null;
+          id?: string;
+          locationId?: string | null;
+          notes?: string | null;
+          receiptDate?: string;
+          requestForQuoteId?: string;
+          status?: Database["public"]["Enums"]["requestForQuoteStatus"];
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "requestForQuote_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuote_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuote_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "requestForQuote_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "location";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuote_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "partQuantities";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "requestForQuote_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "purchaseOrders";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "requestForQuote_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuote_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuote_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
+      requestForQuoteFavorite: {
+        Row: {
+          requestForQuoteId: string;
+          userId: string;
+        };
+        Insert: {
+          requestForQuoteId: string;
+          userId: string;
+        };
+        Update: {
+          requestForQuoteId?: string;
+          userId?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "requestForQuoteFavorites_requestForQuoteId_fkey";
+            columns: ["requestForQuoteId"];
+            referencedRelation: "requestForQuote";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteFavorites_requestForQuoteId_fkey";
+            columns: ["requestForQuoteId"];
+            referencedRelation: "requestForQuotes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteFavorites_userId_fkey";
+            columns: ["userId"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteFavorites_userId_fkey";
+            columns: ["userId"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteFavorites_userId_fkey";
+            columns: ["userId"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
+      requestForQuoteLine: {
+        Row: {
+          createdAt: string | null;
+          createdBy: string;
+          description: string | null;
+          id: string;
+          locationId: string | null;
+          partId: string;
+          quantity: number;
+          requestForQuoteId: string;
+          shelfId: string | null;
+          unitOfMeasureCode: string | null;
+          unitPrice: number;
+          updatedAt: string | null;
+          updatedBy: string | null;
+        };
+        Insert: {
+          createdAt?: string | null;
+          createdBy: string;
+          description?: string | null;
+          id?: string;
+          locationId?: string | null;
+          partId: string;
+          quantity: number;
+          requestForQuoteId: string;
+          shelfId?: string | null;
+          unitOfMeasureCode?: string | null;
+          unitPrice?: number;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Update: {
+          createdAt?: string | null;
+          createdBy?: string;
+          description?: string | null;
+          id?: string;
+          locationId?: string | null;
+          partId?: string;
+          quantity?: number;
+          requestForQuoteId?: string;
+          shelfId?: string | null;
+          unitOfMeasureCode?: string | null;
+          unitPrice?: number;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "requestForQuoteLine_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteLine_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteLine_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "requestForQuoteLine_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "location";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteLine_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "partQuantities";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "requestForQuoteLine_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "purchaseOrders";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "requestForQuoteLine_partId_fkey";
+            columns: ["partId"];
+            referencedRelation: "part";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteLine_partId_fkey";
+            columns: ["partId"];
+            referencedRelation: "partQuantities";
+            referencedColumns: ["partId"];
+          },
+          {
+            foreignKeyName: "requestForQuoteLine_partId_fkey";
+            columns: ["partId"];
+            referencedRelation: "parts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteLine_requestForQuoteId_fkey";
+            columns: ["requestForQuoteId"];
+            referencedRelation: "requestForQuote";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteLine_requestForQuoteId_fkey";
+            columns: ["requestForQuoteId"];
+            referencedRelation: "requestForQuotes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteLine_shelfId_fkey";
+            columns: ["shelfId", "locationId"];
+            referencedRelation: "shelf";
+            referencedColumns: ["id", "locationId"];
+          },
+          {
+            foreignKeyName: "requestForQuoteLine_unitOfMeasureCode_fkey";
+            columns: ["unitOfMeasureCode"];
+            referencedRelation: "unitOfMeasure";
+            referencedColumns: ["code"];
+          },
+          {
+            foreignKeyName: "requestForQuoteLine_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteLine_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteLine_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
+      requestForQuoteSupplier: {
+        Row: {
+          completedAt: string | null;
+          createdAt: string | null;
+          createdBy: string;
+          id: string;
+          password: string | null;
+          requestForQuoteId: string;
+          supplierContactId: string | null;
+          supplierId: string;
+          supplierLocationId: string | null;
+          token: string | null;
+          updatedAt: string | null;
+          updatedBy: string | null;
+        };
+        Insert: {
+          completedAt?: string | null;
+          createdAt?: string | null;
+          createdBy: string;
+          id?: string;
+          password?: string | null;
+          requestForQuoteId: string;
+          supplierContactId?: string | null;
+          supplierId: string;
+          supplierLocationId?: string | null;
+          token?: string | null;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Update: {
+          completedAt?: string | null;
+          createdAt?: string | null;
+          createdBy?: string;
+          id?: string;
+          password?: string | null;
+          requestForQuoteId?: string;
+          supplierContactId?: string | null;
+          supplierId?: string;
+          supplierLocationId?: string | null;
+          token?: string | null;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "requestForQuoteSupplier_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_requestForQuoteId_fkey";
+            columns: ["requestForQuoteId"];
+            referencedRelation: "requestForQuote";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_requestForQuoteId_fkey";
+            columns: ["requestForQuoteId"];
+            referencedRelation: "requestForQuotes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_supplierContactId_fkey";
+            columns: ["supplierContactId"];
+            referencedRelation: "contact";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_supplierId_fkey";
+            columns: ["supplierId"];
+            referencedRelation: "supplier";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_supplierId_fkey";
+            columns: ["supplierId"];
+            referencedRelation: "contractors";
+            referencedColumns: ["supplierId"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_supplierId_fkey";
+            columns: ["supplierId"];
+            referencedRelation: "partners";
+            referencedColumns: ["supplierId"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_supplierId_fkey";
+            columns: ["supplierId"];
+            referencedRelation: "purchaseOrderSuppliers";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_supplierId_fkey";
+            columns: ["supplierId"];
+            referencedRelation: "suppliers";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_supplierLocationId_fkey";
+            columns: ["supplierLocationId"];
+            referencedRelation: "location";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_supplierLocationId_fkey";
+            columns: ["supplierLocationId"];
+            referencedRelation: "partQuantities";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_supplierLocationId_fkey";
+            columns: ["supplierLocationId"];
+            referencedRelation: "purchaseOrders";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplier_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
+      requestForQuoteSupplierLine: {
+        Row: {
+          createdAt: string | null;
+          createdBy: string;
+          id: string;
+          requestForQuoteLineId: string;
+          requestForQuoteSupplierId: string;
+          unitPrice: number;
+          updatedAt: string | null;
+          updatedBy: string | null;
+        };
+        Insert: {
+          createdAt?: string | null;
+          createdBy: string;
+          id?: string;
+          requestForQuoteLineId: string;
+          requestForQuoteSupplierId: string;
+          unitPrice: number;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Update: {
+          createdAt?: string | null;
+          createdBy?: string;
+          id?: string;
+          requestForQuoteLineId?: string;
+          requestForQuoteSupplierId?: string;
+          unitPrice?: number;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "requestForQuoteSupplierLine_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplierLine_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplierLine_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplierLine_requestForQuoteLineId_fkey";
+            columns: ["requestForQuoteLineId"];
+            referencedRelation: "requestForQuoteLine";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplierLine_requestForQuoteSupplierId_fkey";
+            columns: ["requestForQuoteSupplierId"];
+            referencedRelation: "requestForQuoteSupplier";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplierLine_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplierLine_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuoteSupplierLine_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
       search: {
         Row: {
           description: string | null;
@@ -10131,6 +10652,66 @@ export interface Database {
           }
         ];
       };
+      requestForQuotes: {
+        Row: {
+          createdAt: string | null;
+          createdBy: string | null;
+          createdByAvatar: string | null;
+          createdByFullName: string | null;
+          description: string | null;
+          expirationDate: string | null;
+          favorite: boolean | null;
+          id: string | null;
+          locationId: string | null;
+          locationName: string | null;
+          notes: string | null;
+          partIds: string[] | null;
+          receiptDate: string | null;
+          requestForQuoteId: string | null;
+          status: Database["public"]["Enums"]["requestForQuoteStatus"] | null;
+          supplierIds: string[] | null;
+          updatedByAvatar: string | null;
+          updatedByFullName: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "requestForQuote_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuote_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuote_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "requestForQuote_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "location";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "requestForQuote_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "partQuantities";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "requestForQuote_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "purchaseOrders";
+            referencedColumns: ["locationId"];
+          }
+        ];
+      };
       services: {
         Row: {
           active: boolean | null;
@@ -10494,6 +11075,7 @@ export interface Database {
         | "Manufacturing Consumption"
         | "Manufacturing Output";
       receiptStatus: "Draft" | "Pending" | "Posted";
+      requestForQuoteStatus: "Draft" | "Sent" | "Expired" | "Closed";
       searchEntity:
         | "Resource"
         | "Person"

@@ -183,7 +183,8 @@ INSERT INTO "sequence" ("table", "name", "prefix", "suffix", "next", "size", "st
 VALUES 
   ('purchaseOrder', 'Purchase Order', 'PO', NULL, 0, 6, 1),
   ('purchaseInvoice', 'Purchase Invoice', 'AP', NULL, 0, 6, 1),
-  ('receipt', 'Receipt', 'RE', NULL, 0, 6, 1);
+  ('receipt', 'Receipt', 'RE', NULL, 0, 6, 1),
+  ('requestForQuote', 'Request For Quote', 'RFQ', NULL, 0, 6, 1);
 
 -- account categories
 

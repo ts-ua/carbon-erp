@@ -38,7 +38,7 @@ const IconSidebar = () => {
   }, new Set<string>());
 
   return (
-    <div className="h-full border-r border-border bg-background z-10">
+    <div className="h-full bg-background z-10 border-r border-border">
       <div>
         <TooltipProvider>
           <VStack spacing={0} className="self-start sticky">

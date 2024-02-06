@@ -11,6 +11,7 @@ import type {
   purchaseOrderLineValidator,
   purchaseOrderPaymentValidator,
   purchaseOrderValidator,
+  requestForQuoteValidator,
   supplierContactValidator,
   supplierPaymentValidator,
   supplierShippingValidator,
@@ -50,6 +51,23 @@ export async function deletePurchaseOrderLine(
     .from("purchaseOrderLine")
     .delete()
     .eq("id", purchaseOrderLineId);
+}
+
+export async function deleteRequestForQuote(
+  client: SupabaseClient<Database>,
+  requestForQuoteId: string
+) {
+  return client.from("requestForQuote").delete().eq("id", requestForQuoteId);
+}
+
+export async function deleteRequestForQuoteLine(
+  client: SupabaseClient<Database>,
+  requestForQuoteLineId: string
+) {
+  return client
+    .from("requestForQuoteLine")
+    .delete()
+    .eq("id", requestForQuoteLineId);
 }
 
 export async function deleteSupplierContact(
@@ -196,6 +214,39 @@ export async function getPurchaseOrderSuppliers(
   client: SupabaseClient<Database>
 ) {
   return client.from("purchaseOrderSuppliers").select("id, name");
+}
+
+export async function getRequestsForQuotes(
+  client: SupabaseClient<Database>,
+  args: GenericQueryFilters & {
+    search: string | null;
+    status: string | null;
+    supplierId: string | null;
+    partId: string | null;
+  }
+) {
+  let query = client.from("requestForQuotes").select("*", { count: "exact" });
+
+  if (args.search) {
+    query = query.or(
+      `id.ilike.%${args.search}%,requestForQuoteId.ilike.%${args.search}%,description.ilike.%${args.search}%`
+    );
+  }
+
+  if (args.status) {
+    query = query.eq("status", args.status);
+  }
+
+  if (args.supplierId) {
+    query = query.contains("supplierIds", [args.supplierId]);
+  }
+
+  if (args.partId) {
+    query = query.contains("partIds", [args.partId]);
+  }
+
+  query = setGenericQueryFilters(query, args, "id", false);
+  return query;
 }
 
 export async function getSupplier(
@@ -485,6 +536,50 @@ export async function releasePurchaseOrder(
     .eq("id", purchaseOrderId);
 }
 
+export async function updatePurchaseOrderFavorite(
+  client: SupabaseClient<Database>,
+  args: {
+    id: string;
+    favorite: boolean;
+    userId: string;
+  }
+) {
+  const { id, favorite, userId } = args;
+  if (!favorite) {
+    return client
+      .from("purchaseOrderFavorite")
+      .delete()
+      .eq("purchaseOrderId", id)
+      .eq("userId", userId);
+  } else {
+    return client
+      .from("purchaseOrderFavorite")
+      .insert({ purchaseOrderId: id, userId: userId });
+  }
+}
+
+export async function updateRequestForQuoteFavorite(
+  client: SupabaseClient<Database>,
+  args: {
+    id: string;
+    favorite: boolean;
+    userId: string;
+  }
+) {
+  const { id, favorite, userId } = args;
+  if (!favorite) {
+    return client
+      .from("requestForQuoteFavorite")
+      .delete()
+      .eq("requestForQuoteId", id)
+      .eq("userId", userId);
+  } else {
+    return client
+      .from("requestForQuoteFavorite")
+      .insert({ requestForQuoteId: id, userId: userId });
+  }
+}
+
 export async function updateSupplier(
   client: SupabaseClient<Database>,
   supplier: Omit<TypeOfValidator<typeof supplierValidator>, "id"> & {
@@ -744,6 +839,38 @@ export async function upsertPurchaseOrderPayment(
     .insert([purchaseOrderPayment])
     .select("id")
     .single();
+}
+
+export async function upsertRequestForQuote(
+  client: SupabaseClient<Database>,
+  requestForQuote:
+    | (Omit<
+        TypeOfValidator<typeof requestForQuoteValidator>,
+        "id" | "requestForQuoteId"
+      > & {
+        requestForQuoteId: string;
+        createdBy: string;
+      })
+    | (Omit<
+        TypeOfValidator<typeof requestForQuoteValidator>,
+        "id" | "requestForQuoteId"
+      > & {
+        id: string;
+        requestForQuoteId: string;
+        updatedBy: string;
+      })
+) {
+  if ("createdBy" in requestForQuote) {
+    return client
+      .from("requestForQuote")
+      .insert([requestForQuote])
+      .select("id, requestForQuoteId");
+  } else {
+    return client
+      .from("requestForQuote")
+      .update(sanitize(requestForQuote))
+      .eq("id", requestForQuote.id);
+  }
 }
 
 export async function upsertSupplierType(
