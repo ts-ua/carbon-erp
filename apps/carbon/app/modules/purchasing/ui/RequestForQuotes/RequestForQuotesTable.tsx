@@ -57,7 +57,7 @@ const RequestForQuotesTable = memo(
       return [
         {
           accessorKey: "requestForQuoteId",
-          header: "Name",
+          header: "ID",
           cell: ({ row }) => (
             <HStack>
               {row.original.favorite ? (

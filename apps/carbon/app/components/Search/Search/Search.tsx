@@ -1,32 +1,32 @@
 import {
   Button,
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandLoading,
+  CommandSeparator,
   HStack,
-  Input,
-  InputGroup,
-  InputLeftElement,
   Kbd,
   Modal,
-  ModalBody,
   ModalContent,
-  VStack,
   useDebounce,
   useDisclosure,
   useKeyboardShortcuts,
 } from "@carbon/react";
-import { clip } from "@carbon/utils";
-import { Link, useNavigate } from "@remix-run/react";
-import clsx from "clsx";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate } from "@remix-run/react";
+import { useCallback, useEffect, useState } from "react";
 import { AiOutlinePartition } from "react-icons/ai";
 import { BiListCheck } from "react-icons/bi";
-import { BsArrowReturnLeft, BsCartDash, BsCartPlus } from "react-icons/bs";
+import { BsCartDash, BsCartPlus } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { HiOutlineDocumentDuplicate } from "react-icons/hi";
 import { PiShareNetworkFill } from "react-icons/pi";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import { useSidebar } from "~/components/Layout/Sidebar/useSidebar";
 import { useSupabase } from "~/lib/supabase";
-import type { NavItem } from "~/types";
 
 type SearchResult = {
   id: number;
@@ -56,24 +56,18 @@ const SearchModal = ({
 }) => {
   const { supabase } = useSupabase();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const [query, setQuery] = useState("");
-  const [debouncedQuery] = useDebounce(query, 500);
+  const [input, setInput] = useState("");
+  const [debouncedInput] = useDebounce(input, 500);
 
-  const defaultResults = useSidebar();
-  const [moduleResults, setModuleResults] = useState<NavItem[]>(defaultResults);
+  const moduleResults = useSidebar();
+
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
-
-  const listboxRef = useRef<HTMLUListElement>(null);
-
-  const onResultClick = () => {
-    onClose();
-    setQuery("");
-  };
 
   const getSearchResults = useCallback(
     async (q: string) => {
+      setLoading(true);
       const tokens = q.split(" ");
       const search =
         tokens.length > 1
@@ -91,151 +85,75 @@ const SearchModal = ({
       } else {
         setSearchResults([]);
       }
+      setLoading(false);
     },
     [supabase]
   );
 
-  const getModuleResults = useCallback((q: string) => {
-    setModuleResults(
-      defaultResults.filter((item) => {
-        return item.name.toLowerCase().includes(q.toLowerCase());
-      })
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const onKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLInputElement>) => {
-      const results = [...moduleResults, ...searchResults];
-
-      const scrollToListItem = (index: number) => {
-        const listbox = listboxRef.current;
-        if (listbox) {
-          const listItem = listbox.children[index] as HTMLLIElement;
-          if (listItem) {
-            listItem.scrollIntoView({
-              block: "nearest",
-            });
-          }
-        }
-      };
-
-      const next = () => {
-        setSelectedIndex((prev) => {
-          const newIndex = clip(prev + 1, 0, results.length - 1);
-          scrollToListItem(newIndex);
-          return newIndex;
-        });
-      };
-
-      const prev = () => {
-        setSelectedIndex((prev) => {
-          const newIndex = clip(prev - 1, 0, results.length - 1);
-          scrollToListItem(newIndex);
-          return newIndex;
-        });
-      };
-
-      switch (event.code) {
-        case "Tab":
-          event.preventDefault();
-          if (event.shiftKey) {
-            prev();
-          } else {
-            next();
-          }
-          break;
-        case "ArrowDown":
-          next();
-          break;
-        case "ArrowUp":
-          prev();
-          break;
-        case "Enter":
-          const selectedResult = results[selectedIndex];
-          if (selectedResult) {
-            if ("link" in selectedResult) {
-              navigate(selectedResult.link);
-            } else {
-              navigate(selectedResult.to);
-            }
-            onResultClick();
-          }
-          break;
-        default:
-          break;
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [debouncedQuery.length, navigate, searchResults, selectedIndex]
-  );
-
   useEffect(() => {
-    setSelectedIndex(0);
-    if (debouncedQuery) {
-      getSearchResults(debouncedQuery).then(() => {
-        getModuleResults(debouncedQuery);
-      });
+    if (debouncedInput) {
+      getSearchResults(debouncedInput);
     } else {
       setSearchResults([]);
-      setModuleResults(defaultResults);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedQuery, getModuleResults, getSearchResults]);
+  }, [debouncedInput, getSearchResults]);
+
+  const onInputChange = (value: string) => {
+    setInput(value);
+  };
+
+  const onSelect = (location: string) => {
+    navigate(location);
+    onClose();
+  };
 
   return (
     <Modal
       open={isOpen}
       onOpenChange={(open) => {
-        setQuery("");
+        setInput("");
         if (!open) onClose();
       }}
     >
       <ModalContent className="rounded-lg top-[10vh] translate-y-0 p-0">
-        <ModalBody className="max-h-[66vh]">
-          <InputGroup
-            size="lg"
-            className="ring-0 focus-within:ring-0 shadow-none border-0"
-          >
-            <InputLeftElement className="pointer-events-none">
-              <RxMagnifyingGlass className="text-muted-foreground" />
-            </InputLeftElement>
-            <Input
-              placeholder="Search..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={onKeyDown}
-            />
-          </InputGroup>
+        <Command className="rounded-lg border shadow-md">
+          <CommandInput
+            placeholder="Type a command or search..."
+            value={input}
+            onValueChange={onInputChange}
+          />
+          <CommandList>
+            {loading && <CommandLoading />}
+            <CommandEmpty>No results found.</CommandEmpty>
 
-          <div className="h-[calc(100%-3rem)] overflow-y-scroll p-4 pt-0">
-            <ul role="listbox" ref={listboxRef}>
-              {moduleResults.map((item, itemIndex) => (
-                <Module
-                  key={item.to}
-                  item={item}
-                  selected={selectedIndex === itemIndex}
-                  onClick={onResultClick}
-                  onHover={() => setSelectedIndex(itemIndex)}
-                />
+            <CommandGroup heading="Modules">
+              {moduleResults.map((module) => (
+                <CommandItem
+                  key={module.name}
+                  onSelect={() => onSelect(module.to)}
+                >
+                  <module.icon className="mr-2 w-4 h-4" />
+                  <span>{module.name}</span>
+                </CommandItem>
               ))}
-
-              {searchResults.map((result, resultIndex) => (
-                <Result
-                  key={result.uuid}
-                  result={result}
-                  selected={
-                    selectedIndex === resultIndex + moduleResults.length
-                  }
-                  onClick={onResultClick}
-                  onHover={() =>
-                    setSelectedIndex(resultIndex + moduleResults.length)
-                  }
-                />
-              ))}
-            </ul>
-          </div>
-        </ModalBody>
+            </CommandGroup>
+            <CommandSeparator />
+            {searchResults.length > 0 && (
+              <CommandGroup heading="Search Results">
+                {searchResults.map((result) => (
+                  <CommandItem
+                    key={result.id}
+                    value={`${input}${result.id}`}
+                    onSelect={() => onSelect(result.link)}
+                  >
+                    <ResultIcon entity={result.entity} />
+                    <span>{result.name}</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            )}
+          </CommandList>
+        </Command>
       </ModalContent>
     </Modal>
   );
@@ -244,123 +162,26 @@ const SearchModal = ({
 function ResultIcon({ entity }: { entity: SearchResult["entity"] | "Module" }) {
   switch (entity) {
     case "Customer":
-      return (
-        <PiShareNetworkFill className="w-8 h-8 mr-4 text-muted-foreground" />
-      );
+      return <PiShareNetworkFill className="w-4 h-4 mr-2 " />;
     case "Document":
-      return (
-        <HiOutlineDocumentDuplicate className="w-8 h-8 mr-4 text-muted-foreground" />
-      );
+      return <HiOutlineDocumentDuplicate className="w-4 h-4 mr-2 " />;
     case "Job":
-      return <BiListCheck className="w-8 h-8 mr-4 text-muted-foreground" />;
+      return <BiListCheck className="w-4 h-4 mr-2 " />;
     case "Part":
-      return (
-        <AiOutlinePartition className="w-8 h-8 mr-4 text-muted-foreground" />
-      );
+      return <AiOutlinePartition className="w-4 h-4 mr-2 " />;
     case "Person":
-      return <CgProfile className="w-8 h-8 mr-4 text-muted-foreground" />;
+      return <CgProfile className="w-4 h-4 mr-2 " />;
     case "Resource":
-      return <CgProfile className="w-8 h-8 mr-4 text-muted-foreground" />;
+      return <CgProfile className="w-4 h-4 mr-2 " />;
     case "Purchase Order":
-      return <BsCartDash className="w-8 h-8 mr-4 text-muted-foreground" />;
+      return <BsCartDash className="w-4 h-4 mr-2 " />;
     case "Sales Order":
-      return <BsCartPlus className="w-8 h-8 mr-4 text-muted-foreground" />;
+      return <BsCartPlus className="w-4 h-4 mr-2 " />;
     case "Supplier":
-      return (
-        <PiShareNetworkFill className="w-8 h-8 mr-4 text-muted-foreground" />
-      );
+      return <PiShareNetworkFill className="w-4 h-4 mr-2 " />;
     default:
       return null;
   }
-}
-
-function EnterIcon() {
-  return <BsArrowReturnLeft className="w-6 h-6 text-muted-foreground" />;
-}
-
-function Result({
-  result,
-  selected,
-  onClick,
-  onHover,
-}: {
-  result: SearchResult;
-  selected: boolean;
-  onClick: () => void;
-  onHover: () => void;
-}) {
-  return (
-    <Link to={result.link} onClick={onClick}>
-      <li
-        className={clsx(
-          "flex w-full items-center bg-card rounded-lg  min-h-[4rem] mt-2 p-2",
-          {
-            "bg-primary text-primary-foreground": selected,
-            "bg-muted text-foreground": !selected,
-          }
-        )}
-        role="option"
-        aria-selected={selected}
-        onMouseEnter={onHover}
-      >
-        <ResultIcon entity={result.entity} />
-        <VStack spacing={0} className="flex-1">
-          <p
-            className={clsx("text-sm", {
-              "text-primary-foreground/60": selected,
-              "text-muted-foreground": !selected,
-            })}
-          >
-            {result.entity}
-          </p>
-          <p className="font-bold">{result.name}</p>
-        </VStack>
-        <EnterIcon />
-      </li>
-    </Link>
-  );
-}
-
-function Module({
-  item,
-  selected,
-  onClick,
-  onHover,
-}: {
-  item: NavItem;
-  selected: boolean;
-  onClick: () => void;
-  onHover: () => void;
-}) {
-  return (
-    <Link to={item.to} onClick={onClick}>
-      <li
-        className={clsx(
-          "flex w-full items-center bg-card rounded-lg  min-h-[4rem] mt-2 p-2",
-          {
-            "bg-primary text-primary-foreground": selected,
-            "bg-muted text-foreground": !selected,
-          }
-        )}
-        role="option"
-        aria-selected={selected}
-        onMouseEnter={onHover}
-      >
-        <VStack spacing={0} className="flex-1">
-          <p
-            className={clsx("text-sm", {
-              "text-primary-foreground/60": selected,
-              "text-muted-foreground": !selected,
-            })}
-          >
-            Module
-          </p>
-          <p className="font-bold">{item.name}</p>
-        </VStack>
-        <EnterIcon />
-      </li>
-    </Link>
-  );
 }
 
 const SearchButton = () => {
@@ -374,7 +195,7 @@ const SearchButton = () => {
       <Button
         leftIcon={<RxMagnifyingGlass />}
         variant="secondary"
-        className="text-muted-foreground w-[200px] px-2"
+        className=" w-[200px] px-2"
         onClick={searchModal.onOpen}
       >
         <HStack className="w-full">

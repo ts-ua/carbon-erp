@@ -40,7 +40,7 @@ const ColorPicker = ({ name, label }: ColorFieldProps) => {
           <HexColorInput
             color={value}
             onChange={setValue}
-            className="py-0 px-2 h-9 rounded-md outline-2 outline-offset-2 outline-transparent border border-border"
+            className="py-0 px-2 h-9 rounded-md outline-2 outline-offset-2 outline-transparent border border-border bg-background text-foreground focus:ring-ring focus:ring-offset-background focus:ring-2 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
           />
         </HStack>
         {disclosure.isOpen && (

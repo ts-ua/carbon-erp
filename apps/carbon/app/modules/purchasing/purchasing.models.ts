@@ -2,6 +2,7 @@ import { withZod } from "@remix-validated-form/with-zod";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 import { address, contact } from "~/types/validators";
+import { currencyCodes } from "../accounting";
 
 export const purchaseOrderLineType = [
   "Part",
@@ -150,7 +151,7 @@ export const purchaseOrderPaymentValidator = withZod(
     invoiceSupplierContactId: zfd.text(z.string().optional()),
     paymentTermId: zfd.text(z.string().optional()),
     paymentComplete: zfd.checkbox(),
-    currencyCode: zfd.text(z.string().optional()),
+    currencyCode: z.enum(currencyCodes).optional(),
   })
 );
 
