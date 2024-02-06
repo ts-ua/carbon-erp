@@ -25,7 +25,7 @@ export const handle: Handle = {
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client } = await requirePermissions(request, {
-    view: "parts",
+    view: "purchasing",
   });
 
   const { orderId } = params;
