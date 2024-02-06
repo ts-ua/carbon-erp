@@ -44,7 +44,7 @@ const TableHeader = <T extends object>({
   withSelectableRows,
 }: HeaderProps<T>) => {
   return (
-    <HStack className="px-4 py-3 justify-between bg-background border-b border-border w-full">
+    <HStack className="px-4 py-1.5 justify-between bg-background border-b border-border w-full">
       <HStack>
         {withSelectableRows && actions.length > 0 && (
           <Actions actions={actions} selectedRows={selectedRows} />

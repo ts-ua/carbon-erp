@@ -1,7 +1,6 @@
 import { VStack } from "@carbon/react";
 import { ValidatedForm } from "remix-validated-form";
 import { Hidden, Input, Submit } from "~/components/Form";
-import { SectionTitle } from "~/components/Layout";
 import { companyValidator } from "~/modules/settings";
 import type { TypeOfValidator } from "~/types/validators";
 import { path } from "~/utils/path";
@@ -13,7 +12,6 @@ type CompanyFormProps = {
 const CompanyForm = ({ company }: CompanyFormProps) => {
   return (
     <div className="w-full">
-      <SectionTitle>Basic Information</SectionTitle>
       <ValidatedForm
         method="post"
         action={path.to.company}
