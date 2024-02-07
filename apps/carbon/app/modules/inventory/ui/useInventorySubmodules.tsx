@@ -2,17 +2,17 @@ import { usePermissions } from "~/hooks";
 import type { AuthenticatedRouteGroup } from "~/types";
 import { path } from "~/utils/path";
 
-const salesRoutes: AuthenticatedRouteGroup[] = [
+const inventoryRoutes: AuthenticatedRouteGroup[] = [
   {
     name: "Manage",
     routes: [
       {
-        name: "Customers",
-        to: path.to.customers,
+        name: "Receipts",
+        to: path.to.receipts,
       },
       {
-        name: "Quotes",
-        to: path.to.quotes,
+        name: "Shipments",
+        to: path.to.shipments,
       },
     ],
   },
@@ -20,18 +20,18 @@ const salesRoutes: AuthenticatedRouteGroup[] = [
     name: "Configure",
     routes: [
       {
-        name: "Customer Types",
-        to: path.to.customerTypes,
+        name: "Shipping Methods",
+        to: path.to.shippingMethods,
         role: "employee",
       },
     ],
   },
 ];
 
-export default function useSalesSidebar() {
+export default function useAccountingSubmodules() {
   const permissions = usePermissions();
   return {
-    groups: salesRoutes
+    groups: inventoryRoutes
       .filter((group) => {
         const filteredRoutes = group.routes.filter((route) => {
           if (route.role) {

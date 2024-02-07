@@ -1,52 +1,47 @@
-import { BsPaletteFill } from "react-icons/bs";
-import { CgSync } from "react-icons/cg";
-import { GoNumber } from "react-icons/go";
-import { TbBuildingFactory2 } from "react-icons/tb";
 import { usePermissions } from "~/hooks";
 import type { AuthenticatedRouteGroup } from "~/types";
 import { path } from "~/utils/path";
 
-const settingsRoutes: AuthenticatedRouteGroup[] = [
+const partsRoutes: AuthenticatedRouteGroup[] = [
   {
-    name: "Company",
+    name: "Manage",
     routes: [
       {
-        name: "Business",
-        to: path.to.company,
+        name: "Parts",
+        to: path.to.partsSearch,
+      },
+      {
+        name: "Services",
+        to: path.to.services,
+      },
+      {
+        name: "Routing",
+        to: path.to.routings,
         role: "employee",
-        icon: <TbBuildingFactory2 />,
       },
     ],
   },
   {
-    name: "System",
+    name: "Configure",
     routes: [
       {
-        name: "Integrations",
-        to: path.to.integrations,
+        name: "Part Groups",
+        to: path.to.partGroups,
         role: "employee",
-        icon: <CgSync />,
       },
       {
-        name: "Sequences",
-        to: path.to.sequences,
+        name: "Units of Measure",
+        to: path.to.uoms,
         role: "employee",
-        icon: <GoNumber />,
-      },
-      {
-        name: "Theme",
-        to: path.to.theme,
-        role: "employee",
-        icon: <BsPaletteFill />,
       },
     ],
   },
 ];
 
-export default function usePurchasingSidebar() {
+export default function usePartsSubmodules() {
   const permissions = usePermissions();
   return {
-    groups: settingsRoutes
+    groups: partsRoutes
       .filter((group) => {
         const filteredRoutes = group.routes.filter((route) => {
           if (route.role) {

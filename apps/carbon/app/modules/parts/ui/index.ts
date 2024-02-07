@@ -1,4 +1,4 @@
-import usePartsSidebar from "./usePartsSidebar";
+import usePartsSubmodules from "./usePartsSubmodules";
 
 export * from "./Part";
 export * from "./PartGroups";
@@ -7,4 +7,4 @@ export * from "./Routing";
 export * from "./Service";
 export * from "./Services";
 export * from "./UnitOfMeasure";
-export { usePartsSidebar };
+export { usePartsSubmodules };

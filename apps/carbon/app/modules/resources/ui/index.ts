@@ -1,4 +1,4 @@
-import useResourcesSidebar from "./useResourcesSidebar";
+import useResourcesSubmodules from "./useResourcesSubmodules";
 
 export * from "./Abilities";
 export * from "./Attributes";
@@ -12,4 +12,4 @@ export * from "./People";
 export * from "./Person";
 export * from "./Shifts";
 export * from "./WorkCells";
-export { useResourcesSidebar };
+export { useResourcesSubmodules };

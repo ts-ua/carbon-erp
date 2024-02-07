@@ -1,8 +1,8 @@
 import { VStack } from "@carbon/react";
 import type { MetaFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
-import { ContentSidebar } from "~/components/Layout/Sidebar";
-import { useAccountSidebar } from "~/modules/account";
+import { ContentSidebar } from "~/components/Layout/Navigation";
+import { useAccountSubmodules } from "~/modules/account";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 
@@ -17,7 +17,7 @@ export const handle: Handle = {
 };
 
 export default function AccountRoute() {
-  const { links } = useAccountSidebar();
+  const { links } = useAccountSubmodules();
 
   return (
     <div className="grid w-full h-full grid-cols-[auto_1fr]">

@@ -2,17 +2,22 @@ import { usePermissions } from "~/hooks";
 import type { AuthenticatedRouteGroup } from "~/types";
 import { path } from "~/utils/path";
 
-const inventoryRoutes: AuthenticatedRouteGroup[] = [
+const purchasingRoutes: AuthenticatedRouteGroup[] = [
   {
     name: "Manage",
     routes: [
       {
-        name: "Receipts",
-        to: path.to.receipts,
+        name: "Purchase Orders",
+        to: path.to.purchaseOrders,
       },
       {
-        name: "Shipments",
-        to: path.to.shipments,
+        name: "Request for Quotes",
+        to: path.to.requestForQuotes,
+        permission: "employee",
+      },
+      {
+        name: "Suppliers",
+        to: path.to.suppliers,
       },
     ],
   },
@@ -20,18 +25,18 @@ const inventoryRoutes: AuthenticatedRouteGroup[] = [
     name: "Configure",
     routes: [
       {
-        name: "Shipping Methods",
-        to: path.to.shippingMethods,
+        name: "Supplier Types",
+        to: path.to.supplierTypes,
         role: "employee",
       },
     ],
   },
 ];
 
-export default function useAccountingSidebar() {
+export default function usePurchasingSubmodules() {
   const permissions = usePermissions();
   return {
-    groups: inventoryRoutes
+    groups: purchasingRoutes
       .filter((group) => {
         const filteredRoutes = group.routes.filter((route) => {
           if (route.role) {
