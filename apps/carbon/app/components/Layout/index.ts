@@ -1,12 +1,12 @@
 import Background from "./Background";
-import PageTitle from "./PageTitle";
-import SectionTitle from "./SectionTitle";
 import {
   ContentSidebar,
   DetailSidebar,
   GroupedContentSidebar,
   IconSidebar,
-} from "./Sidebar";
+} from "./Navigation";
+import PageTitle from "./PageTitle";
+import SectionTitle from "./SectionTitle";
 import TableFilters from "./TableFilters";
 import Topbar from "./Topbar";
 

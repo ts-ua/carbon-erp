@@ -43,6 +43,6 @@ const usersRoutes: RouteGroup[] = [
   },
 ];
 
-export default function useUsersSidebar() {
+export default function useUsersSubmodules() {
   return { groups: usersRoutes };
 }

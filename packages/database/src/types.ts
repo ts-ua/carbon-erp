@@ -5830,6 +5830,7 @@ export interface Database {
           notes: string | null;
           orderDate: string;
           purchaseOrderId: string;
+          revisionId: number;
           status: Database["public"]["Enums"]["purchaseOrderStatus"];
           supplierContactId: string | null;
           supplierId: string;
@@ -5848,6 +5849,7 @@ export interface Database {
           notes?: string | null;
           orderDate?: string;
           purchaseOrderId: string;
+          revisionId?: number;
           status?: Database["public"]["Enums"]["purchaseOrderStatus"];
           supplierContactId?: string | null;
           supplierId: string;
@@ -5866,6 +5868,7 @@ export interface Database {
           notes?: string | null;
           orderDate?: string;
           purchaseOrderId?: string;
+          revisionId?: number;
           status?: Database["public"]["Enums"]["purchaseOrderStatus"];
           supplierContactId?: string | null;
           supplierId?: string;
@@ -6701,6 +6704,63 @@ export interface Database {
           }
         ];
       };
+      quote: {
+        Row: {
+          createdAt: string;
+          createdBy: string;
+          customerContactId: string | null;
+          customerId: string;
+          customerLocationId: string | null;
+          customerReference: string | null;
+          id: string;
+          name: string;
+          notes: string | null;
+          ownerId: string;
+          quoteDate: string;
+          quoteId: string;
+          revisionId: number;
+          status: Database["public"]["Enums"]["quoteStatus"];
+          updatedAt: string | null;
+          updatedBy: string | null;
+        };
+        Insert: {
+          createdAt?: string;
+          createdBy: string;
+          customerContactId?: string | null;
+          customerId: string;
+          customerLocationId?: string | null;
+          customerReference?: string | null;
+          id?: string;
+          name: string;
+          notes?: string | null;
+          ownerId: string;
+          quoteDate?: string;
+          quoteId: string;
+          revisionId?: number;
+          status?: Database["public"]["Enums"]["quoteStatus"];
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Update: {
+          createdAt?: string;
+          createdBy?: string;
+          customerContactId?: string | null;
+          customerId?: string;
+          customerLocationId?: string | null;
+          customerReference?: string | null;
+          id?: string;
+          name?: string;
+          notes?: string | null;
+          ownerId?: string;
+          quoteDate?: string;
+          quoteId?: string;
+          revisionId?: number;
+          status?: Database["public"]["Enums"]["quoteStatus"];
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Relationships: [];
+      };
       receipt: {
         Row: {
           createdAt: string;
@@ -6995,13 +7055,14 @@ export interface Database {
         Row: {
           createdAt: string | null;
           createdBy: string;
-          description: string | null;
           expirationDate: string | null;
           id: string;
           locationId: string | null;
+          name: string | null;
           notes: string | null;
           receiptDate: string;
           requestForQuoteId: string;
+          revisionId: number;
           status: Database["public"]["Enums"]["requestForQuoteStatus"];
           updatedAt: string | null;
           updatedBy: string | null;
@@ -7009,13 +7070,14 @@ export interface Database {
         Insert: {
           createdAt?: string | null;
           createdBy: string;
-          description?: string | null;
           expirationDate?: string | null;
           id?: string;
           locationId?: string | null;
+          name?: string | null;
           notes?: string | null;
           receiptDate: string;
           requestForQuoteId: string;
+          revisionId?: number;
           status?: Database["public"]["Enums"]["requestForQuoteStatus"];
           updatedAt?: string | null;
           updatedBy?: string | null;
@@ -7023,13 +7085,14 @@ export interface Database {
         Update: {
           createdAt?: string | null;
           createdBy?: string;
-          description?: string | null;
           expirationDate?: string | null;
           id?: string;
           locationId?: string | null;
+          name?: string | null;
           notes?: string | null;
           receiptDate?: string;
           requestForQuoteId?: string;
+          revisionId?: number;
           status?: Database["public"]["Enums"]["requestForQuoteStatus"];
           updatedAt?: string | null;
           updatedBy?: string | null;
@@ -10485,6 +10548,7 @@ export interface Database {
           purchaseOrderId: string | null;
           receiptPromisedDate: string | null;
           receiptRequestedDate: string | null;
+          revisionId: number | null;
           shippingMethodName: string | null;
           shippingTermName: string | null;
           status: Database["public"]["Enums"]["purchaseOrderStatus"] | null;
@@ -10658,12 +10722,12 @@ export interface Database {
           createdBy: string | null;
           createdByAvatar: string | null;
           createdByFullName: string | null;
-          description: string | null;
           expirationDate: string | null;
           favorite: boolean | null;
           id: string | null;
           locationId: string | null;
           locationName: string | null;
+          name: string | null;
           notes: string | null;
           partIds: string[] | null;
           receiptDate: string | null;
@@ -11063,6 +11127,14 @@ export interface Database {
         | "Reject"
         | "Request Approval";
       purchaseOrderType: "Purchase" | "Return";
+      quoteStatus:
+        | "Draft"
+        | "Open"
+        | "Replied"
+        | "Ordered"
+        | "Partially Ordered"
+        | "LostCancelled"
+        | "Expired";
       receiptSourceDocument:
         | "Sales Order"
         | "Sales Invoice"

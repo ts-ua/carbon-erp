@@ -80,6 +80,6 @@ const resourcesRoutes: RouteGroup[] = [
   },
 ];
 
-export default function useResourcesSidebar() {
+export default function useResourcesSubmodules() {
   return { groups: resourcesRoutes };
 }

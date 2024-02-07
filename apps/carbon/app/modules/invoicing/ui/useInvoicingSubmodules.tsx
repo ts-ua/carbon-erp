@@ -23,7 +23,7 @@ const invoicingRoutes: AuthenticatedRouteGroup[] = [
   },
 ];
 
-export default function useInvoicingSidebar() {
+export default function useInvoicingSubmodules() {
   const permissions = usePermissions();
   return {
     groups: invoicingRoutes

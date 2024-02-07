@@ -1,5 +1,5 @@
-import useInventorySidebar from "./useInventorySidebar";
+import useInventorySubmodules from "./useInventorySubmodules";
 
-export { useInventorySidebar };
 export * from "./Receipts";
 export * from "./ShippingMethods";
+export { useInventorySubmodules };

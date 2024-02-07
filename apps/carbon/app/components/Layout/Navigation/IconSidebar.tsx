@@ -12,7 +12,7 @@ import { z } from "zod";
 import { useRouteData } from "~/hooks";
 import type { Company } from "~/modules/settings";
 import { path } from "~/utils/path";
-import { useSidebar } from "./useSidebar";
+import { useModules } from "./useModules";
 
 export const ModuleHandle = z.object({
   module: z.string(),
@@ -25,7 +25,7 @@ const IconSidebar = () => {
 
   const company = routeData?.company;
 
-  const links = useSidebar();
+  const links = useModules();
   const matchedModules = useMatches().reduce((acc, match) => {
     if (match.handle) {
       const result = ModuleHandle.safeParse(match.handle);
