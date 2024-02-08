@@ -6,7 +6,6 @@ import {
   makeRedirectToFromHere,
   safeRedirect,
 } from "~/utils/http";
-import { error } from "~/utils/result";
 
 import {
   NODE_ENV,
@@ -30,8 +29,7 @@ async function assertAuthSession(
 
   if (!authSession?.accessToken || !authSession?.refreshToken) {
     throw redirect(
-      `${onFailRedirectTo || path.to.login}?${makeRedirectToFromHere(request)}`,
-      await flash(request, error("No user session found"))
+      `${onFailRedirectTo || path.to.login}?${makeRedirectToFromHere(request)}`
     );
   }
 

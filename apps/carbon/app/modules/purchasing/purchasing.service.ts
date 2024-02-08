@@ -229,7 +229,7 @@ export async function getRequestsForQuotes(
 
   if (args.search) {
     query = query.or(
-      `id.ilike.%${args.search}%,requestForQuoteId.ilike.%${args.search}%,description.ilike.%${args.search}%`
+      `id.ilike.%${args.search}%,requestForQuoteId.ilike.%${args.search}%,name.ilike.%${args.search}%`
     );
   }
 

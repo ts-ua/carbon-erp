@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   CardAction,
   CardAttribute,
@@ -18,7 +17,6 @@ import {
 } from "@carbon/react";
 import { useParams } from "@remix-run/react";
 import { useMemo } from "react";
-import { FaHistory } from "react-icons/fa";
 import { usePermissions, useRouteData } from "~/hooks";
 import type { PurchaseOrder } from "~/modules/purchasing";
 import { PurchasingStatus, usePurchaseOrderTotals } from "~/modules/purchasing";
@@ -107,13 +105,13 @@ const PurchaseOrderHeader = () => {
               </CardDescription>
             </CardHeader>
             <CardAction>
-              <Button
+              {/* <Button
                 variant="secondary"
                 onClick={() => alert("TODO")}
                 leftIcon={<FaHistory />}
               >
                 Supplier Details
-              </Button>
+              </Button> */}
             </CardAction>
           </HStack>
           <CardContent>

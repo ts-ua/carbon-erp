@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   CardAction,
   CardAttribute,
@@ -13,7 +12,6 @@ import {
   HStack,
 } from "@carbon/react";
 import { useParams } from "@remix-run/react";
-import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
 import type { Service } from "~/modules/parts";
 import { path } from "~/utils/path";
@@ -34,13 +32,13 @@ const ServicePreview = () => {
           <CardDescription>{routeData?.service?.description}</CardDescription>
         </CardHeader>
         <CardAction>
-          <Button
+          {/* <Button
             variant="secondary"
             onClick={() => alert("TODO")}
             leftIcon={<FaHistory />}
           >
             View History
-          </Button>
+          </Button> */}
         </CardAction>
       </HStack>
       <CardContent>

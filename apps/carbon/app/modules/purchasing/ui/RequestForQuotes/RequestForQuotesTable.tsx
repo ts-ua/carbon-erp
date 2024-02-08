@@ -100,8 +100,8 @@ const RequestForQuotesTable = memo(
           ),
         },
         {
-          accessorKey: "description",
-          header: "Description",
+          accessorKey: "name",
+          header: "Name",
           cell: (item) => {
             if (item.getValue<string>()) {
               return item.getValue<string>().substring(0, 50);

@@ -58,3 +58,29 @@ export const customerTypeValidator = withZod(
     color: z.string(),
   })
 );
+
+export const quoteStatusType = [
+  "Draft",
+  "Open",
+  "Replied",
+  "Ordered",
+  "Partially Ordered",
+  "Lost",
+  "Cancelled",
+  "Expired",
+] as const;
+
+export const quotationValidator = withZod(
+  z.object({
+    id: zfd.text(z.string().optional()),
+    name: z.string().min(1, { message: "Name is required" }),
+    customerId: z.string().min(36, { message: "Customer is required" }),
+    customerLocationId: zfd.text(z.string().optional()),
+    customerContactId: zfd.text(z.string().optional()),
+    customerReference: zfd.text(z.string().optional()),
+    locationId: zfd.text(z.string().optional()),
+    ownerId: z.string().min(36, { message: "Owner is required" }),
+    notes: zfd.text(z.string().optional()),
+    expirationDate: zfd.text(z.string().optional()),
+  })
+);

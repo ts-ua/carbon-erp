@@ -1,12 +1,13 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
-import type { RequestForQuoteStatus } from "~/modules/purchasing";
+import { useUser } from "~/hooks";
+import type { QuotationStatus } from "~/modules/sales";
 import {
-  RequestForQuoteForm,
-  requestForQuoteValidator,
-  upsertRequestForQuote,
-} from "~/modules/purchasing";
+  QuotationForm,
+  quotationValidator,
+  upsertQuote,
+} from "~/modules/sales";
 import { getNextSequence, rollbackNextSequence } from "~/modules/settings";
 import { requirePermissions } from "~/services/auth";
 import { flash } from "~/services/session.server";
@@ -17,10 +18,10 @@ import { error } from "~/utils/result";
 export async function action({ request }: ActionFunctionArgs) {
   assertIsPost(request);
   const { client, userId } = await requirePermissions(request, {
-    create: "purchasing",
+    create: "sales",
   });
 
-  const validation = await requestForQuoteValidator.validate(
+  const validation = await quotationValidator.validate(
     await request.formData()
   );
 
@@ -28,10 +29,10 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const nextSequence = await getNextSequence(client, "requestForQuote", userId);
+  const nextSequence = await getNextSequence(client, "quote", userId);
   if (nextSequence.error) {
     return redirect(
-      path.to.newRequestForQuote,
+      path.to.newQuote,
       await flash(
         request,
         error(nextSequence.error, "Failed to get next sequence")
@@ -39,39 +40,42 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
-  const createRequestForQuote = await upsertRequestForQuote(client, {
+  const createQuotation = await upsertQuote(client, {
     ...validation.data,
-    requestForQuoteId: nextSequence.data,
+    quoteId: nextSequence.data,
     createdBy: userId,
   });
 
-  if (createRequestForQuote.error || !createRequestForQuote.data?.[0]) {
+  if (createQuotation.error || !createQuotation.data?.[0]) {
     // TODO: this should be done as a transaction
-    await rollbackNextSequence(client, "requestForQuote", userId);
+    await rollbackNextSequence(client, "quote", userId);
     return redirect(
-      path.to.requestForQuotes,
+      path.to.quotes,
       await flash(
         request,
-        error(createRequestForQuote.error, "Failed to insert request for quote")
+        error(createQuotation.error, "Failed to insert quotation")
       )
     );
   }
 
-  const order = createRequestForQuote.data?.[0];
+  const order = createQuotation.data?.[0];
 
-  return redirect(path.to.requestForQuote(order.id!));
+  return redirect(path.to.quote(order.id!));
 }
 
-export default function RequestForQuoteNewRoute() {
+export default function QuotationNewRoute() {
+  const user = useUser();
   const initialValues = {
+    ownerId: user.id,
+    locationId: user.defaults.locationId,
     description: "",
-    status: "Draft" as RequestForQuoteStatus,
+    status: "Draft" as QuotationStatus,
   };
 
   return (
     <div className="w-1/2 max-w-[720px] min-w-[420px] mx-auto">
       {/* @ts-expect-error */}
-      <RequestForQuoteForm initialValues={initialValues} />
+      <QuotationForm initialValues={initialValues} />
     </div>
   );
 }

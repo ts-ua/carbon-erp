@@ -14,11 +14,11 @@ const partsRoutes: AuthenticatedRouteGroup[] = [
         name: "Services",
         to: path.to.services,
       },
-      {
-        name: "Routing",
-        to: path.to.routings,
-        role: "employee",
-      },
+      // {
+      //   name: "Routing",
+      //   to: path.to.routings,
+      //   role: "employee",
+      // },
     ],
   },
   {

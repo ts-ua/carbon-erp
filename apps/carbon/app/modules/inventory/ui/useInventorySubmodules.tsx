@@ -10,10 +10,10 @@ const inventoryRoutes: AuthenticatedRouteGroup[] = [
         name: "Receipts",
         to: path.to.receipts,
       },
-      {
-        name: "Shipments",
-        to: path.to.shipments,
-      },
+      // {
+      //   name: "Shipments",
+      //   to: path.to.shipments,
+      // },
     ],
   },
   {
