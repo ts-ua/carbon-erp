@@ -166,6 +166,7 @@ export const path = {
       generatePath(`${x}/purchase-order/delete/${id}`),
     deletePurchaseOrderLine: (orderId: string, lineId: string) =>
       generatePath(`${x}/purchase-order/${orderId}/lines/delete/${lineId}`),
+    deleteQuote: (id: string) => generatePath(`${x}/quote/delete/${id}`),
     deleteReceipt: (id: string) =>
       generatePath(`${x}/inventory/receipts/delete/${id}`),
     deleteRequestForQuote: (id: string) =>
@@ -271,6 +272,7 @@ export const path = {
     newPurchaseOrder: `${x}/purchase-order/new`,
     newPurchaseOrderLine: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/lines/new`),
+    newQuote: `${x}/quote/new`,
     newReceipt: `${x}/inventory/receipts/new`,
     newRequestForQuote: `${x}/rfq/new`,
     newShift: `${x}/resources/shifts/new`,
@@ -353,7 +355,9 @@ export const path = {
       generatePath(`${x}/purchase-order/${id}/release`),
     purchaseOrders: `${x}/purchasing/orders`,
     purchasing: `${x}/purchasing`,
+    quote: (id: string) => generatePath(`${x}/quote/${id}`),
     quotes: `${x}/sales/quotes`,
+    quoteFavorite: `${x}/sales/quotes/favorite`,
     receipt: (id: string) => generatePath(`${x}/inventory/receipts/${id}`),
     receipts: `${x}/inventory/receipts`,
     receiptInvoice: (id: string) => generatePath(`${x}/receipt/${id}/invoice`),

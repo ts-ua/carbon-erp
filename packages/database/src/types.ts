@@ -6712,11 +6712,13 @@ export interface Database {
           customerId: string;
           customerLocationId: string | null;
           customerReference: string | null;
+          expirationDate: string | null;
           id: string;
+          locationId: string | null;
           name: string;
           notes: string | null;
           ownerId: string;
-          quoteDate: string;
+          quoteDate: string | null;
           quoteId: string;
           revisionId: number;
           status: Database["public"]["Enums"]["quoteStatus"];
@@ -6730,11 +6732,13 @@ export interface Database {
           customerId: string;
           customerLocationId?: string | null;
           customerReference?: string | null;
+          expirationDate?: string | null;
           id?: string;
+          locationId?: string | null;
           name: string;
           notes?: string | null;
           ownerId: string;
-          quoteDate?: string;
+          quoteDate?: string | null;
           quoteId: string;
           revisionId?: number;
           status?: Database["public"]["Enums"]["quoteStatus"];
@@ -6748,18 +6752,759 @@ export interface Database {
           customerId?: string;
           customerLocationId?: string | null;
           customerReference?: string | null;
+          expirationDate?: string | null;
           id?: string;
+          locationId?: string | null;
           name?: string;
           notes?: string | null;
           ownerId?: string;
-          quoteDate?: string;
+          quoteDate?: string | null;
           quoteId?: string;
           revisionId?: number;
           status?: Database["public"]["Enums"]["quoteStatus"];
           updatedAt?: string | null;
           updatedBy?: string | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "quote_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "quote_customerContactId_fkey";
+            columns: ["customerContactId"];
+            referencedRelation: "contact";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_customerId_fkey";
+            columns: ["customerId"];
+            referencedRelation: "customer";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_customerId_fkey";
+            columns: ["customerId"];
+            referencedRelation: "customers";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_customerLocationId_fkey";
+            columns: ["customerLocationId"];
+            referencedRelation: "location";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_customerLocationId_fkey";
+            columns: ["customerLocationId"];
+            referencedRelation: "partQuantities";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "quote_customerLocationId_fkey";
+            columns: ["customerLocationId"];
+            referencedRelation: "purchaseOrders";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "quote_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "location";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "partQuantities";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "quote_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "purchaseOrders";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "quote_ownerId_fkey";
+            columns: ["ownerId"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_ownerId_fkey";
+            columns: ["ownerId"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_ownerId_fkey";
+            columns: ["ownerId"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "quote_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
+      quoteFavorite: {
+        Row: {
+          quoteId: string;
+          userId: string;
+        };
+        Insert: {
+          quoteId: string;
+          userId: string;
+        };
+        Update: {
+          quoteId?: string;
+          userId?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "quoteFavorites_quoteId_fkey";
+            columns: ["quoteId"];
+            referencedRelation: "quote";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteFavorites_quoteId_fkey";
+            columns: ["quoteId"];
+            referencedRelation: "quotes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteFavorites_userId_fkey";
+            columns: ["userId"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteFavorites_userId_fkey";
+            columns: ["userId"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteFavorites_userId_fkey";
+            columns: ["userId"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
+      quoteLine: {
+        Row: {
+          createdBy: string;
+          customerPartId: string | null;
+          description: string;
+          id: string;
+          partId: string;
+          quantity: number;
+          quoteId: string;
+          updatedAt: string | null;
+          updatedBy: string | null;
+        };
+        Insert: {
+          createdBy: string;
+          customerPartId?: string | null;
+          description: string;
+          id?: string;
+          partId: string;
+          quantity?: number;
+          quoteId: string;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Update: {
+          createdBy?: string;
+          customerPartId?: string | null;
+          description?: string;
+          id?: string;
+          partId?: string;
+          quantity?: number;
+          quoteId?: string;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "quoteLine_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteLine_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteLine_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "quoteLine_partId_fkey";
+            columns: ["partId"];
+            referencedRelation: "part";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteLine_partId_fkey";
+            columns: ["partId"];
+            referencedRelation: "partQuantities";
+            referencedColumns: ["partId"];
+          },
+          {
+            foreignKeyName: "quoteLine_partId_fkey";
+            columns: ["partId"];
+            referencedRelation: "parts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteLine_quoteId_fkey";
+            columns: ["quoteId"];
+            referencedRelation: "quote";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteLine_quoteId_fkey";
+            columns: ["quoteId"];
+            referencedRelation: "quotes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteLine_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteLine_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteLine_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
+      quoteLineQuantities: {
+        Row: {
+          additionalCost: number;
+          createdAt: string;
+          createdBy: string;
+          discountPercentage: number;
+          extendedCost: number;
+          id: string;
+          laborCost: number;
+          leadTime: number;
+          markupPercentage: number;
+          materialCost: number;
+          overheadCost: number;
+          productionHours: number;
+          quantity: number;
+          quoteLineId: string;
+          scrapPercentage: number;
+          setupHours: number;
+          unitCostBase: number;
+          unitTaxAmount: number;
+          updatedAt: string | null;
+          updatedBy: string | null;
+        };
+        Insert: {
+          additionalCost?: number;
+          createdAt?: string;
+          createdBy: string;
+          discountPercentage?: number;
+          extendedCost?: number;
+          id?: string;
+          laborCost?: number;
+          leadTime?: number;
+          markupPercentage?: number;
+          materialCost?: number;
+          overheadCost?: number;
+          productionHours?: number;
+          quantity?: number;
+          quoteLineId: string;
+          scrapPercentage?: number;
+          setupHours?: number;
+          unitCostBase?: number;
+          unitTaxAmount?: number;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Update: {
+          additionalCost?: number;
+          createdAt?: string;
+          createdBy?: string;
+          discountPercentage?: number;
+          extendedCost?: number;
+          id?: string;
+          laborCost?: number;
+          leadTime?: number;
+          markupPercentage?: number;
+          materialCost?: number;
+          overheadCost?: number;
+          productionHours?: number;
+          quantity?: number;
+          quoteLineId?: string;
+          scrapPercentage?: number;
+          setupHours?: number;
+          unitCostBase?: number;
+          unitTaxAmount?: number;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "quoteLineQuantities_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteLineQuantities_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteLineQuantities_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "quoteLineQuantities_quoteLineId_fkey";
+            columns: ["quoteLineId"];
+            referencedRelation: "quoteLine";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteLineQuantities_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteLineQuantities_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteLineQuantities_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
+      quoteMaterial: {
+        Row: {
+          createdAt: string;
+          createdBy: string;
+          description: string;
+          id: string;
+          partId: string;
+          quantity: number;
+          quoteId: string;
+          quoteLineId: string;
+          quoteProcessId: string;
+          unitCost: number;
+          unitOfMeasureCode: string | null;
+          updatedAt: string | null;
+          updatedBy: string | null;
+        };
+        Insert: {
+          createdAt?: string;
+          createdBy: string;
+          description: string;
+          id?: string;
+          partId: string;
+          quantity?: number;
+          quoteId: string;
+          quoteLineId: string;
+          quoteProcessId: string;
+          unitCost?: number;
+          unitOfMeasureCode?: string | null;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Update: {
+          createdAt?: string;
+          createdBy?: string;
+          description?: string;
+          id?: string;
+          partId?: string;
+          quantity?: number;
+          quoteId?: string;
+          quoteLineId?: string;
+          quoteProcessId?: string;
+          unitCost?: number;
+          unitOfMeasureCode?: string | null;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "quoteMaterial_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteMaterial_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteMaterial_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "quoteMaterial_partId_fkey";
+            columns: ["partId"];
+            referencedRelation: "part";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteMaterial_partId_fkey";
+            columns: ["partId"];
+            referencedRelation: "partQuantities";
+            referencedColumns: ["partId"];
+          },
+          {
+            foreignKeyName: "quoteMaterial_partId_fkey";
+            columns: ["partId"];
+            referencedRelation: "parts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteMaterial_quoteId_fkey";
+            columns: ["quoteId"];
+            referencedRelation: "quote";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteMaterial_quoteId_fkey";
+            columns: ["quoteId"];
+            referencedRelation: "quotes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteMaterial_quoteLineId_fkey";
+            columns: ["quoteLineId"];
+            referencedRelation: "quoteLine";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteMaterial_quoteProcessId_fkey";
+            columns: ["quoteProcessId"];
+            referencedRelation: "quoteProcess";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteMaterial_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteMaterial_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteMaterial_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
+      quoteModule: {
+        Row: {
+          createdAt: string;
+          createdBy: string;
+          description: string | null;
+          id: string;
+          parentModuleId: string | null;
+          partId: string;
+          quantityPerParent: number;
+          quoteId: string;
+          quoteLineId: string;
+          quoteModuleId: string;
+          unitOfMeasureCode: string | null;
+          updatedAt: string | null;
+          updatedBy: string | null;
+        };
+        Insert: {
+          createdAt?: string;
+          createdBy: string;
+          description?: string | null;
+          id?: string;
+          parentModuleId?: string | null;
+          partId: string;
+          quantityPerParent?: number;
+          quoteId: string;
+          quoteLineId: string;
+          quoteModuleId?: string;
+          unitOfMeasureCode?: string | null;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Update: {
+          createdAt?: string;
+          createdBy?: string;
+          description?: string | null;
+          id?: string;
+          parentModuleId?: string | null;
+          partId?: string;
+          quantityPerParent?: number;
+          quoteId?: string;
+          quoteLineId?: string;
+          quoteModuleId?: string;
+          unitOfMeasureCode?: string | null;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "quoteModule_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteModule_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteModule_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "quoteModule_parentModuleId_fkey";
+            columns: ["parentModuleId"];
+            referencedRelation: "quoteModule";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteModule_quoteId_fkey";
+            columns: ["quoteId"];
+            referencedRelation: "quote";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteModule_quoteId_fkey";
+            columns: ["quoteId"];
+            referencedRelation: "quotes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteModule_quoteLineId_fkey";
+            columns: ["quoteLineId"];
+            referencedRelation: "quoteLine";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteModule_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteModule_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteModule_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
+      quoteProcess: {
+        Row: {
+          createdAt: string;
+          createdBy: string;
+          description: string;
+          equipmentTypeId: string | null;
+          id: string;
+          laborRate: number;
+          overheadRate: number;
+          productionStandard: number;
+          quoteId: string;
+          quoteLineId: string;
+          quoteModuleId: string;
+          quotingRate: number;
+          setupHours: number;
+          standardFactor: Database["public"]["Enums"]["factor"];
+          updatedAt: string | null;
+          updatedBy: string | null;
+          workCellTypeId: string;
+        };
+        Insert: {
+          createdAt?: string;
+          createdBy: string;
+          description: string;
+          equipmentTypeId?: string | null;
+          id?: string;
+          laborRate?: number;
+          overheadRate?: number;
+          productionStandard?: number;
+          quoteId: string;
+          quoteLineId: string;
+          quoteModuleId: string;
+          quotingRate?: number;
+          setupHours?: number;
+          standardFactor?: Database["public"]["Enums"]["factor"];
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+          workCellTypeId: string;
+        };
+        Update: {
+          createdAt?: string;
+          createdBy?: string;
+          description?: string;
+          equipmentTypeId?: string | null;
+          id?: string;
+          laborRate?: number;
+          overheadRate?: number;
+          productionStandard?: number;
+          quoteId?: string;
+          quoteLineId?: string;
+          quoteModuleId?: string;
+          quotingRate?: number;
+          setupHours?: number;
+          standardFactor?: Database["public"]["Enums"]["factor"];
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+          workCellTypeId?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "quoteProcess_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteProcess_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteProcess_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "quoteProcess_equipmentTypeId_fkey";
+            columns: ["equipmentTypeId"];
+            referencedRelation: "equipmentType";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteProcess_quoteId_fkey";
+            columns: ["quoteId"];
+            referencedRelation: "quote";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteProcess_quoteId_fkey";
+            columns: ["quoteId"];
+            referencedRelation: "quotes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteProcess_quoteLineId_fkey";
+            columns: ["quoteLineId"];
+            referencedRelation: "quoteLine";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteProcess_quoteModuleId_fkey";
+            columns: ["quoteModuleId"];
+            referencedRelation: "quoteModule";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteProcess_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteProcess_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteProcess_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "quoteProcess_workCellTypeId_fkey";
+            columns: ["workCellTypeId"];
+            referencedRelation: "workCellType";
+            referencedColumns: ["id"];
+          }
+        ];
       };
       receipt: {
         Row: {
@@ -10669,6 +11414,101 @@ export interface Database {
         };
         Relationships: [];
       };
+      quotes: {
+        Row: {
+          createdAt: string | null;
+          createdBy: string | null;
+          createdByAvatar: string | null;
+          createdByFullName: string | null;
+          customerId: string | null;
+          customerName: string | null;
+          customerReference: string | null;
+          expirationDate: string | null;
+          favorite: boolean | null;
+          id: string | null;
+          locationId: string | null;
+          locationName: string | null;
+          name: string | null;
+          notes: string | null;
+          ownerAvatar: string | null;
+          ownerFullName: string | null;
+          ownerId: string | null;
+          partIds: string[] | null;
+          quoteDate: string | null;
+          quoteId: string | null;
+          status: Database["public"]["Enums"]["quoteStatus"] | null;
+          updatedByAvatar: string | null;
+          updatedByFullName: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "quote_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "quote_customerId_fkey";
+            columns: ["customerId"];
+            referencedRelation: "customer";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_customerId_fkey";
+            columns: ["customerId"];
+            referencedRelation: "customers";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "location";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "partQuantities";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "quote_locationId_fkey";
+            columns: ["locationId"];
+            referencedRelation: "purchaseOrders";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "quote_ownerId_fkey";
+            columns: ["ownerId"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_ownerId_fkey";
+            columns: ["ownerId"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_ownerId_fkey";
+            columns: ["ownerId"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
       receiptsPostedNotInvoiced: {
         Row: {
           estimatedCost: number | null;
@@ -11133,7 +11973,8 @@ export interface Database {
         | "Replied"
         | "Ordered"
         | "Partially Ordered"
-        | "LostCancelled"
+        | "Lost"
+        | "Cancelled"
         | "Expired";
       receiptSourceDocument:
         | "Sales Order"

@@ -10,6 +10,7 @@ import type {
   customerShippingValidator,
   customerTypeValidator,
   customerValidator,
+  quotationValidator,
 } from "./sales.models";
 
 export async function deleteCustomerContact(
@@ -41,6 +42,13 @@ export async function deleteCustomerType(
   customerTypeId: string
 ) {
   return client.from("customerType").delete().eq("id", customerTypeId);
+}
+
+export async function deleteQuote(
+  client: SupabaseClient<Database>,
+  quoteId: string
+) {
+  return client.from("quote").delete().eq("id", quoteId);
 }
 
 export async function getCustomer(
@@ -205,6 +213,39 @@ export async function getCustomerTypes(
 
 export async function getCustomerTypesList(client: SupabaseClient<Database>) {
   return client.from("customerType").select("id, name").order("name");
+}
+
+export async function getQuotes(
+  client: SupabaseClient<Database>,
+  args: GenericQueryFilters & {
+    search: string | null;
+    status: string | null;
+    customerId: string | null;
+    partId: string | null;
+  }
+) {
+  let query = client.from("quotes").select("*", { count: "exact" });
+
+  if (args.search) {
+    query = query.or(
+      `id.ilike.%${args.search}%,quoteId.ilike.%${args.search}%,name.ilike.%${args.search}%`
+    );
+  }
+
+  if (args.status) {
+    query = query.eq("status", args.status);
+  }
+
+  if (args.customerId) {
+    query = query.eq("customerId", args.customerId);
+  }
+
+  if (args.partId) {
+    query = query.contains("partIds", [args.partId]);
+  }
+
+  query = setGenericQueryFilters(query, args, "id", false);
+  return query;
 }
 
 export async function insertCustomer(
@@ -404,5 +445,45 @@ export async function upsertCustomerType(
       .from("customerType")
       .update(sanitize(customerType))
       .eq("id", customerType.id);
+  }
+}
+
+export async function updateQuoteFavorite(
+  client: SupabaseClient<Database>,
+  args: {
+    id: string;
+    favorite: boolean;
+    userId: string;
+  }
+) {
+  const { id, favorite, userId } = args;
+  if (!favorite) {
+    return client
+      .from("quoteFavorite")
+      .delete()
+      .eq("quoteId", id)
+      .eq("userId", userId);
+  } else {
+    return client.from("quoteFavorite").insert({ quoteId: id, userId: userId });
+  }
+}
+
+export async function upsertQuote(
+  client: SupabaseClient<Database>,
+  quote:
+    | (Omit<TypeOfValidator<typeof quotationValidator>, "id" | "quoteId"> & {
+        quoteId: string;
+        createdBy: string;
+      })
+    | (Omit<TypeOfValidator<typeof quotationValidator>, "id" | "quoteId"> & {
+        id: string;
+        quoteId: string;
+        updatedBy: string;
+      })
+) {
+  if ("createdBy" in quote) {
+    return client.from("quote").insert([quote]).select("id, quoteId");
+  } else {
+    return client.from("quote").update(sanitize(quote)).eq("id", quote.id);
   }
 }

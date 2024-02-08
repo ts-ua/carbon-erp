@@ -1,3 +1,4 @@
+import type { Database } from "@carbon/database";
 import type {
   getCustomer,
   getCustomerContacts,
@@ -5,6 +6,7 @@ import type {
   getCustomers,
   getCustomerStatuses,
   getCustomerTypes,
+  getQuotes,
 } from "./sales.service";
 
 export type Customer = NonNullable<
@@ -30,3 +32,9 @@ export type CustomerStatus = NonNullable<
 export type CustomerType = NonNullable<
   Awaited<ReturnType<typeof getCustomerTypes>>["data"]
 >[number];
+
+export type Quotation = NonNullable<
+  Awaited<ReturnType<typeof getQuotes>>["data"]
+>[number];
+
+export type QuotationStatus = Database["public"]["Enums"]["quoteStatus"];
