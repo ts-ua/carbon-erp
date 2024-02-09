@@ -11420,7 +11420,9 @@ export interface Database {
           createdBy: string | null;
           createdByAvatar: string | null;
           createdByFullName: string | null;
+          customerContactId: string | null;
           customerId: string | null;
+          customerLocationId: string | null;
           customerName: string | null;
           customerReference: string | null;
           expirationDate: string | null;
@@ -11460,6 +11462,12 @@ export interface Database {
             referencedColumns: ["userId"];
           },
           {
+            foreignKeyName: "quote_customerContactId_fkey";
+            columns: ["customerContactId"];
+            referencedRelation: "contact";
+            referencedColumns: ["id"];
+          },
+          {
             foreignKeyName: "quote_customerId_fkey";
             columns: ["customerId"];
             referencedRelation: "customer";
@@ -11470,6 +11478,24 @@ export interface Database {
             columns: ["customerId"];
             referencedRelation: "customers";
             referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_customerLocationId_fkey";
+            columns: ["customerLocationId"];
+            referencedRelation: "location";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quote_customerLocationId_fkey";
+            columns: ["customerLocationId"];
+            referencedRelation: "partQuantities";
+            referencedColumns: ["locationId"];
+          },
+          {
+            foreignKeyName: "quote_customerLocationId_fkey";
+            columns: ["customerLocationId"];
+            referencedRelation: "purchaseOrders";
+            referencedColumns: ["locationId"];
           },
           {
             foreignKeyName: "quote_locationId_fkey";

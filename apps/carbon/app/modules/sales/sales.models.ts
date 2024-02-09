@@ -84,3 +84,18 @@ export const quotationValidator = withZod(
     expirationDate: zfd.text(z.string().optional()),
   })
 );
+
+export const quotationReleaseValidator = withZod(
+  z
+    .object({
+      notification: z.enum(["Email", "None"]).optional(),
+      customerContact: zfd.text(z.string().optional()),
+    })
+    .refine(
+      (data) => (data.notification === "Email" ? data.customerContact : true),
+      {
+        message: "Supplier contact is required for email",
+        path: ["customerContact"], // path of error
+      }
+    )
+);

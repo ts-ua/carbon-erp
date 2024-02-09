@@ -6,6 +6,8 @@ import type {
   getCustomers,
   getCustomerStatuses,
   getCustomerTypes,
+  getQuoteExternalDocuments,
+  getQuoteLines,
   getQuotes,
 } from "./sales.service";
 
@@ -33,8 +35,16 @@ export type CustomerType = NonNullable<
   Awaited<ReturnType<typeof getCustomerTypes>>["data"]
 >[number];
 
+export type QuotationAttachment = NonNullable<
+  Awaited<ReturnType<typeof getQuoteExternalDocuments>>["data"]
+>[number];
+
 export type Quotation = NonNullable<
   Awaited<ReturnType<typeof getQuotes>>["data"]
+>[number];
+
+export type QuotationLine = NonNullable<
+  Awaited<ReturnType<typeof getQuoteLines>>["data"]
 >[number];
 
 export type QuotationStatus = Database["public"]["Enums"]["quoteStatus"];
