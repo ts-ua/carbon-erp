@@ -215,6 +215,13 @@ export async function getCustomerTypesList(client: SupabaseClient<Database>) {
   return client.from("customerType").select("id, name").order("name");
 }
 
+export async function getQuote(
+  client: SupabaseClient<Database>,
+  quoteId: string
+) {
+  return client.from("quote").select("*").eq("id", quoteId).single();
+}
+
 export async function getQuotes(
   client: SupabaseClient<Database>,
   args: GenericQueryFilters & {
@@ -246,6 +253,27 @@ export async function getQuotes(
 
   query = setGenericQueryFilters(query, args, "id", false);
   return query;
+}
+
+export async function getQuoteExternalDocuments(
+  client: SupabaseClient<Database>,
+  quoteId: string
+) {
+  return client.storage.from("quote-external").list(quoteId);
+}
+
+export async function getQuoteInternalDocuments(
+  client: SupabaseClient<Database>,
+  quoteId: string
+) {
+  return client.storage.from("quote-internal").list(quoteId);
+}
+
+export async function getQuoteLines(
+  client: SupabaseClient<Database>,
+  quoteId: string
+) {
+  return client.from("quoteLines").select("*").eq("quoteId", quoteId);
 }
 
 export async function insertCustomer(

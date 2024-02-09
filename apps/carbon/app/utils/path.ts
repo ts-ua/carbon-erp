@@ -48,6 +48,7 @@ export const path = {
       previewFile: (path: string) => generatePath(`${file}/preview/${path}`),
       purchaseOrder: (id: string) =>
         generatePath(`${file}/purchase-order/${id}.pdf`),
+      quote: (id: string) => generatePath(`${file}/quote/${id}.pdf`),
     },
     onboarding: {
       company: `${onboarding}/company`,
@@ -356,8 +357,18 @@ export const path = {
     purchaseOrders: `${x}/purchasing/orders`,
     purchasing: `${x}/purchasing`,
     quote: (id: string) => generatePath(`${x}/quote/${id}`),
+    quoteDetails: (id: string) => generatePath(`${x}/quote/${id}/details`),
+    quoteExternalDocuments: (id: string) =>
+      generatePath(`${x}/quote/${id}/external`),
+    quoteFavorite: `${x}/purchasing/orders/favorite`,
+    quoteInternalDocuments: (id: string) =>
+      generatePath(`${x}/quote/${id}/internal`),
+    quoteLines: (orderId: string) =>
+      generatePath(`${x}/quote/${orderId}/lines`),
+    quoteLine: (orderId: string, id: string) =>
+      generatePath(`${x}/quote/${orderId}/lines/${id}`),
+    quoteRelease: (id: string) => generatePath(`${x}/quote/${id}/release`),
     quotes: `${x}/sales/quotes`,
-    quoteFavorite: `${x}/sales/quotes/favorite`,
     receipt: (id: string) => generatePath(`${x}/inventory/receipts/${id}`),
     receipts: `${x}/inventory/receipts`,
     receiptInvoice: (id: string) => generatePath(`${x}/receipt/${id}/invoice`),
