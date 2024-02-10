@@ -50,8 +50,10 @@ const EditablePurchaseOrderLineNumber =
         .eq("number", accountNumber)
         .single();
 
-      onUpdate("description", account.data?.name ?? "");
-      onUpdate("accountNumber", accountNumber);
+      onUpdate({
+        description: account.data?.name ?? "",
+        accountNumber: accountNumber,
+      });
 
       try {
         const { error } = await client
@@ -96,12 +98,14 @@ const EditablePurchaseOrderLineNumber =
         return;
       }
 
-      onUpdate("partId", partId);
-      onUpdate("description", part.data?.name);
-      onUpdate("unitOfMeasureCode", part.data?.unitOfMeasureCode ?? null);
-      onUpdate("locationId", options.defaultLocationId);
-      onUpdate("shelfId", shelf.data?.defaultShelfId ?? null);
-      onUpdate("unitPrice", cost.data?.unitCost ?? null);
+      onUpdate({
+        partId: partId,
+        description: part.data?.name,
+        unitOfMeasureCode: part.data?.unitOfMeasureCode ?? null,
+        locationId: options.defaultLocationId,
+        shelfId: shelf.data?.defaultShelfId ?? null,
+        unitPrice: cost.data?.unitCost ?? null,
+      });
 
       try {
         const { error } = await client
@@ -139,8 +143,10 @@ const EditablePurchaseOrderLineNumber =
         return;
       }
 
-      onUpdate("serviceId", serviceId);
-      onUpdate("description", service.data?.name);
+      onUpdate({
+        serviceId: serviceId,
+        description: service.data?.name,
+      });
 
       try {
         const { error } = await client
