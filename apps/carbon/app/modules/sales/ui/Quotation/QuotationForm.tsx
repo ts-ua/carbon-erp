@@ -57,7 +57,7 @@ const QuotationForm = ({ initialValues }: QuotationFormProps) => {
           )}
         </CardHeader>
         <CardContent>
-          <Hidden name="quotationId" />
+          <Hidden name="quoteId" />
           <VStack>
             <div
               className={cn(

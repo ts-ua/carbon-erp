@@ -73,6 +73,7 @@ export const quoteStatusType = [
 export const quotationValidator = withZod(
   z.object({
     id: zfd.text(z.string().optional()),
+    quoteId: zfd.text(z.string().optional()),
     name: z.string().min(1, { message: "Name is required" }),
     customerId: z.string().min(36, { message: "Customer is required" }),
     customerLocationId: zfd.text(z.string().optional()),
