@@ -14,7 +14,7 @@ type CellProps<T> = {
   isEditing: boolean;
   isSelected: boolean;
   onClick?: () => void;
-  onUpdate?: (columnId: string, value: unknown) => void;
+  onUpdate?: (updates: Record<string, unknown>) => void;
 };
 
 const Cell = <T extends object>({
