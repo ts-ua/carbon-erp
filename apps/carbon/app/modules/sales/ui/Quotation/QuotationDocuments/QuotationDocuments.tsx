@@ -22,25 +22,25 @@ import { convertKbToString } from "@carbon/utils";
 import { Outlet } from "@remix-run/react";
 import { MdMoreVert } from "react-icons/md";
 import { DocumentIcon } from "~/modules/documents";
-import type { PurchaseOrderAttachment } from "~/modules/purchasing";
-import PurchaseOrderDocumentForm from "./PurchaseOrderDocumentForm";
-import { usePurchaseOrderDocuments } from "./usePurchaseOrderDocuments";
+import type { QuotationAttachment } from "~/modules/sales";
+import QuotationDocumentForm from "./QuotationDocumentForm";
+import { useQuotationDocuments } from "./useQuotationDocuments";
 
-type PurchaseOrderDocumentsProps = {
-  attachments: PurchaseOrderAttachment[];
+type QuotationDocumentsProps = {
+  attachments: QuotationAttachment[];
   isExternal: boolean;
-  orderId: string;
+  id: string;
 };
 
-const PurchaseOrderDocuments = ({
+const QuotationDocuments = ({
   attachments,
   isExternal,
-  orderId,
-}: PurchaseOrderDocumentsProps) => {
-  const { canDelete, download, deleteAttachment } = usePurchaseOrderDocuments({
+  id,
+}: QuotationDocumentsProps) => {
+  const { canDelete, download, deleteAttachment } = useQuotationDocuments({
     attachments,
     isExternal,
-    orderId,
+    id,
   });
 
   return (
@@ -53,10 +53,7 @@ const PurchaseOrderDocuments = ({
             </CardTitle>
           </CardHeader>
           <CardAction>
-            <PurchaseOrderDocumentForm
-              isExternal={isExternal}
-              orderId={orderId}
-            />
+            <QuotationDocumentForm isExternal={isExternal} id={id} />
           </CardAction>
         </HStack>
         <CardContent>
@@ -133,4 +130,4 @@ const PurchaseOrderDocuments = ({
   );
 };
 
-export default PurchaseOrderDocuments;
+export default QuotationDocuments;
