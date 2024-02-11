@@ -439,7 +439,7 @@ const Table = <T extends object>({
         />
       )}
       <div
-        className="w-full h-full bg-background overflow-scroll"
+        className="w-full h-full bg-card overflow-scroll"
         style={{ contain: "strict" }}
         ref={tableContainerRef}
         onKeyDown={editMode ? onKeyDown : undefined}

@@ -49,9 +49,9 @@ export default function OnboardingLayout() {
     // not sure why we need this ClientOnly, but things break without it
     <ClientOnly fallback={null}>
       {() => (
-        <div className="grid grid-cols-[auto_1fr] h-screen w-screen">
+        <div className="bg-card grid grid-cols-[auto_1fr] h-screen w-screen">
           <SidebarPlaceholder />
-          <div className="gri grid-rows-[auto_1fr] h-full w-full">
+          <div className="grid grid-rows-[auto_1fr] h-full w-full">
             <TopbarPlaceholder />
             <div>
               <Outlet />

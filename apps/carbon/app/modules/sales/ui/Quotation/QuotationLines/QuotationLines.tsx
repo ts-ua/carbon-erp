@@ -21,12 +21,18 @@ import { IoMdTrash } from "react-icons/io";
 import { MdMoreHoriz } from "react-icons/md";
 import {
   EditableNumber,
-  // EditableQuotationPart,
+  EditableQuotationPart,
   EditableText,
 } from "~/components/Editable";
 import Grid from "~/components/Grid";
-import { useRouteData } from "~/hooks";
-import type { Quotation, QuotationLine } from "~/modules/sales";
+import { useRouteData, useUser } from "~/hooks";
+import { useSupabase } from "~/lib/supabase";
+import {
+  useQuotationTotals,
+  type Quotation,
+  type QuotationLine,
+} from "~/modules/sales";
+import { useParts } from "~/stores";
 import type { ListItem } from "~/types";
 import { path } from "~/utils/path";
 import useQuotationLines from "./useQuotationLines";
@@ -34,6 +40,15 @@ import useQuotationLines from "./useQuotationLines";
 const QuotationLines = () => {
   const { id } = useParams();
   if (!id) throw new Error("id not found");
+
+  const { supabase } = useSupabase();
+  const [parts] = useParts();
+  const { id: userId } = useUser();
+
+  const partOptions = parts.map((part) => ({
+    value: part.id,
+    label: part.id,
+  }));
 
   const navigate = useNavigate();
 
@@ -44,6 +59,7 @@ const QuotationLines = () => {
   }>(path.to.quote(id));
 
   const { canEdit, canDelete, onCellEdit } = useQuotationLines();
+  const [, setQuotationTotals] = useQuotationTotals();
 
   const isEditable = ["Draft"].includes(routeData?.quotation?.status ?? "");
 
@@ -57,39 +73,41 @@ const QuotationLines = () => {
         accessorKey: "partId",
         header: "Part",
         cell: ({ row }) => {
-          <HStack className="justify-between min-w-[100px]">
-            <span>{row.original.partId}</span>
-            <div className="relative w-6 h-5">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <IconButton
-                    aria-label="Edit quote line"
-                    icon={<MdMoreHoriz />}
-                    size="md"
-                    className="absolute right-[-1px] top-[-6px]"
-                    variant="ghost"
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem
-                    onClick={() => navigate(row.original.id!)}
-                    disabled={!isEditable || !canEdit}
-                  >
-                    <DropdownMenuIcon icon={<BsFillPenFill />} />
-                    Edit Line
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => navigate(`delete/${row.original.id}`)}
-                    disabled={!isEditable || !canDelete}
-                  >
-                    <DropdownMenuIcon icon={<IoMdTrash />} />
-                    Delete Line
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </HStack>;
+          return (
+            <HStack className="justify-between min-w-[100px]">
+              <span>{row.original.partId}</span>
+              <div className="relative w-6 h-5">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <IconButton
+                      aria-label="Edit quote line"
+                      icon={<MdMoreHoriz />}
+                      size="md"
+                      className="absolute right-[-1px] top-[-6px]"
+                      variant="ghost"
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem
+                      onClick={() => navigate(row.original.id!)}
+                      disabled={!isEditable || !canEdit}
+                    >
+                      <DropdownMenuIcon icon={<BsFillPenFill />} />
+                      Edit Line
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => navigate(`delete/${row.original.id}`)}
+                      disabled={!isEditable || !canDelete}
+                    >
+                      <DropdownMenuIcon icon={<IoMdTrash />} />
+                      Delete Line
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </HStack>
+          );
         },
       },
       {
@@ -98,8 +116,28 @@ const QuotationLines = () => {
         cell: (item) => item.getValue(),
       },
       {
+        accessorKey: "customerPartId",
+        header: "Customer Part",
+        cell: (item) => item.getValue(),
+      },
+      {
         accessorKey: "quantity",
         header: "Quantity",
+        cell: (item) => item.getValue(),
+      },
+      {
+        accessorKey: "unitCost",
+        header: "Unit Cost",
+        cell: (item) => item.getValue(),
+      },
+      {
+        accessorKey: "unitPrice",
+        header: "Unit Price",
+        cell: (item) => item.getValue(),
+      },
+      {
+        accessorKey: "leadTime",
+        header: "Lead Time",
         cell: (item) => item.getValue(),
       },
     ];
@@ -108,15 +146,19 @@ const QuotationLines = () => {
 
   const editableComponents = useMemo(
     () => ({
+      partId: EditableQuotationPart(onCellEdit, {
+        client: supabase,
+        parts: partOptions,
+        userId,
+      }),
       description: EditableText(onCellEdit),
+      customerPartId: EditableText(onCellEdit),
       quantity: EditableNumber(onCellEdit),
+      unitCost: EditableNumber(onCellEdit),
       unitPrice: EditableNumber(onCellEdit),
-      // partId: EditableQuotationPart(onCellEdit, {
-      //   client: supabase,
-      //   parts: partOptions,
-      // }),
+      leadTime: EditableNumber(onCellEdit),
     }),
-    [onCellEdit]
+    [onCellEdit, partOptions, supabase, userId]
   );
 
   return (
@@ -141,6 +183,17 @@ const QuotationLines = () => {
             columns={columns}
             canEdit={canEdit && isEditable}
             editableComponents={editableComponents}
+            onDataChange={(lines: QuotationLine[]) => {
+              const totals = lines.reduce(
+                (acc, line) => {
+                  acc.total += (line.quantity ?? 0) * (line.unitPrice ?? 0);
+
+                  return acc;
+                },
+                { total: 0 }
+              );
+              setQuotationTotals(totals);
+            }}
             onNewRow={canEdit && isEditable ? () => navigate("new") : undefined}
           />
         </CardContent>

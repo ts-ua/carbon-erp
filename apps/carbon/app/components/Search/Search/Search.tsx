@@ -167,9 +167,9 @@ const SearchModal = ({
             {recentResults.length > 0 && (
               <>
                 <CommandGroup heading="Recent Searches">
-                  {recentResults.map((result) => (
+                  {recentResults.map((result, index) => (
                     <CommandItem
-                      key={result.to}
+                      key={`${result.to}-${index}`}
                       onSelect={() => onSelect(result)}
                       // append with : so we're not sharing a value with a static result
                       value={`:${result.to}`}
@@ -203,9 +203,9 @@ const SearchModal = ({
             ))}
             {searchResults.length > 0 && (
               <CommandGroup heading="Search Results">
-                {searchResults.map((result) => (
+                {searchResults.map((result, index) => (
                   <CommandItem
-                    key={result.id}
+                    key={`${result.id}-${index}`}
                     value={`${input}${result.id}`}
                     onSelect={() =>
                       onSelect({
