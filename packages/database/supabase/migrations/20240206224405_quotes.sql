@@ -45,11 +45,15 @@ CREATE TABLE "quote" (
 CREATE TABLE "quoteLine" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "quoteId" TEXT NOT NULL,
-  -- "quoteRevisionId" INTEGER NOT NULL DEFAULT 0,
+  "quoteRevisionId" INTEGER NOT NULL DEFAULT 0,
   "partId" TEXT NOT NULL,
   "customerPartId" TEXT,
   "description" TEXT NOT NULL,
   "quantity" NUMERIC(10, 2) NOT NULL DEFAULT 0,
+  "unitCost" NUMERIC(10, 2) NOT NULL DEFAULT 0,
+  "unitPrice" NUMERIC(10, 2) NOT NULL DEFAULT 0,
+  "unitOfMeasureCode" TEXT,
+  "leadTime" INTEGER,
   "createdBy" TEXT NOT NULL,
   "updatedAt" TIMESTAMP WITH TIME ZONE,
   "updatedBy" TEXT,
@@ -57,6 +61,7 @@ CREATE TABLE "quoteLine" (
   CONSTRAINT "quoteLine_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "quoteLine_quoteId_fkey" FOREIGN KEY ("quoteId") REFERENCES "quote" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT "quoteLine_partId_fkey" FOREIGN KEY ("partId") REFERENCES "part" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+  
   CONSTRAINT "quoteLine_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "quoteLine_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -79,7 +84,7 @@ CREATE TABLE "quoteLineQuantities" (
   "unitCostBase" NUMERIC(10, 2) NOT NULL DEFAULT 0,
   "unitTaxAmount" NUMERIC(10, 2) NOT NULL DEFAULT 0,
   "extendedCost" NUMERIC(10, 2) NOT NULL DEFAULT 0,
-  "leadTime" INTEGER NOT NULL DEFAULT 0,
+  "leadTime" NUMERIC (5,2) NOT NULL DEFAULT 0,
   "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   "createdBy" TEXT NOT NULL,
   "updatedAt" TIMESTAMP WITH TIME ZONE,

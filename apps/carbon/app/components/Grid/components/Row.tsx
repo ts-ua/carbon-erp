@@ -40,7 +40,7 @@ const Row = <T extends object>({
     <Tr
       key={row.id}
       ref={rowRef}
-      className={cn("hover:bg-background", rowIsClickable && "cursor-pointer")}
+      className={cn(rowIsClickable && "cursor-pointer")}
     >
       {row.getVisibleCells().map((cell, columnIndex) => {
         const isSelected =

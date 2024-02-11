@@ -66,16 +66,16 @@ const QuotationForm = ({ initialValues }: QuotationFormProps) => {
               )}
             >
               <VStack>
-                <Input name="name" label="Name" />
-                <Employee name="ownerId" label="Quoter" />
-                <Location name="locationId" label="Location" />
-              </VStack>
-              <VStack>
                 <Customer
                   name="customerId"
                   label="Customer"
                   onChange={(value) => setCustomer(value?.value as string)}
                 />
+                <Input name="name" label="Name" />
+                <Employee name="ownerId" label="Quoter" />
+              </VStack>
+              <VStack>
+                <Location name="locationId" label="Location" />
                 <CustomerLocation
                   name="customerLocationId"
                   label="Customer Location"

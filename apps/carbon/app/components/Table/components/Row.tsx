@@ -46,7 +46,7 @@ const Row = <T extends object>({
     <Tr
       key={row.id}
       className={cn(
-        "hover:bg-background border-b border-border transition-colors",
+        "border-b border-border transition-colors",
         isFrozenColumn && "bg-background"
       )}
       {...props}

@@ -333,7 +333,7 @@ const Grid = <T extends object>({
         />
       )} */}
       <div
-        className="w-full h-full bg-background overflow-x-auto"
+        className="w-full h-full bg-card overflow-x-auto"
         style={{
           contain: contained ? "strict" : undefined,
         }}

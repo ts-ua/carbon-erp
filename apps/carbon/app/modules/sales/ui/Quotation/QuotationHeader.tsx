@@ -81,6 +81,12 @@ const QuotationHeader = () => {
                 </CardAttributeValue>
               </CardAttribute>
               <CardAttribute>
+                <CardAttributeLabel>Name</CardAttributeLabel>
+                <CardAttributeValue>
+                  {routeData?.quotation?.name}
+                </CardAttributeValue>
+              </CardAttribute>
+              <CardAttribute>
                 <CardAttributeLabel>Quote Date</CardAttributeLabel>
                 <CardAttributeValue>
                   {routeData?.quotation?.quoteDate}

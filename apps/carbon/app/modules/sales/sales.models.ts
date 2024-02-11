@@ -86,6 +86,23 @@ export const quotationValidator = withZod(
   })
 );
 
+export const quotationLineValidator = withZod(
+  z.object({
+    id: zfd.text(z.string().optional()),
+    quoteId: z.string(),
+    partId: z.string().min(1, { message: "Part is required" }),
+    customerPartId: zfd.text(z.string().optional()),
+    description: z.string().min(1, { message: "Description is required" }),
+    // unitOfMeasureCode: z
+    //   .string()
+    //   .min(1, { message: "Unit of measure is required" }),
+    unitCost: zfd.numeric(z.number().optional()),
+    unitPrice: zfd.numeric(z.number()),
+    quantity: zfd.numeric(z.number()),
+    leadTime: zfd.numeric(z.number().optional()),
+  })
+);
+
 export const quotationReleaseValidator = withZod(
   z
     .object({

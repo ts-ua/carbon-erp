@@ -10,6 +10,7 @@ import type {
   customerShippingValidator,
   customerTypeValidator,
   customerValidator,
+  quotationLineValidator,
   quotationValidator,
 } from "./sales.models";
 
@@ -219,7 +220,7 @@ export async function getQuote(
   client: SupabaseClient<Database>,
   quoteId: string
 ) {
-  return client.from("quote").select("*").eq("id", quoteId).single();
+  return client.from("quotes").select("*").eq("id", quoteId).single();
 }
 
 export async function getQuotes(
@@ -269,11 +270,18 @@ export async function getQuoteInternalDocuments(
   return client.storage.from("quote-internal").list(quoteId);
 }
 
+export async function getQuoteLine(
+  client: SupabaseClient<Database>,
+  quoteLineId: string
+) {
+  return client.from("quoteLine").select("*").eq("id", quoteLineId).single();
+}
+
 export async function getQuoteLines(
   client: SupabaseClient<Database>,
   quoteId: string
 ) {
-  return client.from("quoteLines").select("*").eq("quoteId", quoteId);
+  return client.from("quoteLine").select("*").eq("quoteId", quoteId);
 }
 
 export async function insertCustomer(
@@ -514,4 +522,26 @@ export async function upsertQuote(
   } else {
     return client.from("quote").update(sanitize(quote)).eq("id", quote.id);
   }
+}
+
+export async function upsertQuoteLine(
+  client: SupabaseClient<Database>,
+  quotationLine:
+    | (Omit<TypeOfValidator<typeof quotationLineValidator>, "id"> & {
+        createdBy: string;
+      })
+    | (Omit<TypeOfValidator<typeof quotationLineValidator>, "id"> & {
+        id: string;
+        updatedBy: string;
+      })
+) {
+  if ("id" in quotationLine) {
+    return client
+      .from("quoteLine")
+      .update(sanitize(quotationLine))
+      .eq("id", quotationLine.id)
+      .select("id")
+      .single();
+  }
+  return client.from("quoteLine").insert([quotationLine]).select("id").single();
 }

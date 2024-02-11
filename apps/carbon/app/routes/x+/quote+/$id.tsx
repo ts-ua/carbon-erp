@@ -75,7 +75,7 @@ export default function QuotationRoute() {
   useEffect(() => {
     const totals = quotationLines.reduce(
       (acc, line) => {
-        acc.total += (line.purchaseQuantity ?? 0) * (line.unitPrice ?? 0);
+        acc.total += (line.quantity ?? 0) * (line.unitPrice ?? 0);
 
         return acc;
       },
