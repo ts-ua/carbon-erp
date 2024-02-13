@@ -43,6 +43,8 @@ const QuotationDocuments = ({
     id,
   });
 
+  console.log({ attachments, isExternal, id });
+
   return (
     <>
       <Card>

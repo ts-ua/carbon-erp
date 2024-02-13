@@ -12038,7 +12038,13 @@ export interface Database {
         | "Job"
         | "Part"
         | "Purchase Order"
+        | "Lead"
+        | "Opportunity"
+        | "Quotation"
         | "Sales Order"
+        | "Request for Quotation"
+        | "Sales Invoice"
+        | "Purchase Invoice"
         | "Document";
       serviceType: "Internal" | "External";
       shippingCarrier: "UPS" | "FedEx" | "USPS" | "DHL" | "Other";

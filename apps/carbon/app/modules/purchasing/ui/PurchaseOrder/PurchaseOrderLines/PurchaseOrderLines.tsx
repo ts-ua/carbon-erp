@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   CardAction,
   CardContent,
@@ -14,12 +13,13 @@ import {
   HStack,
   IconButton,
 } from "@carbon/react";
-import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
+import { Outlet, useNavigate, useParams } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
 import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { MdMoreHoriz } from "react-icons/md";
+import { New } from "~/components";
 import {
   EditableNumber,
   EditablePurchaseOrderLineNumber,
@@ -288,13 +288,7 @@ const PurchaseOrderLines = () => {
           <CardHeader>
             <CardTitle>Purchase Order Lines</CardTitle>
           </CardHeader>
-          <CardAction>
-            {canEdit && isEditable && (
-              <Button asChild>
-                <Link to="new">New</Link>
-              </Button>
-            )}
-          </CardAction>
+          <CardAction>{canEdit && isEditable && <New to="new" />}</CardAction>
         </HStack>
 
         <CardContent>

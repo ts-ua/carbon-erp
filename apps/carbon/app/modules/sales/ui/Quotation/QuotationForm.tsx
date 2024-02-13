@@ -67,6 +67,7 @@ const QuotationForm = ({ initialValues }: QuotationFormProps) => {
             >
               <VStack>
                 <Customer
+                  autoFocus
                   name="customerId"
                   label="Customer"
                   onChange={(value) => setCustomer(value?.value as string)}

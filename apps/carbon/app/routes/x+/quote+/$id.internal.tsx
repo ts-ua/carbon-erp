@@ -15,7 +15,7 @@ export default function QuotationInternalDocumentsRoute() {
 
   const routeData = useRouteData<{
     internalDocuments: QuotationAttachment[];
-  }>(path.to.purchaseOrder(id));
+  }>(path.to.quote(id));
 
   return (
     <QuotationDocuments

@@ -61,5 +61,5 @@ export default function useCreate(): Route[] {
     return links;
   }, [permissions]);
 
-  return result;
+  return result.sort((a, b) => a.name.localeCompare(b.name));
 }

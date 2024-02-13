@@ -343,7 +343,7 @@ export const themes = [
         ring: "221.2 83.2% 53.3%",
       },
       dark: {
-        background: "222.2 84% 4.9%",
+        background: "222.2 84% 7.5%",
         foreground: "210 40% 98%",
         card: "222.2 84% 8.9%",
         "card-foreground": "210 40% 98%",

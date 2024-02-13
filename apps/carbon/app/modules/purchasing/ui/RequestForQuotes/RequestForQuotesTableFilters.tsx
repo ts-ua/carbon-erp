@@ -1,7 +1,5 @@
-import { Button, HStack } from "@carbon/react";
-import { Link } from "@remix-run/react";
-import { IoMdAdd } from "react-icons/io";
-import { Combobox, Select } from "~/components";
+import { HStack } from "@carbon/react";
+import { Combobox, New, Select } from "~/components";
 import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -76,9 +74,7 @@ const RequestForQuotesTableFilters = () => {
       </HStack>
       <HStack>
         {permissions.can("create", "purchasing") && (
-          <Button asChild leftIcon={<IoMdAdd />}>
-            <Link to={path.to.newRequestForQuote}>New RFQ</Link>
-          </Button>
+          <New label="RFQ" to={path.to.newRequestForQuote} />
         )}
       </HStack>
     </TableFilters>
