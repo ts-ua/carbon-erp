@@ -241,6 +241,18 @@ CREATE TRIGGER update_part_search_result
   FOR EACH ROW EXECUTE PROCEDURE public.update_part_search_result();
 
 
+CREATE FUNCTION public.delete_part_search_result()
+RETURNS TRIGGER AS $$
+BEGIN
+  DELETE FROM public.search WHERE entity = 'Part' AND uuid = old.id;
+  RETURN old;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER delete_part_search_result
+  AFTER DELETE on public.part
+  FOR EACH ROW EXECUTE PROCEDURE public.delete_part_search_result();
+
 CREATE TABLE "partCost" (
   "partId" TEXT NOT NULL,
   "costingMethod" "partCostingMethod" NOT NULL,

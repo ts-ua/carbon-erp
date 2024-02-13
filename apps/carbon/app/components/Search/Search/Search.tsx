@@ -1,3 +1,4 @@
+import type { Database } from "@carbon/database";
 import {
   Button,
   Command,
@@ -43,17 +44,7 @@ import type { Authenticated, Route } from "~/types";
 type SearchResult = {
   id: number;
   name: string;
-  entity:
-    | "Person"
-    | "Resource"
-    | "Customer"
-    | "Supplier"
-    | "Job"
-    | "Part"
-    | "Purchase Order"
-    | "Sales Order"
-    | "Document"
-    | null;
+  entity: Database["public"]["Enums"]["searchEntity"] | null;
   uuid: string | null;
   link: string;
   description: string | null;
@@ -105,7 +96,7 @@ const SearchModal = ({
       const result = await supabase
         ?.from("search")
         .select()
-        .textSearch("fts", `${search}:*`)
+        .textSearch("fts", `*${search}:*`)
         .limit(20);
 
       if (result?.data) {
@@ -243,6 +234,9 @@ function ResultIcon({ entity }: { entity: SearchResult["entity"] | "Module" }) {
       return <CgProfile className="w-4 h-4 mr-2 " />;
     case "Purchase Order":
       return <BsCartDash className="w-4 h-4 mr-2 " />;
+    case "Opportunity":
+    case "Lead":
+    case "Quotation":
     case "Sales Order":
       return <BsCartPlus className="w-4 h-4 mr-2 " />;
     case "Supplier":

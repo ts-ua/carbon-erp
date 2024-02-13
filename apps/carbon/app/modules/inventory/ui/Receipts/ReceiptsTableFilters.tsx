@@ -1,7 +1,5 @@
-import { Button, HStack } from "@carbon/react";
-import { Link } from "@remix-run/react";
-import { IoMdAdd } from "react-icons/io";
-import { Combobox } from "~/components";
+import { HStack } from "@carbon/react";
+import { Combobox, New } from "~/components";
 import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -54,9 +52,7 @@ const ReceiptsTableFilters = ({ locations }: ReceiptsTableFiltersProps) => {
       </HStack>
       <HStack>
         {permissions.can("create", "inventory") && (
-          <Button asChild leftIcon={<IoMdAdd />}>
-            <Link to={`new?${params.toString()}`}>New Receipt</Link>
-          </Button>
+          <New label="Receipt" to={`new?${params.toString()}`} />
         )}
       </HStack>
     </TableFilters>

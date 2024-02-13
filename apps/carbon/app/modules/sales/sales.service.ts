@@ -52,6 +52,13 @@ export async function deleteQuote(
   return client.from("quote").delete().eq("id", quoteId);
 }
 
+export async function deleteQuoteLine(
+  client: SupabaseClient<Database>,
+  quoteLineId: string
+) {
+  return client.from("quoteLine").delete().eq("id", quoteLineId);
+}
+
 export async function getCustomer(
   client: SupabaseClient<Database>,
   customerId: string

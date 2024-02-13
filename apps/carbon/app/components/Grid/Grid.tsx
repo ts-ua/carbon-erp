@@ -416,7 +416,7 @@ const Grid = <T extends object>({
               );
             })}
             {rows.length === 0 && !onNewRow && (
-              <Tr className="h-10 hover:bg-zinc-100 dark:hover:bg-zinc-900">
+              <Tr className="h-10 hover:bg-muted/50">
                 <Td colSpan={24}>
                   <p className="text-muted-foreground text-center w-full">
                     No Data
@@ -427,7 +427,7 @@ const Grid = <T extends object>({
             {onNewRow && (
               <Tr
                 onClick={onNewRow}
-                className="cursor-pointer h-10 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+                className="cursor-pointer h-10 hover:bg-muted/50"
               >
                 <Td colSpan={24}>
                   <HStack className="items-start h-6">

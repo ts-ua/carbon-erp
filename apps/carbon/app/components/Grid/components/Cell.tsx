@@ -48,7 +48,7 @@ const Cell = <T extends object>({
       className={cn(
         "relative border-r border-border px-4 py-2 whitespace-nowrap text-sm outline-none",
         wasEdited && "bg-yellow-100 dark:bg-yellow-900",
-        !hasEditableTableCellComponent && "bg-zinc-50 dark:bg-zinc-950",
+        !hasEditableTableCellComponent && "bg-muted/50",
         hasError && "ring-inset ring-2 ring-red-500",
         isSelected && "ring-inset ring-2 ring-ring"
       )}
