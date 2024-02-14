@@ -8,7 +8,7 @@ const Menubar = forwardRef<HTMLDivElement, ComponentProps<"div">>(
     return (
       <div
         {...props}
-        className="flex items-center bg-card border border-border rounded-md shadow-sm justify-start p-1 w-full space-x-1"
+        className="flex items-center bg-card border border-border rounded-lg shadow-sm justify-start p-1 w-full space-x-1"
       >
         {children}
       </div>

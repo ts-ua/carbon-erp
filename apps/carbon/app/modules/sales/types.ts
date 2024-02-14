@@ -47,4 +47,4 @@ export type QuotationLine = NonNullable<
   Awaited<ReturnType<typeof getQuoteLines>>["data"]
 >[number];
 
-export type QuotationStatus = Database["public"]["Enums"]["quoteStatus"];
+export type QuotationStatusType = Database["public"]["Enums"]["quoteStatus"];
