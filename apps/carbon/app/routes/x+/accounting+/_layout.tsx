@@ -6,7 +6,7 @@ import { GroupedContentSidebar } from "~/components/Layout";
 import {
   getAccountsList,
   getBaseCurrency,
-  useAccountingSidebar,
+  useAccountingSubmodules,
 } from "~/modules/accounting";
 import { requirePermissions } from "~/services/auth";
 import { flash } from "~/services/session.server";
@@ -76,7 +76,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function AccountingRoute() {
-  const { groups } = useAccountingSidebar();
+  const { groups } = useAccountingSubmodules();
 
   return (
     <div className="grid grid-cols-[auto_1fr] w-full h-full">

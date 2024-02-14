@@ -18,7 +18,7 @@ type RowProps<T> = {
   rowIsSelected: boolean;
   rowRef?: MutableRefObject<HTMLTableRowElement | null>;
   onCellClick: (row: number, column: number) => void;
-  onCellUpdate: (row: number) => (columnId: string, value: unknown) => void;
+  onCellUpdate: (row: number) => (updates: Record<string, unknown>) => void;
   onEditRow?: (row: T) => void;
 };
 
@@ -34,11 +34,13 @@ const Row = <T extends object>({
   onCellClick,
   onCellUpdate,
 }: RowProps<T>) => {
+  const onUpdate = onCellUpdate(row.index);
+
   return (
     <Tr
       key={row.id}
       ref={rowRef}
-      className={cn("hover:bg-background", rowIsClickable && "cursor-pointer")}
+      className={cn(rowIsClickable && "cursor-pointer")}
     >
       {row.getVisibleCells().map((cell, columnIndex) => {
         const isSelected =
@@ -56,7 +58,7 @@ const Row = <T extends object>({
             isSelected={isSelected}
             isEditing={isEditing}
             onClick={() => onCellClick(cell.row.index, columnIndex)}
-            onUpdate={onCellUpdate(cell.row.index)}
+            onUpdate={onUpdate}
           />
         );
       })}

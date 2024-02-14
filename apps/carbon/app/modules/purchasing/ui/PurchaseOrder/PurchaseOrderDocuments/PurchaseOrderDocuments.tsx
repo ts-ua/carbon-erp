@@ -23,7 +23,7 @@ import { Outlet } from "@remix-run/react";
 import { MdMoreVert } from "react-icons/md";
 import { DocumentIcon } from "~/modules/documents";
 import type { PurchaseOrderAttachment } from "~/modules/purchasing";
-import { PurchaseOrderDocumentForm } from "~/modules/purchasing";
+import PurchaseOrderDocumentForm from "./PurchaseOrderDocumentForm";
 import { usePurchaseOrderDocuments } from "./usePurchaseOrderDocuments";
 
 type PurchaseOrderDocumentsProps = {

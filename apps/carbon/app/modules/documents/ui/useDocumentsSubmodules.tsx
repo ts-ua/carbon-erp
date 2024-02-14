@@ -35,6 +35,6 @@ const documentsRoutes: Route[] = [
   },
 ];
 
-export default function useDocumentsSidebar() {
+export default function useDocumentsSubmodules() {
   return { links: documentsRoutes };
 }

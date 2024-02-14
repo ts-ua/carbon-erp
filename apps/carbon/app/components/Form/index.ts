@@ -22,6 +22,7 @@ import Input from "./Input";
 import InputControlled from "./InputControlled";
 import Location from "./Location";
 import Number from "./Number";
+import NumberControlled from "./NumberControlled";
 import Part from "./Part";
 import Password from "./Password";
 import Phone from "./Phone";
@@ -67,6 +68,7 @@ export {
   InputControlled,
   Location,
   Number,
+  NumberControlled,
   Part,
   Password,
   Phone,

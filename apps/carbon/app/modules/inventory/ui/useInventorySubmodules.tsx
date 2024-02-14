@@ -1,52 +1,37 @@
-import { BsPaletteFill } from "react-icons/bs";
-import { CgSync } from "react-icons/cg";
-import { GoNumber } from "react-icons/go";
-import { TbBuildingFactory2 } from "react-icons/tb";
 import { usePermissions } from "~/hooks";
 import type { AuthenticatedRouteGroup } from "~/types";
 import { path } from "~/utils/path";
 
-const settingsRoutes: AuthenticatedRouteGroup[] = [
+const inventoryRoutes: AuthenticatedRouteGroup[] = [
   {
-    name: "Company",
+    name: "Manage",
     routes: [
       {
-        name: "Business",
-        to: path.to.company,
-        role: "employee",
-        icon: <TbBuildingFactory2 />,
+        name: "Receipts",
+        to: path.to.receipts,
       },
+      // {
+      //   name: "Shipments",
+      //   to: path.to.shipments,
+      // },
     ],
   },
   {
-    name: "System",
+    name: "Configure",
     routes: [
       {
-        name: "Integrations",
-        to: path.to.integrations,
+        name: "Shipping Methods",
+        to: path.to.shippingMethods,
         role: "employee",
-        icon: <CgSync />,
-      },
-      {
-        name: "Sequences",
-        to: path.to.sequences,
-        role: "employee",
-        icon: <GoNumber />,
-      },
-      {
-        name: "Theme",
-        to: path.to.theme,
-        role: "employee",
-        icon: <BsPaletteFill />,
       },
     ],
   },
 ];
 
-export default function usePurchasingSidebar() {
+export default function useAccountingSubmodules() {
   const permissions = usePermissions();
   return {
-    groups: settingsRoutes
+    groups: inventoryRoutes
       .filter((group) => {
         const filteredRoutes = group.routes.filter((route) => {
           if (route.role) {

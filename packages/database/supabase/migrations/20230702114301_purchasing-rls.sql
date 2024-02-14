@@ -42,6 +42,22 @@ CREATE POLICY "Employees with purchasing_delete can delete purchase orders" ON "
   FOR DELETE
   USING (coalesce(get_my_claim('purchasing_delete')::boolean, false) = true AND (get_my_claim('role'::text)) = '"employee"'::jsonb);
 
+
+CREATE POLICY "Suppliers with purchasing_view can search for their own purchase orders" ON "search"
+  FOR SELECT
+  USING (
+    coalesce(get_my_claim('purchasing_view')::boolean, false) = true 
+    AND (get_my_claim('role'::text)) = '"supplier"'::jsonb
+    AND entity = 'Purchase Order' 
+    AND uuid IN (
+        SELECT id FROM "purchaseOrder" WHERE "supplierId" IN (
+          SELECT "supplierId" FROM "purchaseOrder" WHERE "supplierId" IN (
+            SELECT "supplierId" FROM "supplierAccount" WHERE id::uuid = auth.uid()
+          )
+        )
+      )
+  );
+
 -- Search
 
 CREATE FUNCTION public.create_purchase_order_search_result()
@@ -72,21 +88,18 @@ CREATE TRIGGER update_purchase_order_search_result
   AFTER UPDATE on public."purchaseOrder"
   FOR EACH ROW EXECUTE PROCEDURE public.update_purchase_order_search_result();
 
+CREATE FUNCTION public.delete_purchase_order_search_result()
+RETURNS TRIGGER AS $$
+BEGIN
+  DELETE FROM public.search WHERE entity = 'Purchase Order' AND uuid = old.id;
+  RETURN old;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
-CREATE POLICY "Suppliers with purchasing_view can search for their own purchase orders" ON "search"
-  FOR SELECT
-  USING (
-    coalesce(get_my_claim('purchasing_view')::boolean, false) = true 
-    AND (get_my_claim('role'::text)) = '"supplier"'::jsonb
-    AND entity = 'Purchase Order' 
-    AND uuid IN (
-        SELECT id FROM "purchaseOrder" WHERE "supplierId" IN (
-          SELECT "supplierId" FROM "purchaseOrder" WHERE "supplierId" IN (
-            SELECT "supplierId" FROM "supplierAccount" WHERE id::uuid = auth.uid()
-          )
-        )
-      )
-  );
+CREATE TRIGGER delete_purchase_order_search_result
+  AFTER DELETE on public."purchaseOrder"
+  FOR EACH ROW EXECUTE PROCEDURE public.delete_purchase_order_search_result();
+
 
 -- Purchase Order Status History
 

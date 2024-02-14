@@ -160,19 +160,23 @@ const Table = <T extends object>({
     meta: {
       // These are not part of the standard API, but are accessible via table.options.meta
       editableComponents,
-      updateData: (rowIndex, columnId, value) => {
+      updateData: (rowIndex, updates) => {
         setInternalData((previousData) =>
           previousData.map((row, index) => {
             if (index === rowIndex) {
-              if (columnId.includes("_") && !(columnId in row)) {
-                updateNestedProperty(row, columnId, value);
-                return row;
-              } else {
-                return {
-                  ...row,
-                  [columnId]: value,
-                };
-              }
+              let newRow = { ...row };
+              Object.entries(updates).forEach(([columnId, value]) => {
+                if (columnId.includes("_") && !(columnId in newRow)) {
+                  updateNestedProperty(newRow, columnId, value);
+                  return newRow;
+                } else {
+                  return {
+                    ...newRow,
+                    [columnId]: value,
+                  };
+                }
+              });
+              return newRow;
             }
             return row;
           })
@@ -263,11 +267,10 @@ const Table = <T extends object>({
   );
 
   const onCellUpdate = useCallback(
-    (rowIndex: number) => (columnId: string, value: unknown) => {
-      return table.options.meta?.updateData
-        ? table.options.meta?.updateData(rowIndex, columnId, value)
-        : undefined;
-    },
+    (rowIndex: number) => (updates: Record<string, unknown>) =>
+      table.options.meta?.updateData
+        ? table.options.meta?.updateData(rowIndex, updates)
+        : undefined,
     [table]
   );
 
@@ -436,7 +439,7 @@ const Table = <T extends object>({
         />
       )}
       <div
-        className="w-full h-full bg-background overflow-scroll"
+        className="w-full h-full bg-card overflow-scroll"
         style={{ contain: "strict" }}
         ref={tableContainerRef}
         onKeyDown={editMode ? onKeyDown : undefined}

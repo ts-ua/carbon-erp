@@ -5,14 +5,19 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "~/Tooltip";
 
 type ToolbarButtonProps = Omit<ButtonProps, "aria-label"> & {
   label: string;
+  isActive?: boolean;
   icon: ReactElement;
 };
 
-const ToolbarButton = ({ label, ...rest }: ToolbarButtonProps) => {
+const ToolbarButton = ({ label, isActive, ...rest }: ToolbarButtonProps) => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <IconButton variant="ghost" aria-label={label} {...rest} />
+        <IconButton
+          variant={isActive ? "solid" : "ghost"}
+          aria-label={label}
+          {...rest}
+        />
       </TooltipTrigger>
       <TooltipContent>{label}</TooltipContent>
     </Tooltip>

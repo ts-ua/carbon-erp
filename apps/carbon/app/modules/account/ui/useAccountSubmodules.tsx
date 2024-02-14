@@ -21,6 +21,6 @@ const accountRoutes: Route[] = [
   },
 ];
 
-export default function useAccountSidebar() {
+export default function useAccountSubmodules() {
   return { links: accountRoutes };
 }

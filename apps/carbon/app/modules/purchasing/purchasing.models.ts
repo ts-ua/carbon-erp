@@ -180,7 +180,7 @@ export const requestForQuoteStatusType = [
 export const requestForQuoteValidator = withZod(
   z.object({
     id: zfd.text(z.string().optional()),
-    description: z.string().min(1, { message: "Description is required" }),
+    name: z.string().min(1, { message: "Name is required" }),
     status: z.enum(requestForQuoteStatusType).optional(),
     notes: zfd.text(z.string().optional()),
     receiptDate: z.string().min(1, { message: "Receipt Date is required" }),

@@ -1,5 +1,5 @@
-import useInvoicingSidebar from "./useInvoicingSidebar";
+import useInvoicingSubmodules from "./useInvoicingSubmodules";
 
 export * from "./PurchaseInvoice";
 export * from "./PurchaseInvoices";
-export { useInvoicingSidebar };
+export { useInvoicingSubmodules };

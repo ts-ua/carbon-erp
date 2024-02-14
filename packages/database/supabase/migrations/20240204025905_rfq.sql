@@ -3,7 +3,8 @@ CREATE TYPE "requestForQuoteStatus" AS ENUM ('Draft', 'Sent', 'Expired', 'Closed
 CREATE TABLE "requestForQuote" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "requestForQuoteId" TEXT NOT NULL,
-  "description" TEXT,
+  "revisionId" INTEGER NOT NULL DEFAULT 0,
+  "name" TEXT,
   "status" "requestForQuoteStatus" NOT NULL DEFAULT 'Draft',
   "notes" TEXT,
   "receiptDate" DATE NOT NULL,
@@ -127,7 +128,7 @@ CREATE OR REPLACE VIEW "requestForQuotes" WITH(SECURITY_INVOKER=true) AS
   SELECT 
   r."id",
   r."requestForQuoteId",
-  r."description",
+  r."name",
   r."status",
   r."notes",
   r."receiptDate",
@@ -157,7 +158,7 @@ LEFT JOIN "user" uu
 GROUP BY
   r."id",
   r."requestForQuoteId",
-  r."description",
+  r."name",
   r."status",
   r."notes",
   r."receiptDate",

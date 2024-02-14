@@ -10,7 +10,7 @@ import { getValidChildren } from "~/utils/react";
 const InputGroupContext = createContext<boolean>(false);
 
 const inputGroupVariants = cva(
-  "flex relative w-full bg-background text-foreground shadow-sm focus-within:outline-none border border-input ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+  "flex relative w-full bg-transparent text-foreground shadow-sm focus-within:outline-none border border-input ring-offset-background focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
   {
     variants: {
       size: {
@@ -93,7 +93,7 @@ const InputGroup = forwardRef<HTMLDivElement, InputGroupProps>(
 InputGroup.displayName = "InputGroup";
 
 export const inputVariants = cva(
-  "flex w-full px-3 py-1 bg-background text-foreground transition-colors placeholder:text-muted-foreground disabled:opacity-50 rounded-md ",
+  "flex w-full px-3 py-1 bg-transparent text-foreground transition-colors placeholder:text-muted-foreground disabled:opacity-50 rounded-md ",
   {
     variants: {
       size: {

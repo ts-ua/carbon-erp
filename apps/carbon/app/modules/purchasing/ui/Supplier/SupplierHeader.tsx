@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   CardAction,
   CardAttribute,
@@ -13,7 +12,6 @@ import {
   VStack,
 } from "@carbon/react";
 import { useParams } from "@remix-run/react";
-import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
 import type {
   SupplierDetail,
@@ -44,13 +42,13 @@ const SupplierHeader = () => {
             <CardTitle>{routeData?.supplier?.name}</CardTitle>
           </CardHeader>
           <CardAction>
-            <Button
+            {/* <Button
               variant="secondary"
               onClick={() => alert("TODO")}
               leftIcon={<FaHistory />}
             >
               Supplier Details
-            </Button>
+            </Button> */}
           </CardAction>
         </HStack>
         <CardContent>

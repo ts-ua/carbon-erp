@@ -75,28 +75,6 @@ const Grid = <T extends object>({
     defaultColumnOrder ?? []
   );
 
-  /* Sorting */
-  // const { isSorted, toggleSortBy } = useSort();
-
-  // const columnAccessors = useMemo(
-  //   () =>
-  //     columns.reduce<Record<string, string>>((acc, column) => {
-  //       const accessorKey: string | undefined = getAccessorKey(column);
-  //       if (accessorKey?.includes("_"))
-  //         throw new Error(
-  //           `Invalid accessorKey ${accessorKey}. Cannot contain '_'`
-  //         );
-  //       if (accessorKey && column.header && typeof column.header === "string") {
-  //         return {
-  //           ...acc,
-  //           [accessorKey]: column.header,
-  //         };
-  //       }
-  //       return acc;
-  //     }, {}),
-  //   [columns]
-  // );
-
   const table = useReactTable({
     data: internalData,
     columns: columns,
@@ -110,22 +88,28 @@ const Grid = <T extends object>({
     meta: {
       // These are not part of the standard API, but are accessible via table.options.meta
       editableComponents,
-      updateData: (rowIndex, columnId, value) => {
+      updateData: (rowIndex, updates) => {
         setInternalData((previousData) => {
           const newData = previousData.map((row, index) => {
             if (index === rowIndex) {
-              if (columnId.includes("_") && !(columnId in row)) {
-                updateNestedProperty(row, columnId, value);
-                return row;
-              } else {
-                return {
-                  ...row,
-                  [columnId]: value,
-                };
-              }
+              return Object.entries(updates).reduce(
+                (newRow, [columnId, value]) => {
+                  if (columnId.includes("_") && !(columnId in newRow)) {
+                    updateNestedProperty(newRow, columnId, value);
+                    return newRow;
+                  } else {
+                    return {
+                      ...newRow,
+                      [columnId]: value,
+                    };
+                  }
+                },
+                row
+              );
             }
             return row;
           });
+
           onDataChange?.(newData);
 
           return newData;
@@ -201,9 +185,9 @@ const Grid = <T extends object>({
   );
 
   const onCellUpdate = useCallback(
-    (rowIndex: number) => (columnId: string, value: unknown) =>
+    (rowIndex: number) => (updates: Record<string, unknown>) =>
       table.options.meta?.updateData
-        ? table.options.meta?.updateData(rowIndex, columnId, value)
+        ? table.options.meta?.updateData(rowIndex, updates)
         : undefined,
     [table]
   );
@@ -349,7 +333,7 @@ const Grid = <T extends object>({
         />
       )} */}
       <div
-        className="w-full h-full bg-background overflow-x-auto"
+        className="w-full h-full bg-card overflow-x-auto"
         style={{
           contain: contained ? "strict" : undefined,
         }}
@@ -432,7 +416,7 @@ const Grid = <T extends object>({
               );
             })}
             {rows.length === 0 && !onNewRow && (
-              <Tr className="h-10 hover:bg-zinc-100 dark:hover:bg-zinc-900">
+              <Tr className="h-10 hover:bg-muted/50">
                 <Td colSpan={24}>
                   <p className="text-muted-foreground text-center w-full">
                     No Data
@@ -443,7 +427,7 @@ const Grid = <T extends object>({
             {onNewRow && (
               <Tr
                 onClick={onNewRow}
-                className="cursor-pointer h-10 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+                className="cursor-pointer h-10 hover:bg-muted/50"
               >
                 <Td colSpan={24}>
                   <HStack className="items-start h-6">

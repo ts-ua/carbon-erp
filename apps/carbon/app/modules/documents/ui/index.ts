@@ -1,4 +1,4 @@
-import useDocumentsSidebar from "./useDocumentsSidebar";
+import useDocumentsSubmodules from "./useDocumentsSubmodules";
 
-export { useDocumentsSidebar };
 export * from "./Documents";
+export { useDocumentsSubmodules };

@@ -1,37 +1,32 @@
+import { BsCartDash } from "react-icons/bs";
 import { usePermissions } from "~/hooks";
 import type { AuthenticatedRouteGroup } from "~/types";
 import { path } from "~/utils/path";
 
-const salesRoutes: AuthenticatedRouteGroup[] = [
+const invoicingRoutes: AuthenticatedRouteGroup[] = [
   {
     name: "Manage",
     routes: [
       {
-        name: "Customers",
-        to: path.to.customers,
-      },
-      {
-        name: "Quotes",
-        to: path.to.quotes,
-      },
-    ],
-  },
-  {
-    name: "Configure",
-    routes: [
-      {
-        name: "Customer Types",
-        to: path.to.customerTypes,
+        name: "Purchasing",
+        to: path.to.purchaseInvoices,
         role: "employee",
+        icon: <BsCartDash />,
       },
+      // {
+      //   name: "Sales",
+      //   to: path.to.salesInvoices,
+      //   role: "employee",
+      //   icon: <BsCartPlus />,
+      // },
     ],
   },
 ];
 
-export default function useSalesSidebar() {
+export default function useInvoicingSubmodules() {
   const permissions = usePermissions();
   return {
-    groups: salesRoutes
+    groups: invoicingRoutes
       .filter((group) => {
         const filteredRoutes = group.routes.filter((route) => {
           if (route.role) {

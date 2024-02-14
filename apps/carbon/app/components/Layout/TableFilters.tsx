@@ -10,7 +10,7 @@ const TableFilters = forwardRef<
     <div
       ref={ref}
       className={cn(
-        "flex px-4 py-3 items-center space-x-4 justify-between border-b border-border w-full",
+        "flex px-4 py-3 items-center space-x-4 justify-between bg-card border-b border-border w-full",
         className
       )}
       {...props}

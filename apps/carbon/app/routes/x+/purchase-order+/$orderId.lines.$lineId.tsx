@@ -17,7 +17,7 @@ import { error } from "~/utils/result";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client } = await requirePermissions(request, {
-    view: "parts",
+    view: "purchasing",
     role: "employee",
   });
 

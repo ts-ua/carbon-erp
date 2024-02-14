@@ -88,13 +88,13 @@ const AbilityChart = ({
               scale={yScale}
               width={width}
               height={height}
-              stroke="#e0e0e0"
+              className="stroke-muted"
             />
             <GridColumns
               scale={xScale}
               width={width}
               height={height}
-              stroke="#e0e0e0"
+              className="stroke-muted"
             />
             <AxisBottom
               top={height}
@@ -154,6 +154,7 @@ const AbilityChart = ({
           scale={yScale}
           numTicks={condensed ? 0 : undefined}
           hideTicks={condensed}
+          axisClassName="text-muted-foreground"
         />
         <LinePath
           data={data}

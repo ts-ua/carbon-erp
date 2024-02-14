@@ -8,10 +8,8 @@ import {
   PopoverTrigger,
 } from "@carbon/react";
 import { parseDate } from "@internationalized/date";
-import { Link } from "@remix-run/react";
-import { IoMdAdd } from "react-icons/io";
 import { MdCalendarMonth, MdClose } from "react-icons/md";
-import { Select } from "~/components";
+import { New, Select } from "~/components";
 import { TableFilters } from "~/components/Layout";
 import { usePermissions, useUrlParams } from "~/hooks";
 import { incomeBalanceTypes } from "~/modules/accounting";
@@ -85,9 +83,7 @@ const ChartOfAccountsTableFilters = () => {
       </HStack>
       <HStack>
         {permissions.can("create", "accounting") && (
-          <Button asChild leftIcon={<IoMdAdd />}>
-            <Link to={`new?${params.toString()}`}>New Account</Link>
-          </Button>
+          <New label="Account" to={`new?${params.toString()}`} />
         )}
       </HStack>
     </TableFilters>
