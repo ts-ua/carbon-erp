@@ -2,7 +2,7 @@ import { VStack } from "@carbon/react";
 import type { MetaFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 import { GroupedContentSidebar } from "~/components/Layout";
-import { useInventorySidebar } from "~/modules/inventory";
+import { useInventorySubmodules } from "~/modules/inventory";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 
@@ -17,7 +17,7 @@ export const handle: Handle = {
 };
 
 export default function UsersRoute() {
-  const { groups } = useInventorySidebar();
+  const { groups } = useInventorySubmodules();
 
   return (
     <div className="grid grid-cols-[auto_1fr] w-full h-full">

@@ -48,6 +48,7 @@ export const path = {
       previewFile: (path: string) => generatePath(`${file}/preview/${path}`),
       purchaseOrder: (id: string) =>
         generatePath(`${file}/purchase-order/${id}.pdf`),
+      quote: (id: string) => generatePath(`${file}/quote/${id}.pdf`),
     },
     onboarding: {
       company: `${onboarding}/company`,
@@ -166,6 +167,9 @@ export const path = {
       generatePath(`${x}/purchase-order/delete/${id}`),
     deletePurchaseOrderLine: (orderId: string, lineId: string) =>
       generatePath(`${x}/purchase-order/${orderId}/lines/delete/${lineId}`),
+    deleteQuote: (id: string) => generatePath(`${x}/quote/delete/${id}`),
+    deleteQuoteLine: (id: string, lineId: string) =>
+      generatePath(`${x}/quote/${id}/lines/delete/${lineId}`),
     deleteReceipt: (id: string) =>
       generatePath(`${x}/inventory/receipts/delete/${id}`),
     deleteRequestForQuote: (id: string) =>
@@ -271,6 +275,8 @@ export const path = {
     newPurchaseOrder: `${x}/purchase-order/new`,
     newPurchaseOrderLine: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/lines/new`),
+    newQuote: `${x}/quote/new`,
+    newQuoteLine: (id: string) => generatePath(`${x}/quote/${id}/lines/new`),
     newReceipt: `${x}/inventory/receipts/new`,
     newRequestForQuote: `${x}/rfq/new`,
     newShift: `${x}/resources/shifts/new`,
@@ -353,6 +359,18 @@ export const path = {
       generatePath(`${x}/purchase-order/${id}/release`),
     purchaseOrders: `${x}/purchasing/orders`,
     purchasing: `${x}/purchasing`,
+    quote: (id: string) => generatePath(`${x}/quote/${id}`),
+    quoteDetails: (id: string) => generatePath(`${x}/quote/${id}/details`),
+    quoteExternalDocuments: (id: string) =>
+      generatePath(`${x}/quote/${id}/external`),
+    quoteFavorite: `${x}/purchasing/orders/favorite`,
+    quoteInternalDocuments: (id: string) =>
+      generatePath(`${x}/quote/${id}/internal`),
+    quoteLines: (orderId: string) =>
+      generatePath(`${x}/quote/${orderId}/lines`),
+    quoteLine: (orderId: string, id: string) =>
+      generatePath(`${x}/quote/${orderId}/lines/${id}`),
+    quoteRelease: (id: string) => generatePath(`${x}/quote/${id}/release`),
     quotes: `${x}/sales/quotes`,
     receipt: (id: string) => generatePath(`${x}/inventory/receipts/${id}`),
     receipts: `${x}/inventory/receipts`,

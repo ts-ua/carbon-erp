@@ -1,7 +1,5 @@
-import { Button, HStack } from "@carbon/react";
-import { Link } from "@remix-run/react";
-import { IoMdAdd } from "react-icons/io";
-import { Combobox, Select } from "~/components";
+import { HStack } from "@carbon/react";
+import { Combobox, New, Select } from "~/components";
 import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -58,11 +56,10 @@ const PeopleTableFilters = ({ employeeTypes }: PeopleTableFiltersProps) => {
       </HStack>
       <HStack>
         {permissions.can("create", "users") && (
-          <Button asChild leftIcon={<IoMdAdd />}>
-            <Link to={`${path.to.newEmployee}?${params.toString()}`}>
-              New Employee
-            </Link>
-          </Button>
+          <New
+            label="Employee"
+            to={`${path.to.newEmployee}?${params.toString()}`}
+          />
         )}
       </HStack>
     </TableFilters>

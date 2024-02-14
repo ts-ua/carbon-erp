@@ -2,41 +2,46 @@ import { usePermissions } from "~/hooks";
 import type { AuthenticatedRouteGroup } from "~/types";
 import { path } from "~/utils/path";
 
-const purchasingRoutes: AuthenticatedRouteGroup[] = [
+const partsRoutes: AuthenticatedRouteGroup[] = [
   {
     name: "Manage",
     routes: [
       {
-        name: "Purchase Orders",
-        to: path.to.purchaseOrders,
+        name: "Parts",
+        to: path.to.partsSearch,
       },
       {
-        name: "Request for Quotes",
-        to: path.to.requestForQuotes,
-        permission: "employee",
+        name: "Services",
+        to: path.to.services,
       },
-      {
-        name: "Suppliers",
-        to: path.to.suppliers,
-      },
+      // {
+      //   name: "Routing",
+      //   to: path.to.routings,
+      //   role: "employee",
+      // },
     ],
   },
   {
     name: "Configure",
     routes: [
       {
-        name: "Supplier Types",
-        to: path.to.supplierTypes,
+        name: "Part Groups",
+        to: path.to.partGroups,
+        role: "employee",
+      },
+      {
+        name: "Units of Measure",
+        to: path.to.uoms,
         role: "employee",
       },
     ],
   },
 ];
 
-export default function usePurchasingSidebar() {
+export default function usePartsSubmodules() {
   const permissions = usePermissions();
   return {
-    groups: purchasingRoutes
+    groups: partsRoutes
       .filter((group) => {
         const filteredRoutes = group.routes.filter((route) => {
           if (route.role) {

@@ -8,7 +8,7 @@ const Kbd = forwardRef<ElementRef<"kbd">, ComponentPropsWithoutRef<"kbd">>(
       <kbd
         ref={ref}
         className={cn(
-          "bg-muted rounded-md border border-input border-b-[3px] text-[0.8em] font-mono font-bold px-[0.8em] whitespace-nowrap",
+          "bg-muted text-foreground rounded-md border border-input border-b-[3px] text-[0.8em] font-mono font-bold px-[0.8em] whitespace-nowrap",
           className
         )}
         {...props}

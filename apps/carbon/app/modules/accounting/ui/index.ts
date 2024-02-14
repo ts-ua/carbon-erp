@@ -1,4 +1,4 @@
-import useAccountingSidebar from "./useAccountingSidebar";
+import useAccountingSubmodules from "./useAccountingSubmodules";
 
 export * from "./AccountCategories";
 export * from "./AccountDefaults";
@@ -7,4 +7,4 @@ export * from "./Currencies";
 export * from "./FiscalYear";
 export * from "./PaymentTerms";
 export * from "./PostingGroups";
-export { useAccountingSidebar };
+export { useAccountingSubmodules };

@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   CardAction,
   CardContent,
@@ -7,9 +6,10 @@ import {
   CardTitle,
   HStack,
 } from "@carbon/react";
-import { Link, Outlet, useNavigate } from "@remix-run/react";
+import { Outlet, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useMemo } from "react";
+import { New } from "~/components";
 import { EditableText } from "~/components/Editable";
 import Grid from "~/components/Grid";
 import type { ServiceSupplier } from "~/modules/parts";
@@ -73,13 +73,7 @@ const ServiceSuppliers = ({ serviceSuppliers }: ServiceSuppliersProps) => {
           <CardHeader>
             <CardTitle>Suppliers</CardTitle>
           </CardHeader>
-          <CardAction>
-            {canEdit && (
-              <Button asChild>
-                <Link to="new">New</Link>
-              </Button>
-            )}
-          </CardAction>
+          <CardAction>{canEdit && <New to="new" />}</CardAction>
         </HStack>
         <CardContent>
           <Grid<ServiceSupplier>

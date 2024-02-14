@@ -1,6 +1,6 @@
 import PurchaseOrderDeliveryForm from "./PurchaseOrderDeliveryForm";
-import PurchaseOrderDocumentForm from "./PurchaseOrderDocumentForm";
 import PurchaseOrderDocuments from "./PurchaseOrderDocuments";
+import PurchaseOrderDocumentForm from "./PurchaseOrderDocuments/PurchaseOrderDocumentForm";
 import PurchaseOrderForm from "./PurchaseOrderForm";
 import PurchaseOrderHeader from "./PurchaseOrderHeader";
 import PurchaseOrderLineForm from "./PurchaseOrderLineForm";

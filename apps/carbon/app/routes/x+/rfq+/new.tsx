@@ -52,7 +52,7 @@ export async function action({ request }: ActionFunctionArgs) {
       path.to.requestForQuotes,
       await flash(
         request,
-        error(createRequestForQuote.error, "Failed to insert purchase order")
+        error(createRequestForQuote.error, "Failed to insert request for quote")
       )
     );
   }

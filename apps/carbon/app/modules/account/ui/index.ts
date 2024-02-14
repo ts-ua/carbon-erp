@@ -1,7 +1,7 @@
-import useAccountSidebar from "./useAccountSidebar";
+import useAccountSubmodules from "./useAccountSubmodules";
 
-export { useAccountSidebar };
 export * from "./Password";
 export * from "./Personal";
 export * from "./Profile";
 export * from "./UserAttributes";
+export { useAccountSubmodules };

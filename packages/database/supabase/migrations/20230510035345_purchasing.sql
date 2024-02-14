@@ -161,6 +161,7 @@ CREATE TYPE "purchaseOrderStatus" AS ENUM (
 CREATE TABLE "purchaseOrder" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "purchaseOrderId" TEXT NOT NULL,
+  "revisionId" INTEGER NOT NULL DEFAULT 0,
   "type" "purchaseOrderType" NOT NULL,
   "status" "purchaseOrderStatus" NOT NULL DEFAULT 'Draft',
   "orderDate" DATE NOT NULL DEFAULT CURRENT_DATE,

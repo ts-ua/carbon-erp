@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   CardAction,
   CardAttribute,
@@ -14,7 +13,6 @@ import {
 } from "@carbon/react";
 
 import { useParams } from "@remix-run/react";
-import { FaHistory } from "react-icons/fa";
 import { useRouteData } from "~/hooks";
 import type {
   CustomerDetail,
@@ -44,9 +42,9 @@ const CustomerHeader = () => {
             <CardTitle>{routeData?.customer?.name}</CardTitle>
           </CardHeader>
           <CardAction>
-            <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
+            {/* <Button onClick={() => alert("TODO")} leftIcon={<FaHistory />}>
               Customer Details
-            </Button>
+            </Button> */}
           </CardAction>
         </HStack>
         <CardContent>

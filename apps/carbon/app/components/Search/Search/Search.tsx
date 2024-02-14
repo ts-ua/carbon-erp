@@ -1,3 +1,4 @@
+import type { Database } from "@carbon/database";
 import {
   Button,
   Command,
@@ -26,34 +27,25 @@ import { CgProfile } from "react-icons/cg";
 import { HiOutlineDocumentDuplicate } from "react-icons/hi";
 import { PiShareNetworkFill } from "react-icons/pi";
 import { RxMagnifyingGlass } from "react-icons/rx";
-import { useSidebar } from "~/components/Layout/Sidebar/useSidebar";
+import { useModules } from "~/components/Layout/Navigation/useModules";
 import { useSupabase } from "~/lib/supabase";
-import { useAccountSidebar } from "~/modules/account";
-import { useAccountingSidebar } from "~/modules/accounting";
-import { useDocumentsSidebar } from "~/modules/documents";
-import { useInventorySidebar } from "~/modules/inventory";
-import { useInvoicingSidebar } from "~/modules/invoicing";
-import { usePartsSidebar } from "~/modules/parts";
-import { usePurchasingSidebar } from "~/modules/purchasing";
-import { useSalesSidebar } from "~/modules/sales";
-import { useSettingsSidebar } from "~/modules/settings";
-import { useUsersSidebar } from "~/modules/users";
+import { useAccountSubmodules } from "~/modules/account";
+import { useAccountingSubmodules } from "~/modules/accounting";
+import { useDocumentsSubmodules } from "~/modules/documents";
+import { useInventorySubmodules } from "~/modules/inventory";
+import { useInvoicingSubmodules } from "~/modules/invoicing";
+import { usePartsSubmodules } from "~/modules/parts";
+import { usePurchasingSubmodules } from "~/modules/purchasing";
+import { useResourcesSubmodules } from "~/modules/resources";
+import { useSalesSubmodules } from "~/modules/sales";
+import { useSettingsSubmodules } from "~/modules/settings";
+import { useUsersSubmodules } from "~/modules/users";
 import type { Authenticated, Route } from "~/types";
 
 type SearchResult = {
   id: number;
   name: string;
-  entity:
-    | "Person"
-    | "Resource"
-    | "Customer"
-    | "Supplier"
-    | "Job"
-    | "Part"
-    | "Purchase Order"
-    | "Sales Order"
-    | "Document"
-    | null;
+  entity: Database["public"]["Enums"]["searchEntity"] | null;
   uuid: string | null;
   link: string;
   description: string | null;
@@ -105,7 +97,7 @@ const SearchModal = ({
       const result = await supabase
         ?.from("search")
         .select()
-        .textSearch("fts", `${search}:*`)
+        .textSearch("fts", `*${search}:*`)
         .limit(20);
 
       if (result?.data) {
@@ -167,9 +159,9 @@ const SearchModal = ({
             {recentResults.length > 0 && (
               <>
                 <CommandGroup heading="Recent Searches">
-                  {recentResults.map((result) => (
+                  {recentResults.map((result, index) => (
                     <CommandItem
-                      key={result.to}
+                      key={`${result.to}-${index}`}
                       onSelect={() => onSelect(result)}
                       // append with : so we're not sharing a value with a static result
                       value={`:${result.to}`}
@@ -203,9 +195,9 @@ const SearchModal = ({
             ))}
             {searchResults.length > 0 && (
               <CommandGroup heading="Search Results">
-                {searchResults.map((result) => (
+                {searchResults.map((result, index) => (
                   <CommandItem
-                    key={result.id}
+                    key={`${result.id}-${index}`}
                     value={`${input}${result.id}`}
                     onSelect={() =>
                       onSelect({
@@ -243,6 +235,9 @@ function ResultIcon({ entity }: { entity: SearchResult["entity"] | "Module" }) {
       return <CgProfile className="w-4 h-4 mr-2 " />;
     case "Purchase Order":
       return <BsCartDash className="w-4 h-4 mr-2 " />;
+    case "Opportunity":
+    case "Lead":
+    case "Quotation":
     case "Sales Order":
       return <BsCartPlus className="w-4 h-4 mr-2 " />;
     case "Supplier":
@@ -277,21 +272,22 @@ const SearchButton = () => {
 };
 
 function useGroupedSubmodules() {
-  const modules = useSidebar();
-  const parts = usePartsSidebar();
+  const modules = useModules();
+  const parts = usePartsSubmodules();
   // const jobs = useJobsSidebar();
-  const inventory = useInventorySidebar();
+  const inventory = useInventorySubmodules();
   // const scheduling = useSchedulingSidebar();
   // const timecards = useTimecardsSidebar();
-  const sales = useSalesSidebar();
-  const purchasing = usePurchasingSidebar();
-  const documents = useDocumentsSidebar();
+  const sales = useSalesSubmodules();
+  const purchasing = usePurchasingSubmodules();
+  const documents = useDocumentsSubmodules();
   // const messages = useMessagesSidebar();
-  const accounting = useAccountingSidebar();
-  const invoicing = useInvoicingSidebar();
-  const users = useUsersSidebar();
-  const settings = useSettingsSidebar();
-  const account = useAccountSidebar();
+  const accounting = useAccountingSubmodules();
+  const invoicing = useInvoicingSubmodules();
+  const users = useUsersSubmodules();
+  const settings = useSettingsSubmodules();
+  const resources = useResourcesSubmodules();
+  const account = useAccountSubmodules();
 
   const groupedSubmodules: Record<
     string,
@@ -309,13 +305,14 @@ function useGroupedSubmodules() {
     purchasing,
     accounting,
     invoicing,
-    users,
+    resources,
     settings,
+    users,
   };
 
   const ungroupedSubmodules: Record<string, { links: Route[] }> = {
     documents,
-    account,
+    "my account": account,
   };
 
   const shortcuts = modules.reduce<Record<string, Route[]>>((acc, module) => {
@@ -333,7 +330,10 @@ function useGroupedSubmodules() {
           }))
         ),
       };
-    } else if (moduleName in ungroupedSubmodules || moduleName === "account") {
+    } else if (
+      moduleName in ungroupedSubmodules ||
+      moduleName === "my account"
+    ) {
       acc = {
         ...acc,
         [module.name]: ungroupedSubmodules[moduleName].links.map((link) => ({

@@ -21,7 +21,7 @@ type RowProps<T> = ComponentProps<typeof Tr> & {
   rowIsSelected: boolean;
   withColumnOrdering: boolean;
   onCellClick: (row: number, column: number) => void;
-  onCellUpdate: (row: number) => (columnId: string, value: unknown) => void;
+  onCellUpdate: (row: number) => (updates: Record<string, unknown>) => void;
 };
 
 const Row = <T extends object>({
@@ -40,11 +40,13 @@ const Row = <T extends object>({
   onCellUpdate,
   ...props
 }: RowProps<T>) => {
+  const onUpdate = isEditMode ? onCellUpdate(row.index) : undefined;
+
   return (
     <Tr
       key={row.id}
       className={cn(
-        "hover:bg-background border-b border-border transition-colors",
+        "border-b border-border transition-colors",
         isFrozenColumn && "bg-background"
       )}
       {...props}
@@ -84,7 +86,7 @@ const Row = <T extends object>({
                     )
                 : undefined
             }
-            onUpdate={isEditMode ? onCellUpdate(cell.row.index) : undefined}
+            onUpdate={onUpdate}
           />
         );
       })}

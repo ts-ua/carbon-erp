@@ -1,6 +1,5 @@
-import { Button, HStack } from "@carbon/react";
-import { Link } from "@remix-run/react";
-import { IoMdAdd } from "react-icons/io";
+import { HStack } from "@carbon/react";
+import { New } from "~/components";
 import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -16,9 +15,7 @@ const SupplierTypesTableFilters = () => {
       </HStack>
       <HStack>
         {permissions.can("create", "purchasing") && (
-          <Button asChild leftIcon={<IoMdAdd />}>
-            <Link to={`new?${params.toString()}`}>New Supplier Type</Link>
-          </Button>
+          <New label="Supplier Type" to={`new?${params.toString()}`} />
         )}
       </HStack>
     </TableFilters>

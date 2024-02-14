@@ -58,3 +58,62 @@ export const customerTypeValidator = withZod(
     color: z.string(),
   })
 );
+
+export const quoteStatusType = [
+  "Draft",
+  "Open",
+  "Replied",
+  "Ordered",
+  "Partially Ordered",
+  "Lost",
+  "Cancelled",
+  "Expired",
+] as const;
+
+export const quotationValidator = withZod(
+  z.object({
+    id: zfd.text(z.string().optional()),
+    quoteId: zfd.text(z.string().optional()),
+    name: z.string().min(1, { message: "Name is required" }),
+    customerId: z.string().min(36, { message: "Customer is required" }),
+    customerLocationId: zfd.text(z.string().optional()),
+    customerContactId: zfd.text(z.string().optional()),
+    customerReference: zfd.text(z.string().optional()),
+    locationId: zfd.text(z.string().optional()),
+    ownerId: z.string().min(36, { message: "Owner is required" }),
+    notes: zfd.text(z.string().optional()),
+    expirationDate: zfd.text(z.string().optional()),
+  })
+);
+
+export const quotationLineValidator = withZod(
+  z.object({
+    id: zfd.text(z.string().optional()),
+    quoteId: z.string(),
+    partId: z.string().min(1, { message: "Part is required" }),
+    customerPartId: zfd.text(z.string().optional()),
+    description: z.string().min(1, { message: "Description is required" }),
+    // unitOfMeasureCode: z
+    //   .string()
+    //   .min(1, { message: "Unit of measure is required" }),
+    unitCost: zfd.numeric(z.number().optional()),
+    unitPrice: zfd.numeric(z.number()),
+    quantity: zfd.numeric(z.number()),
+    leadTime: zfd.numeric(z.number().optional()),
+  })
+);
+
+export const quotationReleaseValidator = withZod(
+  z
+    .object({
+      notification: z.enum(["Email", "None"]).optional(),
+      customerContact: zfd.text(z.string().optional()),
+    })
+    .refine(
+      (data) => (data.notification === "Email" ? data.customerContact : true),
+      {
+        message: "Supplier contact is required for email",
+        path: ["customerContact"], // path of error
+      }
+    )
+);

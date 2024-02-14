@@ -82,6 +82,7 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
             >
               <VStack>
                 <Supplier
+                  autoFocus
                   name="supplierId"
                   label="Supplier"
                   onChange={(newValue) =>
@@ -114,7 +115,7 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
                   name="type"
                   label="Type"
                   options={typeOptions}
-                  isReadOnly={isSupplier}
+                  isReadOnly={true} // {isSupplier}
                 />
               </VStack>
               <VStack>

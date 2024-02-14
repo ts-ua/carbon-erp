@@ -64,7 +64,7 @@ export default function PurchaseOrderBasicRoute() {
   const orderData = useRouteData<{ purchaseOrder: PurchaseOrder }>(
     path.to.purchaseOrder(orderId)
   );
-  if (!orderData) throw new Error("Could not find part data");
+  if (!orderData) throw new Error("Could not find order data");
 
   const initialValues = {
     id: orderData?.purchaseOrder?.id ?? "",

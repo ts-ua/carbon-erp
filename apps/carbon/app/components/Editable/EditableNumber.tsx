@@ -22,7 +22,7 @@ const EditableNumber =
     const updateNumber = async (newValue: string) => {
       const numberValue = Number(newValue);
       // this is the optimistic update on the FE
-      onUpdate(accessorKey, numberValue);
+      onUpdate({ [accessorKey]: numberValue });
 
       // the is the actual update on the BE
       // @ts-ignore
@@ -30,12 +30,12 @@ const EditableNumber =
         .then(({ error }) => {
           if (error) {
             onError();
-            onUpdate(accessorKey, numberValue);
+            onUpdate({ [accessorKey]: value });
           }
         })
         .catch(() => {
           onError();
-          onUpdate(accessorKey, numberValue);
+          onUpdate({ [accessorKey]: value });
         });
     };
 

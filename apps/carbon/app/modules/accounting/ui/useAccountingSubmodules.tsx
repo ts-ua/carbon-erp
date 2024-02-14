@@ -80,7 +80,7 @@ const accountingRoutes: AuthenticatedRouteGroup[] = [
   },
 ];
 
-export default function useAccountingSidebar() {
+export default function useAccountingSubmodules() {
   const permissions = usePermissions();
   return {
     groups: accountingRoutes

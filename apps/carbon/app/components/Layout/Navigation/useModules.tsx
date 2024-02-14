@@ -16,10 +16,10 @@ import { usePermissions } from "~/hooks";
 import type { Authenticated, NavItem } from "~/types";
 import { path } from "~/utils/path";
 
-export function useSidebar() {
+export function useModules() {
   const permissions = usePermissions();
 
-  const sidebarItems: Authenticated<NavItem>[] = [
+  const modules: Authenticated<NavItem>[] = [
     {
       permission: "parts",
       name: "Parts",
@@ -111,7 +111,7 @@ export function useSidebar() {
     },
   ];
 
-  return sidebarItems.filter((item) => {
+  return modules.filter((item) => {
     if (item.permission) {
       return permissions.can("view", item.permission);
     } else {

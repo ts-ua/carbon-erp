@@ -1,32 +1,52 @@
-import { BsCartDash, BsCartPlus } from "react-icons/bs";
+import { BsPaletteFill } from "react-icons/bs";
+import { CgSync } from "react-icons/cg";
+import { GoNumber } from "react-icons/go";
+import { TbBuildingFactory2 } from "react-icons/tb";
 import { usePermissions } from "~/hooks";
 import type { AuthenticatedRouteGroup } from "~/types";
 import { path } from "~/utils/path";
 
-const invoicingRoutes: AuthenticatedRouteGroup[] = [
+const settingsRoutes: AuthenticatedRouteGroup[] = [
   {
-    name: "Manage",
+    name: "Company",
     routes: [
       {
-        name: "Purchasing",
-        to: path.to.purchaseInvoices,
+        name: "Business",
+        to: path.to.company,
         role: "employee",
-        icon: <BsCartDash />,
+        icon: <TbBuildingFactory2 />,
+      },
+    ],
+  },
+  {
+    name: "System",
+    routes: [
+      {
+        name: "Integrations",
+        to: path.to.integrations,
+        role: "employee",
+        icon: <CgSync />,
       },
       {
-        name: "Sales",
-        to: path.to.salesInvoices,
+        name: "Sequences",
+        to: path.to.sequences,
         role: "employee",
-        icon: <BsCartPlus />,
+        icon: <GoNumber />,
+      },
+      {
+        name: "Theme",
+        to: path.to.theme,
+        role: "employee",
+        icon: <BsPaletteFill />,
       },
     ],
   },
 ];
 
-export default function useInvoicingSidebar() {
+export default function usePurchasingSubmodules() {
   const permissions = usePermissions();
   return {
-    groups: invoicingRoutes
+    groups: settingsRoutes
       .filter((group) => {
         const filteredRoutes = group.routes.filter((route) => {
           if (route.role) {

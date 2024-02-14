@@ -16,7 +16,7 @@ type CellProps<T> = {
   isRowSelected: boolean;
   isSelected: boolean;
   onClick?: () => void;
-  onUpdate?: (columnId: string, value: unknown) => void;
+  onUpdate?: (updates: Record<string, unknown>) => void;
 };
 
 const Cell = <T extends object>({
@@ -51,9 +51,7 @@ const Cell = <T extends object>({
       className={cn(
         "relative px-4 whitespace-nowrap text-sm outline-none",
         wasEdited && "bg-yellow-100 dark:bg-yellow-900",
-        isEditing &&
-          !hasEditableTableCellComponent &&
-          "bg-zinc-50 dark:bg-zinc-950",
+        isEditing && !hasEditableTableCellComponent && "bg-muted/50",
         isEditMode && "border-border border-r",
         hasError && "ring-inset ring-2 ring-red-500",
         isSelected && "ring-inset ring-2 ring-ring"

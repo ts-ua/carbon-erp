@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   CardAction,
   CardContent,
@@ -8,11 +7,11 @@ import {
   HStack,
   useDisclosure,
 } from "@carbon/react";
-import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
+import { Outlet, useNavigate, useParams } from "@remix-run/react";
 import { useCallback, useState } from "react";
 import { BsFillPenFill } from "react-icons/bs";
 import { IoMdAdd, IoMdTrash } from "react-icons/io";
-import { Address } from "~/components";
+import { Address, New } from "~/components";
 import { ConfirmDelete } from "~/components/Modals";
 import { usePermissions } from "~/hooks";
 import type { SupplierLocation } from "~/modules/purchasing/types";
@@ -80,13 +79,7 @@ const SupplierLocations = ({ locations }: SupplierLocationsProps) => {
           <CardHeader>
             <CardTitle>Locations</CardTitle>
           </CardHeader>
-          <CardAction>
-            {canEdit && (
-              <Button asChild>
-                <Link to="new">New</Link>
-              </Button>
-            )}
-          </CardAction>
+          <CardAction>{canEdit && <New to="new" />}</CardAction>
         </HStack>
         <CardContent>
           {isEmpty ? (

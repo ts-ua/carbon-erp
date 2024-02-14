@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { AiOutlinePartition } from "react-icons/ai";
-import { BsCartDash, BsShieldLock } from "react-icons/bs";
+import { BsCartDash, BsCartPlus, BsShieldLock } from "react-icons/bs";
 import { IoMdPeople } from "react-icons/io";
 import { PiShareNetworkFill } from "react-icons/pi";
 import { usePermissions } from "~/hooks";
@@ -8,7 +8,7 @@ import { usePermissions } from "~/hooks";
 import type { Route } from "~/types";
 import { path } from "~/utils/path";
 
-export default function useNewMenu(): Route[] {
+export default function useCreate(): Route[] {
   const permissions = usePermissions();
 
   const result = useMemo(() => {
@@ -43,6 +43,11 @@ export default function useNewMenu(): Route[] {
         to: path.to.newCustomer,
         icon: <IoMdPeople />,
       });
+      links.push({
+        name: "Quotation",
+        to: path.to.newQuote,
+        icon: <BsCartPlus />,
+      });
     }
 
     if (permissions.can("create", "users")) {
@@ -56,5 +61,5 @@ export default function useNewMenu(): Route[] {
     return links;
   }, [permissions]);
 
-  return result;
+  return result.sort((a, b) => a.name.localeCompare(b.name));
 }
