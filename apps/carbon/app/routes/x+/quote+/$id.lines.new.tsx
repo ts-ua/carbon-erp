@@ -37,8 +37,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
     createdBy: userId,
   });
 
-  console.log({ createQuotationLine });
-
   if (createQuotationLine.error) {
     return redirect(
       path.to.quoteLines(quoteId),
