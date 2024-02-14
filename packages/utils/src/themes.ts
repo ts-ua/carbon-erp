@@ -31,7 +31,7 @@ export const themes = [
         ring: "240 5.9% 10%",
       },
       dark: {
-        background: "240 10% 3.9%",
+        background: "220 10% 6.9%",
         foreground: "0 0% 98%",
         card: "240 10% 8.9%",
         "card-foreground": "0 0% 98%",
@@ -83,7 +83,7 @@ export const themes = [
         ring: "0 0% 3.9%",
       },
       dark: {
-        background: "0 0% 3.9%",
+        background: "0 0% 6.9%",
         foreground: "0 0% 98%",
         card: "0 0% 8.9%",
         "card-foreground": "0 0% 98%",
@@ -135,7 +135,7 @@ export const themes = [
         ring: "0 72.2% 50.6%",
       },
       dark: {
-        background: "0 0% 3.9%",
+        background: "0 0% 6.9%",
         foreground: "0 0% 98%",
         card: "0 0% 8.9%",
         "card-foreground": "0 0% 98%",
@@ -187,7 +187,7 @@ export const themes = [
         ring: "346.8 77.2% 49.8%",
       },
       dark: {
-        background: "20 14.3% 4.1%",
+        background: "20 14.3% 6.1%",
         foreground: "0 0% 95%",
         popover: "0 0% 9%",
         "popover-foreground": "0 0% 95%",
@@ -239,7 +239,7 @@ export const themes = [
         ring: "24.6 95% 53.1%",
       },
       dark: {
-        background: "20 14.3% 4.1%",
+        background: "20 14.3% 6.1%",
         foreground: "60 9.1% 97.8%",
         card: "20 14.3% 8.9%",
         "card-foreground": "60 9.1% 97.8%",
@@ -291,7 +291,7 @@ export const themes = [
         ring: "142.1 76.2% 36.3%",
       },
       dark: {
-        background: "20 14.3% 4.1%",
+        background: "20 14.3% 6.1%",
         foreground: "0 0% 95%",
         popover: "0 0% 9%",
         "popover-foreground": "0 0% 95%",
@@ -343,7 +343,7 @@ export const themes = [
         ring: "221.2 83.2% 53.3%",
       },
       dark: {
-        background: "222.2 84% 7.5%",
+        background: "222.2 84% 6.5%",
         foreground: "210 40% 98%",
         card: "222.2 84% 8.9%",
         "card-foreground": "210 40% 98%",
@@ -395,7 +395,7 @@ export const themes = [
         ring: "20 14.3% 4.1%",
       },
       dark: {
-        background: "20 14.3% 4.1%",
+        background: "20 14.3% 6.1%",
         foreground: "60 9.1% 97.8%",
         card: "20 14.3% 4.1%",
         "card-foreground": "60 9.1% 97.8%",
@@ -447,11 +447,11 @@ export const themes = [
         ring: "262.1 83.3% 57.8%",
       },
       dark: {
-        background: "224 71.4% 4.1%",
+        background: "224 41.4 6.1%",
         foreground: "210 20% 98%",
-        card: "224 71.4% 8.9%",
+        card: "224 41.4 8.9%",
         "card-foreground": "210 20% 98%",
-        popover: "224 71.4% 8.9%",
+        popover: "224 41.4 8.9%",
         "popover-foreground": "210 20% 98%",
         primary: "263.4 70% 50.4%",
         "primary-foreground": "210 20% 98%",

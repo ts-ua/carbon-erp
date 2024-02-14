@@ -1,4 +1,13 @@
-import { Button, useKeyboardShortcuts } from "@carbon/react";
+import {
+  Button,
+  HStack,
+  Kbd,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+  useKeyboardShortcuts,
+} from "@carbon/react";
 import { Link } from "@remix-run/react";
 import { useRef } from "react";
 import { IoMdAdd } from "react-icons/io";
@@ -18,9 +27,21 @@ const New = ({ label, to }: NewProps) => {
   });
 
   return (
-    <Button asChild leftIcon={<IoMdAdd />} ref={buttonRef}>
-      <Link to={to}>New {label}</Link>
-    </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger>
+          <Button asChild leftIcon={<IoMdAdd />} ref={buttonRef}>
+            <Link to={to}>New {label}</Link>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <HStack>
+            <span>Press </span>
+            <Kbd>n</Kbd>
+          </HStack>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 

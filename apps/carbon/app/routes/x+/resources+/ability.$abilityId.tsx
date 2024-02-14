@@ -1,5 +1,4 @@
 import {
-  Button,
   HStack,
   Heading,
   IconButton,
@@ -13,13 +12,14 @@ import {
 } from "@carbon/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Link, Outlet, useLoaderData, useNavigate } from "@remix-run/react";
+import { Outlet, useLoaderData, useNavigate } from "@remix-run/react";
 import { ParentSize } from "@visx/responsive";
 import { useState } from "react";
-import { IoMdAdd, IoMdClose } from "react-icons/io";
+import { IoMdClose } from "react-icons/io";
 import { LuChevronDown, LuChevronUp } from "react-icons/lu";
 import { MdEdit, MdOutlineArrowBackIos } from "react-icons/md";
 import { ValidatedForm, validationError } from "remix-validated-form";
+import { New } from "~/components";
 import { Hidden, Input, Submit } from "~/components/Form";
 import type { AbilityDatum } from "~/modules/resources";
 import {
@@ -285,9 +285,7 @@ export default function AbilitiesRoute() {
           </ParentSize>
         </div>
         <div className="absolute bottom--4 right-4 z-[3]">
-          <Button asChild leftIcon={<IoMdAdd />}>
-            <Link to="employee/new">New Employee</Link>
-          </Button>
+          <New label="Employee" to="employee/new" />
         </div>
       </div>
       <AbilityEmployeesTable

@@ -71,7 +71,7 @@ const Notes = ({ documentId, notes }: NotesProps) => {
           <Hidden name="documentId" value={documentId} />
           <VStack spacing={3}>
             <div className="w-full border border-border rounded-md">
-              <RichText name="note" minH={160} />
+              <RichText name="note" className="min-h-[160px]" />
             </div>
             <div className="flex justify-end w-full">
               <Submit>Add Note</Submit>
