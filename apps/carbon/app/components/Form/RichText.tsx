@@ -8,7 +8,7 @@ import type { ComponentProps } from "react";
 import { useEffect } from "react";
 import { useControlField, useField } from "remix-validated-form";
 
-type RichTextProps = ComponentProps<typeof Editor> & {
+type RichTextProps = Omit<ComponentProps<typeof Editor>, "editor"> & {
   name: string;
   output?: "html" | "json" | "text";
 };

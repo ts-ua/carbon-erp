@@ -36,6 +36,7 @@ import { useInventorySubmodules } from "~/modules/inventory";
 import { useInvoicingSubmodules } from "~/modules/invoicing";
 import { usePartsSubmodules } from "~/modules/parts";
 import { usePurchasingSubmodules } from "~/modules/purchasing";
+import { useResourcesSubmodules } from "~/modules/resources";
 import { useSalesSubmodules } from "~/modules/sales";
 import { useSettingsSubmodules } from "~/modules/settings";
 import { useUsersSubmodules } from "~/modules/users";
@@ -285,6 +286,7 @@ function useGroupedSubmodules() {
   const invoicing = useInvoicingSubmodules();
   const users = useUsersSubmodules();
   const settings = useSettingsSubmodules();
+  const resources = useResourcesSubmodules();
   const account = useAccountSubmodules();
 
   const groupedSubmodules: Record<
@@ -303,8 +305,9 @@ function useGroupedSubmodules() {
     purchasing,
     accounting,
     invoicing,
-    users,
+    resources,
     settings,
+    users,
   };
 
   const ungroupedSubmodules: Record<string, { links: Route[] }> = {

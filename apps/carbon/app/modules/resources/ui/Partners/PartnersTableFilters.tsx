@@ -1,7 +1,5 @@
-import { Button, HStack } from "@carbon/react";
-import { Link } from "@remix-run/react";
-import { IoMdAdd } from "react-icons/io";
-import { Combobox } from "~/components";
+import { HStack } from "@carbon/react";
+import { Combobox, New } from "~/components";
 import { TableFilters } from "~/components/Layout";
 import { DebouncedInput } from "~/components/Search";
 import { usePermissions, useUrlParams } from "~/hooks";
@@ -39,9 +37,7 @@ const PartnersTableFilters = ({ abilities }: PartnersTableFiltersProps) => {
       </HStack>
       <HStack>
         {permissions.can("create", "resources") && (
-          <Button asChild leftIcon={<IoMdAdd />}>
-            <Link to={`new?${params.toString()}`}>New Partner</Link>
-          </Button>
+          <New label="Partner" to={`new?${params.toString()}`} />
         )}
       </HStack>
     </TableFilters>
