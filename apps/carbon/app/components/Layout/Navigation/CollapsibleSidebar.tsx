@@ -7,22 +7,27 @@ import {
   useDisclosure,
 } from "@carbon/react";
 import { motion } from "framer-motion";
-import type { PropsWithChildren } from "react";
+import { useMemo, type PropsWithChildren } from "react";
 import { TbArrowBarLeft, TbArrowBarRight } from "react-icons/tb";
 
-const variants = {
-  visible: {
-    width: 180,
-  },
-  hidden: {
-    width: 4,
-  },
-};
-
-export const CollapsibleSidebar = ({ children }: PropsWithChildren<{}>) => {
+export const CollapsibleSidebar = ({
+  children,
+  width = 180,
+}: PropsWithChildren<{ width?: number }>) => {
   const sidebar = useDisclosure({
     defaultIsOpen: true,
   });
+
+  const variants = useMemo(() => {
+    return {
+      visible: {
+        width,
+      },
+      hidden: {
+        width: 4,
+      },
+    };
+  }, [width]);
 
   return (
     <TooltipProvider>

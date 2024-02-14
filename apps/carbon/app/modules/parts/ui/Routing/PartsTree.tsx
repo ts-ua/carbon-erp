@@ -16,11 +16,11 @@ const data: PartsTreeNode[] = [
     children: [
       {
         id: "F505555",
-        type: "folder",
+        type: "file",
       },
       {
         id: "F505556",
-        type: "folder",
+        type: "file",
       },
     ],
   },
