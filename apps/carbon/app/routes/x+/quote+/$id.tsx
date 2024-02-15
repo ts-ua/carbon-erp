@@ -34,6 +34,9 @@ import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 import { error } from "~/utils/result";
 
+import { AiOutlinePartition } from "react-icons/ai";
+import { HiOutlineCube } from "react-icons/hi";
+import { LuClock } from "react-icons/lu";
 import { RxChevronDown } from "react-icons/rx";
 
 export const handle: Handle = {
@@ -105,7 +108,7 @@ export default function QuotationRoute() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] w-full">
       <CollapsibleSidebar width={260}>
-        <VStack className="border-b border-border p-4" spacing={0}>
+        <VStack className="border-b border-border p-4" spacing={1}>
           <Heading size="h3" noOfLines={1}>
             QUO000001
           </Heading>
@@ -126,7 +129,7 @@ export default function QuotationRoute() {
             </Tooltip>
           </HStack>
         </VStack>
-        <VStack className="p-2 w-full">
+        <VStack className="h-[calc(100vh-183px)] p-2 w-full">
           <BillOfMaterialExplorer />
         </VStack>
       </CollapsibleSidebar>
@@ -152,28 +155,205 @@ export default function QuotationRoute() {
   );
 }
 
+type BillOfMaterialNodeType =
+  | "parent"
+  | "part"
+  | "assemblies"
+  | "operations"
+  | "materials"
+  | "assembly"
+  | "operation"
+  | "material";
+
 type BillOfMaterialNode = {
   id: string;
-  type: "folder" | "file";
+  label: string;
+  type: BillOfMaterialNodeType;
   children?: BillOfMaterialNode[];
 };
 
 const data: BillOfMaterialNode[] = [
   {
-    id: "QUO000001",
-    type: "folder",
+    id: "1",
+    label: "QUO000001",
+    type: "parent",
     children: [
       {
-        id: "F505555",
-        type: "folder",
-      },
-      {
-        id: "F505556",
-        type: "folder",
+        id: "2",
+        label: "P00001233",
+        type: "part",
+        children: [
+          {
+            id: "3",
+            label: "Assemblies",
+            type: "assemblies",
+            children: [
+              {
+                id: "4",
+                label: "F5000123",
+                type: "part",
+                children: [
+                  {
+                    id: "5",
+                    label: "Assemblies",
+                    type: "assemblies",
+                    children: [],
+                  },
+                  {
+                    id: "6",
+                    label: "Operations",
+                    type: "operations",
+                    children: [
+                      {
+                        id: "7",
+                        label: "OP0003",
+                        type: "operation",
+                        children: [
+                          {
+                            id: "8",
+                            label: "Materials",
+                            type: "materials",
+                            children: [
+                              {
+                                id: "9",
+                                label: "RAW000001",
+                                type: "material",
+                              },
+                              {
+                                id: "10",
+                                label: "FAS000002",
+                                type: "material",
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            id: "11",
+            label: "Operations",
+            type: "operations",
+            children: [
+              {
+                id: "12",
+                label: "OP0001",
+                type: "operation",
+                children: [
+                  {
+                    id: "13",
+                    label: "Materials",
+                    type: "materials",
+                    children: [
+                      {
+                        id: "14",
+                        label: "RAW000003",
+                        type: "material",
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                id: "13",
+                label: "OP0002",
+                type: "operation",
+                children: [
+                  {
+                    id: "13",
+                    label: "Materials",
+                    type: "materials",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
     ],
   },
 ];
+
+const BillOfMaterialItem = ({
+  type,
+  id,
+  label,
+}: Omit<BillOfMaterialNode, "children">) => {
+  switch (type) {
+    case "assemblies":
+      return (
+        <Button
+          variant="ghost"
+          className="w-full justify-between text-muted-foreground"
+        >
+          <span>{label}</span>
+          <IoMdAdd />
+        </Button>
+      );
+    case "materials":
+      return (
+        <Button
+          variant="ghost"
+          className="w-full justify-between text-muted-foreground"
+        >
+          <span>{label}</span>
+          <IoMdAdd />
+        </Button>
+      );
+    case "operations":
+      return (
+        <Button
+          variant="ghost"
+          className="w-full justify-between text-muted-foreground"
+        >
+          <span>{label}</span>
+          <IoMdAdd />
+        </Button>
+      );
+    case "part":
+    case "assembly":
+      return (
+        <Button
+          leftIcon={<AiOutlinePartition />}
+          variant="ghost"
+          className="flex-1 justify-start"
+        >
+          {label}
+        </Button>
+      );
+    case "operation":
+      return (
+        <Button
+          leftIcon={<LuClock />}
+          variant="ghost"
+          className="flex-1 justify-start"
+        >
+          {label}
+        </Button>
+      );
+    case "material":
+      return (
+        <Button
+          leftIcon={<HiOutlineCube />}
+          variant="ghost"
+          className="flex-1 justify-start"
+        >
+          {label}
+        </Button>
+      );
+    case "parent":
+    default:
+      return (
+        <Button variant="ghost" className="flex-1 justify-start">
+          {label}
+        </Button>
+      );
+  }
+};
 
 const BillOfMaterialExplorer = () => {
   const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>(
@@ -230,10 +410,11 @@ const BillOfMaterialExplorer = () => {
               }}
               variant="ghost"
             />
-
-            <Button variant="ghost" className="flex-1 justify-start">
-              {node.id}
-            </Button>
+            <BillOfMaterialItem
+              type={node.type}
+              id={node.id}
+              label={node.label}
+            />
           </HStack>
           {node.children &&
             expandedNodes[node.id] &&

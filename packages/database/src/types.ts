@@ -6876,6 +6876,115 @@ export interface Database {
           }
         ];
       };
+      quoteAssembly: {
+        Row: {
+          createdAt: string;
+          createdBy: string;
+          description: string | null;
+          id: string;
+          parentModuleId: string | null;
+          partId: string;
+          quantityPerParent: number;
+          quoteAssemblyId: string;
+          quoteId: string;
+          quoteLineId: string;
+          unitOfMeasureCode: string | null;
+          updatedAt: string | null;
+          updatedBy: string | null;
+        };
+        Insert: {
+          createdAt?: string;
+          createdBy: string;
+          description?: string | null;
+          id?: string;
+          parentModuleId?: string | null;
+          partId: string;
+          quantityPerParent?: number;
+          quoteAssemblyId?: string;
+          quoteId: string;
+          quoteLineId: string;
+          unitOfMeasureCode?: string | null;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Update: {
+          createdAt?: string;
+          createdBy?: string;
+          description?: string | null;
+          id?: string;
+          parentModuleId?: string | null;
+          partId?: string;
+          quantityPerParent?: number;
+          quoteAssemblyId?: string;
+          quoteId?: string;
+          quoteLineId?: string;
+          unitOfMeasureCode?: string | null;
+          updatedAt?: string | null;
+          updatedBy?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "quoteAssembly_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteAssembly_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteAssembly_createdBy_fkey";
+            columns: ["createdBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          },
+          {
+            foreignKeyName: "quoteAssembly_parentModuleId_fkey";
+            columns: ["parentModuleId"];
+            referencedRelation: "quoteAssembly";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteAssembly_quoteId_fkey";
+            columns: ["quoteId"];
+            referencedRelation: "quote";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteAssembly_quoteId_fkey";
+            columns: ["quoteId"];
+            referencedRelation: "quotes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteAssembly_quoteLineId_fkey";
+            columns: ["quoteLineId"];
+            referencedRelation: "quoteLine";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteAssembly_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "user";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteAssembly_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "employeeSummary";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quoteAssembly_updatedBy_fkey";
+            columns: ["updatedBy"];
+            referencedRelation: "userDefaults";
+            referencedColumns: ["userId"];
+          }
+        ];
+      };
       quoteFavorite: {
         Row: {
           quoteId: string;
@@ -7279,115 +7388,6 @@ export interface Database {
           }
         ];
       };
-      quoteModule: {
-        Row: {
-          createdAt: string;
-          createdBy: string;
-          description: string | null;
-          id: string;
-          parentModuleId: string | null;
-          partId: string;
-          quantityPerParent: number;
-          quoteId: string;
-          quoteLineId: string;
-          quoteModuleId: string;
-          unitOfMeasureCode: string | null;
-          updatedAt: string | null;
-          updatedBy: string | null;
-        };
-        Insert: {
-          createdAt?: string;
-          createdBy: string;
-          description?: string | null;
-          id?: string;
-          parentModuleId?: string | null;
-          partId: string;
-          quantityPerParent?: number;
-          quoteId: string;
-          quoteLineId: string;
-          quoteModuleId?: string;
-          unitOfMeasureCode?: string | null;
-          updatedAt?: string | null;
-          updatedBy?: string | null;
-        };
-        Update: {
-          createdAt?: string;
-          createdBy?: string;
-          description?: string | null;
-          id?: string;
-          parentModuleId?: string | null;
-          partId?: string;
-          quantityPerParent?: number;
-          quoteId?: string;
-          quoteLineId?: string;
-          quoteModuleId?: string;
-          unitOfMeasureCode?: string | null;
-          updatedAt?: string | null;
-          updatedBy?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "quoteModule_createdBy_fkey";
-            columns: ["createdBy"];
-            referencedRelation: "user";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "quoteModule_createdBy_fkey";
-            columns: ["createdBy"];
-            referencedRelation: "employeeSummary";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "quoteModule_createdBy_fkey";
-            columns: ["createdBy"];
-            referencedRelation: "userDefaults";
-            referencedColumns: ["userId"];
-          },
-          {
-            foreignKeyName: "quoteModule_parentModuleId_fkey";
-            columns: ["parentModuleId"];
-            referencedRelation: "quoteModule";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "quoteModule_quoteId_fkey";
-            columns: ["quoteId"];
-            referencedRelation: "quote";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "quoteModule_quoteId_fkey";
-            columns: ["quoteId"];
-            referencedRelation: "quotes";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "quoteModule_quoteLineId_fkey";
-            columns: ["quoteLineId"];
-            referencedRelation: "quoteLine";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "quoteModule_updatedBy_fkey";
-            columns: ["updatedBy"];
-            referencedRelation: "user";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "quoteModule_updatedBy_fkey";
-            columns: ["updatedBy"];
-            referencedRelation: "employeeSummary";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "quoteModule_updatedBy_fkey";
-            columns: ["updatedBy"];
-            referencedRelation: "userDefaults";
-            referencedColumns: ["userId"];
-          }
-        ];
-      };
       quoteProcess: {
         Row: {
           createdAt: string;
@@ -7398,9 +7398,9 @@ export interface Database {
           laborRate: number;
           overheadRate: number;
           productionStandard: number;
+          quoteAssemblyId: string;
           quoteId: string;
           quoteLineId: string;
-          quoteModuleId: string;
           quotingRate: number;
           setupHours: number;
           standardFactor: Database["public"]["Enums"]["factor"];
@@ -7417,9 +7417,9 @@ export interface Database {
           laborRate?: number;
           overheadRate?: number;
           productionStandard?: number;
+          quoteAssemblyId: string;
           quoteId: string;
           quoteLineId: string;
-          quoteModuleId: string;
           quotingRate?: number;
           setupHours?: number;
           standardFactor?: Database["public"]["Enums"]["factor"];
@@ -7436,9 +7436,9 @@ export interface Database {
           laborRate?: number;
           overheadRate?: number;
           productionStandard?: number;
+          quoteAssemblyId?: string;
           quoteId?: string;
           quoteLineId?: string;
-          quoteModuleId?: string;
           quotingRate?: number;
           setupHours?: number;
           standardFactor?: Database["public"]["Enums"]["factor"];
@@ -7472,6 +7472,12 @@ export interface Database {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "quoteProcess_quoteAssemblyId_fkey";
+            columns: ["quoteAssemblyId"];
+            referencedRelation: "quoteAssembly";
+            referencedColumns: ["id"];
+          },
+          {
             foreignKeyName: "quoteProcess_quoteId_fkey";
             columns: ["quoteId"];
             referencedRelation: "quote";
@@ -7487,12 +7493,6 @@ export interface Database {
             foreignKeyName: "quoteProcess_quoteLineId_fkey";
             columns: ["quoteLineId"];
             referencedRelation: "quoteLine";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "quoteProcess_quoteModuleId_fkey";
-            columns: ["quoteModuleId"];
-            referencedRelation: "quoteModule";
             referencedColumns: ["id"];
           },
           {
