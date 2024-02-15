@@ -98,11 +98,11 @@ CREATE TABLE "quoteLineQuantities" (
 
 CREATE INDEX "quoteLineQuantities_quoteLineId_idx" ON "quoteLineQuantities" ("quoteLineId");
 
-CREATE TABLE "quoteModule" (
+CREATE TABLE "quoteAssembly" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "quoteId" TEXT NOT NULL,
   "quoteLineId" TEXT NOT NULL,
-  "quoteModuleId" TEXT NOT NULL DEFAULT xid(),
+  "quoteAssemblyId" TEXT NOT NULL DEFAULT xid(),
   "parentModuleId" TEXT,
   "partId" TEXT NOT NULL,
   "description" TEXT,
@@ -113,23 +113,23 @@ CREATE TABLE "quoteModule" (
   "updatedAt" TIMESTAMP WITH TIME ZONE,
   "updatedBy" TEXT,
 
-  CONSTRAINT "quoteModule_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "quoteModule_quoteId_fkey" FOREIGN KEY ("quoteId") REFERENCES "quote" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT "quoteModule_quoteLineId_fkey" FOREIGN KEY ("quoteLineId") REFERENCES "quoteLine" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT "quoteModule_parentModuleId_fkey" FOREIGN KEY ("parentModuleId") REFERENCES "quoteModule" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT "quoteModule_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT "quoteModule_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT "quoteAssembly_pkey" PRIMARY KEY ("id"),
+  CONSTRAINT "quoteAssembly_quoteId_fkey" FOREIGN KEY ("quoteId") REFERENCES "quote" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "quoteAssembly_quoteLineId_fkey" FOREIGN KEY ("quoteLineId") REFERENCES "quoteLine" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "quoteAssembly_parentModuleId_fkey" FOREIGN KEY ("parentModuleId") REFERENCES "quoteAssembly" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "quoteAssembly_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT "quoteAssembly_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-CREATE INDEX "quoteModule_quoteId_idx" ON "quoteModule" ("quoteId");
-CREATE INDEX "quoteModule_quoteLineId_idx" ON "quoteModule" ("quoteLineId");
-CREATE INDEX "quoteModule_parentModuleId_idx" ON "quoteModule" ("parentModuleId");
+CREATE INDEX "quoteAssembly_quoteId_idx" ON "quoteAssembly" ("quoteId");
+CREATE INDEX "quoteAssembly_quoteLineId_idx" ON "quoteAssembly" ("quoteLineId");
+CREATE INDEX "quoteAssembly_parentModuleId_idx" ON "quoteAssembly" ("parentModuleId");
 
 CREATE TABLE "quoteProcess" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "quoteId" TEXT NOT NULL,
   "quoteLineId" TEXT NOT NULL,
-  "quoteModuleId" TEXT NOT NULL,
+  "quoteAssemblyId" TEXT NOT NULL,
   "workCellTypeId" TEXT NOT NULL,
   "equipmentTypeId" TEXT,
   "description" TEXT NOT NULL,
@@ -147,7 +147,7 @@ CREATE TABLE "quoteProcess" (
   CONSTRAINT "quoteProcess_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "quoteProcess_quoteId_fkey" FOREIGN KEY ("quoteId") REFERENCES "quote" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT "quoteProcess_quoteLineId_fkey" FOREIGN KEY ("quoteLineId") REFERENCES "quoteLine" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT "quoteProcess_quoteModuleId_fkey" FOREIGN KEY ("quoteModuleId") REFERENCES "quoteModule" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "quoteProcess_quoteAssemblyId_fkey" FOREIGN KEY ("quoteAssemblyId") REFERENCES "quoteAssembly" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT "quoteProcess_workCellTypeId_fkey" FOREIGN KEY ("workCellTypeId") REFERENCES "workCellType" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "quoteProcess_equipmentTypeId_fkey" FOREIGN KEY ("equipmentTypeId") REFERENCES "equipmentType" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "quoteProcess_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -156,7 +156,7 @@ CREATE TABLE "quoteProcess" (
 
 CREATE INDEX "quoteProcess_quoteId_idx" ON "quoteProcess" ("quoteId");
 CREATE INDEX "quoteProcess_quoteLineId_idx" ON "quoteProcess" ("quoteLineId");
-CREATE INDEX "quoteProcess_quoteModuleId_idx" ON "quoteProcess" ("quoteModuleId");
+CREATE INDEX "quoteProcess_quoteAssemblyId_idx" ON "quoteProcess" ("quoteAssemblyId");
 
 CREATE TABLE "quoteMaterial" (
   "id" TEXT NOT NULL DEFAULT xid(),
