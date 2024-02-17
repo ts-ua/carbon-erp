@@ -47,7 +47,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  return redirect(path.to.quoteLines(quoteId));
+  const quoteLineId = createQuotationLine.data.id;
+
+  return redirect(path.to.quoteLine(quoteId, quoteLineId));
 }
 
 export default function NewQuotationLineRoute() {
@@ -59,9 +61,8 @@ export default function NewQuotationLineRoute() {
     quoteId: id,
     partId: "",
     description: "",
-    quantity: 1,
-    unitCost: 0,
-    unitPrice: 0,
+    replenishmentSystem: "" as "Buy" | "Make",
+    unitOfMeasureCode: "",
   };
 
   return <QuotationLineForm initialValues={initialValues} />;

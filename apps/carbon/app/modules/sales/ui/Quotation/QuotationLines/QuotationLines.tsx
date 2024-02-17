@@ -19,20 +19,10 @@ import { BsFillPenFill } from "react-icons/bs";
 import { IoMdTrash } from "react-icons/io";
 import { MdMoreHoriz } from "react-icons/md";
 import { New } from "~/components";
-import {
-  EditableNumber,
-  EditableQuotationPart,
-  EditableText,
-} from "~/components/Editable";
+import { EditableNumber } from "~/components/Editable";
 import Grid from "~/components/Grid";
-import { useRouteData, useUser } from "~/hooks";
-import { useSupabase } from "~/lib/supabase";
-import {
-  useQuotationTotals,
-  type Quotation,
-  type QuotationLine,
-} from "~/modules/sales";
-import { useParts } from "~/stores";
+import { useRouteData } from "~/hooks";
+import { type Quotation, type QuotationLine } from "~/modules/sales";
 import type { ListItem } from "~/types";
 import { path } from "~/utils/path";
 import useQuotationLines from "./useQuotationLines";
@@ -40,15 +30,6 @@ import useQuotationLines from "./useQuotationLines";
 const QuotationLines = () => {
   const { id } = useParams();
   if (!id) throw new Error("id not found");
-
-  const { supabase } = useSupabase();
-  const [parts] = useParts();
-  const { id: userId } = useUser();
-
-  const partOptions = parts.map((part) => ({
-    value: part.id,
-    label: part.id,
-  }));
 
   const navigate = useNavigate();
 
@@ -59,7 +40,6 @@ const QuotationLines = () => {
   }>(path.to.quote(id));
 
   const { canEdit, canDelete, onCellEdit } = useQuotationLines();
-  const [, setQuotationTotals] = useQuotationTotals();
 
   const isEditable = ["Draft"].includes(routeData?.quotation?.status ?? "");
 
@@ -146,19 +126,12 @@ const QuotationLines = () => {
 
   const editableComponents = useMemo(
     () => ({
-      partId: EditableQuotationPart(onCellEdit, {
-        client: supabase,
-        parts: partOptions,
-        userId,
-      }),
-      description: EditableText(onCellEdit),
-      customerPartId: EditableText(onCellEdit),
       quantity: EditableNumber(onCellEdit),
       unitCost: EditableNumber(onCellEdit),
       unitPrice: EditableNumber(onCellEdit),
       leadTime: EditableNumber(onCellEdit),
     }),
-    [onCellEdit, partOptions, supabase, userId]
+    [onCellEdit]
   );
 
   return (
@@ -166,7 +139,7 @@ const QuotationLines = () => {
       <Card className="w-full h-full min-h-[50vh]">
         <HStack className="justify-between items-start">
           <CardHeader>
-            <CardTitle>Quotation Lines</CardTitle>
+            <CardTitle>Line Prices</CardTitle>
           </CardHeader>
           <CardAction>{canEdit && isEditable && <New to="new" />}</CardAction>
         </HStack>
@@ -177,17 +150,6 @@ const QuotationLines = () => {
             columns={columns}
             canEdit={canEdit && isEditable}
             editableComponents={editableComponents}
-            onDataChange={(lines: QuotationLine[]) => {
-              const totals = lines.reduce(
-                (acc, line) => {
-                  acc.total += (line.quantity ?? 0) * (line.unitPrice ?? 0);
-
-                  return acc;
-                },
-                { total: 0 }
-              );
-              setQuotationTotals(totals);
-            }}
             onNewRow={canEdit && isEditable ? () => navigate("new") : undefined}
           />
         </CardContent>

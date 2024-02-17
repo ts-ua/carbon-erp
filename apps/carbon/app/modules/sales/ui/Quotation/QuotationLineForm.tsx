@@ -1,25 +1,21 @@
 import {
-  Button,
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  HStack,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
   VStack,
 } from "@carbon/react";
 
-import { useNavigate, useParams } from "@remix-run/react";
+import { useParams } from "@remix-run/react";
 import { useState } from "react";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Hidden,
   Input,
   InputControlled,
-  Number,
-  NumberControlled,
   Part,
+  SelectControlled,
   Submit,
 } from "~/components/Form";
 import { usePermissions, useRouteData } from "~/hooks";
@@ -36,7 +32,6 @@ type QuotationLineFormProps = {
 const QuotationLineForm = ({ initialValues }: QuotationLineFormProps) => {
   const permissions = usePermissions();
   const { supabase } = useSupabase();
-  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -49,15 +44,13 @@ const QuotationLineForm = ({ initialValues }: QuotationLineFormProps) => {
   const [partData, setPartData] = useState<{
     partId: string;
     description: string;
-    unitCost: number;
-    unitPrice: number;
-    // uom: string;
+    replenishmentSystem: string;
+    uom: string;
   }>({
     partId: initialValues.partId ?? "",
     description: initialValues.description ?? "",
-    unitCost: initialValues.unitCost ?? 0,
-    unitPrice: initialValues.unitPrice ?? 0,
-    // uom: initialValues.unitOfMeasureCode ?? "",
+    replenishmentSystem: initialValues.replenishmentSystem ?? "",
+    uom: initialValues.unitOfMeasureCode ?? "",
   });
 
   const isEditable = ["Draft", "To Review"].includes(
@@ -71,98 +64,114 @@ const QuotationLineForm = ({ initialValues }: QuotationLineFormProps) => {
     ? !permissions.can("update", "sales")
     : !permissions.can("create", "sales");
 
-  const onClose = () => navigate(-1);
-
   const onPartChange = async (partId: string) => {
     if (!supabase) return;
-    const [part, cost] = await Promise.all([
+    const [part] = await Promise.all([
       supabase
         .from("part")
-        .select("name, unitOfMeasureCode")
+        .select("name, replenishmentSystem, unitOfMeasureCode")
         .eq("id", partId)
-        .single(),
-      supabase
-        .from("partCost")
-        .select("unitCost")
-        .eq("partId", partId)
         .single(),
     ]);
 
     setPartData({
       partId,
       description: part.data?.name ?? "",
-      unitCost: cost.data?.unitCost ?? 0,
-      unitPrice: cost.data?.unitCost ?? 0,
-      // uom: part.data?.unitOfMeasureCode ?? "EA",
+      replenishmentSystem:
+        part.data?.replenishmentSystem === "Buy and Make"
+          ? ""
+          : part.data?.replenishmentSystem ?? "",
+      uom: part.data?.unitOfMeasureCode ?? "",
     });
   };
 
   return (
-    <Drawer
-      open
-      onOpenChange={(open) => {
-        if (!open) onClose();
-      }}
+    <ValidatedForm
+      defaultValues={initialValues}
+      validator={quotationLineValidator}
+      method="post"
+      action={
+        isEditing
+          ? path.to.quoteLine(id, initialValues.id!)
+          : path.to.newQuoteLine(id)
+      }
+      className="w-full"
     >
-      <DrawerContent>
-        <ValidatedForm
-          defaultValues={initialValues}
-          validator={quotationLineValidator}
-          method="post"
-          action={
-            isEditing
-              ? path.to.quoteLine(id, initialValues.id!)
-              : path.to.newQuoteLine(id)
-          }
-          className="flex flex-col h-full"
-        >
-          <DrawerHeader>
-            <DrawerTitle>
-              {isEditing ? "Edit" : "New"} Quotation Line
-            </DrawerTitle>
-          </DrawerHeader>
-          <DrawerBody>
-            <Hidden name="id" />
-            <Hidden name="quoteId" />
-            <Hidden name="unitCost" value={partData.unitCost} />
-            <VStack spacing={4}>
-              <Part
-                name="partId"
-                label="Part"
-                onChange={(value) => {
-                  onPartChange(value?.value as string);
-                }}
-              />
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            {isEditing ? initialValues?.partId : "New Quote Line"}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Hidden name="id" />
+          <Hidden name="quoteId" />
+          <Hidden name="unitOfMeasureCode" value={partData?.uom} />
+          <VStack>
+            <div className="grid w-full gap-x-8 gap-y-2 grid-cols-1 md:grid-cols-3">
+              <VStack>
+                <Part
+                  name="partId"
+                  label="Part"
+                  onChange={(value) => {
+                    onPartChange(value?.value as string);
+                  }}
+                />
 
-              <InputControlled
-                name="description"
-                label="Description"
-                value={partData.description}
-                onChange={(newValue) =>
-                  setPartData((d) => ({ ...d, description: newValue }))
-                }
-              />
-              <Input name="customerPartId" label="Customer Part ID" />
-              <Number name="quantity" label="Quantity" />
-              <NumberControlled
-                name="unitPrice"
-                label="Unit Price"
-                value={partData.unitPrice}
-              />
-              <Number name="leadTime" label="Lead Time (Days)" />
-            </VStack>
-          </DrawerBody>
-          <DrawerFooter>
-            <HStack>
-              <Submit isDisabled={isDisabled}>Save</Submit>
-              <Button size="md" variant="solid" onClick={onClose}>
-                Cancel
-              </Button>
-            </HStack>
-          </DrawerFooter>
-        </ValidatedForm>
-      </DrawerContent>
-    </Drawer>
+                <InputControlled
+                  name="description"
+                  label="Description"
+                  value={partData.description}
+                  onChange={(newValue) =>
+                    setPartData((d) => ({ ...d, description: newValue }))
+                  }
+                />
+              </VStack>
+              <VStack>
+                <Input name="customerPartId" label="Customer Part ID" />
+                <Input
+                  name="customerPartRevision"
+                  label="Customer Part Revision"
+                />
+              </VStack>
+              <VStack>
+                <SelectControlled
+                  name="replenishmentSystem"
+                  label="Replenishment System"
+                  options={
+                    partData.replenishmentSystem === "Buy"
+                      ? [{ label: "Buy", value: "Buy" }]
+                      : partData.replenishmentSystem === "Make"
+                      ? [{ label: "Make", value: "Make" }]
+                      : [
+                          {
+                            label: "Buy",
+                            value: "Buy",
+                          },
+                          {
+                            label: "Make",
+                            value: "Make",
+                          },
+                        ]
+                  }
+                  value={partData.replenishmentSystem}
+                  onChange={(newValue) => {
+                    if (newValue)
+                      setPartData((d) => ({
+                        ...d,
+                        replenishmentSystem: newValue?.value,
+                      }));
+                  }}
+                />
+              </VStack>
+            </div>
+          </VStack>
+        </CardContent>
+        <CardFooter>
+          <Submit isDisabled={isDisabled}>Save</Submit>
+        </CardFooter>
+      </Card>
+    </ValidatedForm>
   );
 };
 

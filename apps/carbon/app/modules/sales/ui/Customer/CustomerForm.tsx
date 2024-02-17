@@ -80,7 +80,7 @@ const CustomerForm = ({ initialValues }: CustomerFormProps) => {
             )}
           >
             <VStack>
-              <Input autoFocus name="name" label="Name" />
+              <Input autoFocus={!isEditing} name="name" label="Name" />
               <Input name="taxId" label="Tax ID" />
             </VStack>
             <VStack>
