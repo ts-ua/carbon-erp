@@ -276,7 +276,7 @@ export const path = {
     newPurchaseOrderLine: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/lines/new`),
     newQuote: `${x}/quote/new`,
-    newQuoteLine: (id: string) => generatePath(`${x}/quote/${id}/lines/new`),
+    newQuoteLine: (id: string) => generatePath(`${x}/quote/${id}/new`),
     newReceipt: `${x}/inventory/receipts/new`,
     newRequestForQuote: `${x}/rfq/new`,
     newShift: `${x}/resources/shifts/new`,

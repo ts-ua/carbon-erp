@@ -138,7 +138,7 @@ const PartForm = ({ initialValues }: PartFormProps) => {
           >
             <VStack>
               {isEditing ? (
-                <Input autoFocus name="id" label="Part ID" isReadOnly />
+                <Input name="id" label="Part ID" isReadOnly />
               ) : (
                 <InputControlled
                   autoFocus

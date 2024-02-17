@@ -73,7 +73,7 @@ const SupplierForm = ({ initialValues }: SupplierFormProps) => {
             )}
           >
             <VStack>
-              <Input autoFocus name="name" label="Name" />
+              <Input autoFocus={!isEditing} name="name" label="Name" />
               <Input name="taxId" label="Tax ID" />
             </VStack>
             <VStack>

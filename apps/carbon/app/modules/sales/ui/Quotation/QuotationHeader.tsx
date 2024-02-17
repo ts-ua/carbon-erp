@@ -16,12 +16,9 @@ import {
   useDisclosure,
 } from "@carbon/react";
 import { useParams } from "@remix-run/react";
-import { useMemo } from "react";
 import { usePermissions, useRouteData } from "~/hooks";
 import type { Quotation } from "~/modules/sales";
-import { useQuotationTotals } from "~/modules/sales";
 import { path } from "~/utils/path";
-// import { useQuotation } from "../Quotations/useQuotation";
 import QuotationReleaseModal from "./QuotationReleaseModal";
 import QuotationStatus from "./QuotationStatus";
 
@@ -33,20 +30,7 @@ const QuotationHeader = () => {
   const routeData = useRouteData<{ quotation: Quotation }>(path.to.quote(id));
 
   if (!routeData?.quotation) throw new Error("quotation not found");
-  // const isReleased = !["Draft", "Replied"].includes(
-  //   routeData?.quotation?.status ?? ""
-  // );
 
-  const [quotationTotals] = useQuotationTotals();
-
-  // TODO: factor in default currency, quote currency and exchange rate
-  const formatter = useMemo(
-    () =>
-      new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }),
-    []
-  );
-
-  // const {} = useQuotation();
   const releaseDisclosure = useDisclosure();
 
   return (
@@ -74,12 +58,6 @@ const QuotationHeader = () => {
           </HStack>
           <CardContent>
             <CardAttributes>
-              <CardAttribute>
-                <CardAttributeLabel>Total</CardAttributeLabel>
-                <CardAttributeValue>
-                  {formatter.format(quotationTotals?.total ?? 0)}
-                </CardAttributeValue>
-              </CardAttribute>
               <CardAttribute>
                 <CardAttributeLabel>Name</CardAttributeLabel>
                 <CardAttributeValue>

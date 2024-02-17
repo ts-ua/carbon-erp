@@ -5,7 +5,6 @@ import QuotationLineForm from "./QuotationLineForm";
 import QuotationLines from "./QuotationLines";
 import QuotationSidebar from "./QuotationSidebar";
 import QuotationStatus from "./QuotationStatus";
-import { useQuotationTotals } from "./useQuotationTotals";
 
 export {
   QuotationDocuments,
@@ -15,5 +14,4 @@ export {
   QuotationLines,
   QuotationSidebar,
   QuotationStatus,
-  useQuotationTotals,
 };

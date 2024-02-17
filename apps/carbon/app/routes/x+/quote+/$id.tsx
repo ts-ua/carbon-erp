@@ -14,8 +14,8 @@ import {
 } from "@carbon/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import { useEffect, useState } from "react";
+import { Outlet, useNavigate, useParams } from "@remix-run/react";
+import { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { CollapsibleSidebar } from "~/components/Layout/Navigation/CollapsibleSidebar";
 import { getLocationsList } from "~/modules/resources";
@@ -25,7 +25,6 @@ import {
   getQuoteExternalDocuments,
   getQuoteInternalDocuments,
   getQuoteLines,
-  useQuotationTotals,
 } from "~/modules/sales";
 
 import { requirePermissions } from "~/services/auth";
@@ -90,20 +89,9 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function QuotationRoute() {
-  const { quotationLines } = useLoaderData<typeof loader>();
-  const [, setQuotationTotals] = useQuotationTotals();
-
-  useEffect(() => {
-    const totals = quotationLines.reduce(
-      (acc, line) => {
-        acc.total += (line.quantity ?? 0) * (line.unitPrice ?? 0);
-
-        return acc;
-      },
-      { total: 0 }
-    );
-    setQuotationTotals(totals);
-  }, [quotationLines, setQuotationTotals]);
+  const navigate = useNavigate();
+  const { id } = useParams();
+  if (!id) throw new Error("id not found");
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] w-full">
@@ -123,6 +111,7 @@ export default function QuotationRoute() {
                   aria-label="Add Quote Line"
                   variant="secondary"
                   icon={<IoMdAdd />}
+                  onClick={() => navigate(path.to.newQuoteLine(id))}
                 />
               </TooltipTrigger>
               <TooltipContent>Add Quote Line</TooltipContent>
@@ -133,7 +122,7 @@ export default function QuotationRoute() {
           <BillOfMaterialExplorer />
         </VStack>
       </CollapsibleSidebar>
-      <div className="p-4">
+      <VStack className="p-4">
         <Menubar>
           <MenubarItem asChild>
             <a
@@ -145,7 +134,9 @@ export default function QuotationRoute() {
             </a>
           </MenubarItem>
         </Menubar>
-      </div>
+
+        <Outlet />
+      </VStack>
       {/* <QuotationHeader />
       <div className="grid grid-cols-1 md:grid-cols-[1fr_4fr] h-full w-full gap-4">
         <QuotationSidebar />
@@ -157,6 +148,7 @@ export default function QuotationRoute() {
 
 type BillOfMaterialNodeType =
   | "parent"
+  | "part"
   | "part"
   | "assemblies"
   | "operations"
@@ -174,10 +166,15 @@ type BillOfMaterialNode = {
 
 const data: BillOfMaterialNode[] = [
   {
-    id: "1",
+    id: "0",
     label: "QUO000001",
     type: "parent",
     children: [
+      {
+        id: "1",
+        label: "P00001234",
+        type: "part",
+      },
       {
         id: "2",
         label: "P00001233",
