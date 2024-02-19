@@ -40,7 +40,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   if (createQuotationLine.error) {
     return redirect(
-      path.to.quoteLines(quoteId),
+      path.to.quote(quoteId),
       await flash(
         request,
         error(createQuotationLine.error, "Failed to create quote line.")

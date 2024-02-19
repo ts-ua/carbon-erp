@@ -86,6 +86,21 @@ export const quotationValidator = withZod(
   })
 );
 
+export const quotationAssemblyValidator = withZod(
+  z.object({
+    id: zfd.text(z.string().optional()),
+    quoteId: z.string().min(20, { message: "Quote is required" }),
+    quoteLineId: z.string().min(20, { message: "Quote line is required" }),
+    parentAssemblyId: zfd.text(z.string().optional()),
+    partId: z.string().min(1, { message: "Part is required" }),
+    description: z.string().min(1, { message: "Description is required" }),
+    unitOfMeasureCode: zfd.text(z.string().optional()),
+    quantityPerParent: zfd.numeric(
+      z.number().min(1, { message: "Quantity is required" })
+    ),
+  })
+);
+
 export const quotationLineValidator = withZod(
   z.object({
     id: zfd.text(z.string().optional()),

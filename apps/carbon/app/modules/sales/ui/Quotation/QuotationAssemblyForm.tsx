@@ -2,67 +2,57 @@ import {
   Button,
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
   VStack,
+  cn,
 } from "@carbon/react";
-
 import { useParams } from "@remix-run/react";
 import { useState } from "react";
 import { BsDownload, BsUpload } from "react-icons/bs";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Hidden,
-  Input,
   InputControlled,
+  Number,
   Part,
-  SelectControlled,
   Submit,
 } from "~/components/Form";
-import { usePermissions, useRouteData } from "~/hooks";
+import { usePermissions } from "~/hooks";
 import { useSupabase } from "~/lib/supabase";
-import type { Quotation } from "~/modules/sales";
-import { quotationLineValidator } from "~/modules/sales";
+import { quotationAssemblyValidator } from "~/modules/sales";
 import type { TypeOfValidator } from "~/types/validators";
 import { path } from "~/utils/path";
 
-type QuotationLineFormProps = {
-  initialValues: TypeOfValidator<typeof quotationLineValidator>;
+type QuotationAssemblyFormValues = TypeOfValidator<
+  typeof quotationAssemblyValidator
+>;
+
+type QuotationAssemblyFormProps = {
+  initialValues: QuotationAssemblyFormValues;
 };
 
-const QuotationLineForm = ({ initialValues }: QuotationLineFormProps) => {
+const QuotationAssemblyForm = ({
+  initialValues,
+}: QuotationAssemblyFormProps) => {
   const permissions = usePermissions();
   const { supabase } = useSupabase();
 
-  const { id } = useParams();
-
-  if (!id) throw new Error("id not found");
-
-  const routeData = useRouteData<{
-    quotation: Quotation;
-  }>(path.to.quote(id));
-
-  const isEditable = ["Draft", "To Review"].includes(
-    routeData?.quotation?.status ?? ""
-  );
+  const { id: quoteId, lineId } = useParams();
+  if (!quoteId) throw new Error("quoteId not found");
+  if (!lineId) throw new Error("lineId not found");
 
   const isEditing = initialValues.id !== undefined;
-  const isDisabled = !isEditable
-    ? true
-    : isEditing
-    ? !permissions.can("update", "sales")
-    : !permissions.can("create", "sales");
 
   const [partData, setPartData] = useState<{
     partId: string;
     description: string;
-    replenishmentSystem: string;
     uom: string;
   }>({
     partId: initialValues.partId ?? "",
     description: initialValues.description ?? "",
-    replenishmentSystem: initialValues.replenishmentSystem ?? "",
     uom: initialValues.unitOfMeasureCode ?? "",
   });
 
@@ -79,35 +69,37 @@ const QuotationLineForm = ({ initialValues }: QuotationLineFormProps) => {
     setPartData({
       partId,
       description: part.data?.name ?? "",
-      replenishmentSystem:
-        part.data?.replenishmentSystem === "Buy and Make"
-          ? ""
-          : part.data?.replenishmentSystem ?? "",
       uom: part.data?.unitOfMeasureCode ?? "",
     });
   };
 
   return (
     <ValidatedForm
-      defaultValues={initialValues}
-      validator={quotationLineValidator}
       method="post"
+      validator={quotationAssemblyValidator}
+      defaultValues={initialValues}
+      className="w-full"
       action={
         isEditing
-          ? path.to.quoteLine(id, initialValues.id!)
-          : path.to.newQuoteLine(id)
+          ? path.to.quoteAssembly(quoteId, lineId, initialValues.id!)
+          : path.to.newQuoteAssembly(quoteId, lineId)
       }
-      className="w-full"
     >
-      <Card>
+      <Card className={cn(!isEditing && "mt-4")}>
         <CardHeader>
-          <CardTitle>
-            {isEditing ? initialValues?.partId : "New Quote Line"}
-          </CardTitle>
+          <CardTitle>{partData?.partId || "New Assembly"}</CardTitle>
+          {!isEditing && (
+            <CardDescription>
+              A quote assembly is a collection of operations, materials, and
+              subassemblies that are used to build a product.
+            </CardDescription>
+          )}
         </CardHeader>
         <CardContent>
           <Hidden name="id" />
           <Hidden name="quoteId" />
+          <Hidden name="quoteLineId" />
+          <Hidden name="parentAssemblyId" />
           <Hidden name="unitOfMeasureCode" value={partData?.uom} />
           <VStack>
             <div className="grid w-full gap-x-8 gap-y-2 grid-cols-1 md:grid-cols-3">
@@ -115,11 +107,13 @@ const QuotationLineForm = ({ initialValues }: QuotationLineFormProps) => {
                 <Part
                   name="partId"
                   label="Part"
+                  partReplenishmentSystem="Make"
                   onChange={(value) => {
                     onPartChange(value?.value as string);
                   }}
                 />
-
+              </VStack>
+              <VStack>
                 <InputControlled
                   name="description"
                   label="Description"
@@ -130,42 +124,12 @@ const QuotationLineForm = ({ initialValues }: QuotationLineFormProps) => {
                 />
               </VStack>
               <VStack>
-                <Input name="customerPartId" label="Customer Part ID" />
-                <Input
-                  name="customerPartRevision"
-                  label="Customer Part Revision"
+                <Number
+                  name="quantityPerParent"
+                  label="Quantity per Parent"
+                  minValue={0}
                 />
-              </VStack>
-              <VStack>
-                <SelectControlled
-                  name="replenishmentSystem"
-                  label="Replenishment System"
-                  options={
-                    partData.replenishmentSystem === "Buy"
-                      ? [{ label: "Buy", value: "Buy" }]
-                      : partData.replenishmentSystem === "Make"
-                      ? [{ label: "Make", value: "Make" }]
-                      : [
-                          {
-                            label: "Buy",
-                            value: "Buy",
-                          },
-                          {
-                            label: "Make",
-                            value: "Make",
-                          },
-                        ]
-                  }
-                  value={partData.replenishmentSystem}
-                  onChange={(newValue) => {
-                    if (newValue)
-                      setPartData((d) => ({
-                        ...d,
-                        replenishmentSystem: newValue?.value,
-                      }));
-                  }}
-                />
-                {isEditing && partData.replenishmentSystem === "Make" && (
+                {isEditing && (
                   <>
                     <Button
                       isDisabled
@@ -190,11 +154,19 @@ const QuotationLineForm = ({ initialValues }: QuotationLineFormProps) => {
           </VStack>
         </CardContent>
         <CardFooter>
-          <Submit isDisabled={isDisabled}>Save</Submit>
+          <Submit
+            isDisabled={
+              isEditing
+                ? !permissions.can("update", "sales")
+                : !permissions.can("create", "sales")
+            }
+          >
+            Save
+          </Submit>
         </CardFooter>
       </Card>
     </ValidatedForm>
   );
 };
 
-export default QuotationLineForm;
+export default QuotationAssemblyForm;

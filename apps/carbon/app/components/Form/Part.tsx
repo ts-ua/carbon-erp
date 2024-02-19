@@ -16,9 +16,9 @@ const Part = ({ partReplenishmentSystem, ...props }: PartSelectProps) => {
       parts
         .filter((part) => {
           if (partReplenishmentSystem === "Buy") {
-            return part.replenishmentSystem === "Buy";
+            return ["Buy", "Buy and Make"].includes(partReplenishmentSystem);
           } else if (partReplenishmentSystem === "Make") {
-            return part.replenishmentSystem === "Make";
+            return ["Make", "Buy and Make"].includes(partReplenishmentSystem);
           } else {
             return true;
           }
