@@ -20,7 +20,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const quotationLine = await getQuoteLine(client, lineId);
   if (quotationLine.error) {
     return redirect(
-      path.to.quoteLines(id),
+      path.to.quote(id),
       await flash(
         request,
         error(quotationLine.error, "Failed to get quotation line")
@@ -43,7 +43,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const { error: deleteTypeError } = await deleteQuoteLine(client, lineId);
   if (deleteTypeError) {
     return redirect(
-      path.to.quoteLines(id),
+      path.to.quote(id),
       await flash(
         request,
         error(deleteTypeError, "Failed to delete quotation line")
@@ -52,7 +52,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   return redirect(
-    path.to.quoteLines(id),
+    path.to.quote(id),
     await flash(request, success("Successfully deleted quotation line"))
   );
 }
@@ -66,15 +66,13 @@ export default function DeleteQuoteLineRoute() {
   if (!lineId) throw notFound("Could not find lineId");
   if (!id) throw notFound("Could not find id");
 
-  const onCancel = () => navigate(path.to.quoteLines(id));
+  const onCancel = () => navigate(path.to.quote(id));
 
   return (
     <ConfirmDelete
       action={path.to.deleteQuoteLine(id, lineId)}
       name="Quote Line"
-      text={`Are you sure you want to delete the quotation line for ${
-        quotationLine.quantity ?? 0
-      } ${quotationLine.description ?? ""}? This cannot be undone.`}
+      text={`Are you sure you want to delete the quotation line for ${quotationLine.partId}? This cannot be undone.`}
       onCancel={onCancel}
     />
   );

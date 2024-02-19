@@ -170,8 +170,8 @@ const data: BillOfMaterialNode[] = [
     type: "parent",
     children: [
       {
-        id: "cn8g57bau0l38ambhoeg",
-        label: "P000000002",
+        id: "cn9edn5dq0l1fglkrqig",
+        label: "P000000001",
         type: "line",
         children: [
           {
@@ -300,9 +300,12 @@ const BillOfMaterialItem = ({
         <Button
           variant="ghost"
           className="w-full justify-between text-muted-foreground"
+          asChild
         >
-          <span>{label}</span>
-          <IoMdAdd />
+          <Link to={path.to.newQuoteAssembly(quoteId, id)}>
+            <span>{label}</span>
+            <IoMdAdd />
+          </Link>
         </Button>
       );
     case "materials":
