@@ -291,6 +291,16 @@ export async function getQuoteLines(
   return client.from("quoteLine").select("*").eq("quoteId", quoteId);
 }
 
+export async function getQuoteLineQuantities(
+  client: SupabaseClient<Database>,
+  quoteLineId: string
+) {
+  return client
+    .from("quoteLineQuantity")
+    .select("*")
+    .eq("quoteLineId", quoteLineId);
+}
+
 export async function insertCustomer(
   client: SupabaseClient<Database>,
   customer:
@@ -376,6 +386,39 @@ export async function insertCustomerLocation(
     ])
     .select("id")
     .single();
+}
+
+export async function insertQuoteLineQuantity(
+  client: SupabaseClient<Database>,
+  quoteLineQuantity: {
+    quoteLineId: string;
+    quantity?: number;
+    createdBy: string;
+  }
+) {
+  const quoteLine = await getQuoteLine(client, quoteLineQuantity.quoteLineId);
+  if (quoteLine.error) {
+    return quoteLine;
+  }
+
+  const partId = quoteLine.data?.partId;
+  const [partCost] = await Promise.all([
+    client.from("partCost").select("unitCost").eq("partId", partId).single(),
+  ]);
+
+  if (partCost.error) {
+    return partCost;
+  }
+
+  return client.from("quoteLineQuantity").insert([
+    {
+      ...quoteLineQuantity,
+      materialCost:
+        quoteLine.data.replenishmentSystem === "Make"
+          ? partCost.data?.unitCost
+          : 0,
+    },
+  ]);
 }
 
 export async function updateCustomer(

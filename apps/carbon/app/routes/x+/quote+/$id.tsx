@@ -14,7 +14,7 @@ import {
 } from "@carbon/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Outlet, useNavigate, useParams } from "@remix-run/react";
+import { Link, Outlet, useNavigate, useParams } from "@remix-run/react";
 import { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { CollapsibleSidebar } from "~/components/Layout/Navigation/CollapsibleSidebar";
@@ -148,8 +148,7 @@ export default function QuotationRoute() {
 
 type BillOfMaterialNodeType =
   | "parent"
-  | "part"
-  | "part"
+  | "line"
   | "assemblies"
   | "operations"
   | "materials"
@@ -171,106 +170,118 @@ const data: BillOfMaterialNode[] = [
     type: "parent",
     children: [
       {
-        id: "1",
-        label: "P00001234",
-        type: "part",
-      },
-      {
-        id: "2",
-        label: "P00001233",
-        type: "part",
+        id: "cn8g57bau0l38ambhoeg",
+        label: "P000000002",
+        type: "line",
         children: [
           {
-            id: "3",
+            id: "cn8g57bau0l38ambhoeg",
             label: "Assemblies",
             type: "assemblies",
-            children: [
-              {
-                id: "4",
-                label: "F5000123",
-                type: "part",
-                children: [
-                  {
-                    id: "5",
-                    label: "Assemblies",
-                    type: "assemblies",
-                    children: [],
-                  },
-                  {
-                    id: "6",
-                    label: "Operations",
-                    type: "operations",
-                    children: [
-                      {
-                        id: "7",
-                        label: "OP0003",
-                        type: "operation",
-                        children: [
-                          {
-                            id: "8",
-                            label: "Materials",
-                            type: "materials",
-                            children: [
-                              {
-                                id: "9",
-                                label: "RAW000001",
-                                type: "material",
-                              },
-                              {
-                                id: "10",
-                                label: "FAS000002",
-                                type: "material",
-                              },
-                            ],
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
           },
           {
-            id: "11",
+            id: "cn8g57bau0l38ambhoeg",
             label: "Operations",
             type: "operations",
-            children: [
-              {
-                id: "12",
-                label: "OP0001",
-                type: "operation",
-                children: [
-                  {
-                    id: "13",
-                    label: "Materials",
-                    type: "materials",
-                    children: [
-                      {
-                        id: "14",
-                        label: "RAW000003",
-                        type: "material",
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                id: "13",
-                label: "OP0002",
-                type: "operation",
-                children: [
-                  {
-                    id: "13",
-                    label: "Materials",
-                    type: "materials",
-                  },
-                ],
-              },
-            ],
           },
         ],
       },
+      // {
+      //   id: "2",
+      //   label: "P00001233",
+      //   type: "line",
+      //   children: [
+      //     {
+      //       id: "3",
+      //       label: "Assemblies",
+      //       type: "assemblies",
+      //       children: [
+      //         {
+      //           id: "4",
+      //           label: "F5000123",
+      //           type: "assembly",
+      //           children: [
+      //             {
+      //               id: "5",
+      //               label: "Assemblies",
+      //               type: "assemblies",
+      //               children: [],
+      //             },
+      //             {
+      //               id: "6",
+      //               label: "Operations",
+      //               type: "operations",
+      //               children: [
+      //                 {
+      //                   id: "7",
+      //                   label: "OP0003",
+      //                   type: "operation",
+      //                   children: [
+      //                     {
+      //                       id: "8",
+      //                       label: "Materials",
+      //                       type: "materials",
+      //                       children: [
+      //                         {
+      //                           id: "9",
+      //                           label: "RAW000001",
+      //                           type: "material",
+      //                         },
+      //                         {
+      //                           id: "10",
+      //                           label: "FAS000002",
+      //                           type: "material",
+      //                         },
+      //                       ],
+      //                     },
+      //                   ],
+      //                 },
+      //               ],
+      //             },
+      //           ],
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       id: "11",
+      //       label: "Operations",
+      //       type: "operations",
+      //       children: [
+      //         {
+      //           id: "12",
+      //           label: "OP0001",
+      //           type: "operation",
+      //           children: [
+      //             {
+      //               id: "13",
+      //               label: "Materials",
+      //               type: "materials",
+      //               children: [
+      //                 {
+      //                   id: "14",
+      //                   label: "RAW000003",
+      //                   type: "material",
+      //                 },
+      //               ],
+      //             },
+      //           ],
+      //         },
+      //         {
+      //           id: "13",
+      //           label: "OP0002",
+      //           type: "operation",
+      //           children: [
+      //             {
+      //               id: "13",
+      //               label: "Materials",
+      //               type: "materials",
+      //             },
+      //           ],
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // },
     ],
   },
 ];
@@ -280,6 +291,9 @@ const BillOfMaterialItem = ({
   id,
   label,
 }: Omit<BillOfMaterialNode, "children">) => {
+  const { id: quoteId } = useParams();
+  if (!quoteId) throw new Error("id not found");
+
   switch (type) {
     case "assemblies":
       return (
@@ -311,7 +325,19 @@ const BillOfMaterialItem = ({
           <IoMdAdd />
         </Button>
       );
-    case "part":
+    case "line":
+      return (
+        <Button
+          variant="ghost"
+          className="flex-1 justify-start"
+          leftIcon={<AiOutlinePartition />}
+          asChild
+        >
+          <Link to={path.to.quoteLine(quoteId, id)} prefetch="intent">
+            {label}
+          </Link>
+        </Button>
+      );
     case "assembly":
       return (
         <Button
@@ -343,12 +369,15 @@ const BillOfMaterialItem = ({
         </Button>
       );
     case "parent":
-    default:
       return (
-        <Button variant="ghost" className="flex-1 justify-start">
-          {label}
+        <Button variant="ghost" className="flex-1 justify-start" asChild>
+          <Link to={path.to.quote(quoteId)} prefetch="intent">
+            {label}
+          </Link>
         </Button>
       );
+    default:
+      throw new Error(`unknown type: ${type}`);
   }
 };
 

@@ -7143,7 +7143,7 @@ export interface Database {
           }
         ];
       };
-      quoteLineQuantities: {
+      quoteLineQuantity: {
         Row: {
           additionalCost: number;
           createdAt: string;
@@ -7212,43 +7212,43 @@ export interface Database {
         };
         Relationships: [
           {
-            foreignKeyName: "quoteLineQuantities_createdBy_fkey";
+            foreignKeyName: "quoteLineQuantity_createdBy_fkey";
             columns: ["createdBy"];
             referencedRelation: "user";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "quoteLineQuantities_createdBy_fkey";
+            foreignKeyName: "quoteLineQuantity_createdBy_fkey";
             columns: ["createdBy"];
             referencedRelation: "employeeSummary";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "quoteLineQuantities_createdBy_fkey";
+            foreignKeyName: "quoteLineQuantity_createdBy_fkey";
             columns: ["createdBy"];
             referencedRelation: "userDefaults";
             referencedColumns: ["userId"];
           },
           {
-            foreignKeyName: "quoteLineQuantities_quoteLineId_fkey";
+            foreignKeyName: "quoteLineQuantity_quoteLineId_fkey";
             columns: ["quoteLineId"];
             referencedRelation: "quoteLine";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "quoteLineQuantities_updatedBy_fkey";
+            foreignKeyName: "quoteLineQuantity_updatedBy_fkey";
             columns: ["updatedBy"];
             referencedRelation: "user";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "quoteLineQuantities_updatedBy_fkey";
+            foreignKeyName: "quoteLineQuantity_updatedBy_fkey";
             columns: ["updatedBy"];
             referencedRelation: "employeeSummary";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "quoteLineQuantities_updatedBy_fkey";
+            foreignKeyName: "quoteLineQuantity_updatedBy_fkey";
             columns: ["updatedBy"];
             referencedRelation: "userDefaults";
             referencedColumns: ["userId"];
