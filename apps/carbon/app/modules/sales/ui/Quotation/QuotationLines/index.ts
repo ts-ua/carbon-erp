@@ -1,3 +1,3 @@
-import QuotationLines from "./QuotationLines";
+import QuotationLineQuantities from "./QuotationLineQuantities";
 
-export default QuotationLines;
+export default QuotationLineQuantities;

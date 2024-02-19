@@ -4,6 +4,7 @@ import { useParams } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import {
   QuotationLineForm,
+  insertQuoteLineQuantity,
   quotationLineValidator,
   upsertQuoteLine,
 } from "~/modules/sales";
@@ -48,6 +49,25 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   const quoteLineId = createQuotationLine.data.id;
+
+  const createQuoteQuantity = await insertQuoteLineQuantity(client, {
+    quoteLineId,
+    quantity: 1,
+    createdBy: userId,
+  });
+
+  if (createQuoteQuantity.error) {
+    return redirect(
+      path.to.quoteLine(quoteId, quoteLineId),
+      await flash(
+        request,
+        error(
+          createQuoteQuantity.error,
+          "Failed to create quote line quantity."
+        )
+      )
+    );
+  }
 
   return redirect(path.to.quoteLine(quoteId, quoteLineId));
 }

@@ -45,6 +45,7 @@ const QuotationForm = ({ initialValues }: QuotationFormProps) => {
       method="post"
       validator={quotationValidator}
       defaultValues={initialValues}
+      className="w-full"
     >
       <Card className={cn(!isEditing && "mt-4")}>
         <CardHeader>

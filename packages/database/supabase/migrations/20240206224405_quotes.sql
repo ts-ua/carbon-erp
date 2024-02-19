@@ -66,7 +66,7 @@ CREATE TABLE "quoteLine" (
 
 CREATE INDEX "quoteLine_quoteId_idx" ON "quoteLine" ("quoteId");
 
-CREATE TABLE "quoteLineQuantities" (
+CREATE TABLE "quoteLineQuantity" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "quoteLineId" TEXT NOT NULL,
   "quantity" NUMERIC(10, 2) NOT NULL DEFAULT 0,
@@ -88,13 +88,13 @@ CREATE TABLE "quoteLineQuantities" (
   "updatedAt" TIMESTAMP WITH TIME ZONE,
   "updatedBy" TEXT,
 
-  CONSTRAINT "quoteLineQuantities_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "quoteLineQuantities_quoteLineId_fkey" FOREIGN KEY ("quoteLineId") REFERENCES "quoteLine" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT "quoteLineQuantities_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT "quoteLineQuantities_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT "quoteLineQuantity_pkey" PRIMARY KEY ("id"),
+  CONSTRAINT "quoteLineQuantity_quoteLineId_fkey" FOREIGN KEY ("quoteLineId") REFERENCES "quoteLine" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "quoteLineQuantity_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT "quoteLineQuantity_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-CREATE INDEX "quoteLineQuantities_quoteLineId_idx" ON "quoteLineQuantities" ("quoteLineId");
+CREATE INDEX "quoteLineQuantity_quoteLineId_idx" ON "quoteLineQuantity" ("quoteLineId");
 
 CREATE TABLE "quoteAssembly" (
   "id" TEXT NOT NULL DEFAULT xid(),

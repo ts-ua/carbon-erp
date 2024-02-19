@@ -4,7 +4,7 @@ import { useSupabase } from "~/lib/supabase";
 import type { QuotationLine } from "~/modules/sales";
 import { useParts } from "~/stores/parts";
 
-export default function useQuotationLines() {
+export default function useQuotationQuantities() {
   const { id: userId } = useUser();
   const { supabase } = useSupabase();
   const permissions = usePermissions();
@@ -26,7 +26,7 @@ export default function useQuotationLines() {
     async (id: string, value: unknown, row: QuotationLine) => {
       if (!supabase) throw new Error("Supabase client not found");
       return await supabase
-        .from("quoteLine")
+        .from("quoteLineQuantity")
         .update({
           [id]: value,
           updatedBy: userId,

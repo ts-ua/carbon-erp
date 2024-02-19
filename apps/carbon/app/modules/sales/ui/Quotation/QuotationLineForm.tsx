@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardContent,
   CardFooter,
@@ -9,6 +10,7 @@ import {
 
 import { useParams } from "@remix-run/react";
 import { useState } from "react";
+import { BsDownload, BsUpload } from "react-icons/bs";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Hidden,
@@ -163,6 +165,26 @@ const QuotationLineForm = ({ initialValues }: QuotationLineFormProps) => {
                       }));
                   }}
                 />
+                {isEditing && partData.replenishmentSystem === "Make" && (
+                  <>
+                    <Button
+                      isDisabled
+                      variant="secondary"
+                      className="w-full"
+                      leftIcon={<BsDownload />}
+                    >
+                      Get Part
+                    </Button>
+                    <Button
+                      isDisabled
+                      variant="secondary"
+                      className="w-full"
+                      leftIcon={<BsUpload />}
+                    >
+                      Set Part
+                    </Button>
+                  </>
+                )}
               </VStack>
             </div>
           </VStack>

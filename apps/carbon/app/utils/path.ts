@@ -277,6 +277,8 @@ export const path = {
       generatePath(`${x}/purchase-order/${id}/lines/new`),
     newQuote: `${x}/quote/new`,
     newQuoteLine: (id: string) => generatePath(`${x}/quote/${id}/new`),
+    newQuoteLineQuantity: (id: string, lineId: string) =>
+      generatePath(`${x}/quote/${id}/lines/${lineId}/new`),
     newReceipt: `${x}/inventory/receipts/new`,
     newRequestForQuote: `${x}/rfq/new`,
     newShift: `${x}/resources/shifts/new`,
@@ -366,10 +368,10 @@ export const path = {
     quoteFavorite: `${x}/purchasing/orders/favorite`,
     quoteInternalDocuments: (id: string) =>
       generatePath(`${x}/quote/${id}/internal`),
-    quoteLines: (orderId: string) =>
-      generatePath(`${x}/quote/${orderId}/lines`),
-    quoteLine: (orderId: string, id: string) =>
-      generatePath(`${x}/quote/${orderId}/lines/${id}`),
+    quoteLines: (quoteId: string) =>
+      generatePath(`${x}/quote/${quoteId}/lines`),
+    quoteLine: (quoteId: string, id: string) =>
+      generatePath(`${x}/quote/${quoteId}/lines/${id}`),
     quoteRelease: (id: string) => generatePath(`${x}/quote/${id}/release`),
     quotes: `${x}/sales/quotes`,
     receipt: (id: string) => generatePath(`${x}/inventory/receipts/${id}`),

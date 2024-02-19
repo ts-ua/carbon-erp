@@ -141,7 +141,6 @@ const PartForm = ({ initialValues }: PartFormProps) => {
                 <Input name="id" label="Part ID" isReadOnly />
               ) : (
                 <InputControlled
-                  autoFocus
                   name="id"
                   label="Part ID"
                   helperText="Use ... to get the next part ID"
