@@ -158,6 +158,7 @@ type BillOfMaterialNodeType =
 
 type BillOfMaterialNode = {
   id: string;
+  parentId?: string;
   label: string;
   type: BillOfMaterialNodeType;
   children?: BillOfMaterialNode[];
@@ -175,12 +176,13 @@ const data: BillOfMaterialNode[] = [
         type: "line",
         children: [
           {
-            id: "cn8g57bau0l38ambhoeg",
+            id: "cn9edn5dq0l1fglkrqig",
+            parentId: "cn9v3tldq0l1lvlkrqmg",
             label: "Assemblies",
             type: "assemblies",
           },
           {
-            id: "cn8g57bau0l38ambhoeg",
+            id: "cn9edn5dq0l1fglkrqig",
             label: "Operations",
             type: "operations",
           },
@@ -289,6 +291,7 @@ const data: BillOfMaterialNode[] = [
 const BillOfMaterialItem = ({
   type,
   id,
+  parentId,
   label,
 }: Omit<BillOfMaterialNode, "children">) => {
   const { id: quoteId } = useParams();
@@ -296,13 +299,14 @@ const BillOfMaterialItem = ({
 
   switch (type) {
     case "assemblies":
+      console.log({ type, id, parentId, label });
       return (
         <Button
           variant="ghost"
           className="w-full justify-between text-muted-foreground"
           asChild
         >
-          <Link to={path.to.newQuoteAssembly(quoteId, id)}>
+          <Link to={path.to.newQuoteAssembly(quoteId, id, parentId)}>
             <span>{label}</span>
             <IoMdAdd />
           </Link>
@@ -443,6 +447,7 @@ const BillOfMaterialExplorer = () => {
               type={node.type}
               id={node.id}
               label={node.label}
+              parentId={node.parentId}
             />
           </HStack>
           {node.children &&
