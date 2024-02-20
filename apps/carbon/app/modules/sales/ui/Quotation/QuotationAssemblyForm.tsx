@@ -87,18 +87,15 @@ const QuotationAssemblyForm = ({
     >
       <Card className={cn(!isEditing && "mt-4")}>
         <CardHeader>
-          <CardTitle>{partData?.partId || "New Assembly"}</CardTitle>
-          {!isEditing && (
-            <CardDescription>
-              A quote assembly is a collection of operations, materials, and
-              subassemblies that are used to build a product.
-            </CardDescription>
-          )}
+          <CardTitle>{isEditing ? partData?.partId : "New Assembly"}</CardTitle>
+          <CardDescription>
+            {isEditing
+              ? partData?.description
+              : "A quote assembly is a collection of operations, materials, and subassemblies that are used to build a product."}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Hidden name="id" />
-          <Hidden name="quoteId" />
-          <Hidden name="quoteLineId" />
           <Hidden name="parentAssemblyId" />
           <Hidden name="unitOfMeasureCode" value={partData?.uom} />
           <VStack>

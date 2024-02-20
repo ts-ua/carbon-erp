@@ -1,10 +1,10 @@
-import { json, redirect, useParams } from "@remix-run/react";
-import { useUrlParams } from "~/hooks";
+import { json, redirect, useLoaderData } from "@remix-run/react";
 import QuotationAssemblyForm from "~/modules/sales/ui/Quotation/QuotationAssemblyForm";
 
-import type { ActionFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
 import {
+  getQuoteAssembly,
   quotationAssemblyValidator,
   upsertQuoteAssembly,
 } from "~/modules/sales";
@@ -13,6 +13,31 @@ import { flash } from "~/services/session.server";
 import { assertIsPost } from "~/utils/http";
 import { path } from "~/utils/path";
 import { error } from "~/utils/result";
+
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  const { client } = await requirePermissions(request, {
+    view: "sales",
+  });
+
+  const { id, assemblyId } = params;
+  if (!id) throw new Error("Could not find id");
+  if (!assemblyId) throw new Error("Could not find assemblyId");
+
+  const assembly = await getQuoteAssembly(client, assemblyId);
+  if (assembly.error) {
+    return redirect(
+      path.to.quote(id),
+      await flash(
+        request,
+        error(assembly.error, "Failed to load quote assembly.")
+      )
+    );
+  }
+
+  return json({
+    quoteAssembly: assembly.data,
+  });
+}
 
 export async function action({ request, params }: ActionFunctionArgs) {
   assertIsPost(request);
@@ -46,7 +71,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       path.to.quote(quoteId),
       await flash(
         request,
-        error(createQuotationAssembly.error, "Failed to create quote assembly")
+        error(createQuotationAssembly.error, "Failed to update quote assembly")
       )
     );
   }
@@ -57,21 +82,18 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 }
 
-export default function NewQuoteAssembly() {
-  const { id: quoteId, lineId } = useParams();
-  const [params] = useUrlParams();
-  const parentAssemblyId = params.get("parentAssemblyId");
-
-  if (!quoteId) throw new Error("quoteId not found");
-  if (!lineId) throw new Error("lineId not found");
+export default function QuoteAssembly() {
+  const { quoteAssembly } = useLoaderData<typeof loader>();
 
   const initialValues = {
-    quoteId,
-    quoteLineId: lineId,
-    parentAssemblyId: parentAssemblyId ?? undefined,
-    partId: "",
-    description: "",
-    quantityPerParent: 1,
+    id: quoteAssembly.id,
+    quoteId: quoteAssembly.quoteId,
+    quoteLineId: quoteAssembly.quoteLineId,
+    parentAssemblyId: quoteAssembly.parentAssemblyId ?? undefined,
+    partId: quoteAssembly.partId,
+    description: quoteAssembly.description ?? "",
+    quantityPerParent: quoteAssembly.quantityPerParent,
+    unitOfMeasureCode: quoteAssembly.unitOfMeasureCode ?? "",
   };
 
   return <QuotationAssemblyForm initialValues={initialValues} />;

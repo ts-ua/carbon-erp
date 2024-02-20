@@ -10,6 +10,7 @@ import type {
   customerShippingValidator,
   customerTypeValidator,
   customerValidator,
+  quotationAssemblyValidator,
   quotationLineValidator,
   quotationValidator,
 } from "./sales.models";
@@ -261,6 +262,17 @@ export async function getQuotes(
 
   query = setGenericQueryFilters(query, args, "id", false);
   return query;
+}
+
+export async function getQuoteAssembly(
+  client: SupabaseClient<Database>,
+  quoteAssemblyId: string
+) {
+  return client
+    .from("quoteAssembly")
+    .select("*")
+    .eq("id", quoteAssemblyId)
+    .single();
 }
 
 export async function getQuoteExternalDocuments(
@@ -572,6 +584,36 @@ export async function upsertQuote(
   } else {
     return client.from("quote").update(sanitize(quote)).eq("id", quote.id);
   }
+}
+
+export async function upsertQuoteAssembly(
+  client: SupabaseClient<Database>,
+  quotationAssembly:
+    | (Omit<TypeOfValidator<typeof quotationAssemblyValidator>, "id"> & {
+        quoteId: string;
+        quoteLineId: string;
+        createdBy: string;
+      })
+    | (Omit<TypeOfValidator<typeof quotationAssemblyValidator>, "id"> & {
+        id: string;
+        quoteId: string;
+        quoteLineId: string;
+        updatedBy: string;
+      })
+) {
+  if ("id" in quotationAssembly) {
+    return client
+      .from("quoteAssembly")
+      .update(sanitize(quotationAssembly))
+      .eq("id", quotationAssembly.id)
+      .select("id")
+      .single();
+  }
+  return client
+    .from("quoteAssembly")
+    .insert([quotationAssembly])
+    .select("id")
+    .single();
 }
 
 export async function upsertQuoteLine(

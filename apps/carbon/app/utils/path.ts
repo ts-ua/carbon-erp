@@ -276,8 +276,12 @@ export const path = {
     newPurchaseOrderLine: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/lines/new`),
     newQuote: `${x}/quote/new`,
-    newQuoteAssembly: (quoteId: string, lineId: string) =>
-      generatePath(`${x}/quote/${quoteId}/lines/${lineId}/assembly/new`),
+    newQuoteAssembly: (quoteId: string, lineId: string, parentId?: string) =>
+      generatePath(
+        `${x}/quote/${quoteId}/lines/${lineId}/assembly/new${
+          parentId ? `?parentAssemblyId=${parentId}` : ""
+        }`
+      ),
     newQuoteLine: (id: string) => generatePath(`${x}/quote/${id}/new`),
     newQuoteLineQuantity: (id: string, lineId: string) =>
       generatePath(`${x}/quote/${id}/lines/${lineId}/new`),
