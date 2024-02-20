@@ -1,16 +1,25 @@
 import {
-  Button,
   Card,
+  CardAction,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuIcon,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  HStack,
+  IconButton,
   VStack,
 } from "@carbon/react";
 
-import { useParams } from "@remix-run/react";
+import { useNavigate, useParams } from "@remix-run/react";
 import { useState } from "react";
-import { BsDownload, BsUpload } from "react-icons/bs";
+import { BsDownload, BsThreeDotsVertical, BsUpload } from "react-icons/bs";
+import { IoMdTrash } from "react-icons/io";
 import { ValidatedForm } from "remix-validated-form";
 import {
   Hidden,
@@ -32,6 +41,7 @@ type QuotationLineFormProps = {
 };
 
 const QuotationLineForm = ({ initialValues }: QuotationLineFormProps) => {
+  const navigate = useNavigate();
   const permissions = usePermissions();
   const { supabase } = useSupabase();
 
@@ -100,11 +110,45 @@ const QuotationLineForm = ({ initialValues }: QuotationLineFormProps) => {
       className="w-full"
     >
       <Card>
-        <CardHeader>
-          <CardTitle>
-            {isEditing ? initialValues?.partId : "New Quote Line"}
-          </CardTitle>
-        </CardHeader>
+        <HStack className="w-full justify-between items-start">
+          <CardHeader>
+            <CardTitle>
+              {isEditing ? partData?.partId : "New Quote Line"}
+            </CardTitle>
+            <CardDescription>
+              {isEditing
+                ? partData?.description
+                : "A quote line contains pricing and lead times for a particular part"}
+            </CardDescription>
+          </CardHeader>
+          <CardAction>
+            {isEditing && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <IconButton
+                    icon={<BsThreeDotsVertical />}
+                    aria-label="More"
+                    variant="secondary"
+                  />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => navigate("delete")}>
+                    <DropdownMenuIcon icon={<IoMdTrash />} />
+                    Delete Line
+                  </DropdownMenuItem>
+                  <DropdownMenuItem disabled>
+                    <DropdownMenuIcon icon={<BsDownload />} />
+                    Get Part
+                  </DropdownMenuItem>
+                  <DropdownMenuItem disabled>
+                    <DropdownMenuIcon icon={<BsUpload />} />
+                    Save Part
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </CardAction>
+        </HStack>
         <CardContent>
           <Hidden name="id" />
           <Hidden name="quoteId" />
@@ -165,26 +209,6 @@ const QuotationLineForm = ({ initialValues }: QuotationLineFormProps) => {
                       }));
                   }}
                 />
-                {isEditing && partData.replenishmentSystem === "Make" && (
-                  <>
-                    <Button
-                      isDisabled
-                      variant="secondary"
-                      className="w-full"
-                      leftIcon={<BsDownload />}
-                    >
-                      Get Part
-                    </Button>
-                    <Button
-                      isDisabled
-                      variant="secondary"
-                      className="w-full"
-                      leftIcon={<BsUpload />}
-                    >
-                      Set Part
-                    </Button>
-                  </>
-                )}
               </VStack>
             </div>
           </VStack>

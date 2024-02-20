@@ -53,6 +53,13 @@ export async function deleteQuote(
   return client.from("quote").delete().eq("id", quoteId);
 }
 
+export async function deleteQuoteAssembly(
+  client: SupabaseClient<Database>,
+  quoteAssemblyId: string
+) {
+  return client.from("quoteAssembly").delete().eq("id", quoteAssemblyId);
+}
+
 export async function deleteQuoteLine(
   client: SupabaseClient<Database>,
   quoteLineId: string

@@ -1,4 +1,4 @@
-import { json, redirect, useParams } from "@remix-run/react";
+import { redirect, useParams } from "@remix-run/react";
 import { useUrlParams } from "~/hooks";
 import QuotationAssemblyForm from "~/modules/sales/ui/Quotation/QuotationAssemblyForm";
 
@@ -42,8 +42,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
   });
 
   if (createQuotationAssembly.error) {
-    return json(
-      path.to.quote(quoteId),
+    return redirect(
+      path.to.newQuoteAssembly(quoteId, quoteLineId),
       await flash(
         request,
         error(createQuotationAssembly.error, "Failed to create quote assembly")

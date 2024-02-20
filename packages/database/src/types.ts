@@ -7383,7 +7383,7 @@ export interface Database {
         Row: {
           createdAt: string;
           createdBy: string;
-          description: string;
+          description: string | null;
           equipmentTypeId: string | null;
           id: string;
           laborRate: number;
@@ -7402,7 +7402,7 @@ export interface Database {
         Insert: {
           createdAt?: string;
           createdBy: string;
-          description: string;
+          description?: string | null;
           equipmentTypeId?: string | null;
           id?: string;
           laborRate?: number;
@@ -7421,7 +7421,7 @@ export interface Database {
         Update: {
           createdAt?: string;
           createdBy?: string;
-          description?: string;
+          description?: string | null;
           equipmentTypeId?: string | null;
           id?: string;
           laborRate?: number;

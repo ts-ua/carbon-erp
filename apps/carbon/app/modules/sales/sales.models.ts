@@ -2,6 +2,7 @@ import { withZod } from "@remix-validated-form/with-zod";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 import { address, contact } from "~/types/validators";
+import { standardFactorType } from "../shared/types";
 
 export const customerValidator = withZod(
   z.object({
@@ -96,6 +97,24 @@ export const quotationAssemblyValidator = withZod(
     quantityPerParent: zfd.numeric(
       z.number().min(1, { message: "Quantity is required" })
     ),
+  })
+);
+
+export const quotationOperationValidator = withZod(
+  z.object({
+    id: zfd.text(z.string().optional()),
+    quoteAssemblyId: z.string().min(20, { message: "Assembly is required" }),
+    workCellTypeId: z.string().min(20, { message: "Work cell is required" }),
+    equipmentTypeId: zfd.text(z.string().optional()),
+    description: zfd.text(z.string().optional()),
+    setupHours: zfd.numeric(z.number().min(0)),
+    standardFactor: z.enum(standardFactorType, {
+      errorMap: () => ({ message: "Standard factor is required" }),
+    }),
+    productionStandard: zfd.numeric(z.number().min(0)),
+    quotingRate: zfd.numeric(z.number().min(0)),
+    laborRate: zfd.numeric(z.number().min(0)),
+    overheadRate: zfd.numeric(z.number().min(0)),
   })
 );
 

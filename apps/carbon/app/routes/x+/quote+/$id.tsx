@@ -171,18 +171,18 @@ const data: BillOfMaterialNode[] = [
     type: "parent",
     children: [
       {
-        id: "cn9edn5dq0l1fglkrqig",
+        id: "cna3ivpvo0l18j8abtlg",
         label: "P000000001",
         type: "line",
         children: [
           {
-            id: "cn9edn5dq0l1fglkrqig",
-            parentId: "cn9v3tldq0l1lvlkrqmg",
+            id: "cna3ivpvo0l18j8abtlg",
+            // parentId: "cn9v3tldq0l1lvlkrqmg",
             label: "Assemblies",
             type: "assemblies",
           },
           {
-            id: "cn9edn5dq0l1fglkrqig",
+            id: "cna3ivpvo0l18j8abtlg",
             label: "Operations",
             type: "operations",
           },
