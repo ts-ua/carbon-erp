@@ -129,7 +129,7 @@ CREATE TABLE "quoteOperation" (
   "quoteAssemblyId" TEXT NOT NULL,
   "workCellTypeId" TEXT NOT NULL,
   "equipmentTypeId" TEXT,
-  "description" TEXT NOT NULL,
+  "description" TEXT,
   "setupHours" NUMERIC(10,2) NOT NULL DEFAULT 0,
   "standardFactor" factor NOT NULL DEFAULT 'Hours/Piece',
   "productionStandard" NUMERIC(10,4) NOT NULL DEFAULT 0,

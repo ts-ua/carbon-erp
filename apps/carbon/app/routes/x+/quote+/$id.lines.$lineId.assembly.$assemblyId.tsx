@@ -1,4 +1,4 @@
-import { json, redirect, useLoaderData } from "@remix-run/react";
+import { Outlet, json, redirect, useLoaderData } from "@remix-run/react";
 import QuotationAssemblyForm from "~/modules/sales/ui/Quotation/QuotationAssemblyForm";
 
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
@@ -45,9 +45,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
     create: "sales",
   });
 
-  const { id: quoteId, lineId: quoteLineId } = params;
+  const { id: quoteId, lineId: quoteLineId, assemblyId } = params;
   if (!quoteId) throw new Error("Could not find quoteId");
   if (!quoteLineId) throw new Error("Could not find quoteLineId");
+  if (!assemblyId) throw new Error("Could not find assemblyId");
 
   const validation = await quotationAssemblyValidator.validate(
     await request.formData()
@@ -59,27 +60,25 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const { id, ...data } = validation.data;
 
-  const createQuotationAssembly = await upsertQuoteAssembly(client, {
+  const updateQuotationAssembly = await upsertQuoteAssembly(client, {
+    id: assemblyId,
     quoteId,
     quoteLineId,
     ...data,
     createdBy: userId,
   });
 
-  if (createQuotationAssembly.error) {
+  if (updateQuotationAssembly.error) {
     return json(
       path.to.quote(quoteId),
       await flash(
         request,
-        error(createQuotationAssembly.error, "Failed to update quote assembly")
+        error(updateQuotationAssembly.error, "Failed to update quote assembly")
       )
     );
   }
 
-  const assemblyId = createQuotationAssembly.data.id;
-  if (assemblyId) {
-    return redirect(path.to.quoteAssembly(quoteId, quoteLineId, assemblyId));
-  }
+  return redirect(path.to.quoteAssembly(quoteId, quoteLineId, assemblyId));
 }
 
 export default function QuoteAssembly() {
@@ -96,5 +95,10 @@ export default function QuoteAssembly() {
     unitOfMeasureCode: quoteAssembly.unitOfMeasureCode ?? "",
   };
 
-  return <QuotationAssemblyForm initialValues={initialValues} />;
+  return (
+    <>
+      <QuotationAssemblyForm initialValues={initialValues} />
+      <Outlet />
+    </>
+  );
 }
