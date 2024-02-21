@@ -60,6 +60,12 @@ export const customerTypeValidator = withZod(
   })
 );
 
+export const quoteLineStatusType = [
+  "Draft",
+  "In Progress",
+  "Complete",
+] as const;
+
 export const quoteStatusType = [
   "Draft",
   "Open",
@@ -103,7 +109,7 @@ export const quotationAssemblyValidator = withZod(
 export const quotationOperationValidator = withZod(
   z.object({
     id: zfd.text(z.string().optional()),
-    quoteAssemblyId: z.string().min(20, { message: "Assembly is required" }),
+    quoteAssemblyId: zfd.text(z.string().optional()),
     workCellTypeId: z.string().min(20, { message: "Work cell is required" }),
     equipmentTypeId: zfd.text(z.string().optional()),
     description: zfd.text(z.string().optional()),

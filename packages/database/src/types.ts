@@ -7039,6 +7039,7 @@ export interface Database {
           quoteId: string;
           quoteRevisionId: number;
           replenishmentSystem: string | null;
+          status: Database["public"]["Enums"]["quoteLineStatus"];
           unitOfMeasureCode: string | null;
           updatedAt: string | null;
           updatedBy: string | null;
@@ -7053,6 +7054,7 @@ export interface Database {
           quoteId: string;
           quoteRevisionId?: number;
           replenishmentSystem?: string | null;
+          status?: Database["public"]["Enums"]["quoteLineStatus"];
           unitOfMeasureCode?: string | null;
           updatedAt?: string | null;
           updatedBy?: string | null;
@@ -7067,6 +7069,7 @@ export interface Database {
           quoteId?: string;
           quoteRevisionId?: number;
           replenishmentSystem?: string | null;
+          status?: Database["public"]["Enums"]["quoteLineStatus"];
           unitOfMeasureCode?: string | null;
           updatedAt?: string | null;
           updatedBy?: string | null;
@@ -7389,7 +7392,7 @@ export interface Database {
           laborRate: number;
           overheadRate: number;
           productionStandard: number;
-          quoteAssemblyId: string;
+          quoteAssemblyId: string | null;
           quoteId: string;
           quoteLineId: string;
           quotingRate: number;
@@ -7408,7 +7411,7 @@ export interface Database {
           laborRate?: number;
           overheadRate?: number;
           productionStandard?: number;
-          quoteAssemblyId: string;
+          quoteAssemblyId?: string | null;
           quoteId: string;
           quoteLineId: string;
           quotingRate?: number;
@@ -7427,7 +7430,7 @@ export interface Database {
           laborRate?: number;
           overheadRate?: number;
           productionStandard?: number;
-          quoteAssemblyId?: string;
+          quoteAssemblyId?: string | null;
           quoteId?: string;
           quoteLineId?: string;
           quotingRate?: number;
@@ -11999,6 +12002,7 @@ export interface Database {
         | "Reject"
         | "Request Approval";
       purchaseOrderType: "Purchase" | "Return";
+      quoteLineStatus: "Draft" | "In Progress" | "Complete";
       quoteStatus:
         | "Draft"
         | "Open"
