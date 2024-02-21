@@ -42,10 +42,22 @@ CREATE TABLE "quote" (
   CONSTRAINT "quote_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+CREATE INDEX "quote_quoteId_idx" ON "quote" ("quoteId");
+CREATE INDEX "quote_ownerId_idx" ON "quote" ("ownerId");
+CREATE INDEX "quote_customerId_idx" ON "quote" ("customerId");
+CREATE INDEX "quote_locationId_idx" ON "quote" ("locationId");
+
+CREATE TYPE "quoteLineStatus" AS ENUM (
+  'Draft',
+  'In Progress',
+  'Complete'
+);
+
 CREATE TABLE "quoteLine" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "quoteId" TEXT NOT NULL,
   "quoteRevisionId" INTEGER NOT NULL DEFAULT 0,
+  "status" "quoteLineStatus" NOT NULL DEFAULT 'Draft',
   "partId" TEXT NOT NULL,
   "description" TEXT NOT NULL,
   "customerPartId" TEXT,
@@ -126,7 +138,7 @@ CREATE TABLE "quoteOperation" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "quoteId" TEXT NOT NULL,
   "quoteLineId" TEXT NOT NULL,
-  "quoteAssemblyId" TEXT NOT NULL,
+  "quoteAssemblyId" TEXT,
   "workCellTypeId" TEXT NOT NULL,
   "equipmentTypeId" TEXT,
   "description" TEXT,
