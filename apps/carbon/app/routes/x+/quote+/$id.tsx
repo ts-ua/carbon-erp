@@ -171,119 +171,119 @@ const data: BillOfMaterialNode[] = [
     type: "parent",
     children: [
       {
-        id: "cna3ivpvo0l18j8abtlg",
+        id: "cnad6opvo0l053gabtp0",
         label: "P000000001",
         type: "line",
         children: [
           {
-            id: "cna3ivpvo0l18j8abtlg",
+            id: "cnad6opvo0l053gabtp0",
             // parentId: "cn9v3tldq0l1lvlkrqmg",
             label: "Assemblies",
             type: "assemblies",
           },
           {
-            id: "cna3ivpvo0l18j8abtlg",
+            id: "cnad6opvo0l053gabtp0",
             label: "Operations",
             type: "operations",
           },
         ],
       },
-      // {
-      //   id: "2",
-      //   label: "P00001233",
-      //   type: "line",
-      //   children: [
-      //     {
-      //       id: "3",
-      //       label: "Assemblies",
-      //       type: "assemblies",
-      //       children: [
-      //         {
-      //           id: "4",
-      //           label: "F5000123",
-      //           type: "assembly",
-      //           children: [
-      //             {
-      //               id: "5",
-      //               label: "Assemblies",
-      //               type: "assemblies",
-      //               children: [],
-      //             },
-      //             {
-      //               id: "6",
-      //               label: "Operations",
-      //               type: "operations",
-      //               children: [
-      //                 {
-      //                   id: "7",
-      //                   label: "OP0003",
-      //                   type: "operation",
-      //                   children: [
-      //                     {
-      //                       id: "8",
-      //                       label: "Materials",
-      //                       type: "materials",
-      //                       children: [
-      //                         {
-      //                           id: "9",
-      //                           label: "RAW000001",
-      //                           type: "material",
-      //                         },
-      //                         {
-      //                           id: "10",
-      //                           label: "FAS000002",
-      //                           type: "material",
-      //                         },
-      //                       ],
-      //                     },
-      //                   ],
-      //                 },
-      //               ],
-      //             },
-      //           ],
-      //         },
-      //       ],
-      //     },
-      //     {
-      //       id: "11",
-      //       label: "Operations",
-      //       type: "operations",
-      //       children: [
-      //         {
-      //           id: "12",
-      //           label: "OP0001",
-      //           type: "operation",
-      //           children: [
-      //             {
-      //               id: "13",
-      //               label: "Materials",
-      //               type: "materials",
-      //               children: [
-      //                 {
-      //                   id: "14",
-      //                   label: "RAW000003",
-      //                   type: "material",
-      //                 },
-      //               ],
-      //             },
-      //           ],
-      //         },
-      //         {
-      //           id: "13",
-      //           label: "OP0002",
-      //           type: "operation",
-      //           children: [
-      //             {
-      //               id: "13",
-      //               label: "Materials",
-      //               type: "materials",
-      //             },
-      //           ],
-      //         },
-      //       ],
-      //     },
-      //   ],
-      // },
+      {
+        id: "2",
+        label: "P00001233",
+        type: "line",
+        children: [
+          {
+            id: "3",
+            label: "Assemblies",
+            type: "assemblies",
+            children: [
+              {
+                id: "4",
+                label: "F5000123",
+                type: "assembly",
+                children: [
+                  {
+                    id: "5",
+                    label: "Assemblies",
+                    type: "assemblies",
+                    children: [],
+                  },
+                  {
+                    id: "6",
+                    label: "Operations",
+                    type: "operations",
+                    children: [
+                      {
+                        id: "7",
+                        label: "OP0003",
+                        type: "operation",
+                        children: [
+                          {
+                            id: "8",
+                            label: "Materials",
+                            type: "materials",
+                            children: [
+                              {
+                                id: "9",
+                                label: "RAW000001",
+                                type: "material",
+                              },
+                              {
+                                id: "10",
+                                label: "FAS000002",
+                                type: "material",
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            id: "11",
+            label: "Operations",
+            type: "operations",
+            children: [
+              {
+                id: "12",
+                label: "OP0001",
+                type: "operation",
+                children: [
+                  {
+                    id: "13",
+                    label: "Materials",
+                    type: "materials",
+                    children: [
+                      {
+                        id: "14",
+                        label: "RAW000003",
+                        type: "material",
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                id: "13",
+                label: "OP0002",
+                type: "operation",
+                children: [
+                  {
+                    id: "13",
+                    label: "Materials",
+                    type: "materials",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
 ];

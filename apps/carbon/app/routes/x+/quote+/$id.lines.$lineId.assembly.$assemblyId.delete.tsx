@@ -38,6 +38,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function DeleteQuoteAssembly() {
+  const navigate = useNavigate();
+
   const { id, lineId, assemblyId } = useParams();
   if (!id) throw new Error("id not found");
   if (!lineId) throw new Error("lineId not found");
@@ -46,19 +48,15 @@ export default function DeleteQuoteAssembly() {
   const routeData = useRouteData<{ quoteAssembly: QuotationAssembly }>(
     path.to.quoteAssembly(id, lineId, assemblyId)
   );
-  const navigate = useNavigate();
 
   if (!routeData?.quoteAssembly) throw new Error("quote assembly not found");
-
-  const onCancel = () =>
-    navigate(path.to.quoteAssembly(id, lineId, assemblyId));
 
   return (
     <ConfirmDelete
       action={path.to.deleteQuoteAssembly(id, lineId, assemblyId)}
       name={routeData?.quoteAssembly.partId}
       text={`Are you sure you want to delete the assembly: ${routeData?.quoteAssembly.partId}? This cannot be undone.`}
-      onCancel={onCancel}
+      onCancel={() => navigate(path.to.quoteAssembly(id, lineId, assemblyId))}
     />
   );
 }
