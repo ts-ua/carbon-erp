@@ -12,6 +12,7 @@ import type {
   customerValidator,
   quotationAssemblyValidator,
   quotationLineValidator,
+  quotationOperationValidator,
   quotationValidator,
 } from "./sales.models";
 
@@ -65,6 +66,13 @@ export async function deleteQuoteLine(
   quoteLineId: string
 ) {
   return client.from("quoteLine").delete().eq("id", quoteLineId);
+}
+
+export async function deleteQuoteOperation(
+  client: SupabaseClient<Database>,
+  quoteOperationId: string
+) {
+  return client.from("quoteOperation").delete().eq("id", quoteOperationId);
 }
 
 export async function getCustomer(
@@ -282,6 +290,23 @@ export async function getQuoteAssembly(
     .single();
 }
 
+export async function getQuoteAssembliesByLine(
+  client: SupabaseClient<Database>,
+  quoteLineId: string
+) {
+  return client
+    .from("quoteAssembly")
+    .select("*")
+    .eq("quoteLineId", quoteLineId);
+}
+
+export async function getQuoteAssembliesByQuote(
+  client: SupabaseClient<Database>,
+  quoteId: string
+) {
+  return client.from("quoteAssembly").select("*").eq("quoteId", quoteId);
+}
+
 export async function getQuoteExternalDocuments(
   client: SupabaseClient<Database>,
   quoteId: string
@@ -318,6 +343,34 @@ export async function getQuoteLineQuantities(
     .from("quoteLineQuantity")
     .select("*")
     .eq("quoteLineId", quoteLineId);
+}
+
+export async function getQuoteOperation(
+  client: SupabaseClient<Database>,
+  quoteOperationId: string
+) {
+  return client
+    .from("quoteOperation")
+    .select("*")
+    .eq("id", quoteOperationId)
+    .single();
+}
+
+export async function getQuoteOperationsByLine(
+  client: SupabaseClient<Database>,
+  quoteLineId: string
+) {
+  return client
+    .from("quoteOperation")
+    .select("*")
+    .eq("quoteLineId", quoteLineId);
+}
+
+export async function getQuoteOperationsByQuote(
+  client: SupabaseClient<Database>,
+  quoteId: string
+) {
+  return client.from("quoteOperation").select("*").eq("quoteId", quoteId);
 }
 
 export async function insertCustomer(
@@ -643,4 +696,34 @@ export async function upsertQuoteLine(
       .single();
   }
   return client.from("quoteLine").insert([quotationLine]).select("id").single();
+}
+
+export async function upsertQuoteOperation(
+  client: SupabaseClient<Database>,
+  quotationOperation:
+    | (Omit<TypeOfValidator<typeof quotationOperationValidator>, "id"> & {
+        quoteId: string;
+        quoteLineId: string;
+        createdBy: string;
+      })
+    | (Omit<TypeOfValidator<typeof quotationOperationValidator>, "id"> & {
+        id: string;
+        quoteId: string;
+        quoteLineId: string;
+        updatedBy: string;
+      })
+) {
+  if ("id" in quotationOperation) {
+    return client
+      .from("quoteOperation")
+      .update(sanitize(quotationOperation))
+      .eq("id", quotationOperation.id)
+      .select("id")
+      .single();
+  }
+  return client
+    .from("quoteOperation")
+    .insert([quotationOperation])
+    .select("id")
+    .single();
 }
