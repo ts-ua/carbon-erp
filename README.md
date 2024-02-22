@@ -4,11 +4,11 @@ https://github.com/barbinbrad/carbon/assets/64510427/abc040a0-3899-47cf-924e-c5d
 
 # Carbon ERP
 
-Carbon is a high permformance, open-source, single tenant (incomplete) ERP written in Typescript. It allows customers, suppliers, and employees to share a common platform that's easy to integrate with.
+Carbon is a high performance, open-source, single tenant (incomplete) ERP written in Typescript. It allows customers, suppliers, and employees to share a common platform that's easy to integrate with.
 
 Technical highlights/roadmap:
 
-- [x] Full-stack type safety (Datbase → UI)
+- [x] Full-stack type safety (Database → UI)
 - [x] Realtime database subscriptions
 - [x] Attribute-based access control (ABAC)
 - [x] Row-level security (RLS)
@@ -49,7 +49,7 @@ Product highlights/roadmap are:
 
 ## Codebase
 
-The monorepo follows the Turborepo covention of grouping packages into one of two folders.
+The monorepo follows the Turborepo convention of grouping packages into one of two folders.
 
 1. `/apps` for applications
 2. `/packages` for shared code
@@ -103,7 +103,7 @@ Copy the environment variables from the initialization script to an `.env` file:
 $ cp ./.env.example ./.env
 ```
 
-After you've set the enviroment variables to the output of `npm run db:start` you can run
+After you've set the environment variables to the output of `npm run db:start` you can run
 
 ```bash
 $ npm run db:build     # run db migrations and seed script
