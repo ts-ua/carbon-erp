@@ -97,13 +97,18 @@ $ npm install       # install dependencies
 $ npm run db:start  # pull and run the containers
 ```
 
-Copy the environment variables from the initialization script to an `.env` file:
+Create an `.env` file and copy the contents of `.env.example` file into it
 
-```
-$ cp ./.env.example ./.env
+```bash
+  cp ./.env.example ./.env
 ```
 
-After you've set the enviroment variables to the output of `npm run db:start` you can run
+Use the output of `npm run db:start` to set the following variables in `.env`:
+
+- SUPABASE_SERVICE_ROLE=[service_role key]
+- SUPABASE_ANON_PUBLIC=[anon key]
+
+Then you can run the following:
 
 ```bash
 $ npm run db:build     # run db migrations and seed script
