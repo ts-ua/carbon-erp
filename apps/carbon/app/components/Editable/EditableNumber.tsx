@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+import type { NumberFieldProps } from "@carbon/react";
 import { Input, NumberField } from "@carbon/react";
 import type { PostgrestSingleResponse } from "@supabase/supabase-js";
 import type { FocusEvent, KeyboardEvent } from "react";
@@ -10,7 +11,8 @@ const EditableNumber =
       accessorKey: string,
       newValue: string,
       row: T
-    ) => Promise<PostgrestSingleResponse<unknown>>
+    ) => Promise<PostgrestSingleResponse<unknown>>,
+    numberFieldProps?: NumberFieldProps
   ) =>
   ({
     value,
@@ -56,10 +58,10 @@ const EditableNumber =
     };
 
     return (
-      <NumberField defaultValue={value as number}>
+      <NumberField {...numberFieldProps} defaultValue={value as number}>
         <Input
           size="sm"
-          className="w-full rounded-none"
+          className="w-full rounded-none ring-offset-0"
           autoFocus
           onKeyDown={onKeyDown}
           onBlur={onBlur}

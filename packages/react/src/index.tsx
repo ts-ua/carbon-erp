@@ -145,6 +145,19 @@ import {
   ModalTitle,
   ModalTrigger,
 } from "./Modal";
+import {
+  ModalCard,
+  ModalCardBody,
+  ModalCardContent,
+  ModalCardDescription,
+  ModalCardFooter,
+  ModalCardHeader,
+  ModalCardProvider,
+  ModalCardTitle,
+  ModalCardTypeContext,
+  ModalCardTypeProvider,
+  useModalCardType,
+} from "./ModalCard";
 import type { NumberFieldProps } from "./Number";
 import {
   NumberDecrementStepper,
@@ -322,6 +335,16 @@ export {
   MenubarItem,
   Modal,
   ModalBody,
+  ModalCard,
+  ModalCardBody,
+  ModalCardContent,
+  ModalCardDescription,
+  ModalCardFooter,
+  ModalCardHeader,
+  ModalCardProvider,
+  ModalCardTitle,
+  ModalCardTypeContext,
+  ModalCardTypeProvider,
   ModalClose,
   ModalContent,
   ModalDescription,
@@ -389,6 +412,7 @@ export {
   useHydrated,
   useInterval,
   useKeyboardShortcuts,
+  useModalCardType,
   useMount,
   useOutsideClick,
 };

@@ -4,6 +4,7 @@ import { useParams } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import {
   QuotationLineForm,
+  insertQuoteLineQuantity,
   quotationLineValidator,
   upsertQuoteLine,
 } from "~/modules/sales";
@@ -39,7 +40,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   if (createQuotationLine.error) {
     return redirect(
-      path.to.quoteLines(quoteId),
+      path.to.quote(quoteId),
       await flash(
         request,
         error(createQuotationLine.error, "Failed to create quote line.")
@@ -47,7 +48,28 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  return redirect(path.to.quoteLines(quoteId));
+  const quoteLineId = createQuotationLine.data.id;
+
+  const createQuoteQuantity = await insertQuoteLineQuantity(client, {
+    quoteLineId,
+    quantity: 1,
+    createdBy: userId,
+  });
+
+  if (createQuoteQuantity.error) {
+    return redirect(
+      path.to.quoteLine(quoteId, quoteLineId),
+      await flash(
+        request,
+        error(
+          createQuoteQuantity.error,
+          "Failed to create quote line quantity."
+        )
+      )
+    );
+  }
+
+  return redirect(path.to.quoteLine(quoteId, quoteLineId));
 }
 
 export default function NewQuotationLineRoute() {
@@ -59,9 +81,8 @@ export default function NewQuotationLineRoute() {
     quoteId: id,
     partId: "",
     description: "",
-    quantity: 1,
-    unitCost: 0,
-    unitPrice: 0,
+    replenishmentSystem: "" as "Buy" | "Make",
+    unitOfMeasureCode: "",
   };
 
   return <QuotationLineForm initialValues={initialValues} />;

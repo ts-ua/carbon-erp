@@ -45,8 +45,9 @@ const QuotationForm = ({ initialValues }: QuotationFormProps) => {
       method="post"
       validator={quotationValidator}
       defaultValues={initialValues}
+      className="w-full"
     >
-      <Card>
+      <Card className={cn(!isEditing && "mt-4")}>
         <CardHeader>
           <CardTitle>{isEditing ? "Quote" : "New Quote"}</CardTitle>
           {!isEditing && (
@@ -67,7 +68,7 @@ const QuotationForm = ({ initialValues }: QuotationFormProps) => {
             >
               <VStack>
                 <Customer
-                  autoFocus
+                  autoFocus={!isEditing}
                   name="customerId"
                   label="Customer"
                   onChange={(value) => setCustomer(value?.value as string)}

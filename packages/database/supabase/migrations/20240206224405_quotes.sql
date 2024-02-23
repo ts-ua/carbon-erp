@@ -42,18 +42,28 @@ CREATE TABLE "quote" (
   CONSTRAINT "quote_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+CREATE INDEX "quote_quoteId_idx" ON "quote" ("quoteId");
+CREATE INDEX "quote_ownerId_idx" ON "quote" ("ownerId");
+CREATE INDEX "quote_customerId_idx" ON "quote" ("customerId");
+CREATE INDEX "quote_locationId_idx" ON "quote" ("locationId");
+
+CREATE TYPE "quoteLineStatus" AS ENUM (
+  'Draft',
+  'In Progress',
+  'Complete'
+);
+
 CREATE TABLE "quoteLine" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "quoteId" TEXT NOT NULL,
   "quoteRevisionId" INTEGER NOT NULL DEFAULT 0,
+  "status" "quoteLineStatus" NOT NULL DEFAULT 'Draft',
   "partId" TEXT NOT NULL,
-  "customerPartId" TEXT,
   "description" TEXT NOT NULL,
-  "quantity" NUMERIC(10, 2) NOT NULL DEFAULT 0,
-  "unitCost" NUMERIC(10, 2) NOT NULL DEFAULT 0,
-  "unitPrice" NUMERIC(10, 2) NOT NULL DEFAULT 0,
+  "customerPartId" TEXT,
+  "customerPartRevision" TEXT,
+  "replenishmentSystem" TEXT,
   "unitOfMeasureCode" TEXT,
-  "leadTime" INTEGER,
   "createdBy" TEXT NOT NULL,
   "updatedAt" TIMESTAMP WITH TIME ZONE,
   "updatedBy" TEXT,
@@ -68,7 +78,7 @@ CREATE TABLE "quoteLine" (
 
 CREATE INDEX "quoteLine_quoteId_idx" ON "quoteLine" ("quoteId");
 
-CREATE TABLE "quoteLineQuantities" (
+CREATE TABLE "quoteLineQuantity" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "quoteLineId" TEXT NOT NULL,
   "quantity" NUMERIC(10, 2) NOT NULL DEFAULT 0,
@@ -90,20 +100,19 @@ CREATE TABLE "quoteLineQuantities" (
   "updatedAt" TIMESTAMP WITH TIME ZONE,
   "updatedBy" TEXT,
 
-  CONSTRAINT "quoteLineQuantities_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "quoteLineQuantities_quoteLineId_fkey" FOREIGN KEY ("quoteLineId") REFERENCES "quoteLine" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT "quoteLineQuantities_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT "quoteLineQuantities_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT "quoteLineQuantity_pkey" PRIMARY KEY ("id"),
+  CONSTRAINT "quoteLineQuantity_quoteLineId_fkey" FOREIGN KEY ("quoteLineId") REFERENCES "quoteLine" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "quoteLineQuantity_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT "quoteLineQuantity_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-CREATE INDEX "quoteLineQuantities_quoteLineId_idx" ON "quoteLineQuantities" ("quoteLineId");
+CREATE INDEX "quoteLineQuantity_quoteLineId_idx" ON "quoteLineQuantity" ("quoteLineId");
 
-CREATE TABLE "quoteModule" (
+CREATE TABLE "quoteAssembly" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "quoteId" TEXT NOT NULL,
   "quoteLineId" TEXT NOT NULL,
-  "quoteModuleId" TEXT NOT NULL DEFAULT xid(),
-  "parentModuleId" TEXT,
+  "parentAssemblyId" TEXT,
   "partId" TEXT NOT NULL,
   "description" TEXT,
   "unitOfMeasureCode" TEXT,
@@ -113,26 +122,26 @@ CREATE TABLE "quoteModule" (
   "updatedAt" TIMESTAMP WITH TIME ZONE,
   "updatedBy" TEXT,
 
-  CONSTRAINT "quoteModule_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "quoteModule_quoteId_fkey" FOREIGN KEY ("quoteId") REFERENCES "quote" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT "quoteModule_quoteLineId_fkey" FOREIGN KEY ("quoteLineId") REFERENCES "quoteLine" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT "quoteModule_parentModuleId_fkey" FOREIGN KEY ("parentModuleId") REFERENCES "quoteModule" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT "quoteModule_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT "quoteModule_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT "quoteAssembly_pkey" PRIMARY KEY ("id"),
+  CONSTRAINT "quoteAssembly_quoteId_fkey" FOREIGN KEY ("quoteId") REFERENCES "quote" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "quoteAssembly_quoteLineId_fkey" FOREIGN KEY ("quoteLineId") REFERENCES "quoteLine" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "quoteAssembly_parentAssemblyId_fkey" FOREIGN KEY ("parentAssemblyId") REFERENCES "quoteAssembly" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "quoteAssembly_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT "quoteAssembly_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-CREATE INDEX "quoteModule_quoteId_idx" ON "quoteModule" ("quoteId");
-CREATE INDEX "quoteModule_quoteLineId_idx" ON "quoteModule" ("quoteLineId");
-CREATE INDEX "quoteModule_parentModuleId_idx" ON "quoteModule" ("parentModuleId");
+CREATE INDEX "quoteAssembly_quoteId_idx" ON "quoteAssembly" ("quoteId");
+CREATE INDEX "quoteAssembly_quoteLineId_idx" ON "quoteAssembly" ("quoteLineId");
+CREATE INDEX "quoteAssembly_parentAssemblyId_idx" ON "quoteAssembly" ("parentAssemblyId");
 
-CREATE TABLE "quoteProcess" (
+CREATE TABLE "quoteOperation" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "quoteId" TEXT NOT NULL,
   "quoteLineId" TEXT NOT NULL,
-  "quoteModuleId" TEXT NOT NULL,
+  "quoteAssemblyId" TEXT,
   "workCellTypeId" TEXT NOT NULL,
   "equipmentTypeId" TEXT,
-  "description" TEXT NOT NULL,
+  "description" TEXT,
   "setupHours" NUMERIC(10,2) NOT NULL DEFAULT 0,
   "standardFactor" factor NOT NULL DEFAULT 'Hours/Piece',
   "productionStandard" NUMERIC(10,4) NOT NULL DEFAULT 0,
@@ -144,25 +153,25 @@ CREATE TABLE "quoteProcess" (
   "updatedAt" TIMESTAMP WITH TIME ZONE,
   "updatedBy" TEXT,
 
-  CONSTRAINT "quoteProcess_pkey" PRIMARY KEY ("id"),
-  CONSTRAINT "quoteProcess_quoteId_fkey" FOREIGN KEY ("quoteId") REFERENCES "quote" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT "quoteProcess_quoteLineId_fkey" FOREIGN KEY ("quoteLineId") REFERENCES "quoteLine" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT "quoteProcess_quoteModuleId_fkey" FOREIGN KEY ("quoteModuleId") REFERENCES "quoteModule" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT "quoteProcess_workCellTypeId_fkey" FOREIGN KEY ("workCellTypeId") REFERENCES "workCellType" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT "quoteProcess_equipmentTypeId_fkey" FOREIGN KEY ("equipmentTypeId") REFERENCES "equipmentType" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT "quoteProcess_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT "quoteProcess_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT "quoteOperation_pkey" PRIMARY KEY ("id"),
+  CONSTRAINT "quoteOperation_quoteId_fkey" FOREIGN KEY ("quoteId") REFERENCES "quote" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "quoteOperation_quoteLineId_fkey" FOREIGN KEY ("quoteLineId") REFERENCES "quoteLine" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "quoteOperation_quoteAssemblyId_fkey" FOREIGN KEY ("quoteAssemblyId") REFERENCES "quoteAssembly" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "quoteOperation_workCellTypeId_fkey" FOREIGN KEY ("workCellTypeId") REFERENCES "workCellType" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT "quoteOperation_equipmentTypeId_fkey" FOREIGN KEY ("equipmentTypeId") REFERENCES "equipmentType" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT "quoteOperation_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT "quoteOperation_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-CREATE INDEX "quoteProcess_quoteId_idx" ON "quoteProcess" ("quoteId");
-CREATE INDEX "quoteProcess_quoteLineId_idx" ON "quoteProcess" ("quoteLineId");
-CREATE INDEX "quoteProcess_quoteModuleId_idx" ON "quoteProcess" ("quoteModuleId");
+CREATE INDEX "quoteOperation_quoteId_idx" ON "quoteOperation" ("quoteId");
+CREATE INDEX "quoteOperation_quoteLineId_idx" ON "quoteOperation" ("quoteLineId");
+CREATE INDEX "quoteOperation_quoteAssemblyId_idx" ON "quoteOperation" ("quoteAssemblyId");
 
 CREATE TABLE "quoteMaterial" (
   "id" TEXT NOT NULL DEFAULT xid(),
   "quoteId" TEXT NOT NULL,
   "quoteLineId" TEXT NOT NULL,
-  "quoteProcessId" TEXT NOT NULL,
+  "quoteOperationId" TEXT NOT NULL,
   "partId" TEXT NOT NULL,
   "description" TEXT NOT NULL,
   "quantity" NUMERIC(10, 2) NOT NULL DEFAULT 0,
@@ -176,7 +185,7 @@ CREATE TABLE "quoteMaterial" (
   CONSTRAINT "quoteMaterial_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "quoteMaterial_quoteId_fkey" FOREIGN KEY ("quoteId") REFERENCES "quote" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT "quoteMaterial_quoteLineId_fkey" FOREIGN KEY ("quoteLineId") REFERENCES "quoteLine" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT "quoteMaterial_quoteProcessId_fkey" FOREIGN KEY ("quoteProcessId") REFERENCES "quoteProcess" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT "quoteMaterial_quoteOperationId_fkey" FOREIGN KEY ("quoteOperationId") REFERENCES "quoteOperation" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT "quoteMaterial_partId_fkey" FOREIGN KEY ("partId") REFERENCES "part" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "quoteMaterial_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "quoteMaterial_updatedBy_fkey" FOREIGN KEY ("updatedBy") REFERENCES "user" ("id") ON DELETE RESTRICT ON UPDATE CASCADE

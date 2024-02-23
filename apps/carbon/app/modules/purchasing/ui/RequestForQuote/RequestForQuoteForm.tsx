@@ -72,7 +72,7 @@ const RequestForQuoteForm = ({ initialValues }: RequestForQuoteFormProps) => {
               )}
             >
               <VStack>
-                <Input autoFocus name="name" label="Name" />
+                <Input autoFocus={!isEditing} name="name" label="Name" />
                 <DatePicker name="receiptDate" label="Receipt Date" />
                 <DatePicker name="expirationDate" label="Expiration Date" />
               </VStack>

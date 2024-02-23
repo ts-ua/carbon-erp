@@ -4,7 +4,9 @@ import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import {
   QuotationLineForm,
+  QuotationLineQuantities,
   getQuoteLine,
+  getQuoteLineQuantities,
   quotationLineValidator,
   upsertQuoteLine,
 } from "~/modules/sales";
@@ -23,10 +25,14 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { lineId } = params;
   if (!lineId) throw notFound("lineId not found");
 
-  const quotationLine = await getQuoteLine(client, lineId);
+  const [quotationLine, quotationLineQuantities] = await Promise.all([
+    getQuoteLine(client, lineId),
+    getQuoteLineQuantities(client, lineId),
+  ]);
 
   return json({
     quotationLine: quotationLine?.data ?? null,
+    quotationLineQuantities: quotationLineQuantities?.data ?? [],
   });
 }
 
@@ -58,7 +64,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   if (updateQuotationLine.error) {
     return redirect(
-      path.to.quoteLines(quoteId),
+      path.to.quoteLine(quoteId, lineId),
       await flash(
         request,
         error(updateQuotationLine.error, "Failed to update quote line")
@@ -66,24 +72,34 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  return redirect(path.to.quoteLines(quoteId));
+  return redirect(path.to.quoteLine(quoteId, lineId));
 }
 
 export default function EditQuotationLineRoute() {
-  const { quotationLine } = useLoaderData<typeof loader>();
+  const { quotationLine, quotationLineQuantities } =
+    useLoaderData<typeof loader>();
+  if (!quotationLine) throw new Error("Could not find quotation line");
 
   const initialValues = {
     id: quotationLine?.id ?? undefined,
     quoteId: quotationLine?.quoteId ?? "",
-
     partId: quotationLine?.partId ?? "",
-    customerPartId: quotationLine?.customerPartId ?? "",
     description: quotationLine?.description ?? "",
-    quantity: quotationLine?.quantity ?? 1,
-    unitCost: quotationLine?.unitCost ?? 0,
-    unitPrice: quotationLine?.unitPrice ?? 0,
-    leadTime: quotationLine?.leadTime ?? undefined,
+    customerPartId: quotationLine?.customerPartId ?? "",
+    customerPartRevision: quotationLine?.customerPartRevision ?? "",
+    replenishmentSystem: (quotationLine?.replenishmentSystem ?? "") as
+      | "Buy"
+      | "Make",
+    unitOfMeasureCode: quotationLine?.unitOfMeasureCode ?? "",
   };
 
-  return <QuotationLineForm initialValues={initialValues} />;
+  return (
+    <>
+      <QuotationLineForm initialValues={initialValues} />
+      <QuotationLineQuantities
+        quotationLine={quotationLine}
+        quotationLineQuantities={quotationLineQuantities}
+      />
+    </>
+  );
 }

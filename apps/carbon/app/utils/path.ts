@@ -168,8 +168,16 @@ export const path = {
     deletePurchaseOrderLine: (orderId: string, lineId: string) =>
       generatePath(`${x}/purchase-order/${orderId}/lines/delete/${lineId}`),
     deleteQuote: (id: string) => generatePath(`${x}/quote/delete/${id}`),
+    deleteQuoteAssembly: (
+      quoteId: string,
+      lineId: string,
+      assemblyId: string
+    ) =>
+      generatePath(
+        `${x}/quote/${quoteId}/lines/${lineId}/assembly/${assemblyId}/delete`
+      ),
     deleteQuoteLine: (id: string, lineId: string) =>
-      generatePath(`${x}/quote/${id}/lines/delete/${lineId}`),
+      generatePath(`${x}/quote/${id}/lines/${lineId}/details/delete`),
     deleteReceipt: (id: string) =>
       generatePath(`${x}/inventory/receipts/delete/${id}`),
     deleteRequestForQuote: (id: string) =>
@@ -276,7 +284,15 @@ export const path = {
     newPurchaseOrderLine: (id: string) =>
       generatePath(`${x}/purchase-order/${id}/lines/new`),
     newQuote: `${x}/quote/new`,
-    newQuoteLine: (id: string) => generatePath(`${x}/quote/${id}/lines/new`),
+    newQuoteAssembly: (quoteId: string, lineId: string, parentId?: string) =>
+      generatePath(
+        `${x}/quote/${quoteId}/lines/${lineId}/assembly/new${
+          parentId ? `?parentAssemblyId=${parentId}` : ""
+        }`
+      ),
+    newQuoteLine: (id: string) => generatePath(`${x}/quote/${id}/new`),
+    newQuoteLineQuantity: (id: string, lineId: string) =>
+      generatePath(`${x}/quote/${id}/lines/${lineId}/new`),
     newReceipt: `${x}/inventory/receipts/new`,
     newRequestForQuote: `${x}/rfq/new`,
     newShift: `${x}/resources/shifts/new`,
@@ -360,16 +376,18 @@ export const path = {
     purchaseOrders: `${x}/purchasing/orders`,
     purchasing: `${x}/purchasing`,
     quote: (id: string) => generatePath(`${x}/quote/${id}`),
+    quoteAssembly: (quoteId: string, lineId: string, assemblyId: string) =>
+      generatePath(
+        `${x}/quote/${quoteId}/lines/${lineId}/assembly/${assemblyId}`
+      ),
     quoteDetails: (id: string) => generatePath(`${x}/quote/${id}/details`),
     quoteExternalDocuments: (id: string) =>
       generatePath(`${x}/quote/${id}/external`),
-    quoteFavorite: `${x}/purchasing/orders/favorite`,
+    quoteFavorite: `${x}/sales/quotes/favorite`,
     quoteInternalDocuments: (id: string) =>
       generatePath(`${x}/quote/${id}/internal`),
-    quoteLines: (orderId: string) =>
-      generatePath(`${x}/quote/${orderId}/lines`),
-    quoteLine: (orderId: string, id: string) =>
-      generatePath(`${x}/quote/${orderId}/lines/${id}`),
+    quoteLine: (quoteId: string, id: string) =>
+      generatePath(`${x}/quote/${quoteId}/lines/${id}/details`),
     quoteRelease: (id: string) => generatePath(`${x}/quote/${id}/release`),
     quotes: `${x}/sales/quotes`,
     receipt: (id: string) => generatePath(`${x}/inventory/receipts/${id}`),

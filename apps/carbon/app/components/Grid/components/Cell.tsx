@@ -60,7 +60,7 @@ const Cell = <T extends object>({
       onFocus={onFocus}
     >
       {isSelected && isEditing && hasEditableTableCellComponent ? (
-        <div className="mx-[-1rem] my-[-0.5rem]">
+        <div className="mx-[-0.65rem] my-[-0.25rem]">
           {hasEditableTableCellComponent
             ? flexRender(editableCell, {
                 accessorKey,

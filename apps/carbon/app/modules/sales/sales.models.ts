@@ -2,6 +2,7 @@ import { withZod } from "@remix-validated-form/with-zod";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 import { address, contact } from "~/types/validators";
+import { standardFactorType } from "../shared/types";
 
 export const customerValidator = withZod(
   z.object({
@@ -59,6 +60,12 @@ export const customerTypeValidator = withZod(
   })
 );
 
+export const quoteLineStatusType = [
+  "Draft",
+  "In Progress",
+  "Complete",
+] as const;
+
 export const quoteStatusType = [
   "Draft",
   "Open",
@@ -86,20 +93,49 @@ export const quotationValidator = withZod(
   })
 );
 
+export const quotationAssemblyValidator = withZod(
+  z.object({
+    id: zfd.text(z.string().optional()),
+    parentAssemblyId: zfd.text(z.string().optional()),
+    partId: z.string().min(1, { message: "Part is required" }),
+    description: z.string().min(1, { message: "Description is required" }),
+    unitOfMeasureCode: zfd.text(z.string().optional()),
+    quantityPerParent: zfd.numeric(
+      z.number().min(1, { message: "Quantity is required" })
+    ),
+  })
+);
+
+export const quotationOperationValidator = withZod(
+  z.object({
+    id: zfd.text(z.string().optional()),
+    quoteAssemblyId: zfd.text(z.string().optional()),
+    workCellTypeId: z.string().min(20, { message: "Work cell is required" }),
+    equipmentTypeId: zfd.text(z.string().optional()),
+    description: zfd.text(z.string().optional()),
+    setupHours: zfd.numeric(z.number().min(0)),
+    standardFactor: z.enum(standardFactorType, {
+      errorMap: () => ({ message: "Standard factor is required" }),
+    }),
+    productionStandard: zfd.numeric(z.number().min(0)),
+    quotingRate: zfd.numeric(z.number().min(0)),
+    laborRate: zfd.numeric(z.number().min(0)),
+    overheadRate: zfd.numeric(z.number().min(0)),
+  })
+);
+
 export const quotationLineValidator = withZod(
   z.object({
     id: zfd.text(z.string().optional()),
     quoteId: z.string(),
     partId: z.string().min(1, { message: "Part is required" }),
-    customerPartId: zfd.text(z.string().optional()),
     description: z.string().min(1, { message: "Description is required" }),
-    // unitOfMeasureCode: z
-    //   .string()
-    //   .min(1, { message: "Unit of measure is required" }),
-    unitCost: zfd.numeric(z.number().optional()),
-    unitPrice: zfd.numeric(z.number()),
-    quantity: zfd.numeric(z.number()),
-    leadTime: zfd.numeric(z.number().optional()),
+    replenishmentSystem: z.enum(["Buy", "Make"]),
+    customerPartId: zfd.text(z.string().optional()),
+    customerPartRevision: zfd.text(z.string().optional()),
+    unitOfMeasureCode: z
+      .string()
+      .min(1, { message: "Unit of measure is required" }),
   })
 );
 

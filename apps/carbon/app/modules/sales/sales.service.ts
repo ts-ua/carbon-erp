@@ -10,7 +10,9 @@ import type {
   customerShippingValidator,
   customerTypeValidator,
   customerValidator,
+  quotationAssemblyValidator,
   quotationLineValidator,
+  quotationOperationValidator,
   quotationValidator,
 } from "./sales.models";
 
@@ -52,11 +54,25 @@ export async function deleteQuote(
   return client.from("quote").delete().eq("id", quoteId);
 }
 
+export async function deleteQuoteAssembly(
+  client: SupabaseClient<Database>,
+  quoteAssemblyId: string
+) {
+  return client.from("quoteAssembly").delete().eq("id", quoteAssemblyId);
+}
+
 export async function deleteQuoteLine(
   client: SupabaseClient<Database>,
   quoteLineId: string
 ) {
   return client.from("quoteLine").delete().eq("id", quoteLineId);
+}
+
+export async function deleteQuoteOperation(
+  client: SupabaseClient<Database>,
+  quoteOperationId: string
+) {
+  return client.from("quoteOperation").delete().eq("id", quoteOperationId);
 }
 
 export async function getCustomer(
@@ -263,6 +279,34 @@ export async function getQuotes(
   return query;
 }
 
+export async function getQuoteAssembly(
+  client: SupabaseClient<Database>,
+  quoteAssemblyId: string
+) {
+  return client
+    .from("quoteAssembly")
+    .select("*")
+    .eq("id", quoteAssemblyId)
+    .single();
+}
+
+export async function getQuoteAssembliesByLine(
+  client: SupabaseClient<Database>,
+  quoteLineId: string
+) {
+  return client
+    .from("quoteAssembly")
+    .select("*")
+    .eq("quoteLineId", quoteLineId);
+}
+
+export async function getQuoteAssembliesByQuote(
+  client: SupabaseClient<Database>,
+  quoteId: string
+) {
+  return client.from("quoteAssembly").select("*").eq("quoteId", quoteId);
+}
+
 export async function getQuoteExternalDocuments(
   client: SupabaseClient<Database>,
   quoteId: string
@@ -289,6 +333,44 @@ export async function getQuoteLines(
   quoteId: string
 ) {
   return client.from("quoteLine").select("*").eq("quoteId", quoteId);
+}
+
+export async function getQuoteLineQuantities(
+  client: SupabaseClient<Database>,
+  quoteLineId: string
+) {
+  return client
+    .from("quoteLineQuantity")
+    .select("*")
+    .eq("quoteLineId", quoteLineId);
+}
+
+export async function getQuoteOperation(
+  client: SupabaseClient<Database>,
+  quoteOperationId: string
+) {
+  return client
+    .from("quoteOperation")
+    .select("*")
+    .eq("id", quoteOperationId)
+    .single();
+}
+
+export async function getQuoteOperationsByLine(
+  client: SupabaseClient<Database>,
+  quoteLineId: string
+) {
+  return client
+    .from("quoteOperation")
+    .select("*")
+    .eq("quoteLineId", quoteLineId);
+}
+
+export async function getQuoteOperationsByQuote(
+  client: SupabaseClient<Database>,
+  quoteId: string
+) {
+  return client.from("quoteOperation").select("*").eq("quoteId", quoteId);
 }
 
 export async function insertCustomer(
@@ -376,6 +458,39 @@ export async function insertCustomerLocation(
     ])
     .select("id")
     .single();
+}
+
+export async function insertQuoteLineQuantity(
+  client: SupabaseClient<Database>,
+  quoteLineQuantity: {
+    quoteLineId: string;
+    quantity?: number;
+    createdBy: string;
+  }
+) {
+  const quoteLine = await getQuoteLine(client, quoteLineQuantity.quoteLineId);
+  if (quoteLine.error) {
+    return quoteLine;
+  }
+
+  const partId = quoteLine.data?.partId;
+  const [partCost] = await Promise.all([
+    client.from("partCost").select("unitCost").eq("partId", partId).single(),
+  ]);
+
+  if (partCost.error) {
+    return partCost;
+  }
+
+  return client.from("quoteLineQuantity").insert([
+    {
+      ...quoteLineQuantity,
+      materialCost:
+        quoteLine.data.replenishmentSystem === "Make"
+          ? partCost.data?.unitCost
+          : 0,
+    },
+  ]);
 }
 
 export async function updateCustomer(
@@ -531,6 +646,36 @@ export async function upsertQuote(
   }
 }
 
+export async function upsertQuoteAssembly(
+  client: SupabaseClient<Database>,
+  quotationAssembly:
+    | (Omit<TypeOfValidator<typeof quotationAssemblyValidator>, "id"> & {
+        quoteId: string;
+        quoteLineId: string;
+        createdBy: string;
+      })
+    | (Omit<TypeOfValidator<typeof quotationAssemblyValidator>, "id"> & {
+        id: string;
+        quoteId: string;
+        quoteLineId: string;
+        updatedBy: string;
+      })
+) {
+  if ("id" in quotationAssembly) {
+    return client
+      .from("quoteAssembly")
+      .update(sanitize(quotationAssembly))
+      .eq("id", quotationAssembly.id)
+      .select("id")
+      .single();
+  }
+  return client
+    .from("quoteAssembly")
+    .insert([quotationAssembly])
+    .select("id")
+    .single();
+}
+
 export async function upsertQuoteLine(
   client: SupabaseClient<Database>,
   quotationLine:
@@ -551,4 +696,34 @@ export async function upsertQuoteLine(
       .single();
   }
   return client.from("quoteLine").insert([quotationLine]).select("id").single();
+}
+
+export async function upsertQuoteOperation(
+  client: SupabaseClient<Database>,
+  quotationOperation:
+    | (Omit<TypeOfValidator<typeof quotationOperationValidator>, "id"> & {
+        quoteId: string;
+        quoteLineId: string;
+        createdBy: string;
+      })
+    | (Omit<TypeOfValidator<typeof quotationOperationValidator>, "id"> & {
+        id: string;
+        quoteId: string;
+        quoteLineId: string;
+        updatedBy: string;
+      })
+) {
+  if ("id" in quotationOperation) {
+    return client
+      .from("quoteOperation")
+      .update(sanitize(quotationOperation))
+      .eq("id", quotationOperation.id)
+      .select("id")
+      .single();
+  }
+  return client
+    .from("quoteOperation")
+    .insert([quotationOperation])
+    .select("id")
+    .single();
 }
